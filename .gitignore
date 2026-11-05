@@ -1,0 +1,7 @@
+.cache/
+.config/
+.arena/
+__pycache__/
+*.pyc
+node_modules/
+.sudo_as_admin_successful

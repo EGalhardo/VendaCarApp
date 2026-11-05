@@ -1,0 +1,277 @@
+[
+ {
+  "r": "PASS",
+  "n": "Aritmética · Corolla 75.000 / entrada 25.000",
+  "d": "saldo 50,000 | 12x 4,166.67 (esperado 4,166.67)"
+ },
+ {
+  "r": "PASS",
+  "n": "Aritmética · Entrada sugerida 10%",
+  "d": "saldo 67,500 | 12x 5,625 (esperado 5,625.0)"
+ },
+ {
+  "r": "PASS",
+  "n": "Aritmética · Entrada = preço (100%)",
+  "d": "saldo 0 | 12x 0 (esperado 0.0)"
+ },
+ {
+  "r": "PASS",
+  "n": "Aritmética · Entrada 1 Kz",
+  "d": "saldo 74,999 | 12x 6,249.92 (esperado 6,249.92)"
+ },
+ {
+  "r": "PASS",
+  "n": "Aritmética · Hilux 210.000 / 30.000",
+  "d": "saldo 180,000 | 12x 15,000 (esperado 15,000.0)"
+ },
+ {
+  "r": "PASS",
+  "n": "Aritmética · Tucson 95.000 / 95.000",
+  "d": "saldo 0 | 12x 0 (esperado 0.0)"
+ },
+ {
+  "r": "PASS",
+  "n": "À vista com desconto (75.000 − 15.000)",
+  "d": "60,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Entrada acima do preço é limitada",
+  "d": "saldo = 0 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Saldo 0 → parcelas 0 (sem erro)",
+  "d": "['0 Kz', '0 Kz']"
+ },
+ {
+  "r": "PASS",
+  "n": "WhatsApp abre com +244 e texto",
+  "d": "https://wa.me/244923111999"
+ },
+ {
+  "r": "PASS",
+  "n": "Mensagem contém carro, entrada e parcelas",
+  "d": "🚗 Toyota Corolla 2018 …"
+ },
+ {
+  "r": "PASS",
+  "n": "Cliente criado aparece na lista",
+  "d": "5 clientes (4 seed + 1 novo)"
+ },
+ {
+  "r": "PASS",
+  "n": "Detalhe mostra orçamentos do cliente",
+  "d": "1 orçamentos"
+ },
+ {
+  "r": "PASS",
+  "n": "Reenvio abre popup com dados do cliente",
+  "d": "nome/telefone preenchidos"
+ },
+ {
+  "r": "PASS",
+  "n": "Novo modelo não grava sem dados",
+  "d": "modal mantém-se aberto"
+ },
+ {
+  "r": "PASS",
+  "n": "Marca normalizada/capitalizada",
+  "d": "Mitsubishi Motors L200 2022"
+ },
+ {
+  "r": "PASS",
+  "n": "Bloqueia modelo com preço 0",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Desconto > preço não gera valor negativo",
+  "d": "à vista = 0 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Limite de 6 imagens respeitado",
+  "d": "6 miniaturas (enviei 7)"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop usa barra lateral",
+  "d": "{'side': 'flex', 'nav': 'none'}"
+ },
+ {
+  "r": "PASS",
+  "n": "Sem erros de consola (desktop)",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile usa navbar",
+  "d": "{'side': 'none', 'nav': 'flex'}"
+ },
+ {
+  "r": "PASS",
+  "n": "Sem scroll horizontal em mobile (390px)",
+  "d": "overflow = 0px"
+ },
+ {
+  "r": "PASS",
+  "n": "Orçamentos sem overflow em mobile",
+  "d": "overflow = 0px"
+ },
+ {
+  "r": "PASS",
+  "n": "Sem erros de consola (mobile)",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Tablet 820px sem overflow",
+  "d": "overflow = 0px"
+ },
+ {
+  "r": "PASS",
+  "n": "Arranque online",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Offline detetado pela app",
+  "d": "Offline"
+ },
+ {
+  "r": "PASS",
+  "n": "Orçamento criado offline entra na fila",
+  "d": "1"
+ },
+ {
+  "r": "PASS",
+  "n": "Estado do orçamento passa a Pendente",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Fila persistida no dispositivo",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "App recarrega offline com dados",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Fila mantém-se após recarregar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Ao voltar a rede pede para enviar a fila",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "'Agora não' preserva a fila",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Sem erros no modo offline",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · botões com altura harmoniosa",
+  "d": "{'h1': 48, 'h2': 46, 'w1': 334, 'w2': 334, 'ordem': True, 'fim': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · botões com a mesma largura",
+  "d": "{'h1': 48, 'h2': 46, 'w1': 334, 'w2': 334, 'ordem': True, 'fim': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · Guardar acima de Cancelar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · rodapé dentro do ecrã",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Clicar no orçamento abre a página de detalhe",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Abre o orçamento correto",
+  "d": "Ana Silva"
+ },
+ {
+  "r": "PASS",
+  "n": "Campos vêm preenchidos com os valores guardados",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Resumo recalcula ao editar a entrada",
+  "d": "60,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Guardar alterações persiste",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Lista de orçamentos mostra o valor editado",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Clientes refletem a edição",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Bloqueia guardar sem nome",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Bloqueia telefone incompleto",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Entrada maior que o preço é limitada",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Botão reenviar abre o popup com os dados",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Apagar remove o orçamento",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Sem erros de consola na página de orçamento",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · orçamento abre sem overflow",
+  "d": "overflow = 0px"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · edição utilizável",
+  "d": ""
+ }
+]

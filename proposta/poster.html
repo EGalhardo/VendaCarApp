@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<style>
+  @page { margin: 0 }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1400px; font-family: "DejaVu Sans", Arial, sans-serif;
+    color: #2B352F; background: #FFFFFF;
+  }
+  :root { }
+  .wrap { padding: 0 0 0 0; }
+
+  /* ---------- CAPA ---------- */
+  .hero { position: relative; height: 420px; overflow: hidden; background: #0B4A44; }
+  .hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hero .overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, rgba(6,42,38,.94) 0%, rgba(6,42,38,.86) 42%, rgba(6,42,38,.15) 78%, rgba(6,42,38,0) 100%);
+    display: flex; flex-direction: column; justify-content: center; padding: 0 78px;
+  }
+  .kicker { font-size: 15px; letter-spacing: 3.4px; text-transform: uppercase; color: #7FE3C4; font-weight: 700; }
+  .hero h1 { font-size: 62px; line-height: 1.03; font-weight: 800; color: #fff; margin: 18px 0 14px; letter-spacing: -1.2px; max-width: 760px; }
+  .hero p { font-size: 20px; color: #C8E6DA; max-width: 620px; line-height: 1.45; }
+  .hero .meta { margin-top: 26px; font-size: 14.5px; color: #8FBDB0; letter-spacing: .3px; }
+
+  /* ---------- FAIXA DE NÚMEROS ---------- */
+  .stats { display: flex; background: #3F9E46; }
+  .stat { flex: 1; padding: 26px 30px; border-right: 1px solid rgba(255,255,255,.22); }
+  .stat:last-child { border-right: 0; }
+  .stat b { display: block; font-size: 40px; color: #fff; font-weight: 800; line-height: 1; letter-spacing: -1px; }
+  .stat span { display: block; margin-top: 8px; font-size: 13.5px; color: #E4F6E0; letter-spacing: .4px; }
+
+  /* ---------- SECÇÕES ---------- */
+  .sec { padding: 46px 78px 0; }
+  .sec h2 {
+    font-size: 25px; font-weight: 800; color: #0E7A55; letter-spacing: -.3px;
+    display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px;
+  }
+  .sec h2 em { font-style: normal; font-size: 15px; font-weight: 800; color: #B7C7C0; letter-spacing: 1px; }
+  .rule { height: 3px; width: 74px; background: #3F9E46; border-radius: 2px; margin-bottom: 22px; }
+  .lead { font-size: 17.5px; line-height: 1.62; color: #46544C; max-width: 1180px; }
+
+  /* ---------- PROBLEMA ---------- */
+  .cols { display: flex; gap: 30px; margin-top: 24px; }
+  .card {
+    flex: 1; border: 1px solid #E1E9E4; border-radius: 14px; padding: 24px 26px; background: #FBFDFC;
+  }
+  .card.bad { background: #FFF8F6; border-color: #F6DDD6; }
+  .card.good { background: #F5FBF6; border-color: #D6EEDB; }
+  .card h3 { font-size: 16px; font-weight: 800; margin-bottom: 14px; letter-spacing: .2px; }
+  .card.bad h3 { color: #B4442C; }
+  .card.good h3 { color: #2E7D36; }
+  .card ul { list-style: none; }
+  .card li { font-size: 14.6px; line-height: 1.55; color: #46544C; padding-left: 20px; position: relative; margin-bottom: 11px; }
+  .card li:last-child { margin-bottom: 0; }
+  .card li::before { content: ""; position: absolute; left: 3px; top: 7px; width: 7px; height: 7px; border-radius: 50%; }
+  .card.bad li::before { background: #E0704F; }
+  .card.good li::before { background: #3F9E46; }
+  .card li b { color: #2B352F; }
+
+  /* ---------- FUNCIONALIDADES ---------- */
+  .shots { display: flex; gap: 24px; margin-top: 26px; }
+  .shot { flex: 1; }
+  .shot img { width: 100%; display: block; border-radius: 10px; border: 1px solid #DDE6E1; box-shadow: 0 6px 18px rgba(28,64,52,.10); }
+  .shot .cap { margin-top: 12px; font-size: 13.4px; color: #5C6B64; line-height: 1.5; }
+  .shot .cap b { display: block; color: #2B352F; font-size: 14.6px; font-weight: 800; margin-bottom: 3px; }
+  .num { display: inline-block; width: 21px; height: 21px; border-radius: 50%; background: #3F9E46; color: #fff;
+         font-size: 12.5px; font-weight: 800; text-align: center; line-height: 21px; margin-right: 7px; }
+
+  /* ---------- MOBILE ---------- */
+  .band { background: #F4F8F6; margin-top: 46px; padding: 40px 78px 44px; }
+  .band h2 { font-size: 25px; font-weight: 800; color: #0E7A55; margin-bottom: 8px; letter-spacing: -.3px; }
+  .band p { font-size: 16px; color: #46544C; line-height: 1.6; max-width: 1050px; }
+  .phones { display: flex; gap: 26px; margin-top: 26px; justify-content: center; }
+  .phone { width: 232px; }
+  .phone .frame {
+    border-radius: 22px; overflow: hidden; border: 6px solid #10241F; background: #10241F;
+    box-shadow: 0 10px 26px rgba(16,36,31,.22);
+  }
+  .phone img { width: 100%; display: block; }
+  .phone .cap { text-align: center; margin-top: 11px; font-size: 13px; color: #5C6B64; font-weight: 700; letter-spacing: .2px; }
+
+  /* ---------- TABELAS ---------- */
+  table { width: 100%; border-collapse: collapse; margin-top: 22px; font-size: 14.2px; }
+  th { background: #3F9E46; color: #fff; text-align: left; padding: 11px 14px; font-size: 13px; letter-spacing: .5px; text-transform: uppercase; }
+  td { padding: 11px 14px; border-bottom: 1px solid #E6EDE9; color: #46544C; vertical-align: top; line-height: 1.45; }
+  tr:nth-child(even) td { background: #FAFCFB; }
+  td:first-child { font-weight: 700; color: #2B352F; }
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 800; letter-spacing: .3px; }
+  .pill.ok { background: #E4F5E5; color: #2E7D36; }
+  .pill.crit { background: #FDE8E2; color: #B4442C; }
+  .pill.alta { background: #FDF1DC; color: #9A6A0B; }
+  .pill.med { background: #E8F0FB; color: #2C5C9E; }
+
+  /* ---------- RODAPÉ ---------- */
+  .foot { background: #0B4A44; color: #A9CFC4; padding: 30px 78px; display: flex; justify-content: space-between; align-items: center; margin-top: 46px; }
+  .foot b { color: #fff; font-size: 16px; display: block; margin-bottom: 5px; letter-spacing: .3px; }
+  .foot span { font-size: 13.5px; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <img src="img/capa.png" alt="">
+  <div class="overlay">
+    <div class="kicker">Proposta de aplicação</div>
+    <h1>Orçamento de Automóveis por WhatsApp</h1>
+    <p>Simulador de vendas para stands: o vendedor escolhe o carro, define a entrada e envia o orçamento completo para o cliente em 4 toques.</p>
+    <div class="meta">ABC Seminovos · Luanda, Angola &nbsp;|&nbsp; Versão 1.0 — entregue, testada e validada &nbsp;|&nbsp; 05 de novembro de 2026</div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="stat"><b>26</b><span>testes automatizados</span></div>
+  <div class="stat"><b>100%</b><span>aprovados</span></div>
+  <div class="stat"><b>0</b><span>erros de consola</span></div>
+  <div class="stat"><b>4</b><span>toques até enviar</span></div>
+  <div class="stat"><b>1</b><span>ficheiro, sem instalação</span></div>
+</section>
+
+<section class="sec">
+  <h2><em>01</em> O problema</h2>
+  <div class="rule"></div>
+  <p class="lead">Um stand de seminovos vive de responder depressa. Hoje, o orçamento é calculado de cabeça, escrito à mão e enviado por WhatsApp — e cada minuto nesse processo é um cliente a arrefecer. O preço muda de vendedor para vendedor, os contactos perdem-se no papel e não existe histórico de quem recebeu o quê.</p>
+
+  <div class="cols">
+    <div class="card bad">
+      <h3>Processo manual</h3>
+      <ul>
+        <li><b>Cálculo frágil:</b> prestações de cabeça, sujeitas a erro</li>
+        <li><b>Sem padrão:</b> cada vendedor escreve de forma diferente</li>
+        <li><b>Contactos perdidos:</b> o número do cliente fica num papel</li>
+        <li><b>Zero rastreio:</b> ninguém sabe se a proposta foi feita</li>
+      </ul>
+    </div>
+    <div class="card good">
+      <h3>Com a aplicação</h3>
+      <ul>
+        <li><b>Cálculo imediato:</b> saldo, 12x/24x/36x e valor à vista</li>
+        <li><b>Orçamento padronizado:</b> sempre com a mesma apresentação</li>
+        <li><b>Cliente registado:</b> fica guardado com o histórico</li>
+        <li><b>Reenvio em 1 toque:</b> "Enviar novamente" para o mesmo número</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <h2><em>02</em> O que a aplicação faz</h2>
+  <div class="rule"></div>
+  <p class="lead">Quatro ecrãs, um fluxo linear: escolher o carro, ler a ficha, simular o financiamento, enviar por WhatsApp. Depois disso, o cliente passa a existir na lista de Clientes com todos os orçamentos que recebeu.</p>
+
+  <div class="shots">
+    <div class="shot">
+      <img src="img/d-modelos.png" alt="">
+      <div class="cap"><b><span class="num">1</span>Catálogo</b>Grelha de veículos com fotografia, estado e preço. Filtros Novo / Usado / Semi-usado e pesquisa por nome.</div>
+    </div>
+    <div class="shot">
+      <img src="img/d-novo-modelo.png" alt="">
+      <div class="cap"><b><span class="num">2</span>Novo modelo</b>Marca em texto livre, ano, cor, preço, desconto e até 6 fotografias — por seleção ou arrastamento.</div>
+    </div>
+  </div>
+
+  <div class="shots" style="margin-top:26px">
+    <div class="shot">
+      <img src="img/d-orcamento.png" alt="">
+      <div class="cap"><b><span class="num">3</span>Simulação</b>Ao alterar a entrada, tudo é recalculado no instante: saldo a pagar, prestações e valor à vista com desconto.</div>
+    </div>
+    <div class="shot">
+      <img src="img/d-cliente-detalhe.png" alt="">
+      <div class="cap"><b><span class="num">4</span>Cliente e reenvio</b>Todos os orçamentos de um cliente, com os valores originais e o botão "Enviar novamente".</div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <h2>A aplicação no telemóvel</h2>
+  <p>É no telemóvel que a aplicação é realmente usada — em pé, num stand ou numa feira. É o mesmo ficheiro: adapta-se sozinho ao ecrã, passando a barra lateral para menu inferior, a grelha de 4 para 2 colunas e as tabelas para cartões próprios para toque.</p>
+  <div class="phones">
+    <div class="phone"><div class="frame"><img src="img/m-modelos.png" alt=""></div><div class="cap">Modelos</div></div>
+    <div class="phone"><div class="frame"><img src="img/m-detalhe.png" alt=""></div><div class="cap">Ficha do veículo</div></div>
+    <div class="phone"><div class="frame"><img src="img/m-orcamento.png" alt=""></div><div class="cap">Orçamento</div></div>
+    <div class="phone"><div class="frame"><img src="img/m-clientes.png" alt=""></div><div class="cap">Clientes</div></div>
+  </div>
+</section>
+
+<section class="sec">
+  <h2><em>03</em> Qualidade</h2>
+  <div class="rule"></div>
+  <p class="lead">Antes da entrega, a aplicação passou por 26 testes automatizados — cálculos, validações, imagens, persistência de dados e comportamento em três tamanhos de ecrã. Todos passaram, sem um único erro de consola.</p>
+  <table>
+    <tr><th style="width:19%">Área</th><th style="width:61%">Verificação</th><th style="width:20%">Resultado</th></tr>
+    <tr><td>Cálculo</td><td>Entrada de 10%, 100%, 1 Kz e entrada acima do preço</td><td><span class="pill ok">Aprovado</span></td></tr>
+    <tr><td>Cálculo</td><td>Prestações de 12x, 24x e 36x em 6 cenários</td><td><span class="pill ok">Aprovado</span></td></tr>
+    <tr><td>Cálculo</td><td>Desconto superior ao preço nunca gera valor negativo</td><td><span class="pill ok">Aprovado</span></td></tr>
+    <tr><td>Validação</td><td>Registo bloqueado sem marca, modelo, ano ou preço</td><td><span class="pill ok">Aprovado</span></td></tr>
+    <tr><td>Integração</td><td>Envio para WhatsApp com indicativo +244 e nome do cliente</td><td><span class="pill ok">Aprovado</span></td></tr>
+    <tr><td>Dados</td><td>Catálogo e orçamentos mantidos após fechar o navegador</td><td><span class="pill ok">Aprovado</span></td></tr>
+    <tr><td>Interface</td><td>Sem deslocamento horizontal em telemóvel, tablet e desktop</td><td><span class="pill ok">Aprovado</span></td></tr>
+  </table>
+</section>
+
+<section class="sec">
+  <h2><em>04</em> Recomendações do especialista</h2>
+  <div class="rule"></div>
+  <p class="lead">Avaliação de quem trabalha com orçamentação de automóveis: <b>8,5 / 10</b>. A aplicação está pronta a usar; o que falta são decisões comerciais, não código.</p>
+  <table>
+    <tr><th style="width:14%">Prioridade</th><th style="width:31%">Melhoria</th><th style="width:55%">Impacto no negócio</th></tr>
+    <tr>
+      <td><span class="pill crit">Crítica</span></td>
+      <td>Tabela de coeficientes de juros por prazo</td>
+      <td>Hoje as prestações não têm juros: 36x de 5 000 Kz num carro de 180 000 Kz devolve o mesmo valor. Um cliente que faz a conta em casa percebe — e perde-se a confiança.</td>
+    </tr>
+    <tr>
+      <td><span class="pill alta">Alta</span></td>
+      <td>Validade do orçamento (7 dias)</td>
+      <td>Protege a loja de reclamações baseadas em preços antigos.</td>
+    </tr>
+    <tr>
+      <td><span class="pill alta">Alta</span></td>
+      <td>Retoma do carro usado como parte do pagamento</td>
+      <td>É a prática corrente em Angola: "dou o meu carro + 30 000 Kz de entrada".</td>
+    </tr>
+    <tr>
+      <td><span class="pill med">Média</span></td>
+      <td>Câmbio Kz/USD no orçamento</td>
+      <td>O mercado angolano negoceia em dólares; evita contas paralelas em papel.</td>
+    </tr>
+    <tr>
+      <td><span class="pill med">Média</span></td>
+      <td>IVA, documentação e transferência</td>
+      <td>O cliente quer saber o valor final, pronto a circular.</td>
+    </tr>
+  </table>
+</section>
+
+<footer class="foot">
+  <div>
+    <b>O que está entregue</b>
+    <span>Aplicação completa num único ficheiro (164 KB) · fotografias incluídas · documentação visual · bateria de testes reutilizável</span>
+  </div>
+  <div style="text-align:right">
+    <b>Requisitos</b>
+    <span>Qualquer navegador atualizado · sem servidor · sem instalação</span>
+  </div>
+</footer>
+
+</body>
+</html>
