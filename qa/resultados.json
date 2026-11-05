@@ -226,6 +226,31 @@
  },
  {
   "r": "PASS",
+  "n": "Desktop · campo de procura removido",
+  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'oculto', 'sinoAFrente': True, 'utilizador': 'visivel'}"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · nome da página fora da appbar",
+  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'oculto', 'sinoAFrente': True, 'utilizador': 'visivel'}"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · modo Online fora da appbar",
+  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'oculto', 'sinoAFrente': True, 'utilizador': 'visivel'}"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · notificações e utilizador alinhados à direita",
+  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'oculto', 'sinoAFrente': True, 'utilizador': 'visivel'}"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · appbar sem erros",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
   "n": "Mobile · botões com altura harmoniosa",
   "d": "{'h1': 48, 'h2': 46, 'w1': 334, 'w2': 334, 'ordem': True, 'fim': True}"
  },

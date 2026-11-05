@@ -275,6 +275,26 @@ async def main():
         ok("Mobile · sem erros no detalhe do cliente", len(ce)==0, str(ce[:2]))
         await cb.close()
 
+        # ============ APPBAR DESKTOP LIMPA ============
+        da = await b.new_page(viewport={"width":1440,"height":860})
+        dde=[]; da.on("pageerror", lambda e: dde.append(str(e)))
+        await novo(da)
+        gd = await da.evaluate("""()=>{
+          const vis=s=>{const e=document.querySelector(s); if(!e) return 'inexistente';
+            return getComputedStyle(e).display==='none'?'oculto':'visivel';};
+          const bar=document.querySelector('.bar').getBoundingClientRect();
+          const sino=document.querySelector('.bar .ic-btn').getBoundingClientRect();
+          return {busca:vis('.search-top'), titulo:vis('#barTitle'), pill:vis('#netPill'),
+                  sinoAFrente: sino.right > bar.left + bar.width/2,
+                  utilizador: vis('.who')};
+        }""")
+        ok("Desktop · campo de procura removido", gd["busca"]=="inexistente", str(gd))
+        ok("Desktop · nome da página fora da appbar", gd["titulo"]=="oculto", str(gd))
+        ok("Desktop · modo Online fora da appbar", gd["pill"]=="oculto", str(gd))
+        ok("Desktop · notificações e utilizador alinhados à direita", gd["sinoAFrente"] and gd["utilizador"] in ("visivel","flex"), str(gd))
+        ok("Desktop · appbar sem erros", len(dde)==0, str(dde[:2]))
+        await da.close()
+
         mb = await b.new_page(viewport={"width":390,"height":760}, is_mobile=True, has_touch=True)
         await novo(mb)
         await mb.click("[data-criar]:visible"); await mb.wait_for_timeout(700)
