@@ -477,17 +477,23 @@
         "content"
         "navbar";
     }
-    .brand{padding:0 16px;gap:11px}
+    .brand{padding:0 14px;gap:6px;height:58px}
     .brand::after{display:none}
     .brand .mark{width:28px;height:28px}
-    .brand b{font-size:15.5px}
+    .brand b{display:none}                 /* poupa espaço: o título da página ocupa o centro */
+    .brand.com-voltar .mark{display:none}  /* o botão voltar ocupa o lugar do logótipo */
 
+    /* appbar única no telemóvel: marca + título + estado + notificações */
     .bar{
-      position:fixed;top:58px;left:0;right:0;height:52px;z-index:40;
-      padding:0 12px;gap:10px;border-bottom:1px solid var(--line);
+      position:relative;z-index:2;grid-area:brand;height:auto;min-width:0;
+      padding:0;gap:8px;border-bottom:0;box-shadow:none;background:transparent;
     }
-    .bar .back{display:flex}
-    .bar h1{font-size:15px;flex:1;overflow:hidden;text-overflow:ellipsis}
+    .bar .back{
+      display:flex;margin-left:6px;width:30px;height:30px;
+      background:#f2f5f4;border-radius:8px;color:var(--ink-2);
+    }
+    .bar h1{font-size:14.5px;font-weight:700;flex:1;min-width:0;overflow:hidden;
+            text-overflow:ellipsis;white-space:nowrap;margin-left:2px}
     .bar .crumb,.search-top,.who{display:none}
     .net-pill{height:24px;padding:0 8px;font-size:10px;gap:5px}
     .net-pill i{width:6px;height:6px}
@@ -506,11 +512,11 @@
     .nav-item.on{color:var(--green)}
 
     .content{
-      padding:calc(52px + 14px) 14px 26px;
+      padding:14px 14px 26px;
       position:relative;
     }
     .page-head{margin-bottom:14px}
-    .page-head h2{font-size:19px}
+    .page-head h2{display:none}          /* título já está na appbar — evita repetição */
     .page-head p{font-size:11.5px}
     .page-head .right .btn.ghost{display:none}
 
@@ -1217,6 +1223,7 @@ function ir(page){
   document.getElementById('barCrumb').textContent = TITLES[page][1];
   const voltar = (page === 'detalhe' || page === 'orcamento' || page === 'cliente' || page === 'orcdetalhe');
   document.getElementById('btnBack').style.visibility = voltar ? 'visible' : 'hidden';
+  document.querySelector('.brand').classList.toggle('com-voltar', voltar);
 
   const raiz = (page === 'detalhe' || page === 'orcamento') ? 'modelos'
              : (page === 'cliente') ? 'clientes'

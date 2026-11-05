@@ -181,6 +181,31 @@
  },
  {
   "r": "PASS",
+  "n": "Mobile · appbar única (sem barra extra)",
+  "d": "{'appbar': 58, 'topoConteudo': 58, 'barraExtra': 0, 'pillDentro': True, 'sinoDentro': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · 'Online' na appbar",
+  "d": "{'appbar': 58, 'topoConteudo': 58, 'barraExtra': 0, 'pillDentro': True, 'sinoDentro': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · ícone de notificações na appbar",
+  "d": "{'appbar': 58, 'topoConteudo': 58, 'barraExtra': 0, 'pillDentro': True, 'sinoDentro': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · voltar não tapa o logótipo",
+  "d": "{'voltar': True, 'logoEscondido': True, 'sobreposto': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · sem erros na appbar única",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
   "n": "Mobile · botões com altura harmoniosa",
   "d": "{'h1': 48, 'h2': 46, 'w1': 334, 'w2': 334, 'ordem': True, 'fim': True}"
  },

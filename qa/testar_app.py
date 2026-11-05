@@ -226,6 +226,33 @@ async def main():
         ok("Sem erros no modo offline", len(oe)==0, str(oe[:2]))
         await ctxo.close()
 
+        # ============ APPBAR MOBILE ÚNICA ============
+        ab = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        ae=[]; ab.on("pageerror", lambda e: ae.append(str(e)))
+        await novo(ab)
+        g = await ab.evaluate("""()=>{
+          const q=s=>document.querySelector(s).getBoundingClientRect();
+          const brand=q('.brand'), pill=q('#netPill'), sino=q('.bar .ic-btn'), cont=q('.content');
+          return {appbar:Math.round(brand.height), topoConteudo:Math.round(cont.top),
+                  barraExtra:Math.round(q('.bar').top),
+                  pillDentro: pill.top>=brand.top && pill.bottom<=brand.bottom,
+                  sinoDentro: sino.top>=brand.top && sino.bottom<=brand.bottom};
+        }""")
+        ok("Mobile · appbar única (sem barra extra)", g["appbar"]==58 and g["topoConteudo"]==58 and g["barraExtra"]==0, str(g))
+        ok("Mobile · 'Online' na appbar", g["pillDentro"], str(g))
+        ok("Mobile · ícone de notificações na appbar", g["sinoDentro"], str(g))
+        await ab.evaluate("()=>{atual=CARROS[0]; abrirDetalhe();}"); await ab.wait_for_timeout(500)
+        d = await ab.evaluate("""()=>{
+          const back=document.getElementById('btnBack'), mark=document.querySelector('.brand .mark');
+          const rb=back.getBoundingClientRect(), rm=mark.getBoundingClientRect();
+          return {voltar:getComputedStyle(back).visibility==='visible',
+                  logoEscondido:getComputedStyle(mark).display==='none',
+                  sobreposto: rm.width>0 && rb.right>rm.left};
+        }""")
+        ok("Mobile · voltar não tapa o logótipo", d["voltar"] and not d["sobreposto"], str(d))
+        ok("Mobile · sem erros na appbar única", len(ae)==0, str(ae[:2]))
+        await ab.close()
+
         mb = await b.new_page(viewport={"width":390,"height":760}, is_mobile=True, has_touch=True)
         await novo(mb)
         await mb.click("[data-criar]:visible"); await mb.wait_for_timeout(700)
