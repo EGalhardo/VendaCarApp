@@ -47,20 +47,27 @@
       "side  content";
   }
 
-  /* ---------- marca ---------- */
+  /* ---------- marca (appbar branca) ---------- */
   .brand{
-    grid-area:brand;display:flex;align-items:center;gap:10px;padding:0 20px;
-    background:var(--teal);color:#fff;
+    position:relative;grid-area:brand;display:flex;align-items:center;gap:10px;padding:0 20px;
+    background:#fff;color:var(--ink);border-bottom:1px solid var(--line);
   }
   .brand .mark{
-    width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.18);
+    width:30px;height:30px;border-radius:8px;background:var(--teal);
     display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+    box-shadow:0 2px 6px rgba(14,156,148,.28);
   }
-  .brand b{font-weight:600;letter-spacing:.3px;font-size:16.5px}
+  .brand .mark svg{stroke:#fff}
+  .brand b{font-weight:700;letter-spacing:.3px;font-size:16.5px;color:var(--ink)}
+  /* traço fino a separar a marca da appbar no desktop */
+  .brand::after{
+    content:"";position:absolute;left:250px;top:14px;bottom:14px;width:1px;background:var(--line);
+  }
 
   /* ---------- appbar ---------- */
   .bar{
     grid-area:bar;background:#fff;border-bottom:1px solid var(--line);
+    box-shadow:0 1px 2px rgba(20,40,30,.03);
     display:flex;align-items:center;gap:16px;padding:0 24px;min-width:0;
   }
   .bar .back{
@@ -453,6 +460,7 @@
   /* --- tablet / desktop estreito: barra lateral em ícones --- */
   @media (max-width:1080px) and (min-width:901px){
     .app{grid-template-columns:76px 1fr}
+    .brand::after{left:76px}
     .side .lbl,.nav span.tx,.side .cnt,.side .store .n,.side .store .s{display:none}
     .nav{justify-content:center}
     .detail,.quote{grid-template-columns:1fr}
@@ -470,6 +478,7 @@
         "navbar";
     }
     .brand{padding:0 16px;gap:11px}
+    .brand::after{display:none}
     .brand .mark{width:28px;height:28px}
     .brand b{font-size:15.5px}
 
