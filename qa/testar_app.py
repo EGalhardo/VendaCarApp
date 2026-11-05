@@ -253,6 +253,28 @@ async def main():
         ok("Mobile · sem erros na appbar única", len(ae)==0, str(ae[:2]))
         await ab.close()
 
+        # ============ CLIENTE · BOTÃO "ENVIAR NOVAMENTE" (mobile) ============
+        cb = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        ce=[]; cb.on("pageerror", lambda e: ce.append(str(e)))
+        await novo(cb)
+        await cb.evaluate("()=>abrirCliente('Maria Costa','921445010')"); await cb.wait_for_timeout(600)
+        hb = await cb.evaluate("""()=>{
+          const bs=[...document.querySelectorAll('#cOrcs .orc-card .orc-actions .btn')];
+          const env=bs.filter(x=>x.textContent.includes('Enviar novamente'));
+          return {n:env.length, alturas:env.map(b=>Math.round(b.getBoundingClientRect().height)),
+                  larguras:env.map(b=>Math.round(b.getBoundingClientRect().width)),
+                  fs: env.length?getComputedStyle(env[0]).fontSize:null};
+        }""")
+        ok("Mobile · botão 'Enviar novamente' com altura de toque",
+           hb["n"]>0 and all(46<=x<=56 for x in hb["alturas"]), str(hb))
+        ok("Mobile · botão ocupa a largura do cartão",
+           len(set(hb["larguras"]))==1 and hb["larguras"][0]>=280, str(hb["larguras"]))
+        await cb.click("#cOrcs .orc-card .orc-actions .btn"); await cb.wait_for_timeout(500)
+        ok("Mobile · botão continua a abrir o popup de envio",
+           await cb.evaluate("()=>document.getElementById('mEnviar').classList.contains('open')"), "")
+        ok("Mobile · sem erros no detalhe do cliente", len(ce)==0, str(ce[:2]))
+        await cb.close()
+
         mb = await b.new_page(viewport={"width":390,"height":760}, is_mobile=True, has_touch=True)
         await novo(mb)
         await mb.click("[data-criar]:visible"); await mb.wait_for_timeout(700)

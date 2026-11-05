@@ -206,6 +206,26 @@
  },
  {
   "r": "PASS",
+  "n": "Mobile · botão 'Enviar novamente' com altura de toque",
+  "d": "{'n': 2, 'alturas': [50, 50], 'larguras': [328, 328], 'fs': '14.5px'}"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · botão ocupa a largura do cartão",
+  "d": "[328, 328]"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · botão continua a abrir o popup de envio",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · sem erros no detalhe do cliente",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
   "n": "Mobile · botões com altura harmoniosa",
   "d": "{'h1': 48, 'h2': 46, 'w1': 334, 'w2': 334, 'ordem': True, 'fim': True}"
  },

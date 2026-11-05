@@ -584,8 +584,14 @@
     .orc-rows{grid-template-columns:1fr;gap:0}
     .orc-top img{width:74px;height:54px}
     .orc-val{font-size:15.5px}
-    .orc-actions{flex-direction:column}
-    .orc-actions .btn.wide{min-width:0}
+    .orc-actions{flex-direction:column;gap:9px}
+    /* ação principal com altura de toque confortável (estava a colapsar) */
+    .orc-actions .btn,
+    .orc-actions .btn.wide{
+      flex:0 0 auto;width:100%;min-width:0;
+      height:50px;min-height:50px;font-size:14.5px;border-radius:11px;
+    }
+    .orc-actions .btn.ghost{height:44px;min-height:44px;font-size:13.5px}
     .foot{flex-direction:column-reverse}
     .foot .btn,.foot .btn.ghost{flex:0 0 auto;width:100%}
   }
