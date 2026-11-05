@@ -5,3 +5,4 @@ __pycache__/
 *.pyc
 node_modules/
 .sudo_as_admin_successful
+*.bundle
