@@ -301,8 +301,29 @@ async def main():
         }""")
         ok("Desktop · área de conteúdo branca", est["fundo"]=="rgb(255, 255, 255)", est["fundo"])
         ok("Desktop · moldura cinzenta no conteúdo",
-           est["bordaTopo"]=="rgb(216, 222, 219)" and est["bordaEsq"]=="rgb(216, 222, 219)", str(est))
+           est["bordaTopo"]=="rgb(216, 222, 219)", str(est))
         ok("Desktop · cartões com borda cinzenta", est["cartao"]=="rgb(216, 222, 219)", est["cartao"])
+        await da.screenshot(path="/tmp/moldura.png")
+        mol = await da.evaluate("""()=>{
+          const g=s=>getComputedStyle(document.querySelector(s));
+          const c=g('.content'), sd=g('.side'), br=g('.brand');
+          return {cTopo:c.borderTopColor, cDir:c.borderRightColor, cFundo:c.borderBottomColor,
+                  sDir:sd.borderRightColor, sFundo:sd.borderBottomColor,
+                  bFundo:br.borderBottomColor, bEsq:br.borderLeftWidth};
+        }""")
+        cinza = "rgb(216, 222, 219)"
+        ok("Desktop · moldura completa (1px, cantos fechados)",
+           mol["cTopo"]==cinza and mol["cDir"]==cinza and mol["cFundo"]==cinza
+           and mol["sDir"]==cinza and mol["sFundo"]==cinza and mol["bFundo"]==cinza, str(mol))
+        hitos = await da.evaluate("""()=>{
+          const q=s=>document.querySelector(s).getBoundingClientRect();
+          const c=q('.content'), sd=q('.side'), b=q('.brand'), br=q('.bar');
+          return {conteudoTopo:c.top, appbarFundo:Math.max(b.bottom,br.bottom),
+                  conteudoEsq:c.left, lateralDir:sd.right, fim:innerHeight, fundoConteudo:c.bottom};
+        }""")
+        ok("Desktop · moldura alinhada com appbar e barra lateral",
+           hitos["conteudoTopo"]==hitos["appbarFundo"] and hitos["conteudoEsq"]==hitos["lateralDir"], str(hitos))
+        ok("Desktop · moldura fecha no fundo do ecrã", abs(hitos["fundoConteudo"]-hitos["fim"])<=1, str(hitos))
         await da.close()
 
         mb = await b.new_page(viewport={"width":390,"height":760}, is_mobile=True, has_touch=True)

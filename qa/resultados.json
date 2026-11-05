@@ -207,12 +207,12 @@
  {
   "r": "PASS",
   "n": "Mobile · botão 'Enviar novamente' com altura de toque",
-  "d": "{'n': 2, 'alturas': [50, 50], 'larguras': [326, 326], 'fs': '14.5px'}"
+  "d": "{'n': 2, 'alturas': [50, 50], 'larguras': [327, 327], 'fs': '14.5px'}"
  },
  {
   "r": "PASS",
   "n": "Mobile · botão ocupa a largura do cartão",
-  "d": "[326, 326]"
+  "d": "[327, 327]"
  },
  {
   "r": "PASS",
@@ -257,12 +257,27 @@
  {
   "r": "PASS",
   "n": "Desktop · moldura cinzenta no conteúdo",
-  "d": "{'fundo': 'rgb(255, 255, 255)', 'bordaTopo': 'rgb(216, 222, 219)', 'bordaEsq': 'rgb(216, 222, 219)', 'cartao': 'rgb(216, 222, 219)'}"
+  "d": "{'fundo': 'rgb(255, 255, 255)', 'bordaTopo': 'rgb(216, 222, 219)', 'bordaEsq': 'rgb(61, 71, 68)', 'cartao': 'rgb(216, 222, 219)'}"
  },
  {
   "r": "PASS",
   "n": "Desktop · cartões com borda cinzenta",
   "d": "rgb(216, 222, 219)"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · moldura completa (1px, cantos fechados)",
+  "d": "{'cTopo': 'rgb(216, 222, 219)', 'cDir': 'rgb(216, 222, 219)', 'cFundo': 'rgb(216, 222, 219)', 'sDir': 'rgb(216, 222, 219)', 'sFundo': 'rgb(216, 222, 219)', 'bFundo': 'rgb(216, 222, 219)', 'bEsq': '0px'}"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · moldura alinhada com appbar e barra lateral",
+  "d": "{'conteudoTopo': 64, 'appbarFundo': 64, 'conteudoEsq': 250, 'lateralDir': 250, 'fim': 860, 'fundoConteudo': 860}"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · moldura fecha no fundo do ecrã",
+  "d": "{'conteudoTopo': 64, 'appbarFundo': 64, 'conteudoEsq': 250, 'lateralDir': 250, 'fim': 860, 'fundoConteudo': 860}"
  },
  {
   "r": "PASS",
