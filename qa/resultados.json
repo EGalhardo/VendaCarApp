@@ -207,12 +207,12 @@
  {
   "r": "PASS",
   "n": "Mobile · botão 'Enviar novamente' com altura de toque",
-  "d": "{'n': 2, 'alturas': [50, 50], 'larguras': [328, 328], 'fs': '14.5px'}"
+  "d": "{'n': 2, 'alturas': [50, 50], 'larguras': [326, 326], 'fs': '14.5px'}"
  },
  {
   "r": "PASS",
   "n": "Mobile · botão ocupa a largura do cartão",
-  "d": "[328, 328]"
+  "d": "[326, 326]"
  },
  {
   "r": "PASS",
@@ -248,6 +248,21 @@
   "r": "PASS",
   "n": "Desktop · appbar sem erros",
   "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · área de conteúdo branca",
+  "d": "rgb(255, 255, 255)"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · moldura cinzenta no conteúdo",
+  "d": "{'fundo': 'rgb(255, 255, 255)', 'bordaTopo': 'rgb(216, 222, 219)', 'bordaEsq': 'rgb(216, 222, 219)', 'cartao': 'rgb(216, 222, 219)'}"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · cartões com borda cinzenta",
+  "d": "rgb(216, 222, 219)"
  },
  {
   "r": "PASS",

@@ -293,6 +293,16 @@ async def main():
         ok("Desktop · modo Online fora da appbar", gd["pill"]=="oculto", str(gd))
         ok("Desktop · notificações e utilizador alinhados à direita", gd["sinoAFrente"] and gd["utilizador"] in ("visivel","flex"), str(gd))
         ok("Desktop · appbar sem erros", len(dde)==0, str(dde[:2]))
+        est = await da.evaluate("""()=>{
+          const c=document.querySelector('.content'), st=getComputedStyle(c);
+          const card=document.querySelector('.car');
+          return {fundo:st.backgroundColor, bordaTopo:st.borderTopColor, bordaEsq:st.borderLeftColor,
+                  cartao:getComputedStyle(card).borderColor};
+        }""")
+        ok("Desktop · área de conteúdo branca", est["fundo"]=="rgb(255, 255, 255)", est["fundo"])
+        ok("Desktop · moldura cinzenta no conteúdo",
+           est["bordaTopo"]=="rgb(216, 222, 219)" and est["bordaEsq"]=="rgb(216, 222, 219)", str(est))
+        ok("Desktop · cartões com borda cinzenta", est["cartao"]=="rgb(216, 222, 219)", est["cartao"])
         await da.close()
 
         mb = await b.new_page(viewport={"width":390,"height":760}, is_mobile=True, has_touch=True)
