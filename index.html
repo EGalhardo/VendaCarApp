@@ -384,12 +384,22 @@
   /* miniaturas de vídeo no popup */
   .ups.videos{grid-template-columns:repeat(3,1fr)}
   .up.video{background:#132b24}
+  .up.video video{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    background:#132b24;pointer-events:none;
+  }
   .up.video .play{
     position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    color:#fff;font-size:0;
+    color:#fff;font-size:0;z-index:1;
+    background:linear-gradient(180deg,rgba(9,20,17,0) 40%,rgba(9,20,17,.55) 100%);
   }
-  .up.video .play svg{width:30px;height:30px;color:#fff;opacity:.92;
-    filter:drop-shadow(0 2px 8px rgba(0,0,0,.55))}
+  .up.video .play svg{width:17px;height:17px;color:#132b24;opacity:1;
+    transform:translateX(1px)}
+  .up.video .play::before{
+    content:"";position:absolute;width:38px;height:38px;border-radius:50%;
+    background:rgba(255,255,255,.94);box-shadow:0 3px 10px rgba(0,0,0,.45);
+  }
+  .up.video .play svg{position:relative;z-index:2}
   .up.video .nm{
     position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);color:#fff;
     font-size:9.5px;font-weight:600;padding:3px 5px;white-space:nowrap;overflow:hidden;
@@ -403,12 +413,18 @@
   .hero video{width:100%;height:100%;object-fit:contain;background:#0d1a17;display:block}
   .gal .t.play-t{position:relative}
   .gal .t.play-t::after{
-    content:"";position:absolute;inset:0;background:rgba(13,26,23,.34);
+    content:"";position:absolute;inset:0;background:rgba(13,26,23,.30);
   }
   .gal .t.play-t .ico{
     position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;
   }
-  .gal .t.play-t .ico svg{width:20px;height:20px;color:#fff;filter:drop-shadow(0 1px 4px rgba(0,0,0,.5))}
+  .gal .t.play-t .ico::before{
+    content:"";position:absolute;width:30px;height:30px;border-radius:50%;
+    background:rgba(255,255,255,.95);box-shadow:0 2px 8px rgba(0,0,0,.35);
+  }
+  .gal .t.play-t .ico svg{
+    width:15px;height:15px;color:#132b24;position:relative;z-index:2;transform:translateX(1px);
+  }
 
   /* cartões de estatística clicáveis no Perfil */
   .stat-card.link{cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s}
@@ -1496,6 +1512,7 @@ function renderVideos(){
   previewVid.className = 'ups videos';
   previewVid.innerHTML = videos.map((v, i) => `
     <div class="up video">
+      <video src="${v.src}#t=0.3" muted preload="metadata" playsinline></video>
       <div class="play">${ICONE_PLAY}</div>
       <span class="nm">${esc(v.nome || 'vídeo')}</span>
       <button type="button" class="del" data-delvid="${i}" aria-label="Remover vídeo">×</button>
