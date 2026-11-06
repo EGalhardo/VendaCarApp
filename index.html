@@ -382,6 +382,17 @@
     font-size:8.5px;font-weight:700;text-align:center;padding:2px 0;letter-spacing:.3px;
   }
   .up-count{font-size:11px;color:#9bb0a4;margin-top:8px}
+  /* IVA — imposto mostrado à parte */
+  .imposto{
+    font-style:normal;font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;
+    color:#9a6b12;background:#fdf3dd;border:1px solid #f0dfb4;border-radius:5px;
+    padding:1px 5px;margin-left:6px;vertical-align:1px;
+  }
+  .r.total-iva,.od-row.total-iva{
+    background:#fbfdfb;border-radius:8px;padding:7px 9px;margin:2px 0 4px;
+  }
+  .r.total-iva b,.od-row.total-iva b{color:var(--green-ink)}
+
   /* campos da loja no popup */
   .sep-lbl{
     display:flex;align-items:baseline;gap:8px;margin:20px 0 10px;
@@ -795,6 +806,7 @@
           <div class="d-off" id="dOff">—</div>
           <div class="specs">
             <div class="spec"><span>Preço Normal</span><b id="sPreco">—</b></div>
+            <div class="spec"><span>IVA 14% <i class="imposto">imposto</i></span><b id="sIva">—</b></div>
             <div class="spec"><span>Desconto à vista</span><b id="sDesc">—</b></div>
             <div class="spec"><span>Entrada sugerida (10%)</span><b id="sEnt">—</b></div>
             <div class="spec"><span>Estado</span><b id="sEstado">—</b></div>
@@ -829,6 +841,8 @@
           </div>
           <div class="rows" style="margin-top:18px">
             <div class="r"><span>Preço Normal</span><b id="oPrecoN">—</b></div>
+            <div class="r"><span>IVA 14% <i class="imposto">imposto</i></span><b id="oIva">—</b></div>
+            <div class="r total-iva"><span>Total com IVA</span><b id="oTotalIva">—</b></div>
             <div class="r"><span>Valor da Entrada</span><b id="oEnt">—</b></div>
             <div class="r"><span>Saldo a Pagar</span><b id="oSaldo">—</b></div>
           </div>
@@ -846,6 +860,7 @@
           <div class="total">
             <div class="r"><span>Saldo a Pagar</span><span id="tSaldo">—</span></div>
           </div>
+          <div class="note" style="margin-top:12px">O <b>IVA 14%</b> é imposto e é sempre apresentado à parte, por fora do preço da viatura.</div>
           <button class="btn big" id="btnEnviar" style="margin-top:16px">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="#fff"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.92-4.45 9.92-9.91C21.96 6.45 17.5 2 12.04 2zm4.52 12.65c-.19.53-1.09 1.02-1.5 1.06-.4.05-.87.07-1.4-.12-.32-.11-.74-.25-1.27-.47-2.22-.97-3.67-3.19-3.78-3.34-.11-.15-1.02-1.35-1.02-2.57 0-1.22.65-1.83.88-2.08.23-.25.5-.31.67-.31h.48c.15 0 .36-.06.56.42.21.5.7 1.71.76 1.83s.09.26.01.42c-.09.16-.16.26-.31.41-.15.16-.32.35-.46.47-.15.14-.31.28-.14.54.17.26.75 1.24 1.61 2.01.9.8 1.63 1.05 1.87 1.17.23.12.37.1.51-.06.14-.16.6-.7.76-.94.16-.24.32-.19.54-.11.22.07 1.39.66 1.63.78.24.12.4.18.46.28.06.1.06.59-.13 1.12z"/></svg>
             Enviar por WhatsApp
@@ -949,6 +964,8 @@
         <div class="panel">
           <div class="grp" style="margin-top:0">Resumo</div>
           <div class="od-row"><span>Preço Normal</span><b id="odRPreco">—</b></div>
+          <div class="od-row"><span>IVA 14% <i class="imposto">imposto</i></span><b id="odRIva">—</b></div>
+          <div class="od-row total-iva"><span>Total com IVA</span><b id="odRTotalIva">—</b></div>
           <div class="od-row"><span>Valor da Entrada</span><b id="odREnt">—</b></div>
           <div class="od-row hl"><span>Saldo a Pagar</span><b id="odRSaldo">—</b></div>
 
@@ -1341,6 +1358,11 @@ const videosDe  = c => (c && c.videos) ? c.videos : [];
 /* valor à vista = preço − desconto, nunca abaixo de 0 */
 const valorAVista = (preco, desconto) => Math.max(Number(preco) - Number(desconto), 0);
 
+/* IVA 14% — imposto mostrado sempre à parte (nunca somado ao preço do carro) */
+const IVA_TAXA = 0.14;
+const ivaDe   = preco => Math.round((Number(preco) || 0) * IVA_TAXA * 100) / 100;
+const totalComIva = preco => (Number(preco) || 0) + ivaDe(preco);
+
 /* ==========================================================
    PERSISTÊNCIA
    ========================================================== */
@@ -1527,6 +1549,7 @@ function abrirDetalhe(){
   document.getElementById('dPreco').textContent = fmt(atual.preco);
   document.getElementById('dOff').textContent = 'À vista por ' + fmt(valorAVista(atual.preco, atual.desc));
   document.getElementById('sPreco').textContent = fmt(atual.preco);
+  document.getElementById('sIva').textContent   = fmt(ivaDe(atual.preco));
   document.getElementById('sDesc').textContent = fmt(atual.desc);
   document.getElementById('sEnt').textContent = fmt(atual.preco / 10);
   document.getElementById('sEstado').textContent = atual.cat;
@@ -1841,6 +1864,8 @@ function calc(){
   const entrada = Math.min(num(document.getElementById('oEntrada').value), preco);
   const saldo = preco - entrada;
   document.getElementById('oPrecoN').textContent = fmt(preco);
+  document.getElementById('oIva').textContent = fmt(ivaDe(preco));
+  document.getElementById('oTotalIva').textContent = fmt(totalComIva(preco));
   document.getElementById('oEnt').textContent = fmt(entrada);
   document.getElementById('oSaldo').textContent = fmt(saldo);
   document.getElementById('tSaldo').textContent = fmt(saldo);
@@ -1878,7 +1903,9 @@ function mensagem(){
   return 'Olá ' + nome + ', tudo bem? 😃\n\n' +
     'Conforme falamos' + (LOJA.dados.trim() ? ' aqui na loja ' + LOJA.dados.trim() : '') + ', segue o orçamento:\n' +
     '🚗 ' + atual.nome + '\n' +
-    '💰 Valor: ' + fmt(atual.preco) + '\n\n' +
+    '💰 Valor: ' + fmt(atual.preco) + '\n' +
+    '🧾 IVA 14%: ' + fmt(ivaDe(atual.preco)) + '\n' +
+    '💵 Total com IVA: ' + fmt(totalComIva(atual.preco)) + '\n\n' +
     'Podemos trabalhar com uma entrada de ' + fmt(entrada) + ' e o saldo em:\n' +
     '- 12x de ' + fmt(saldo / 12) + ', ou\n' +
     '- 24x de ' + fmt(saldo / 24) + ', ou\n' +
@@ -1894,7 +1921,9 @@ function textoOrcamento(nome, carro, preco, entrada, desc){
   return 'Olá ' + nome + ', tudo bem? 😃\n\n' +
     'Conforme falamos' + (LOJA.dados.trim() ? ' aqui na loja ' + LOJA.dados.trim() : '') + ', segue o orçamento:\n' +
     '🚗 ' + carro.nome + '\n' +
-    '💰 Valor: ' + fmt(preco) + '\n\n' +
+    '💰 Valor: ' + fmt(preco) + '\n' +
+    '🧾 IVA 14%: ' + fmt(ivaDe(preco)) + '\n' +
+    '💵 Total com IVA: ' + fmt(totalComIva(preco)) + '\n\n' +
     'Podemos trabalhar com uma entrada de ' + fmt(entrada) + ' e o saldo em:\n' +
     '- 12x de ' + fmt(saldo / 12) + ', ou\n' +
     '- 24x de ' + fmt(saldo / 24) + ', ou\n' +
@@ -2243,6 +2272,8 @@ function orcResumo(){
   const { preco, entrada, desc } = valoresOrcForm();
   const saldo = Math.max(preco - entrada, 0);
   document.getElementById('odRPreco').textContent = fmt(preco);
+  document.getElementById('odRIva').textContent   = fmt(ivaDe(preco));
+  document.getElementById('odRTotalIva').textContent = fmt(totalComIva(preco));
   document.getElementById('odREnt').textContent   = fmt(entrada);
   document.getElementById('odRSaldo').textContent = fmt(saldo);
   document.getElementById('odR12').textContent    = fmt(saldo / 12);

@@ -291,6 +291,59 @@
  },
  {
   "r": "PASS",
+  "n": "IVA · linha no Detalhe do Carro (75.000 → 10.500)",
+  "d": "10,500 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · etiquetado como imposto no Detalhe",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · mostrado à parte no Orçamento",
+  "d": "10,500 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · total com IVA = 85.500",
+  "d": "85,500 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · preço do carro não é inflacionado",
+  "d": "75,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · parcelas calculadas sobre o preço sem IVA",
+  "d": "4,166.67 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · discriminado na mensagem do WhatsApp",
+  "d": "💰 Valor: 75,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · presente no orçamento guardado",
+  "d": [
+   "10,500 Kz",
+   "85,500 Kz"
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · 14% aplicado também a 210.000 (Hilux)",
+  "d": "29,400 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
   "n": "Perfil · Dados da Loja começa vazio",
   "d": "— não preenchido —"
  },

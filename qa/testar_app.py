@@ -325,6 +325,43 @@ async def main():
                await vd.evaluate(f"()=>!document.getElementById('{pgid}').classList.contains('hidden')"), pgid)
         await vd.close()
 
+        # ============ IVA 14% (imposto à parte) ============
+        iv = await b.new_page(viewport={"width":1440,"height":900})
+        ie=[]; iv.on("pageerror", lambda e: ie.append(str(e)))
+        await novo(iv)
+        await iv.evaluate("()=>{atual=CARROS.find(c=>c.id==='corolla');abrirDetalhe();}"); await iv.wait_for_timeout(400)
+        ok("IVA · linha no Detalhe do Carro (75.000 → 10.500)",
+           await iv.inner_text("#sIva") == "10,500 Kz", await iv.inner_text("#sIva"))
+        ok("IVA · etiquetado como imposto no Detalhe",
+           await iv.locator("#pg-detalhe .imposto").count() == 1, "")
+        await iv.click("#btnCriarOrc"); await iv.wait_for_timeout(300)
+        await iv.click("#btnSalvar"); await iv.wait_for_timeout(400)
+        ok("IVA · mostrado à parte no Orçamento",
+           await iv.inner_text("#oIva") == "10,500 Kz", await iv.inner_text("#oIva"))
+        ok("IVA · total com IVA = 85.500",
+           await iv.inner_text("#oTotalIva") == "85,500 Kz", await iv.inner_text("#oTotalIva"))
+        ok("IVA · preço do carro não é inflacionado",
+           await iv.inner_text("#oPrecoN") == "75,000 Kz", await iv.inner_text("#oPrecoN"))
+        ok("IVA · parcelas calculadas sobre o preço sem IVA",
+           await iv.evaluate("()=>{document.getElementById('oEntrada').value='25,000 Kz';calc();return document.getElementById('o12').textContent;}") == "4,166.67 Kz",
+           await iv.inner_text("#o12"))
+        await iv.click("#btnEnviar"); await iv.wait_for_timeout(350)
+        await iv.fill("#mNome", "Renato"); await iv.fill("#mTel", "923111999")
+        await iv.evaluate("window.__u=null; window.open=(u)=>{window.__u=u;}")
+        await iv.click("#btnZap"); await iv.wait_for_timeout(350)
+        uu = up.unquote((await iv.evaluate("window.__u")).split("text=")[1])
+        ok("IVA · discriminado na mensagem do WhatsApp",
+           "IVA 14%: 10,500 Kz" in uu and "Total com IVA: 85,500 Kz" in uu, uu.split(chr(10))[4])
+        await iv.evaluate("()=>{const id=ORCAMENTOS[0].id; abrirOrcDetalhe(id);}"); await iv.wait_for_timeout(400)
+        ok("IVA · presente no orçamento guardado",
+           await iv.inner_text("#odRIva") == "10,500 Kz" and await iv.inner_text("#odRTotalIva") == "85,500 Kz",
+           (await iv.inner_text("#odRIva"), await iv.inner_text("#odRTotalIva")))
+        ok("IVA · 14% aplicado também a 210.000 (Hilux)",
+           await iv.evaluate("()=>fmt(ivaDe(210000))") == "29,400 Kz",
+           await iv.evaluate("()=>fmt(ivaDe(210000))"))
+        ok("IVA · sem erros de consola", len(ie) == 0, str(ie[:2]))
+        await iv.close()
+
         # ============ DADOS DA LOJA (Perfil ↔ popup ↔ orçamento) ============
         lo = await b.new_page(viewport={"width":1440,"height":900})
         le=[]; lo.on("pageerror", lambda e: le.append(str(e)))
