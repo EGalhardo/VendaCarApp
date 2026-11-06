@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{width:1500px;font-family:"DejaVu Sans",Arial,sans-serif;color:#2B352F;background:#fff}
+
+  /* ---------- CAPA ---------- */
+  .hero{position:relative;height:300px;overflow:hidden;background:#0B4A44}
+  .hero img{width:100%;height:100%;object-fit:cover;object-position:right center;display:block}
+  .hero .ov{
+    position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 64px;
+    background:linear-gradient(90deg,rgba(6,42,38,.95) 0%,rgba(6,42,38,.88) 45%,rgba(6,42,38,.12) 82%,rgba(6,42,38,0) 100%);
+  }
+  .kick{font-size:13px;letter-spacing:3.4px;text-transform:uppercase;color:#7FE3C4;font-weight:700}
+  .hero h1{font-size:46px;line-height:1.06;color:#fff;font-weight:800;letter-spacing:-1px;margin:14px 0 10px}
+  .hero p{font-size:16.5px;color:#C8E6DA;max-width:640px;line-height:1.5}
+  .hero .meta{margin-top:16px;font-size:13px;color:#8FBDB0}
+
+  /* ---------- FAIXA ---------- */
+  .strip{display:flex;background:#3F9E46}
+  .strip div{flex:1;padding:18px 26px;border-right:1px solid rgba(255,255,255,.22)}
+  .strip div:last-child{border:0}
+  .strip b{display:block;font-size:30px;color:#fff;font-weight:800;line-height:1;letter-spacing:-.5px}
+  .strip span{display:block;margin-top:6px;font-size:12px;color:#E4F6E0}
+
+  /* ---------- SECÇÕES ---------- */
+  .sec{padding:38px 64px 0}
+  .sec h2{font-size:23px;color:#0E7A55;font-weight:800;letter-spacing:-.3px;display:flex;align-items:baseline;gap:11px}
+  .sec h2 em{font-style:normal;font-size:14px;color:#B7C7C0;letter-spacing:1px;font-weight:800}
+  .rule{height:3px;width:70px;background:#3F9E46;border-radius:2px;margin:9px 0 20px}
+  .sec .lead{font-size:15px;line-height:1.6;color:#46544C;max-width:1120px;margin-bottom:22px}
+
+  /* ---------- DESKTOP ---------- */
+  .dg{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .shot{background:#fff;border:1px solid #D8DEDB;border-radius:12px;overflow:hidden}
+  .shot img{width:100%;display:block}
+  .cap{display:flex;align-items:center;gap:9px;padding:11px 14px;border-top:1px solid #EDF1EF;background:#FBFCFB}
+  .cap .n{width:21px;height:21px;border-radius:50%;background:#3F9E46;color:#fff;font-size:11.5px;
+          font-weight:800;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .cap .t{font-size:13.5px;font-weight:800;color:#2B352F}
+  .cap .s{font-size:12px;color:#7C8B85;margin-left:auto}
+
+  /* ---------- MOBILE ---------- */
+  .band{background:#F4F8F6;margin-top:44px;padding:36px 64px 44px;border-top:1px solid #E3EBE7}
+  .band h2{font-size:23px;color:#0E7A55;font-weight:800}
+  .band p{font-size:14.5px;color:#46544C;line-height:1.6;margin-top:8px;max-width:1080px}
+  .mg{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:26px}
+  .phone{background:transparent}
+  .phone .fr{border-radius:20px;overflow:hidden;border:5px solid #10241F;background:#10241F;
+             box-shadow:0 10px 26px rgba(16,36,31,.22)}
+  .phone img{width:100%;display:block}
+  .phone .c{text-align:center;margin-top:10px;font-size:12.5px;color:#5C6B64;font-weight:700}
+  .phone .c span{display:block;font-weight:600;font-size:11.5px;color:#93A39D;margin-top:2px}
+
+  /* ---------- RODAPÉ ---------- */
+  .foot{background:#0B4A44;color:#A9CFC4;padding:24px 64px;display:flex;justify-content:space-between;
+        align-items:center;margin-top:44px;font-size:12.5px}
+  .foot b{color:#fff;font-size:14px;display:block;margin-bottom:4px}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <img src="../proposta/img/capa.png" alt="">
+  <div class="ov">
+    <div class="kick">Mapa de páginas</div>
+    <h1>Todas as páginas do app</h1>
+    <p>As 8 páginas da aplicação Modelo, no computador e no telemóvel — capturas reais, sem maquetes.</p>
+    <div class="meta">ABC Seminovos · Luanda, Angola &nbsp;|&nbsp; Versão 1.0 &nbsp;|&nbsp; 05 de novembro de 2026</div>
+  </div>
+</section>
+
+<section class="strip">
+  <div><b>8</b><span>páginas</span></div>
+  <div><b>2</b><span>modos: desktop e telemóvel</span></div>
+  <div><b>16</b><span>capturas reais</span></div>
+  <div><b>1</b><span>ficheiro HTML</span></div>
+</section>
+
+<section class="sec">
+  <h2><em>01</em> No computador</h2>
+  <div class="rule"></div>
+  <p class="lead">Barra lateral fixa, área de conteúdo com moldura cinzenta e appbar enxuta. Uma página para cada tarefa do vendedor: consultar o catálogo, ler a ficha, simular, gerir orçamentos, clientes e perfil.</p>
+
+  <div class="dg">
+    <div class="shot"><img src="../paginas/desktop/01-modelos.png" alt="">
+      <div class="cap"><span class="n">1</span><span class="t">Modelos</span><span class="s">Catálogo e filtros</span></div></div>
+    <div class="shot"><img src="../paginas/desktop/02-detalhe.png" alt="">
+      <div class="cap"><span class="n">2</span><span class="t">Detalhe do Carro</span><span class="s">Galeria e ficha</span></div></div>
+    <div class="shot"><img src="../paginas/desktop/03-orcamento.png" alt="">
+      <div class="cap"><span class="n">3</span><span class="t">Orçamento</span><span class="s">Simulação em tempo real</span></div></div>
+    <div class="shot"><img src="../paginas/desktop/04-orcamentos.png" alt="">
+      <div class="cap"><span class="n">4</span><span class="t">Orçamentos</span><span class="s">Histórico</span></div></div>
+    <div class="shot"><img src="../paginas/desktop/05-orcamento-edicao.png" alt="">
+      <div class="cap"><span class="n">5</span><span class="t">Orçamento · edição</span><span class="s">Detalhe e alteração</span></div></div>
+    <div class="shot"><img src="../paginas/desktop/06-clientes.png" alt="">
+      <div class="cap"><span class="n">6</span><span class="t">Clientes</span><span class="s">Agrupados por telefone</span></div></div>
+    <div class="shot"><img src="../paginas/desktop/07-cliente.png" alt="">
+      <div class="cap"><span class="n">7</span><span class="t">Cliente</span><span class="s">Orçamentos e reenvio</span></div></div>
+    <div class="shot"><img src="../paginas/desktop/08-perfil.png" alt="">
+      <div class="cap"><span class="n">8</span><span class="t">Perfil</span><span class="s">Loja e preferências</span></div></div>
+  </div>
+</section>
+
+<section class="band">
+  <h2>No telemóvel</h2>
+  <p>O mesmo ficheiro, adaptado: appbar única com título, estado e notificações; menu inferior com as quatro áreas; grelha de 2 colunas e tabelas convertidas em cartões próprios para toque.</p>
+
+  <div class="mg">
+    <div class="phone"><div class="fr"><img src="../paginas/mobile/01-modelos.png" alt=""></div>
+      <div class="c">Modelos<span>1</span></div></div>
+    <div class="phone"><div class="fr"><img src="../paginas/mobile/02-detalhe.png" alt=""></div>
+      <div class="c">Detalhe do Carro<span>2</span></div></div>
+    <div class="phone"><div class="fr"><img src="../paginas/mobile/03-orcamento.png" alt=""></div>
+      <div class="c">Orçamento<span>3</span></div></div>
+    <div class="phone"><div class="fr"><img src="../paginas/mobile/04-orcamentos.png" alt=""></div>
+      <div class="c">Orçamentos<span>4</span></div></div>
+  </div>
+
+  <div class="mg" style="margin-top:26px">
+    <div class="phone"><div class="fr"><img src="../paginas/mobile/05-orcamento-edicao.png" alt=""></div>
+      <div class="c">Orçamento · edição<span>5</span></div></div>
+    <div class="phone"><div class="fr"><img src="../paginas/mobile/06-clientes.png" alt=""></div>
+      <div class="c">Clientes<span>6</span></div></div>
+    <div class="phone"><div class="fr"><img src="../paginas/mobile/07-cliente.png" alt=""></div>
+      <div class="c">Cliente<span>7</span></div></div>
+    <div class="phone"><div class="fr"><img src="../paginas/mobile/08-perfil.png" alt=""></div>
+      <div class="c">Perfil<span>8</span></div></div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div><b>Modelo — orçamento de automóveis por WhatsApp</b>
+    Capturas geradas a partir da aplicação real, em 05/11/2026</div>
+  <div style="text-align:right"><b>Desktop 1440 px · Telemóvel 390 px</b>
+    Mesma base de código, sem versões separadas</div>
+</footer>
+
+</body>
+</html>
