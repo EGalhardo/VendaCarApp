@@ -226,6 +226,71 @@
  },
  {
   "r": "PASS",
+  "n": "Popup · secção de vídeos presente",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Popup · vídeo entra na lista",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Popup · miniatura de vídeo desenhada",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Popup · limite de 2 vídeos",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Popup · remover vídeo",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Ficha · vídeo na mesma lista das imagens",
+  "d": "3 miniaturas"
+ },
+ {
+  "r": "PASS",
+  "n": "Ficha · clique no vídeo abre o player",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Ficha · voltar à foto fecha o player",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Ficha · modelo sem vídeo mostra só fotos",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Vídeos · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · cartão 'estoque' abre a página respetiva",
+  "d": "pg-modelos"
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · cartão 'orcs' abre a página respetiva",
+  "d": "pg-listaorc"
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · cartão 'clientes' abre a página respetiva",
+  "d": "pg-clientes"
+ },
+ {
+  "r": "PASS",
   "n": "Desktop · campo de procura removido",
   "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'oculto', 'sinoAFrente': True, 'utilizador': 'visivel'}"
  },

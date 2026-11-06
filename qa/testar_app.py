@@ -275,6 +275,56 @@ async def main():
         ok("Mobile · sem erros no detalhe do cliente", len(ce)==0, str(ce[:2]))
         await cb.close()
 
+        # ============ VÍDEOS NO POPUP E NA FICHA ============
+        vd = await b.new_page(viewport={"width":1440,"height":900})
+        ve=[]; vd.on("pageerror", lambda e: ve.append(str(e)))
+        await novo(vd)
+        await vd.click("[data-criar]:visible"); await vd.wait_for_timeout(600)
+        ok("Popup · secção de vídeos presente", await vd.locator("#fVideos").count()==1, "")
+        import pathlib
+        pathlib.Path("/tmp/tv1.mp4").write_bytes(b"\x00\x00\x00\x18ftypmp42" + b"\x00"*600)
+        pathlib.Path("/tmp/tv2.mp4").write_bytes(b"\x00\x00\x00\x18ftypmp42" + b"\x01"*600)
+        pathlib.Path("/tmp/tv3.mp4").write_bytes(b"\x00\x00\x00\x18ftypmp42" + b"\x02"*600)
+        await vd.set_input_files("#fVideos", "/tmp/tv1.mp4"); await vd.wait_for_timeout(500)
+        ok("Popup · vídeo entra na lista", await vd.evaluate("()=>videos.length")==1, "")
+        ok("Popup · miniatura de vídeo desenhada", await vd.locator("#videosPreview .up.video").count()==1, "")
+        await vd.set_input_files("#fVideos", ["/tmp/tv2.mp4","/tmp/tv3.mp4"]); await vd.wait_for_timeout(700)
+        ok("Popup · limite de 2 vídeos", await vd.evaluate("()=>videos.length")==2, "")
+        await vd.evaluate("()=>document.querySelector('#videosPreview [data-delvid=\"0\"]').click()")
+        await vd.wait_for_timeout(400)
+        ok("Popup · remover vídeo", await vd.evaluate("()=>videos.length")==1, "")
+        await vd.evaluate("""async ()=>{
+          const blob=new Blob([new Uint8Array(2048)],{type:'video/mp4'});
+          const url=await new Promise(r=>{const f=new FileReader();f.onload=e=>r(e.target.result);f.readAsDataURL(blob);});
+          CARROS.push({id:'vid1',nome:'Toyota Video 2025',tipo:'SUV · 2025 · Preto',cat:'Novo',
+                       preco:120000,desc:10000,img:CARROS[0].img,
+                       fotos:[CARROS[0].img,CARROS[1].img],videos:[url]});
+          guardar(); atual=CARROS[CARROS.length-1]; abrirDetalhe();
+        }"""); await vd.wait_for_timeout(700)
+        ok("Ficha · vídeo na mesma lista das imagens",
+           await vd.locator("#thumbs .t.play-t").count()==1 and await vd.locator("#thumbs .t").count()==3,
+           f"{await vd.locator('#thumbs .t').count()} miniaturas")
+        await vd.evaluate("()=>document.querySelector('#thumbs .t.play-t').click()")
+        await vd.wait_for_timeout(600)
+        ok("Ficha · clique no vídeo abre o player", await vd.locator(".hero video").count()==1, "")
+        await vd.evaluate("()=>document.querySelector(\"#thumbs .t[data-foto='1']\").click()")
+        await vd.wait_for_timeout(400)
+        ok("Ficha · voltar à foto fecha o player",
+           await vd.locator(".hero video").count()==0 and await vd.locator("#heroImg").count()==1, "")
+        await vd.evaluate("()=>{atual=CARROS[0]; abrirDetalhe();}"); await vd.wait_for_timeout(500)
+        ok("Ficha · modelo sem vídeo mostra só fotos", await vd.locator("#thumbs .play-t").count()==0, "")
+        ok("Vídeos · sem erros de consola", len(ve)==0, str(ve[:2]))
+
+        # ---------- Perfil: cartões clicáveis ----------
+        await vd.evaluate("()=>document.getElementById('mNovoModelo').classList.remove('open')")
+        await vd.wait_for_timeout(400)
+        for chave, pgid in [("estoque","pg-modelos"), ("orcs","pg-listaorc"), ("clientes","pg-clientes")]:
+            await vd.evaluate("()=>ir('perfil')"); await vd.wait_for_timeout(250)
+            await vd.click(f".stat-card[data-perfil='{chave}']"); await vd.wait_for_timeout(400)
+            ok(f"Perfil · cartão '{chave}' abre a página respetiva",
+               await vd.evaluate(f"()=>!document.getElementById('{pgid}').classList.contains('hidden')"), pgid)
+        await vd.close()
+
         # ============ APPBAR DESKTOP LIMPA ============
         da = await b.new_page(viewport={"width":1440,"height":860})
         dde=[]; da.on("pageerror", lambda e: dde.append(str(e)))

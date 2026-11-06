@@ -381,6 +381,41 @@
     font-size:8.5px;font-weight:700;text-align:center;padding:2px 0;letter-spacing:.3px;
   }
   .up-count{font-size:11px;color:#9bb0a4;margin-top:8px}
+  /* miniaturas de vídeo no popup */
+  .ups.videos{grid-template-columns:repeat(3,1fr)}
+  .up.video{background:#132b24}
+  .up.video .play{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:0;
+  }
+  .up.video .play svg{width:30px;height:30px;color:#fff;opacity:.92;
+    filter:drop-shadow(0 2px 8px rgba(0,0,0,.55))}
+  .up.video .nm{
+    position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);color:#fff;
+    font-size:9.5px;font-weight:600;padding:3px 5px;white-space:nowrap;overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .up.video .del{z-index:2}
+  .upload-video .ic{background:#e8f0fb}
+  .upload-video:hover,.upload-video.drag{border-color:#3b72c4;background:#f2f7ff}
+
+  /* player de vídeo na ficha do carro */
+  .hero video{width:100%;height:100%;object-fit:contain;background:#0d1a17;display:block}
+  .gal .t.play-t{position:relative}
+  .gal .t.play-t::after{
+    content:"";position:absolute;inset:0;background:rgba(13,26,23,.34);
+  }
+  .gal .t.play-t .ico{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;
+  }
+  .gal .t.play-t .ico svg{width:20px;height:20px;color:#fff;filter:drop-shadow(0 1px 4px rgba(0,0,0,.5))}
+
+  /* cartões de estatística clicáveis no Perfil */
+  .stat-card.link{cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s}
+  .stat-card.link:hover{border-color:#bcd8c2;box-shadow:0 6px 16px rgba(30,60,45,.10);transform:translateY(-1px)}
+  .stat-card.link .go{
+    float:right;font-size:11px;font-weight:800;color:var(--green-ink);opacity:.75;
+  }
   .foot{display:flex;gap:10px;margin-top:20px}
   .foot .btn{flex:1;height:44px;font-size:13.5px;border-radius:10px}
   .foot .btn.ghost{flex:0 0 130px}
@@ -945,15 +980,18 @@
         <div><h2>Perfil</h2><p>Dados da loja e preferências</p></div>
       </div>
       <div class="stat-grid">
-        <div class="stat-card">
+        <div class="stat-card link" data-perfil="estoque" role="button" tabindex="0" title="Ver carros no estoque">
+          <span class="go">›</span>
           <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg></div>
           <div class="n" id="stCarros">4</div><div class="l">Carros no estoque</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card link" data-perfil="orcs" role="button" tabindex="0" title="Ver orçamentos criados">
+          <span class="go">›</span>
           <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2h9l5 5v15H6zM15 2v5h5M9 12h8M9 16h8"/></svg></div>
           <div class="n" id="stOrcs">5</div><div class="l">Orçamentos criados</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card link" data-perfil="clientes" role="button" tabindex="0" title="Ver clientes">
+          <span class="go">›</span>
           <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 3a4 4 0 100 8 4 4 0 000-8"/></svg></div>
           <div class="n" id="stClientes">4</div><div class="l">Clientes</div>
         </div>
@@ -1064,6 +1102,22 @@
     <input type="file" id="fFotos" accept="image/*" multiple hidden>
     <div class="ups" id="fotosPreview"></div>
     <div class="up-count" id="fotosContador"></div>
+
+    <p class="lbl" style="margin-top:16px">Vídeos do Carro</p>
+    <label class="upload upload-video" id="dropVideo" for="fVideos">
+      <span class="ic">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#4caf50" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 10l4.5-2.6v9.2L15 14"/><rect x="3" y="6" width="12" height="12" rx="2"/>
+        </svg>
+      </span>
+      <span class="t">Carregar vídeos</span>
+      <span class="s s-desk">Clique ou arraste · MP4 ou WebM · até 2 vídeos</span>
+      <span class="s s-mob">Toque para escolher · MP4 ou WebM · até 2 vídeos</span>
+    </label>
+    <input type="file" id="fVideos" accept="video/*" multiple hidden>
+    <div class="ups" id="videosPreview"></div>
+    <div class="up-count" id="videosContador"></div>
 
     </div>
 
@@ -1176,7 +1230,9 @@ let enviarPendente = null;   // id do orçamento em reenvio
 let FILA_ENVIOS  = [];       // mensagens criadas sem ligação, à espera de abrir o WhatsApp
 let DEMO_OFFLINE = false;    // simulação de falta de rede (útil em demonstração)
 let fotos = [];
-const MAX_FOTOS = 6;
+let videos = [];              // vídeos do modelo (data URI), no máximo 2
+const MAX_FOTOS  = 6;
+const MAX_VIDEOS = 2;
 
 /* ==========================================================
    UTILITÁRIOS
@@ -1189,6 +1245,8 @@ const fmt = v => {
 const num = t => Number(String(t).replace(/[^\d]/g, '')) || 0;
 const tagClass = c => c === 'Novo' ? '' : c === 'Usado' ? ' u' : ' s';
 const galeria = c => (c.fotos && c.fotos.length) ? c.fotos : [c.img];
+const temVideos = c => !!(c && c.videos && c.videos.length);
+const videosDe  = c => (c && c.videos) ? c.videos : [];
 
 /* valor à vista = preço − desconto, nunca abaixo de 0 */
 const valorAVista = (preco, desconto) => Math.max(Number(preco) - Number(desconto), 0);
@@ -1334,7 +1392,7 @@ buscaClienteEl.addEventListener('keyup', () => renderClientes(buscaClienteEl.val
    ========================================================== */
 function abrirDetalhe(){
   const gal = galeria(atual);
-  document.getElementById('heroImg').src = gal[0];
+  mostrarMidia(0);
   document.getElementById('dNome').textContent = atual.nome;
   document.getElementById('dSub').textContent = atual.tipo;
   document.getElementById('dPreco').textContent = fmt(atual.preco);
@@ -1344,18 +1402,44 @@ function abrirDetalhe(){
   document.getElementById('sEnt').textContent = fmt(atual.preco / 10);
   document.getElementById('sEstado').textContent = atual.cat;
 
-  document.getElementById('thumbs').innerHTML = gal.map((src, i) =>
+  /* miniatura 0..n = fotos · miniatura "v0..vn" = vídeos (na mesma lista) */
+  const vids = videosDe(atual);
+  const miniFotos = gal.map((src, i) =>
     `<div class="t ${i === 0 ? 'on' : ''}" data-foto="${i}"><img src="${src}" alt=""></div>`).join('');
+  const miniVideos = vids.map((v, i) => `
+    <div class="t play-t" data-video="${i}" title="Vídeo ${i + 1}">
+      <img src="${gal[0]}" alt="">
+      <span class="ico">${ICONE_PLAY}</span>
+    </div>`).join('');
+  document.getElementById('thumbs').innerHTML = miniFotos + miniVideos;
 
   ir('detalhe');
 }
 
+/* mostra foto ou vídeo no destaque */
+function mostrarMidia(indiceFoto, indiceVideo){
+  const hero = document.querySelector('.hero');
+  const gal  = galeria(atual);
+  const vids = videosDe(atual);
+
+  if (indiceVideo !== undefined && vids[indiceVideo] !== undefined){
+    hero.innerHTML = `<video src="${vids[indiceVideo]}" controls playsinline preload="metadata"></video>`;
+    document.querySelectorAll('#thumbs .t').forEach(x =>
+      x.classList.toggle('on', x.dataset.video === String(indiceVideo)));
+  } else {
+    hero.innerHTML = `<img id="heroImg" alt="">`;
+    document.getElementById('heroImg').src = gal[indiceFoto] || gal[0];
+    document.querySelectorAll('#thumbs .t').forEach(x =>
+      x.classList.toggle('on', x.dataset.foto === String(indiceFoto)));
+  }
+}
+
 document.getElementById('pg-detalhe').addEventListener('click', e => {
+  const v = e.target.closest('[data-video]');
+  if (v){ mostrarMidia(0, Number(v.dataset.video)); return; }
   const t = e.target.closest('[data-foto]');
   if (!t) return;
-  const gal = galeria(atual), i = Number(t.dataset.foto);
-  document.getElementById('heroImg').src = gal[i];
-  document.querySelectorAll('#thumbs .t').forEach(x => x.classList.toggle('on', x === t));
+  mostrarMidia(Number(t.dataset.foto));
 });
 
 /* ==========================================================
@@ -1400,6 +1484,56 @@ function addFotos(lista){
 
 inputFotos.addEventListener('change', e => { addFotos(e.target.files); inputFotos.value = ''; });
 
+/* ---------------- VÍDEOS ---------------- */
+const inputVideos = document.getElementById('fVideos');
+const dropVideo   = document.getElementById('dropVideo');
+const previewVid  = document.getElementById('videosPreview');
+const contadorVid = document.getElementById('videosContador');
+
+const ICONE_PLAY = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+
+function renderVideos(){
+  previewVid.className = 'ups videos';
+  previewVid.innerHTML = videos.map((v, i) => `
+    <div class="up video">
+      <div class="play">${ICONE_PLAY}</div>
+      <span class="nm">${esc(v.nome || 'vídeo')}</span>
+      <button type="button" class="del" data-delvid="${i}" aria-label="Remover vídeo">×</button>
+    </div>`).join('');
+  contadorVid.textContent = videos.length
+    ? videos.length + ' de ' + MAX_VIDEOS + ' vídeos' : '';
+}
+
+function addVideos(lista){
+  const vagas = MAX_VIDEOS - videos.length;
+  Array.from(lista).slice(0, Math.max(vagas, 0)).forEach(f => {
+    if (!f.type.startsWith('video/')){ toast('Escolha um ficheiro de vídeo (MP4 ou WebM)'); return; }
+    if (f.size > 8 * 1024 * 1024){ toast('Vídeo demasiado grande — máximo 8 MB'); return; }
+    const fr = new FileReader();
+    fr.onload = ev => { videos.push({ nome: f.name, src: ev.target.result }); renderVideos(); };
+    fr.readAsDataURL(f);
+  });
+}
+
+inputVideos.addEventListener('change', e => { addVideos(e.target.files); inputVideos.value = ''; });
+
+['dragover','dragenter'].forEach(ev => dropVideo.addEventListener(ev, e => {
+  e.preventDefault(); dropVideo.classList.add('drag');
+}));
+['dragleave','drop'].forEach(ev => dropVideo.addEventListener(ev, e => {
+  e.preventDefault();
+  if (ev === 'drop') addVideos(e.dataTransfer.files);
+  dropVideo.classList.remove('drag');
+}));
+
+previewVid.addEventListener('click', e => {
+  const b = e.target.closest('[data-delvid]');
+  if (!b) return;
+  e.preventDefault();
+  videos.splice(Number(b.dataset.delvid), 1);
+  renderVideos();
+});
+
 ['dragover','dragenter'].forEach(ev => dropZone.addEventListener(ev, e => {
   e.preventDefault(); dropZone.classList.add('drag');
 }));
@@ -1426,6 +1560,7 @@ function abrirNovoModelo(){
   document.getElementById('fPreco').value = '';
   document.getElementById('fDesc').value = '';
   fotos = []; renderFotos();
+  videos = []; renderVideos();
   mNovoModelo.classList.add('open'); reiniciarScroll(mNovoModelo);
   setTimeout(() => document.getElementById('fMarca').focus(), 120);
 }
@@ -1466,7 +1601,8 @@ document.getElementById('btnGuardarModelo').addEventListener('click', () => {
     cat: tipo,
     preco, desc,
     img: fotos[0] || CARROS[0].img,
-    fotos: fotos.slice()
+    fotos: fotos.slice(),
+    videos: videos.map(v => v.src)
   };
 
   CARROS.push(carro);
@@ -1841,6 +1977,22 @@ function renderTabelaOrc(){
     </tr>`;
   }).join('');
 }
+
+/* atalhos do Perfil: cada cartão abre a página respetiva */
+document.getElementById('pg-perfil').addEventListener('click', e => {
+  const c = e.target.closest('.stat-card[data-perfil]');
+  if (!c) return;
+  const destino = { estoque:'modelos', orcs:'listaorc', clientes:'clientes' }[c.dataset.perfil];
+  if (destino) ir(destino);
+});
+document.getElementById('pg-perfil').addEventListener('keydown', e => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const c = e.target.closest('.stat-card[data-perfil]');
+  if (!c) return;
+  e.preventDefault();
+  const destino = { estoque:'modelos', orcs:'listaorc', clientes:'clientes' }[c.dataset.perfil];
+  if (destino) ir(destino);
+});
 
 /* ==========================================================
    DETALHE / EDIÇÃO DE UM ORÇAMENTO
