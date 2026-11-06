@@ -353,6 +353,7 @@
   }
   .prefilled{background:#f4fbf5;border-color:#bfe3c2;color:var(--green-ink);font-weight:700}
   .hint{font-size:11px;color:var(--green-ink);margin-top:7px;display:flex;align-items:center;gap:5px}
+  .hint span{display:block;line-height:1.5}
 
   /* upload */
   .upload{
@@ -381,6 +382,24 @@
     font-size:8.5px;font-weight:700;text-align:center;padding:2px 0;letter-spacing:.3px;
   }
   .up-count{font-size:11px;color:#9bb0a4;margin-top:8px}
+  /* campos da loja no popup */
+  .sep-lbl{
+    display:flex;align-items:baseline;gap:8px;margin:20px 0 10px;
+    font-size:12px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:#8a9a92;
+    padding-top:16px;border-top:1px dashed var(--line);
+  }
+  .sep-lbl span{font-size:10.5px;font-weight:600;text-transform:none;letter-spacing:0;color:#a9b5b0}
+  /* linhas editáveis do Perfil */
+  .tbl tr.editavel{cursor:pointer;transition:background .15s}
+  .tbl tr.editavel:hover{background:#f6faf7}
+  .tbl tr.editavel:hover td.b{color:var(--green-ink)}
+  .edit-mini{
+    border:1px solid var(--gray-line);background:#fff;color:var(--green-ink);
+    font-family:inherit;font-size:11px;font-weight:800;padding:5px 10px;border-radius:7px;
+    cursor:pointer;letter-spacing:.2px;
+  }
+  .edit-mini:hover{border-color:#9ccfa8;background:#f3fbf5}
+
   /* miniaturas de vídeo no popup */
   .ups.videos{grid-template-columns:repeat(3,1fr)}
   .up.video{background:#132b24}
@@ -1015,8 +1034,16 @@
       <div class="tbl-wrap">
         <table class="tbl">
           <tbody>
-            <tr><td class="b">Dados da Loja</td><td>ABC Seminovos · Luanda, Angola</td><td style="text-align:right;color:#c3ccc8">›</td></tr>
-            <tr><td class="b">Número do WhatsApp</td><td>+244 923 456 789</td><td style="text-align:right;color:#c3ccc8">›</td></tr>
+            <tr class="editavel" data-abrir-loja="dados">
+              <td class="b">Dados da Loja</td>
+              <td id="perfilLojaDados">—</td>
+              <td style="text-align:right"><button class="edit-mini" data-abrir-loja="dados" aria-label="Editar dados da loja">Editar</button></td>
+            </tr>
+            <tr class="editavel" data-abrir-loja="whatsapp">
+              <td class="b">Número do WhatsApp</td>
+              <td id="perfilLojaZap">—</td>
+              <td style="text-align:right"><button class="edit-mini" data-abrir-loja="whatsapp" aria-label="Editar número do WhatsApp">Editar</button></td>
+            </tr>
             <tr><td class="b">Modo offline</td><td id="linhaOffline">Ativo — dados guardados no dispositivo</td><td style="text-align:right;color:#c3ccc8">✓</td></tr>
             <tr><td class="b">Modelo de Mensagem</td><td>Texto padrão do orçamento</td><td style="text-align:right;color:#c3ccc8">›</td></tr>
             <tr><td class="b">Exportar Orçamentos</td><td>CSV / PDF</td><td style="text-align:right;color:#c3ccc8">›</td></tr>
@@ -1103,6 +1130,19 @@
       <div class="fg"></div>
     </div>
 
+    <div class="sep-lbl">Dados da Loja <span>aparecem no orçamento enviado</span></div>
+    <div class="grid2">
+      <div class="fg">
+        <p class="lbl">Dados da Loja</p>
+        <input class="inp" id="fLojaDados" placeholder="Ex: ABC Seminovos · Luanda, Angola"
+               autocomplete="off" maxlength="90">
+      </div>
+      <div class="fg">
+        <p class="lbl">Número do WhatsApp</p>
+        <input class="inp" id="fLojaZap" placeholder="Ex: 923 456 789" inputmode="numeric" autocomplete="off">
+      </div>
+    </div>
+
     <p class="lbl">Imagens do Carro</p>
     <label class="upload" id="dropZone" for="fFotos">
       <span class="ic">
@@ -1142,6 +1182,40 @@
       <button class="btn" id="btnGuardarModelo">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
         Guardar Modelo
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MODAL: DADOS DA LOJA ================= -->
+<div class="ov" id="mLoja">
+  <div class="modal narrow" role="dialog" aria-modal="true" aria-labelledby="ttLoja">
+    <div class="head">
+      <div class="ic">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4caf50" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l1.5-5h15L21 9M4 9v11h16V9M9 20v-6h6v6"/>
+        </svg>
+      </div>
+      <div><h3 id="ttLoja">Dados da Loja</h3><div class="sub">Aparecem no orçamento enviado</div></div>
+      <button class="x" data-close="mLoja" aria-label="Fechar">×</button>
+    </div>
+    <div class="body">
+      <div class="fg">
+        <p class="lbl">Dados da Loja</p>
+        <input class="inp" id="lDados" placeholder="Ex: ABC Seminovos · Luanda, Angola" autocomplete="off" maxlength="90">
+      </div>
+      <div class="fg">
+        <p class="lbl">Número do WhatsApp</p>
+        <input class="inp" id="lZap" placeholder="Ex: 923 456 789" inputmode="numeric" autocomplete="off">
+        <div class="hint"><span>Formato angolano — o indicativo <b>+244</b> é adicionado automaticamente.</span></div>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="btn ghost" data-close="mLoja">Cancelar</button>
+      <button class="btn" id="btnGuardarLoja">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>
+        Guardar Dados
       </button>
     </div>
   </div>
@@ -1283,6 +1357,44 @@ function carregar(){
     ORCAMENTOS = rawO ? JSON.parse(rawO) : null;
     if (!Array.isArray(ORCAMENTOS)) ORCAMENTOS = SEED_ORCAMENTOS();
   }catch(e){ ORCAMENTOS = SEED_ORCAMENTOS(); }
+
+  carregarLoja();
+}
+
+/* ---- dados da loja (Perfil / popup de novo modelo / orçamento enviado) ---- */
+const LOJA_KEY = 'modelo_loja_v1';
+let LOJA = { dados:'', zap:'' };
+
+function carregarLoja(){
+  try{
+    const raw = localStorage.getItem(LOJA_KEY);
+    const o = raw ? JSON.parse(raw) : null;
+    LOJA = { dados: (o && o.dados) ? String(o.dados) : '',
+             zap:   (o && o.zap)   ? String(o.zap).replace(/\D/g,'').slice(0,9) : '' };
+  }catch(e){ LOJA = { dados:'', zap:'' }; }
+}
+function guardarLoja(){
+  try{ localStorage.setItem(LOJA_KEY, JSON.stringify(LOJA)); }catch(e){/* quota */}
+}
+/* WhatsApp da loja com indicativo +244 */
+function zapLoja(){
+  const d = (LOJA.zap || '').replace(/\D/g,'');
+  if (!d) return '';
+  return '+244 ' + d.slice(0,3) + (d.length > 3 ? ' ' + d.slice(3,6) : '') +
+         (d.length > 6 ? ' ' + d.slice(6,9) : '');
+}
+/* linha de assinatura usada na mensagem do orçamento */
+function linhaLoja(){
+  const partes = [];
+  if (LOJA.dados.trim()) partes.push(LOJA.dados.trim());
+  if (zapLoja())          partes.push('WhatsApp: ' + zapLoja());
+  return partes.join(' · ');
+}
+function renderPerfilLoja(){
+  const d = document.getElementById('perfilLojaDados');
+  const z = document.getElementById('perfilLojaZap');
+  if (d) d.textContent = LOJA.dados.trim() || '— não preenchido —';
+  if (z) z.textContent = zapLoja() || '— não preenchido —';
 }
 function guardar(){
   try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(CARROS)); }catch(e){/* quota */}
@@ -1357,6 +1469,7 @@ function renderGrid(){
 
   document.querySelectorAll('[data-cnt="carros"]').forEach(el => el.textContent = CARROS.length);
   document.getElementById('stCarros').textContent = CARROS.length;
+  renderPerfilLoja();
   document.getElementById('subModelos').textContent =
     CARROS.length + (CARROS.length === 1 ? ' veículo no estoque' : ' veículos no estoque');
 
@@ -1576,6 +1689,10 @@ function abrirNovoModelo(){
   document.getElementById('fCor').value = '';
   document.getElementById('fPreco').value = '';
   document.getElementById('fDesc').value = '';
+  /* dados da loja: refletem o Perfil (vazio se o Perfil estiver vazio) */
+  carregarLoja();
+  document.getElementById('fLojaDados').value = LOJA.dados;
+  document.getElementById('fLojaZap').value   = mascaraZap(LOJA.zap);
   fotos = []; renderFotos();
   videos = []; renderVideos();
   mNovoModelo.classList.add('open'); reiniciarScroll(mNovoModelo);
@@ -1588,6 +1705,20 @@ function abrirNovoModelo(){
     const d = el.value.replace(/\D/g, '').slice(0, 12);
     el.value = d ? Number(d).toLocaleString('en-US') + ' Kz' : '';
   });
+});
+
+/* máscara 9XX XXX XXX nos campos de WhatsApp */
+function mascaraZap(valor){
+  const d = String(valor).replace(/\D/g, '').replace(/^244/, '').slice(0, 9);
+  let o = d.slice(0, 3);
+  if (d.length > 3) o += ' ' + d.slice(3, 6);
+  if (d.length > 6) o += ' ' + d.slice(6, 9);
+  return o;
+}
+['fLojaZap','lZap'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('input', e => { e.target.value = mascaraZap(e.target.value); });
 });
 
 document.getElementById('btnGuardarModelo').addEventListener('click', () => {
@@ -1622,6 +1753,13 @@ document.getElementById('btnGuardarModelo').addEventListener('click', () => {
     videos: videos.map(v => v.src)
   };
 
+  /* dados da loja escritos no popup passam a ser os do Perfil */
+  const lojaDados = document.getElementById('fLojaDados').value.trim().replace(/\s+/g,' ');
+  const lojaZap   = document.getElementById('fLojaZap').value.replace(/\D/g,'').slice(0,9);
+  LOJA = { dados: lojaDados, zap: lojaZap };
+  guardarLoja();
+  renderPerfilLoja();
+
   CARROS.push(carro);
   guardar();
 
@@ -1632,6 +1770,43 @@ document.getElementById('btnGuardarModelo').addEventListener('click', () => {
 
   atual = carro;
   abrirDetalhe();
+});
+
+/* ==========================================================
+   DADOS DA LOJA (Perfil)
+   ========================================================== */
+function abrirLoja(foco){
+  carregarLoja();
+  document.getElementById('lDados').value = LOJA.dados;
+  document.getElementById('lZap').value   = mascaraZap(LOJA.zap);
+  document.getElementById('mLoja').classList.add('open');
+  reiniciarScroll(document.getElementById('mLoja'));
+  setTimeout(() => {
+    const el = document.getElementById(foco === 'whatsapp' ? 'lZap' : 'lDados');
+    el.focus();
+  }, 140);
+}
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-abrir-loja]');
+  if (!b) return;
+  e.preventDefault();
+  abrirLoja(b.dataset.abrirLoja);
+});
+document.getElementById('pg-perfil').addEventListener('keydown', e => {
+  const tr = e.target.closest('[data-abrir-loja]');
+  if (!tr) return;
+  if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); abrirLoja(tr.dataset.abrirLoja); }
+});
+
+document.getElementById('btnGuardarLoja').addEventListener('click', () => {
+  LOJA = {
+    dados: document.getElementById('lDados').value.trim().replace(/\s+/g,' '),
+    zap:   document.getElementById('lZap').value.replace(/\D/g,'').slice(0,9)
+  };
+  guardarLoja(); renderPerfilLoja();
+  document.getElementById('mLoja').classList.remove('open');
+  toast('Dados da loja atualizados');
 });
 
 /* ==========================================================
@@ -1701,7 +1876,7 @@ function mensagem(){
   const saldo = atual.preco - entrada;
 
   return 'Olá ' + nome + ', tudo bem? 😃\n\n' +
-    'Conforme falamos aqui na loja ABC SEMINOVOS, segue o orçamento:\n' +
+    'Conforme falamos' + (LOJA.dados.trim() ? ' aqui na loja ' + LOJA.dados.trim() : '') + ', segue o orçamento:\n' +
     '🚗 ' + atual.nome + '\n' +
     '💰 Valor: ' + fmt(atual.preco) + '\n\n' +
     'Podemos trabalhar com uma entrada de ' + fmt(entrada) + ' e o saldo em:\n' +
@@ -1710,14 +1885,14 @@ function mensagem(){
     '- 36x de ' + fmt(saldo / 36) + ',\n' +
     'Ou, ainda, se quiser pagar à vista, conseguimos chegar no incrível valor de ' +
     fmt(valorAVista(atual.preco, atual.desc)) + ' 😱\n\n' +
-    'O que acha?';
+    'O que acha?' + (linhaLoja() ? '\n\n' + linhaLoja() : '');
 }
 
 /* ---- helpers de orçamento ---- *//* ---- helpers de orçamento ---- */
 function textoOrcamento(nome, carro, preco, entrada, desc){
   const saldo = preco - entrada;
   return 'Olá ' + nome + ', tudo bem? 😃\n\n' +
-    'Conforme falamos aqui na loja ABC SEMINOVOS, segue o orçamento:\n' +
+    'Conforme falamos' + (LOJA.dados.trim() ? ' aqui na loja ' + LOJA.dados.trim() : '') + ', segue o orçamento:\n' +
     '🚗 ' + carro.nome + '\n' +
     '💰 Valor: ' + fmt(preco) + '\n\n' +
     'Podemos trabalhar com uma entrada de ' + fmt(entrada) + ' e o saldo em:\n' +
@@ -1726,7 +1901,7 @@ function textoOrcamento(nome, carro, preco, entrada, desc){
     '- 36x de ' + fmt(saldo / 36) + ',\n' +
     'Ou, ainda, se quiser pagar à vista, conseguimos chegar no incrível valor de ' +
     fmt(valorAVista(preco, desc)) + ' 😱\n\n' +
-    'O que acha?';
+    'O que acha?' + (linhaLoja() ? '\n\n' + linhaLoja() : '');
 }
 
 /* ==========================================================

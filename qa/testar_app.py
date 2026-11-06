@@ -325,6 +325,53 @@ async def main():
                await vd.evaluate(f"()=>!document.getElementById('{pgid}').classList.contains('hidden')"), pgid)
         await vd.close()
 
+        # ============ DADOS DA LOJA (Perfil ↔ popup ↔ orçamento) ============
+        lo = await b.new_page(viewport={"width":1440,"height":900})
+        le=[]; lo.on("pageerror", lambda e: le.append(str(e)))
+        await novo(lo)
+        await lo.evaluate("()=>ir('perfil')"); await lo.wait_for_timeout(300)
+        ok("Perfil · Dados da Loja começa vazio",
+           "não preenchido" in await lo.inner_text("#perfilLojaDados"), await lo.inner_text("#perfilLojaDados"))
+        ok("Perfil · Número do WhatsApp começa vazio",
+           "não preenchido" in await lo.inner_text("#perfilLojaZap"), await lo.inner_text("#perfilLojaZap"))
+        await lo.click("button.edit-mini[data-abrir-loja='dados']"); await lo.wait_for_timeout(600)
+        ok("Perfil · editar abre o popup dos dados", await lo.evaluate("()=>document.getElementById('mLoja').classList.contains('open')"), "")
+        await lo.fill("#lDados", "ABC Seminovos · Luanda, Angola")
+        await lo.fill("#lZap", "923456789")
+        ok("Perfil · máscara 9XX XXX XXX", await lo.input_value("#lZap") == "923 456 789", await lo.input_value("#lZap"))
+        await lo.click("#btnGuardarLoja"); await lo.wait_for_timeout(500)
+        ok("Perfil · dados guardados aparecem na linha",
+           await lo.inner_text("#perfilLojaDados") == "ABC Seminovos · Luanda, Angola", await lo.inner_text("#perfilLojaDados"))
+        ok("Perfil · número mostrado com +244",
+           await lo.inner_text("#perfilLojaZap") == "+244 923 456 789", await lo.inner_text("#perfilLojaZap"))
+        ok("Perfil · dados persistem no dispositivo",
+           "ABC Seminovos" in (await lo.evaluate("()=>localStorage.getItem('modelo_loja_v1')") or ""), "")
+        await lo.evaluate("()=>ir('modelos')"); await lo.wait_for_timeout(250)
+        await lo.click("[data-criar]:visible"); await lo.wait_for_timeout(650)
+        ok("Popup novo modelo · campos Dados da Loja e WhatsApp existem",
+           await lo.locator("#fLojaDados").count() == 1 and await lo.locator("#fLojaZap").count() == 1, "")
+        ok("Popup novo modelo · herda o que está no Perfil",
+           await lo.input_value("#fLojaDados") == "ABC Seminovos · Luanda, Angola"
+           and await lo.input_value("#fLojaZap") == "923 456 789",
+           (await lo.input_value("#fLojaDados"), await lo.input_value("#fLojaZap")))
+        await lo.fill("#fMarca", "Kia"); await lo.fill("#fModelo", "Sportage")
+        await lo.select_option("#fAno", "2024"); await lo.select_option("#fTipo", "Novo")
+        await lo.fill("#fCor", "Branco"); await lo.fill("#fPreco", "99000")
+        await lo.fill("#fLojaDados", "Auto Kadumbo · Talatona"); await lo.fill("#fLojaZap", "934111222")
+        await lo.click("#btnGuardarModelo"); await lo.wait_for_timeout(900)
+        await lo.evaluate("()=>ir('perfil')"); await lo.wait_for_timeout(300)
+        ok("Criar modelo · Perfil fica atualizado",
+           await lo.inner_text("#perfilLojaDados") == "Auto Kadumbo · Talatona"
+           and await lo.inner_text("#perfilLojaZap") == "+244 934 111 222",
+           (await lo.inner_text("#perfilLojaDados"), await lo.inner_text("#perfilLojaZap")))
+        msg = await lo.evaluate("()=>{const c=CARROS.find(x=>x.nome.indexOf('Kia')===0); return textoOrcamento('Renato', c, c.preco, 20000, c.desc);}")
+        ok("Orçamento enviado · contém Dados da Loja", "Auto Kadumbo · Talatona" in msg, msg.split(chr(10))[2])
+        ok("Orçamento enviado · contém WhatsApp da loja", "+244 934 111 222" in msg, msg.split(chr(10))[-1])
+        vazia = await lo.evaluate("()=>{LOJA={dados:'',zap:''};guardarLoja();renderPerfilLoja();const c=CARROS[0];return textoOrcamento('Ana', c, c.preco, 10000, c.desc);}")
+        ok("Loja vazia · mensagem sem assinatura", "+244" not in vazia and "aqui na loja" not in vazia, vazia.split(chr(10))[2])
+        ok("Dados da Loja · sem erros de consola", len(le) == 0, str(le[:2]))
+        await lo.close()
+
         # ============ APPBAR DESKTOP LIMPA ============
         da = await b.new_page(viewport={"width":1440,"height":860})
         dde=[]; da.on("pageerror", lambda e: dde.append(str(e)))

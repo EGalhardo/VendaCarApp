@@ -291,6 +291,82 @@
  },
  {
   "r": "PASS",
+  "n": "Perfil · Dados da Loja começa vazio",
+  "d": "— não preenchido —"
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · Número do WhatsApp começa vazio",
+  "d": "— não preenchido —"
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · editar abre o popup dos dados",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · máscara 9XX XXX XXX",
+  "d": "923 456 789"
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · dados guardados aparecem na linha",
+  "d": "ABC Seminovos · Luanda, Angola"
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · número mostrado com +244",
+  "d": "+244 923 456 789"
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · dados persistem no dispositivo",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Popup novo modelo · campos Dados da Loja e WhatsApp existem",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Popup novo modelo · herda o que está no Perfil",
+  "d": [
+   "ABC Seminovos · Luanda, Angola",
+   "923 456 789"
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "Criar modelo · Perfil fica atualizado",
+  "d": [
+   "Auto Kadumbo · Talatona",
+   "+244 934 111 222"
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "Orçamento enviado · contém Dados da Loja",
+  "d": "Conforme falamos aqui na loja Auto Kadumbo · Talatona, segue o orçamento:"
+ },
+ {
+  "r": "PASS",
+  "n": "Orçamento enviado · contém WhatsApp da loja",
+  "d": "Auto Kadumbo · Talatona · WhatsApp: +244 934 111 222"
+ },
+ {
+  "r": "PASS",
+  "n": "Loja vazia · mensagem sem assinatura",
+  "d": "Conforme falamos, segue o orçamento:"
+ },
+ {
+  "r": "PASS",
+  "n": "Dados da Loja · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
   "n": "Desktop · campo de procura removido",
   "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'oculto', 'sinoAFrente': True, 'utilizador': 'visivel'}"
  },
