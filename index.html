@@ -111,7 +111,7 @@
   .net-pill.save{background:#eef4ff;color:#2c5c9e;border-color:#dbe6fa}
   .net-pill.save i{background:#3b72c4}
   .ic-btn{
-    width:36px;height:36px;border-radius:9px;border:1px solid var(--line);background:#fff;
+    width:36px;height:36px;border-radius:9px;border:0;background:transparent;
     display:flex;align-items:center;justify-content:center;color:#6c7a75;cursor:pointer;flex:0 0 auto;
   }
   .ic-btn:hover{background:#f6f8f7}
@@ -120,16 +120,26 @@
   html[data-tema="escuro"] .tema-btn .ico-lua{display:none}
   html[data-tema="escuro"] .tema-btn .ico-sol{display:block}
 
-  .who{display:flex;align-items:center;gap:9px;padding-left:16px;border-left:1px solid #eef1ef;flex:0 0 auto}
+  /* bloco do utilizador: foto de perfil com o cumprimento por baixo */
+  .who{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+    padding:0;border:0;background:transparent;font-family:inherit;cursor:pointer;
+    flex:0 0 auto;margin-left:6px;border-radius:10px;
+  }
   .bar .ic-btn{margin-left:0}
   /* o primeiro ícone da appbar (tema) empurra os restantes para a direita */
   .bar .ic-btn.tema-btn{margin-left:auto}
   .who .av{
     width:34px;height:34px;border-radius:50%;background:var(--green-soft);color:var(--green-ink);
     font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center;
+    flex:0 0 auto;transition:box-shadow .18s;
   }
-  .who .nm{font-size:12.5px;font-weight:700;color:#3a4441;line-height:1.2;white-space:nowrap}
-  .who .rl{font-size:11px;color:var(--muted-2);white-space:nowrap}
+  .who:hover .av, .who:focus-visible .av{box-shadow:0 0 0 3px rgba(76,175,80,.16)}
+  .who .oi{
+    display:block;font-size:10.5px;line-height:1.15;color:var(--muted-2);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:132px;text-align:center;
+  }
+  .who .oi b{font-weight:700;color:#3a4441}
 
   /* ---------- barra lateral ---------- */
   .side{
@@ -751,10 +761,12 @@
   html[data-tema="escuro"] .net-pill{background:#042b25;color:#6fd48d;border:1px solid #0a3b30}
   html[data-tema="escuro"] .net-pill.off{background:#2b1f0a;color:#e7c276;border-color:#4a3512}
   html[data-tema="escuro"] .net-pill.save{background:#0b2b52;color:#8fbcf7;border-color:#14406e}
-  html[data-tema="escuro"] .ic-btn{background:#040d1f;color:#b3c6e0}
+  html[data-tema="escuro"] .ic-btn{background:transparent;color:#b3c6e0}
   html[data-tema="escuro"] .ic-btn:hover{background:#071528}
-  html[data-tema="escuro"] .who{border-left:1px solid #0a1c34}
-  html[data-tema="escuro"] .who .nm{color:#eaf1fb}
+  html[data-tema="escuro"] .who{background:transparent}
+  html[data-tema="escuro"] .who .oi{color:#93a7c4}
+  html[data-tema="escuro"] .who .oi b{color:#eaf1fb}
+  html[data-tema="escuro"] .who:hover .av{box-shadow:0 0 0 3px rgba(22,194,90,.18)}
   html[data-tema="escuro"] .side{background:#040d1f}
   html[data-tema="escuro"] .side .lbl{color:#7c90ae}
   html[data-tema="escuro"] .nav:hover{background:#071528}
@@ -943,7 +955,7 @@
     /* appbar única no telemóvel: marca + título + estado + notificações */
     .bar{
       position:relative;z-index:2;height:58px;min-width:0;
-      padding:0 12px;gap:8px;border-bottom:0;box-shadow:none;background:#fff;
+      padding:0 10px;gap:6px;border-bottom:0;box-shadow:none;background:#fff;
     }
     /* na página inicial a appbar não mostra voltar: o título alinha com o logótipo */
     .brand:not(.com-voltar) ~ .bar .back{display:none}
@@ -953,10 +965,24 @@
     }
     .bar h1{display:block;font-size:14px;font-weight:700;flex:1;min-width:0;overflow:hidden;
             text-overflow:ellipsis;white-space:nowrap;margin-left:4px}
-    .bar .crumb,.search-top,.who{display:none}
+    .bar .crumb,.search-top{display:none}
+    /* telemóvel: a foto de perfil com o "Oi, …" ocupa o lugar das notificações */
+    .who{margin-left:0;gap:2px}
+    .who .av{width:30px;height:30px;font-size:11px}
+    .who .oi{font-size:9px;max-width:96px;line-height:1.1}
     .net-pill{display:inline-flex;height:24px;padding:0 8px;font-size:10px;gap:5px}
     .net-pill i{width:6px;height:6px}
     .bar .ic-btn,.bar .ic-btn.tema-btn{width:34px;height:34px;margin-left:0}
+
+    /* ecrãs muito estreitos: mantém o título legível ao lado da foto */
+    @media (max-width:360px){
+      .bar{padding:0 6px;gap:3px}
+      .bar h1{font-size:13px;margin-left:2px}
+      .net-pill{padding:0 6px;font-size:9.5px;gap:4px}
+      .bar .ic-btn,.bar .ic-btn.tema-btn{width:30px;height:30px}
+      .who .av{width:26px;height:26px;font-size:10px}
+      .who .oi{font-size:8.5px;max-width:64px}
+    }
 
     .side{display:none}
 
@@ -1098,14 +1124,10 @@
         <circle cx="12" cy="12" r="4.2"/>
         <path d="M12 2.4v2.2M12 19.4v2.2M2.4 12h2.2M19.4 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"/></svg>
     </button>
-    <button class="ic-btn" title="Notificações" aria-label="Notificações">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M18 8a6 6 0 10-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10.3 21a2 2 0 003.4 0"/></svg>
+    <button class="who" id="whoBtn" data-go="perfil" title="Perfil" aria-label="Perfil">
+      <span class="av">AS</span>
+      <span class="oi">Oi, <b id="whoNome">ABC Seminovos</b></span>
     </button>
-    <div class="who">
-      <div class="av">AS</div>
-      <div><div class="nm">ABC Seminovos</div><div class="rl">Luanda, Angola</div></div>
-    </div>
   </div>
 
   <!-- ================= BARRA LATERAL (desktop) ================= -->
@@ -2069,6 +2091,14 @@ function renderAvatarLoja(){
   }
   if (ini) ini.textContent = iniciaisLoja();
   if (rem) rem.classList.toggle('hidden', !foto);
+  /* cumprimento na appbar: "Oi, <nome da loja>" */
+  const nome = document.getElementById('whoNome');
+  if (nome){
+    const n = (LOJA.dados || '').trim() || 'ABC Seminovos';
+    nome.textContent = n;
+    const btn = document.getElementById('whoBtn');
+    if (btn) btn.title = 'Perfil · ' + n;
+  }
   const av = document.querySelector('.who .av');
   if (av){
     if (foto){

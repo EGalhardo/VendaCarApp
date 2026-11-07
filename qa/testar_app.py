@@ -486,16 +486,15 @@ async def main():
         await novo(tm)
         T = await tm.evaluate("""()=>{
           const b=document.getElementById('btnTema');
-          const ic=[...document.querySelectorAll('.bar .ic-btn')];
-          const r=b.getBoundingClientRect(), sino=ic[ic.length-1].getBoundingClientRect();
+          const r=b.getBoundingClientRect(), qu=document.getElementById('whoBtn').getBoundingClientRect();
           const lua=getComputedStyle(b.querySelector('.ico-lua')).display;
           const sol=getComputedStyle(b.querySelector('.ico-sol')).display;
-          return {existe:!!b, antesDoSino:Math.round(r.right)<=Math.round(sino.left),
+          return {existe:!!b, antesDoSino:Math.round(r.right)<=Math.round(qu.left),
                   lua:lua, sol:sol, tema:document.documentElement.dataset.tema||'claro',
                   titulo:b.title, pressed:b.getAttribute('aria-pressed')};
         }""")
         ok("R30 · botão de tema presente na appbar", T["existe"], str(T))
-        ok("R30 · botão de tema à esquerda das notificações", T["antesDoSino"], str(T))
+        ok("R35 · botão de tema à esquerda da foto de perfil", T["antesDoSino"], str(T))
         ok("R30 · tema começa claro (ícone de lua)", T["lua"]=="block" and T["sol"]=="none" and T["tema"]=="claro", str(T))
         ok("R30 · botão de tema com tooltip e aria-pressed", T["titulo"]=="Modo escuro" and T["pressed"]=="false", str(T))
         await tm.click("#btnTema"); await tm.wait_for_timeout(400)
@@ -543,14 +542,14 @@ async def main():
         TM = await tmb.evaluate("""()=>{
           const b=document.getElementById('btnTema'), r=b.getBoundingClientRect();
           const pill=document.querySelector('#netPill').getBoundingClientRect();
-          const sino=document.querySelector('.bar .ic-btn:last-of-type').getBoundingClientRect();
+          const sino=document.getElementById('whoBtn').getBoundingClientRect();
           const back=document.querySelector('.bar .back').getBoundingClientRect();
           return {alt:Math.round(r.height), larg:Math.round(r.width),
                   entrePillESino: r.left>=pill.right-0.5 && r.right<=sino.left+0.5,
                   tituloAinda:b.innerText===undefined?null:document.querySelector('.bar h1').getBoundingClientRect().width>0,
                   semOverflow:document.documentElement.scrollWidth<=390};
         }""")
-        ok("R30 · mobile · botão de tema entre Online e o sino", TM["entrePillESino"], str(TM))
+        ok("R35 · mobile · botão de tema entre Online e a foto de perfil", TM["entrePillESino"], str(TM))
         ok("R30 · mobile · botão de tema com 34px", TM["alt"]==34 and TM["larg"]==34, str(TM))
         ok("R30 · mobile · appbar continua sem overflow", TM["semOverflow"], str(TM))
         await tmb.click("#btnTema"); await tmb.wait_for_timeout(400)
@@ -613,7 +612,7 @@ async def main():
         await novo(ab)
         g = await ab.evaluate("""()=>{
           const q=s=>document.querySelector(s).getBoundingClientRect();
-          const brand=q('.brand'), pill=q('#netPill'), sino=q('.bar .ic-btn'), cont=q('.content');
+          const brand=q('.brand'), pill=q('#netPill'), sino=q('#whoBtn'), cont=q('.content');
           return {appbar:Math.round(brand.height), topoConteudo:Math.round(cont.top),
                   barraExtra:Math.round(q('.bar').top),
                   pillDentro: pill.top>=brand.top && pill.bottom<=brand.bottom,
@@ -621,7 +620,7 @@ async def main():
         }""")
         ok("Mobile · appbar única (sem barra extra)", g["appbar"]==58 and g["topoConteudo"]==58 and g["barraExtra"]==0, str(g))
         ok("Mobile · 'Online' na appbar", g["pillDentro"], str(g))
-        ok("Mobile · ícone de notificações na appbar", g["sinoDentro"], str(g))
+        ok("R35 · mobile · foto de perfil no lugar das notificações", g["sinoDentro"], str(g))
         await ab.evaluate("()=>{atual=CARROS[0]; abrirDetalhe();}"); await ab.wait_for_timeout(500)
         d = await ab.evaluate("""()=>{
           const back=document.getElementById('btnBack'), mark=document.querySelector('.brand .logo');
@@ -1048,15 +1047,15 @@ async def main():
           const vis=s=>{const e=document.querySelector(s); if(!e) return 'inexistente';
             return getComputedStyle(e).display==='none'?'oculto':'visivel';};
           const bar=document.querySelector('.bar').getBoundingClientRect();
-          const sino=document.querySelector('.bar .ic-btn:last-of-type').getBoundingClientRect();
+          const sino=document.getElementById('whoBtn').getBoundingClientRect();
           return {busca:vis('.search-top'), titulo:vis('#barTitle'), pill:vis('#netPill'),
                   sinoAFrente: sino.right > bar.left + bar.width/2,
-                  utilizador: vis('.who')};
+                  utilizador: vis('#whoBtn'), oi: (document.querySelector('.who .oi')||{}).textContent||''};
         }""")
         ok("Desktop · campo de procura removido", gd["busca"]=="inexistente", str(gd))
         ok("Desktop · nome da página fora da appbar", gd["titulo"]=="oculto", str(gd))
         ok("Desktop · modo Online fora da appbar", gd["pill"]=="oculto", str(gd))
-        ok("Desktop · notificações e utilizador alinhados à direita", gd["sinoAFrente"] and gd["utilizador"] in ("visivel","flex"), str(gd))
+        ok("Desktop · foto de perfil alinhada à direita (sem notificações)", gd["sinoAFrente"] and gd["utilizador"] in ("visivel","flex"), str(gd))
         ok("Desktop · appbar sem erros", len(dde)==0, str(dde[:2]))
         est = await da.evaluate("""()=>{
           const c=document.querySelector('.content'), st=getComputedStyle(c);
@@ -1167,6 +1166,76 @@ async def main():
         ok("Mobile · edição utilizável",
            await dmod.locator("#odGuardar").is_visible() and await dmod.locator("#odNomeInp").is_visible(), "")
         await dmod.close()
+
+        # ============ R35 · APPBAR: FOTO DE PERFIL NO LUGAR DAS NOTIFICAÇÕES ============
+        r5 = await b.new_page(viewport={"width":1440,"height":900})
+        r5e=[]; r5.on("pageerror", lambda e: r5e.append(str(e)))
+        await novo(r5)
+        A = await r5.evaluate("""()=>{
+          const bar=document.querySelector('.bar');
+          const txt=[...bar.querySelectorAll('button')].map(x=>x.getAttribute('aria-label')||x.title||'');
+          const tema=getComputedStyle(document.getElementById('btnTema'));
+          const av=document.querySelector('.who .av').getBoundingClientRect();
+          const oi=document.querySelector('.who .oi').getBoundingClientRect();
+          const who=document.querySelector('.who').getBoundingClientRect();
+          return {sino: bar.innerHTML.includes('Notificações'),
+                  semTextoNotif: !txt.some(t=>t.includes('Notificações')),
+                  bordas: tema.borderTopWidth, fundoBtn: tema.backgroundColor,
+                  fotoAcimaDoNome: av.bottom<=oi.top+1, nomeAbaixo: oi.top>=av.bottom-1,
+                  centrado: Math.abs((av.left+av.right)/2-(who.left+who.right)/2)<1.5,
+                  oiTexto: document.querySelector('.who .oi').textContent.trim()};
+        }""")
+        ok("R35 · desktop · ícone de notificações removido", not A["sino"] and A["semTextoNotif"], str(A))
+        ok("R35 · ícones da appbar sem bordas", A["bordas"]=="0px" and A["fundoBtn"]=="rgba(0, 0, 0, 0)", str(A))
+        ok("R35 · nome da loja debaixo da foto de perfil", A["fotoAcimaDoNome"] and A["centrado"], str(A))
+        ok("R35 · cumprimento 'Oi, <nome da loja>'", A["oiTexto"].startswith("Oi,"), A["oiTexto"])
+        await r5.evaluate("()=>{LOJA.dados='Seminovos Kianda'; guardarLoja(); renderAvatarLoja();}")
+        await r5.wait_for_timeout(250)
+        N = await r5.evaluate("()=>document.querySelector('.who .oi').textContent.trim()")
+        ok("R35 · o nome segue os Dados da Loja", N=="Oi, Seminovos Kianda", N)
+        await r5.click("#whoBtn"); await r5.wait_for_timeout(600)
+        ok("R35 · clicar na foto abre o Perfil",
+           await r5.evaluate("()=>!document.getElementById('pg-perfil').classList.contains('hidden')"), "")
+        await r5.evaluate("()=>{LOJA.dados=''; guardarLoja(); renderAvatarLoja();}")
+        ok("R35 · sem erros de consola (desktop)", len(r5e)==0, str(r5e[:2]))
+        await r5.close()
+
+        r5m = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        r5me=[]; r5m.on("pageerror", lambda e: r5me.append(str(e)))
+        await novo(r5m)
+        M = await r5m.evaluate("""()=>{
+          const who=document.getElementById('whoBtn');
+          const r=who.getBoundingClientRect(), bar=document.querySelector('.bar').getBoundingClientRect();
+          const pill=document.getElementById('netPill').getBoundingClientRect();
+          const tema=document.getElementById('btnTema').getBoundingClientRect();
+          const av=document.querySelector('.who .av').getBoundingClientRect();
+          const oi=document.querySelector('.who .oi').getBoundingClientRect();
+          const t=getComputedStyle(document.getElementById('btnTema'));
+          return {visivel:getComputedStyle(who).display!=='none' && r.width>0,
+                  lugarDoSino: r.left>=tema.right-0.5 && r.right<=bar.right+0.5,
+                  dentroDaBarra: r.top>=bar.top && r.bottom<=bar.bottom,
+                  depoisDoOnline: r.left>=pill.right-0.5,
+                  fotoAcima: av.bottom<=oi.top+1,
+                  bordas: t.borderTopWidth + '|' + t.backgroundColor,
+                  overflow: document.documentElement.scrollWidth-390,
+                  oi: document.querySelector('.who .oi').textContent.trim()};
+        }""")
+        ok("R35 · mobile · foto de perfil no lugar das notificações", M["visivel"] and M["lugarDoSino"] and M["dentroDaBarra"], str(M))
+        ok("R35 · mobile · nome debaixo da foto", M["fotoAcima"], str(M))
+        ok("R35 · mobile · ícones sem bordas", M["bordas"]=="0px|rgba(0, 0, 0, 0)", M["bordas"])
+        ok("R35 · mobile · appbar mantém-se dentro do ecrã", M["overflow"]<=0, str(M["overflow"]))
+        ok("R35 · mobile · sem erros de consola", len(r5me)==0, str(r5me[:2]))
+        await r5m.close()
+
+        r5f = await b.new_page(viewport={"width":1440,"height":900})
+        await novo(r5f)
+        await r5f.evaluate("""()=>{LOJA.avatar='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; renderAvatarLoja();}""")
+        await r5f.wait_for_timeout(250)
+        F = await r5f.evaluate("""()=>{const av=document.querySelector('.who .av');
+          return {fundo:getComputedStyle(av).backgroundImage.includes('url('), texto:av.textContent.trim()};}""")
+        ok("R35 · foto de perfil escolhida aparece na appbar", F["fundo"] and F["texto"]=="", str(F))
+        await r5f.evaluate("()=>{LOJA.avatar=''; renderAvatarLoja();}")
+        await r5f.close()
 
         await b.close()
 
