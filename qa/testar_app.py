@@ -356,6 +356,23 @@ async def main():
         ok("IVA · presente no orçamento guardado",
            await iv.inner_text("#odRIva") == "10,500 Kz" and await iv.inner_text("#odRTotalIva") == "85,500 Kz",
            (await iv.inner_text("#odRIva"), await iv.inner_text("#odRTotalIva")))
+        ok("IVA · visível no cartão do carro no topo do Orçamento",
+           await iv.inner_text("#oIvaMini") == "10,500 Kz" and await iv.inner_text("#oTotalIvaMini") == "85,500 Kz",
+           (await iv.inner_text("#oIvaMini"), await iv.inner_text("#oTotalIvaMini")))
+        await iv.evaluate("()=>{atual=CARROS.find(c=>c.id==='corolla');abrirOrcamento();}"); await iv.wait_for_timeout(300)
+        await iv.click("#btnEnviar"); await iv.wait_for_timeout(450)
+        ok("IVA · resumo dentro do popup de envio",
+           await iv.inner_text("#reIva") == "10,500 Kz" and await iv.inner_text("#reTotal") == "85,500 Kz",
+           (await iv.inner_text("#reIva"), await iv.inner_text("#reTotal")))
+        await iv.evaluate("()=>document.getElementById('mEnviar').classList.remove('open')")
+        await iv.evaluate("()=>ir('listaorc')"); await iv.wait_for_timeout(350)
+        linha_orc = await iv.evaluate("()=>{const t=document.querySelector('#tblOrc tr');return t?t.innerText:''}")
+        ok("IVA · coluna na lista de Orçamentos",
+           "10,500 Kz" in linha_orc and "85,500 Kz" in linha_orc, linha_orc.replace(chr(9)," | ")[-40:])
+        await iv.evaluate("()=>abrirOrcDetalhe(ORCAMENTOS[0].id)"); await iv.wait_for_timeout(400)
+        ok("IVA · linha de topo no detalhe do orçamento",
+           await iv.inner_text("#odIvaMini") == "10,500 Kz" and await iv.inner_text("#odTotalMini") == "85,500 Kz",
+           (await iv.inner_text("#odIvaMini"), await iv.inner_text("#odTotalMini")))
         ok("IVA · 14% aplicado também a 210.000 (Hilux)",
            await iv.evaluate("()=>fmt(ivaDe(210000))") == "29,400 Kz",
            await iv.evaluate("()=>fmt(ivaDe(210000))"))

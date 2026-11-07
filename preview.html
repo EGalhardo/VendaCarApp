@@ -382,7 +382,21 @@
     font-size:8.5px;font-weight:700;text-align:center;padding:2px 0;letter-spacing:.3px;
   }
   .up-count{font-size:11px;color:#9bb0a4;margin-top:8px}
-  /* IVA — imposto mostrado à parte */
+  /* IVA — imposto mostrado à parte (vários pontos do ecrã) */
+  .iva-mini{font-size:11px;color:#9a6b12;margin-top:3px}
+  .iva-mini b{color:#7d570e;font-weight:800}
+  .iva-col{color:#9a6b12}
+  .resumo-envio{
+    background:#fbfdfb;border:1px solid #e6f1e8;border-radius:11px;
+    padding:12px 14px;margin-bottom:16px;
+  }
+  .resumo-envio .re{display:flex;justify-content:space-between;font-size:12.5px;padding:4px 0;color:var(--muted)}
+  .resumo-envio .re b{color:#333d3a;font-weight:700}
+  .resumo-envio .re.total{
+    border-top:1px dashed #dbe8df;margin-top:5px;padding-top:8px;background:none;border-radius:0;
+    font-size:13px;
+  }
+  .resumo-envio .re.total b{color:var(--green-ink);font-weight:800}
   .imposto{
     font-style:normal;font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;
     color:#9a6b12;background:#fdf3dd;border:1px solid #f0dfb4;border-radius:5px;
@@ -833,6 +847,7 @@
             <div>
               <div class="n" id="oNome">—</div>
               <div class="p" id="oPreco">—</div>
+              <div class="p iva-mini">IVA 14% <b id="oIvaMini">—</b> · Total <b id="oTotalIvaMini">—</b></div>
             </div>
           </div>
           <div style="margin-top:20px">
@@ -884,6 +899,7 @@
           <thead><tr>
             <th>Carro</th><th>Cliente</th><th>Telefone</th><th>Data</th>
             <th>Estado</th><th style="text-align:right">Valor</th>
+            <th style="text-align:right">IVA 14%</th><th style="text-align:right">Total c/ IVA</th>
           </tr></thead>
           <tbody id="tblOrc"></tbody>
         </table>
@@ -906,6 +922,7 @@
               <div class="n" id="odCarro">—</div>
               <div class="m" id="odTipo">—</div>
               <div class="d" id="odData">—</div>
+              <div class="d iva-mini">IVA 14% <b id="odIvaMini">—</b> · Total <b id="odTotalMini">—</b></div>
             </div>
             <span class="pill" id="odEstado">—</span>
           </div>
@@ -1288,6 +1305,12 @@
     </div>
 
     <div class="body">
+    <div class="resumo-envio">
+      <div class="re"><span>Carro</span><b id="reCarro">—</b></div>
+      <div class="re"><span>Valor</span><b id="rePreco">—</b></div>
+      <div class="re"><span>IVA 14% <i class="imposto">imposto</i></span><b id="reIva">—</b></div>
+      <div class="re total"><span>Total com IVA</span><b id="reTotal">—</b></div>
+    </div>
     <div class="fg"><p class="lbl">Nome do Cliente</p><input class="inp" id="mNome" placeholder="Ex: Renato" autocomplete="off"></div>
     <div class="fg"><p class="lbl">Telefone</p><input class="inp" id="mTel" placeholder="923 456 789" inputmode="numeric"></div>
 
@@ -1866,6 +1889,8 @@ function calc(){
   document.getElementById('oPrecoN').textContent = fmt(preco);
   document.getElementById('oIva').textContent = fmt(ivaDe(preco));
   document.getElementById('oTotalIva').textContent = fmt(totalComIva(preco));
+  document.getElementById('oIvaMini').textContent = fmt(ivaDe(preco));
+  document.getElementById('oTotalIvaMini').textContent = fmt(totalComIva(preco));
   document.getElementById('oEnt').textContent = fmt(entrada);
   document.getElementById('oSaldo').textContent = fmt(saldo);
   document.getElementById('tSaldo').textContent = fmt(saldo);
@@ -1881,7 +1906,17 @@ document.getElementById('oEntrada').addEventListener('input', e => {
   calc();
 });
 
+function preencherResumoEnvio(preco){
+  const g = id => document.getElementById(id);
+  if (!g('rePreco')) return;
+  g('reCarro').textContent = atual ? atual.nome : '—';
+  g('rePreco').textContent = fmt(preco);
+  g('reIva').textContent   = fmt(ivaDe(preco));
+  g('reTotal').textContent = fmt(totalComIva(preco));
+}
+
 document.getElementById('btnEnviar').addEventListener('click', () => {
+  preencherResumoEnvio(atual.preco);
   document.getElementById('mEnviar').classList.add('open'); reiniciarScroll(document.getElementById('mEnviar'));
   setTimeout(() => document.getElementById('mNome').focus(), 120);
 });
@@ -2153,6 +2188,7 @@ document.getElementById('pg-cliente').addEventListener('click', e => {
   document.getElementById('mTel').value  = orc.tel.replace(/^(\d{3})(\d{3})(\d{3})$/, '$1 $2 $3');
 
   enviarPendente = orc.id;   // permite saber que se trata de um reenvio
+  if (typeof preencherResumoEnvio === 'function') preencherResumoEnvio(orc.preco);
   document.getElementById('mEnviar').classList.add('open');
   reiniciarScroll(document.getElementById('mEnviar')); reiniciarScroll(document.getElementById('mEnviar'));
 });
@@ -2181,7 +2217,7 @@ function renderTabelaOrc(){
   document.querySelectorAll('[data-cnt="orcs"]').forEach(el => el.textContent = ORCAMENTOS.length);
 
   if (!ORCAMENTOS.length){
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#a2afa9;padding:30px">
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#a2afa9;padding:30px">
       Ainda não há orçamentos enviados.</td></tr>`;
     return;
   }
@@ -2195,6 +2231,8 @@ function renderTabelaOrc(){
       <td>${o.nome}</td><td>${fmtTel(o.tel)}</td><td>${fmtData(o.data)}</td>
       <td><span class="pill${o.estado === 'Enviado' ? '' : o.estado === 'Pendente' ? ' p' : ' d'}">${o.estado}</span></td>
       <td style="text-align:right" class="b">${fmt(o.preco)}</td>
+      <td style="text-align:right" class="iva-col">${fmt(ivaDe(o.preco))}</td>
+      <td style="text-align:right" class="b">${fmt(totalComIva(o.preco))}</td>
     </tr>`;
   }).join('');
 }
@@ -2273,6 +2311,8 @@ function orcResumo(){
   const saldo = Math.max(preco - entrada, 0);
   document.getElementById('odRPreco').textContent = fmt(preco);
   document.getElementById('odRIva').textContent   = fmt(ivaDe(preco));
+  document.getElementById('odIvaMini').textContent   = fmt(ivaDe(preco));
+  document.getElementById('odTotalMini').textContent = fmt(totalComIva(preco));
   document.getElementById('odRTotalIva').textContent = fmt(totalComIva(preco));
   document.getElementById('odREnt').textContent   = fmt(entrada);
   document.getElementById('odRSaldo').textContent = fmt(saldo);

@@ -334,6 +334,35 @@
  },
  {
   "r": "PASS",
+  "n": "IVA · visível no cartão do carro no topo do Orçamento",
+  "d": [
+   "10,500 Kz",
+   "85,500 Kz"
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · resumo dentro do popup de envio",
+  "d": [
+   "10,500 Kz",
+   "85,500 Kz"
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · coluna na lista de Orçamentos",
+  "d": "iado | 75,000 Kz | 10,500 Kz | 85,500 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · linha de topo no detalhe do orçamento",
+  "d": [
+   "10,500 Kz",
+   "85,500 Kz"
+  ]
+ },
+ {
+  "r": "PASS",
   "n": "IVA · 14% aplicado também a 210.000 (Hilux)",
   "d": "29,400 Kz"
  },
