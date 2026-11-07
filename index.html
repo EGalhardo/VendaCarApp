@@ -78,18 +78,6 @@
     cursor:pointer;padding:0;align-items:center;justify-content:center;flex:0 0 auto;
   }
   .bar h1{display:none}                     /* desktop: título vive no cabeçalho da página */
-  .bar .crumb{display:none}
-  .bar .crumb{font-size:12.5px;color:var(--muted-2);flex:1;margin-left:-8px;
-              white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .search-top{
-    display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);
-    border-radius:9px;padding:9px 12px;color:#a9b5b0;font-size:13px;width:250px;flex:0 0 auto;
-  }
-  .search-top input{
-    border:0;background:none;outline:none;font-family:inherit;font-size:13px;
-    color:var(--ink-2);width:100%;
-  }
-  .search-top input::placeholder{color:#a9b5b0}
   /* aviso rápido (toast) */
   .toast{
     position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);
@@ -436,7 +424,7 @@
   }
   .car .del-car:hover,.car .del-car:focus-visible{background:#fdecea;color:#c0392b;border-color:#f3cfc9;transform:scale(1.06)}
   .car .del-car:active{transform:scale(.96)}
-  .conftxt,.conf-txt{font-size:13.5px;color:var(--ink-3);line-height:1.55;margin:0 0 12px}
+  .conf-txt{font-size:13.5px;color:var(--ink-3);line-height:1.55;margin:0 0 12px}
   .conf-txt b{color:#333d3a}
   .conf-box{
     background:#fbf7f6;border:1px solid #f1e2df;border-radius:10px;padding:11px 13px;
@@ -762,7 +750,6 @@
   .od-row:last-child{border-bottom:0}
   .od-row b{color:#2b3532;font-weight:700}
   .od-row.hl b{color:var(--red)}
-  .od-note{font-size:11.5px;color:#a2afa9;margin-top:10px;line-height:1.5}
   .od-actions{display:flex;flex-direction:column;gap:9px;margin-top:16px}
   .od-actions .btn{width:100%;height:44px}
   .od-actions .btn.danger{background:#fff;color:#c0503c;border:1px solid #f2d9d2}
@@ -833,8 +820,6 @@
 
   html[data-tema="escuro"] .brand{background:#040d1f}
   html[data-tema="escuro"] .bar{background:#040d1f}
-  html[data-tema="escuro"] .search-top{color:#869cbb}
-  html[data-tema="escuro"] .search-top input::placeholder{color:#869cbb}
   html[data-tema="escuro"] .toast{background:#04101f}
   html[data-tema="escuro"] .ic-btn{background:transparent;color:#b3c6e0}
   html[data-tema="escuro"] .ic-btn:hover{background:#071528}
@@ -924,7 +909,6 @@
   html[data-tema="escuro"] .od-cliente .n{color:#ffffff}
   html[data-tema="escuro"] .od-row{border-bottom:1px dashed #0a1c34}
   html[data-tema="escuro"] .od-row b{color:#ffffff}
-  html[data-tema="escuro"] .od-note{color:#8ea3c0}
   html[data-tema="escuro"] .od-actions .btn.danger{background:#040d1f;color:#f1897c;border:1px solid #4a2027}
   html[data-tema="escuro"] .od-actions .btn.danger:hover{background:#2e1418}
   html[data-tema="escuro"] .od-save{color:#8ea3c0}
@@ -1003,7 +987,6 @@
     .side .lbl,.nav span.tx,.side .cnt{display:none}
     .nav{justify-content:center}
     .detail,.quote{grid-template-columns:1fr}
-    .search-top{width:180px}
   }
 
   /* ===================== MOBILE ===================== */
@@ -1037,7 +1020,6 @@
     }
     .bar h1{display:block;font-size:14px;font-weight:700;flex:1;min-width:0;overflow:hidden;
             text-overflow:ellipsis;white-space:nowrap;margin-left:4px}
-    .bar .crumb,.search-top{display:none}
     /* telemóvel: a foto de perfil com o "Oi, …" ocupa o lugar das notificações */
     .bar-acoes{margin-left:auto;gap:6px}
     .bar-sep{height:22px}
@@ -1047,6 +1029,9 @@
     .bar .ic-btn,.bar .ic-btn.tema-btn{width:34px;height:34px;margin-left:0}
 
     /* ecrãs muito estreitos: mantém o título legível ao lado da foto */
+    @media (max-width:380px){
+      .cars{grid-template-columns:1fr}
+    }
     @media (max-width:360px){
       .bar{padding:0 6px;gap:3px}
       .bar h1{font-size:13px;margin-left:2px}
@@ -1155,10 +1140,6 @@
     .foot{flex-direction:column-reverse}
     .foot .btn,.foot .btn.ghost{flex:0 0 auto;width:100%}
   }
-
-  @media (max-width:380px){
-    .cars{grid-template-columns:1fr}
-  }
   /* ==========================================================
      MODO ESCURO — ícone e nome da página ativa em verde
      ========================================================== */
@@ -1187,7 +1168,6 @@
         <path d="M15 19l-7-7 7-7"/></svg>
     </button>
     <h1 id="barTitle">Modelos</h1>
-    <div class="crumb" id="barCrumb">Gestão de estoque de veículos</div>
 
     <div class="bar-acoes">
       <button class="ic-btn tema-btn" id="btnTema" title="Modo escuro" aria-label="Alternar modo claro/escuro" aria-pressed="false">
@@ -1230,9 +1210,9 @@
 
     <button class="nav" data-go="clientes">
       <span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-        <clipPath id="espreitaLado"><rect x="0" y="-6" width="24" height="18.4"/></clipPath>
+        
         <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/>
-        <g clip-path="url(#espreitaLado)">
+        <g>
           <circle class="cabeca-frente" cx="9" cy="7" r="3.8"/>
           <circle class="cabeca-tras" cx="17.4" cy="9.4" r="3.1"/>
         </g>
@@ -1629,9 +1609,9 @@
     </button>
     <button class="nav-item" data-go="clientes">
       <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-        <clipPath id="espreitaNav"><rect x="0" y="-6" width="24" height="18.4"/></clipPath>
+        
         <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/>
-        <g clip-path="url(#espreitaNav)">
+        <g>
           <circle class="cabeca-frente" cx="9" cy="7" r="3.8"/>
           <circle class="cabeca-tras" cx="17.4" cy="9.4" r="3.1"/>
         </g>
@@ -1941,7 +1921,6 @@ function SEED_ORCAMENTOS(){
 }
 let atual = null;
 let filtro = 'Todos';
-let busca = '';
 let enviarPendente = null;   // id do orçamento em reenvio
 let FILA_ENVIOS  = [];       // mensagens criadas sem ligação, à espera de abrir o WhatsApp
 let DEMO_OFFLINE = false;    // simulação de falta de rede (útil em demonstração)
@@ -2092,7 +2071,6 @@ function recomecarValores(raiz){
 
 const tagClass = c => c === 'Novo' ? '' : c === 'Usado' ? ' u' : ' s';
 const galeria = c => (c.fotos && c.fotos.length) ? c.fotos : [c.img];
-const temVideos = c => !!(c && c.videos && c.videos.length);
 const videosDe  = c => (c && c.videos) ? c.videos : [];
 
 /* valor à vista = preço − desconto, nunca abaixo de 0 */
@@ -2164,7 +2142,6 @@ function migrarVersao(){
 }
 
 /* preço mínimo de referência no mercado angolano */
-const MIN_ANGOLA = 3000000;
 /* os orçamentos de demonstração (o1..o5) acompanham sempre o preço atual do catálogo;
    orçamentos criados pelo utilizador nunca são tocados */
 function migrarPrecos(){
@@ -2292,7 +2269,6 @@ function ir(page){
   PAGES.forEach(p => document.getElementById('pg-' + p).classList.toggle('hidden', p !== page));
 
   document.getElementById('barTitle').textContent = TITLES[page][0];
-  document.getElementById('barCrumb').textContent = TITLES[page][1];
   const voltar = (page === 'detalhe' || page === 'orcamento' || page === 'cliente' || page === 'orcdetalhe');
   document.getElementById('btnBack').style.visibility = voltar ? 'visible' : 'hidden';
   document.querySelector('.brand').classList.toggle('com-voltar', voltar);
@@ -2335,7 +2311,6 @@ function tocarIcone(el){
 /* ==========================================================
    VENDAS — funil, negócios em curso e mudança de etapa
    ========================================================== */
-const ESTADOS = ['Enviado','Em negociação','Venda concluída'];
 
 /* cor da etiqueta de estado: âmbar para o que espera resposta, verde para o resto */
 function classeEstado(e){
@@ -2457,11 +2432,7 @@ function renderFiltros(){
 }
 
 function renderGrid(){
-  const termo = busca.trim().toLowerCase();
-  const lista = CARROS.filter(c =>
-    (filtro === 'Todos' || c.cat === filtro) &&
-    (!termo || c.nome.toLowerCase().includes(termo))
-  );
+  const lista = CARROS.filter(c => filtro === 'Todos' || c.cat === filtro);
 
   document.querySelectorAll('[data-cnt="carros"]').forEach(el => el.textContent = CARROS.length);
   document.getElementById('stCarros').textContent = CARROS.length;
@@ -2539,8 +2510,6 @@ document.getElementById('grid').addEventListener('click', e => {
 });
 
 /* o campo de pesquisa da appbar foi removido no desktop */
-const buscaEl = document.getElementById('busca');
-if (buscaEl) buscaEl.addEventListener('input', e => { busca = e.target.value; renderGrid(); });
 
 const buscaClienteEl = document.getElementById('buscaCliente');
 buscaClienteEl.addEventListener('input', () => renderClientes(buscaClienteEl.value));
@@ -2797,8 +2766,7 @@ document.getElementById('btnGuardarModelo').addEventListener('click', () => {
   guardar();
 
   mNovoModelo.classList.remove('open');
-  filtro = 'Todos'; busca = '';
-  const bEl = document.getElementById('busca'); if (bEl) bEl.value = '';
+  filtro = 'Todos';
   renderFiltros(); renderGrid();
 
   atual = carro;
