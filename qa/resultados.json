@@ -1,13 +1,13 @@
 [
  {
   "r": "PASS",
-  "n": "Aritmética · Corolla 4,5M / entrada 1,5M",
-  "d": "saldo 3,000,000 | 12x 250,000 (esperado 250,000.0)"
+  "n": "Aritmética · Corolla 9,75M / entrada 2M",
+  "d": "saldo 7,750,000 | 12x 645,833.33 (esperado 645,833.33)"
  },
  {
   "r": "PASS",
   "n": "Aritmética · Entrada sugerida 10%",
-  "d": "saldo 4,050,000 | 12x 337,500 (esperado 337,500.0)"
+  "d": "saldo 8,775,000 | 12x 731,250 (esperado 731,250.0)"
  },
  {
   "r": "PASS",
@@ -17,22 +17,22 @@
  {
   "r": "PASS",
   "n": "Aritmética · Entrada 1 Kz",
-  "d": "saldo 4,499,999 | 12x 374,999.92 (esperado 374,999.92)"
+  "d": "saldo 9,749,999 | 12x 812,499.92 (esperado 812,499.92)"
  },
  {
   "r": "PASS",
-  "n": "Aritmética · Hilux 18,5M / 4M",
-  "d": "saldo 14,500,000 | 12x 1,208,333.33 (esperado 1,208,333.33)"
+  "n": "Aritmética · Hilux 28,5M / 6M",
+  "d": "saldo 22,500,000 | 12x 1,875,000 (esperado 1,875,000.0)"
  },
  {
   "r": "PASS",
-  "n": "Aritmética · Tucson 6,2M / 6,2M",
+  "n": "Aritmética · Tucson 12,9M / 12,9M",
   "d": "saldo 0 | 12x 0 (esperado 0.0)"
  },
  {
   "r": "PASS",
-  "n": "À vista com desconto (4.500.000 − 250.000)",
-  "d": "4,250,000 Kz"
+  "n": "À vista com desconto (9.750.000 − 450.000)",
+  "d": "9,300,000 Kz"
  },
  {
   "r": "PASS",
@@ -348,37 +348,57 @@
   "r": "PASS",
   "n": "Preços · catálogo todo ≥ 3.000.000 Kz",
   "d": [
-   4500000,
-   7800000,
-   18500000,
-   6200000
+   9750000,
+   13500000,
+   28500000,
+   12900000
   ]
  },
  {
   "r": "PASS",
   "n": "Preços · orçamentos alinhados com o catálogo",
   "d": [
-   4500000,
-   7800000,
-   18500000,
-   6200000,
-   4500000
+   9750000,
+   13500000,
+   28500000,
+   12900000,
+   9750000
   ]
  },
  {
   "r": "PASS",
-  "n": "Preços · IVA sobre 4.500.000 = 630.000",
-  "d": "630,000 Kz"
+  "n": "Preços · catálogo com valores de mercado de Luanda",
+  "d": "9750000,13500000,28500000,12900000"
  },
  {
   "r": "PASS",
-  "n": "Preços · total com IVA 4.500.000 = 5.130.000",
-  "d": "5,130,000 Kz"
+  "n": "Preços · orçamentos de demonstração seguem o catálogo",
+  "d": ""
  },
  {
   "r": "PASS",
-  "n": "IVA · linha no Detalhe do Carro (4,5M → 630.000)",
-  "d": "630,000 Kz"
+  "n": "Preços · orçamento do utilizador nunca é reescrito",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Preços · referência de câmbio visível no Perfil",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Preços · IVA sobre 9.750.000 = 1.365.000",
+  "d": "1,365,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Preços · total com IVA 9.750.000 = 11.115.000",
+  "d": "11,115,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · linha no Detalhe do Carro (9,75M → 1.365.000)",
+  "d": "1,365,000 Kz"
  },
  {
   "r": "PASS",
@@ -388,69 +408,69 @@
  {
   "r": "PASS",
   "n": "IVA · mostrado à parte no Orçamento",
-  "d": "630,000 Kz"
+  "d": "1,365,000 Kz"
  },
  {
   "r": "PASS",
   "n": "IVA · total com IVA = 85.500",
-  "d": "5,130,000 Kz"
+  "d": "11,115,000 Kz"
  },
  {
   "r": "PASS",
   "n": "IVA · preço do carro não é inflacionado",
-  "d": "4,500,000 Kz"
+  "d": "9,750,000 Kz"
  },
  {
   "r": "PASS",
   "n": "IVA · parcelas calculadas sobre o preço sem IVA",
-  "d": "250,000 Kz"
+  "d": "645,833.33 Kz"
  },
  {
   "r": "PASS",
   "n": "IVA · discriminado na mensagem do WhatsApp",
-  "d": "💰 Valor: 4,500,000 Kz"
+  "d": "💰 Valor: 9,750,000 Kz"
  },
  {
   "r": "PASS",
   "n": "IVA · presente no orçamento guardado",
   "d": [
-   "630,000 Kz",
-   "5,130,000 Kz"
+   "1,365,000 Kz",
+   "11,115,000 Kz"
   ]
  },
  {
   "r": "PASS",
   "n": "IVA · visível no cartão do carro no topo do Orçamento",
   "d": [
-   "630,000 Kz",
-   "5,130,000 Kz"
+   "1,365,000 Kz",
+   "11,115,000 Kz"
   ]
  },
  {
   "r": "PASS",
   "n": "IVA · resumo dentro do popup de envio",
   "d": [
-   "630,000 Kz",
-   "5,130,000 Kz"
+   "1,365,000 Kz",
+   "11,115,000 Kz"
   ]
  },
  {
   "r": "PASS",
   "n": "IVA · coluna na lista de Orçamentos",
-  "d": "4,500,000 Kz | 630,000 Kz | 5,130,000 Kz"
+  "d": "50,000 Kz | 1,365,000 Kz | 11,115,000 Kz"
  },
  {
   "r": "PASS",
   "n": "IVA · linha de topo no detalhe do orçamento",
   "d": [
-   "630,000 Kz",
-   "5,130,000 Kz"
+   "1,365,000 Kz",
+   "11,115,000 Kz"
   ]
  },
  {
   "r": "PASS",
-  "n": "IVA · 14% aplicado também a 18.500.000 (Hilux)",
-  "d": "2,590,000 Kz"
+  "n": "IVA · 14% aplicado também a 28.500.000 (Hilux)",
+  "d": "3,990,000 Kz"
  },
  {
   "r": "PASS",
@@ -626,7 +646,7 @@
  {
   "r": "PASS",
   "n": "Resumo recalcula ao editar a entrada",
-  "d": "3,800,000 Kz"
+  "d": "9,500,000 Kz"
  },
  {
   "r": "PASS",
