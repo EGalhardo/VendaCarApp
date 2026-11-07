@@ -433,6 +433,7 @@
     padding:8px 15px;border-radius:20px;cursor:pointer;white-space:nowrap;flex:0 0 auto;
   }
   .chip:hover{border-color:#cfe0d4}
+  .chip:focus-visible{outline:2px solid var(--green);outline-offset:2px}
   .chip.on{background:var(--green);border-color:var(--green);color:#fff}
 
   /* grelha de carros */
@@ -542,6 +543,14 @@
   }
   .pill.d{background:#f1f3f2;color:#8b9a94}
   .pill.p{background:#e8f0fb;color:#2c5c9e}
+  .pill.v{background:#e7f7ec;color:#1f7a3d}
+  .pill.pd{background:#fdf1dc;color:#9a6a0b}
+  .pill.c{background:#f1f3f2;color:#8b9a94;text-decoration:line-through}
+  /* aviso dentro dos popups (validação) */
+  .aviso{display:none;align-items:center;gap:6px;margin:-4px 0 10px;padding:8px 10px;border:1px solid #f0d0a0;
+         background:#fdf6e6;color:#8a6100;border-radius:9px;font-size:11.5px;font-weight:700;line-height:1.35}
+  .aviso.on{display:flex}
+  .inp.erro{border-color:#e2a24a;background:#fffdf7}
   .avx{
     width:34px;height:34px;border-radius:50%;background:var(--green-soft);color:var(--green-ink);
     font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;
@@ -904,6 +913,11 @@
   html[data-tema="escuro"] .b{color:#ffffff}
   html[data-tema="escuro"] .pill.d{background:#071a2e;color:#93a7c4}
   html[data-tema="escuro"] .pill.p{background:#0b2b52;color:#8fbcf7}
+  html[data-tema="escuro"] .pill.v{background:#042b25;color:#63dc92}
+  html[data-tema="escuro"] .pill.pd{background:#3a2a0c;color:#f0c15c}
+  html[data-tema="escuro"] .pill.c{background:#071528;color:#93a7c4}
+  html[data-tema="escuro"] .aviso{background:#2a1e04;border-color:#4a3608;color:#f0c15c}
+  html[data-tema="escuro"] .inp.erro{border-color:#8a6100;background:#1c1503}
   html[data-tema="escuro"] .stat-card{background:#040d1f}
   html[data-tema="escuro"] .modal{background:#040d1f}
   html[data-tema="escuro"] .modal .body{scrollbar-color:#24507f transparent}
@@ -1271,7 +1285,7 @@
       <div class="page-head">
         <div><h2>Modelos</h2><p id="subModelos">4 veículos no estoque</p></div>
         <div class="right">
-          <button class="btn ghost">Exportar</button>
+          <button class="btn ghost" id="btnExportarModelos">Exportar</button>
           <button class="btn btn-criar-desktop btn-mais" data-criar aria-label="Criar novo modelo de carro" title="Novo modelo">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
           </button>
@@ -1375,10 +1389,11 @@
     <section id="pg-listaorc" class="hidden">
       <div class="page-head">
         <div><h2>Orçamentos</h2><p>Histórico de simulações enviadas</p></div>
-        <div class="right"><button class="btn ghost">Filtrar</button></div>
       </div>
-      <div class="filters">
-        <button class="chip on">Todos</button><button class="chip">Enviados</button><button class="chip">Rascunhos</button>
+      <div class="filters" id="filtrosOrc">
+        <button class="chip on" data-forc="Todos">Todos</button>
+        <button class="chip" data-forc="Abertos">Em curso</button>
+        <button class="chip" data-forc="Fechados">Fechados</button>
       </div>
       <div class="tbl-wrap">
         <table class="tbl">
@@ -1446,8 +1461,8 @@
             <div class="fg">
               <p class="lbl">Estado</p>
               <select class="inp" id="odEstadoInp">
-                <option>Enviado</option><option>Em negociação</option><option>Pendente</option><option>Venda concluída</option>
-                <option>Pendente</option><option>Cancelado</option>
+                <option>Enviado</option><option>Em negociação</option><option>Pendente</option>
+                <option>Venda concluída</option><option>Cancelado</option>
               </select>
             </div>
           </div>
@@ -1614,8 +1629,19 @@
               <td style="text-align:right"><button class="edit-mini" data-abrir-loja="whatsapp" aria-label="Editar número do WhatsApp">Editar</button></td>
             </tr>
             <tr><td class="b">Modo offline</td><td id="linhaOffline">Ativo — dados guardados no dispositivo</td><td style="text-align:right;color:#c3ccc8">✓</td></tr>
-            <tr><td class="b">Modelo de Mensagem</td><td>Texto padrão do orçamento</td><td style="text-align:right;color:#c3ccc8">›</td></tr>
-            <tr><td class="b">Exportar Orçamentos</td><td>CSV / PDF</td><td style="text-align:right;color:#c3ccc8">›</td></tr>
+            <tr class="editavel">
+              <td class="b">Modelo de Mensagem</td>
+              <td>Texto padrão do orçamento</td>
+              <td style="text-align:right"><button class="edit-mini" id="btnVerModelo" aria-label="Ver modelo de mensagem">Ver</button></td>
+            </tr>
+            <tr class="editavel">
+              <td class="b">Exportar Orçamentos</td>
+              <td>CSV / PDF</td>
+              <td style="text-align:right;white-space:nowrap">
+                <button class="edit-mini" data-exportar="csv" aria-label="Exportar orçamentos em CSV">CSV</button>
+                <button class="edit-mini" data-exportar="pdf" aria-label="Exportar orçamentos em PDF">PDF</button>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -1763,6 +1789,7 @@
 
     <div class="foot">
       <button class="btn ghost" data-close="mNovoModelo">Cancelar</button>
+      <div class="aviso" id="avisoModelo">Preencha marca, modelo, ano, tipo e um preço maior que 0.</div>
       <button class="btn" id="btnGuardarModelo">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
         Guardar Modelo
@@ -1915,6 +1942,9 @@
     </div>
     <div class="fg"><p class="lbl">Nome do Cliente</p><input class="inp" id="mNome" placeholder="Ex: Renato" autocomplete="off"></div>
     <div class="fg"><p class="lbl">Telefone</p><input class="inp" id="mTel" placeholder="923 456 789" inputmode="numeric"></div>
+    <div class="aviso" id="avisoEnvio">Indique o nome do cliente e os 9 dígitos do telefone (ex.: 923 456 789).</div>
+    <p style="font-size:10.5px;color:var(--muted-2);margin:2px 0 0;line-height:1.45">
+      Simulação sem juros — sujeita a aprovação de financiamento. O envio abre o WhatsApp; a app não envia sozinha.</p>
 
     </div>
 
@@ -2116,12 +2146,30 @@ function recomecarValores(raiz){
   });
 }
 
+/* nome do carro de um orçamento, mesmo que o modelo tenha saído do estoque */
+const nomeDoCarro = o => (o.carroNome || (CARROS.find(c => c.id === o.carro) || {}).nome || 'Modelo eliminado');
+
 const tagClass = c => c === 'Novo' ? '' : c === 'Usado' ? ' u' : ' s';
 const galeria = c => (c.fotos && c.fotos.length) ? c.fotos : [c.img];
 const videosDe  = c => (c && c.videos) ? c.videos : [];
 
 /* valor à vista = preço − desconto, nunca abaixo de 0 */
 const valorAVista = (preco, desconto) => Math.max(Number(preco) - Number(desconto), 0);
+
+/* prestação redonda: nenhum vendedor envia “858,333.33 Kz”.
+   Arredonda a 1.000 Kz e a última prestação absorve o resto (soma sempre exacta). */
+const MIL = 1000;
+function prestacao(saldo, meses){
+  const base = Math.floor((saldo / meses) / MIL) * MIL;
+  const ultima = Math.round(saldo - base * (meses - 1));
+  return { base, ultima };
+}
+/* texto das prestações para o resumo e para os ecrãs */
+function textoPrestacao(saldo, meses){
+  const { base, ultima } = prestacao(saldo, meses);
+  if (base <= 0) return fmt(Math.round(saldo / meses) || 0);
+  return ultima === base ? fmt(base) : fmt(base) + ' (última ' + fmt(ultima) + ')';
+}
 
 /* IVA 14% — imposto mostrado sempre à parte (nunca somado ao preço do carro) */
 const IVA_TAXA = 0.14;
@@ -2378,7 +2426,11 @@ function tocarIcone(el){
 
 /* cor da etiqueta de estado: âmbar para o que espera resposta, verde para o resto */
 function classeEstado(e){
-  return (e === 'Pendente' || e === 'Em negociação') ? ' p' : '';
+  if (e === 'Venda concluída') return ' v';
+  if (e === 'Pendente')        return ' pd';
+  if (e === 'Cancelado')       return ' c';
+  if (e === 'Em negociação')   return ' p';
+  return '';
 }
 
 /* números do funil: contactos = clientes únicos · enviados / negociação / vendas = orçamentos */
@@ -2440,8 +2492,8 @@ function renderVendas(){
     const c = CARROS.find(x => x.id === o.carro) || CARROS[0];
     const valor = totalComIva(o.preco);
     return `<article class="vneg${fechado ? ' fechado' : ''}">
-      <div class="topo"><img src="${c.img}" alt="">
-        <div><div class="nm">${o.nome}</div><div class="cr">${c.nome} · ${fmtTel(o.tel)}</div></div>
+      <div class="topo">${o.carro ? '<img src="' + c.img + '" alt="">' : ''}
+        <div><div class="nm">${o.nome}</div><div class="cr">${nomeDoCarro(o)} · ${fmtTel(o.tel)}</div></div>
         <div class="vl" data-valor="${valor}">${fmt(valor)}</div>
       </div>
       <div class="est"><span class="pill${classeEstado(o.estado)}">${o.estado}</span>
@@ -2572,6 +2624,13 @@ document.getElementById('filtros').addEventListener('click', e => {
   if (!b) return;
   filtro = b.dataset.filtro;
   renderFiltros(); renderGrid();
+});
+
+document.getElementById('filtrosOrc').addEventListener('click', e => {
+  const b = e.target.closest('[data-forc]');
+  if (!b) return;
+  filtroOrc = b.dataset.forc;
+  renderTabelaOrc();
 });
 
 document.getElementById('grid').addEventListener('click', e => {
@@ -2772,6 +2831,8 @@ function abrirNovoModelo(){
   document.getElementById('fLojaZap').value   = mascaraZap(LOJA.zap);
   fotos = []; renderFotos();
   videos = []; renderVideos();
+  const av = document.getElementById('avisoModelo');
+  if (av) av.classList.remove('on');
   mNovoModelo.classList.add('open'); reiniciarScroll(mNovoModelo);
   setTimeout(() => document.getElementById('fMarca').focus(), 120);
 }
@@ -2813,11 +2874,16 @@ document.getElementById('btnGuardarModelo').addEventListener('click', () => {
   const preco  = num(document.getElementById('fPreco').value);
   const desc   = num(document.getElementById('fDesc').value);
 
-  if (!marca)  { document.getElementById('fMarca').focus();  return; }
-  if (!modelo) { document.getElementById('fModelo').focus(); return; }
-  if (!ano)    { document.getElementById('fAno').focus();    return; }
-  if (!tipo)   { document.getElementById('fTipo').focus();   return; }
-  if (!preco)  { document.getElementById('fPreco').focus();  return; }
+  if (!marca)  return mostrarAviso('avisoModelo', 'Indique a marca do carro.', document.getElementById('fMarca'));
+  if (!modelo) return mostrarAviso('avisoModelo', 'Indique o modelo do carro.', document.getElementById('fModelo'));
+  if (!ano)    return mostrarAviso('avisoModelo', 'Escolha o ano.', document.getElementById('fAno'));
+  if (!tipo)   return mostrarAviso('avisoModelo', 'Escolha o tipo (Novo, Usado ou Semi-usado).', document.getElementById('fTipo'));
+  if (preco < 3000000)
+    return mostrarAviso('avisoModelo', 'O preço tem de ser pelo menos 3,000,000 Kz (mínimo da app).',
+                        document.getElementById('fPreco'));
+  if (desc >= preco)
+    return mostrarAviso('avisoModelo', 'O desconto não pode ser igual ou maior que o preço.',
+                        document.getElementById('fDesc'));
 
   const carro = {
     id: 'c' + Date.now(),
@@ -2840,6 +2906,7 @@ document.getElementById('btnGuardarModelo').addEventListener('click', () => {
   CARROS.push(carro);
   guardar();
 
+  document.getElementById('avisoModelo').classList.remove('on');
   mNovoModelo.classList.remove('open');
   filtro = 'Todos';
   renderFiltros(); renderGrid();
@@ -2871,6 +2938,16 @@ document.getElementById('btnApagarModelo').addEventListener('click', () => {
   const c = CARROS.find(x => x.id === id);
   CARROS = CARROS.filter(x => x.id !== id);
   guardar();
+
+  /* os orçamentos não podem ficar a apontar para outro carro nem mostrar a foto errada */
+  const orcsDoCarro = ORCAMENTOS.filter(o => o.carro === id).length;
+  ORCAMENTOS.forEach(o => {
+    if (o.carro === id){
+      o.carroNome = c ? c.nome : (o.carroNome || '');
+      o.carro = '';
+    }
+  });
+  if (orcsDoCarro){ guardarOrc(); renderTabelaOrc(); renderClientes(); }
 
   /* se o carro em foco era este, escolhe outro */
   if (atual && atual.id === id) atual = CARROS[0] || null;
@@ -2992,9 +3069,9 @@ function calc(){
     oEnt: entrada,
     oSaldo: saldo,
     tSaldo: saldo,
-    o12: saldo / 12,
-    o24: saldo / 24,
-    o36: saldo / 36,
+    o12: prestacao(saldo, 12).base,
+    o24: prestacao(saldo, 24).base,
+    o36: prestacao(saldo, 36).base,
     oVista: valorAVista(preco, atual.desc)
   });
 }
@@ -3014,6 +3091,8 @@ function preencherResumoEnvio(preco){
 
 document.getElementById('btnEnviar').addEventListener('click', () => {
   preencherResumoEnvio(atual.preco);
+  const avE = document.getElementById('avisoEnvio');
+  if (avE) avE.classList.remove('on');
   document.getElementById('mEnviar').classList.add('open'); reiniciarScroll(document.getElementById('mEnviar'));
   setTimeout(() => document.getElementById('mNome').focus(), 120);
 });
@@ -3039,11 +3118,12 @@ function mensagem(){
     '🧾 IVA 14%: ' + fmt(ivaDe(atual.preco)) + '\n' +
     '💵 Total com IVA: ' + fmt(totalComIva(atual.preco)) + '\n\n' +
     'Podemos trabalhar com uma entrada de ' + fmt(entrada) + ' e o saldo em:\n' +
-    '- 12x de ' + fmt(saldo / 12) + ', ou\n' +
-    '- 24x de ' + fmt(saldo / 24) + ', ou\n' +
-    '- 36x de ' + fmt(saldo / 36) + ',\n' +
+    '- 12x de ' + textoPrestacao(saldo, 12) + ', ou\n' +
+    '- 24x de ' + textoPrestacao(saldo, 24) + ', ou\n' +
+    '- 36x de ' + textoPrestacao(saldo, 36) + ',\n' +
     'Ou, ainda, se quiser pagar à vista, conseguimos chegar no incrível valor de ' +
     fmt(valorAVista(atual.preco, atual.desc)) + ' 😱\n\n' +
+    'Simulação sem juros, sujeita a aprovação de financiamento.\n\n' +
     'O que acha?' + (linhaLoja() ? '\n\n' + linhaLoja() : '');
 }
 
@@ -3057,12 +3137,27 @@ function textoOrcamento(nome, carro, preco, entrada, desc){
     '🧾 IVA 14%: ' + fmt(ivaDe(preco)) + '\n' +
     '💵 Total com IVA: ' + fmt(totalComIva(preco)) + '\n\n' +
     'Podemos trabalhar com uma entrada de ' + fmt(entrada) + ' e o saldo em:\n' +
-    '- 12x de ' + fmt(saldo / 12) + ', ou\n' +
-    '- 24x de ' + fmt(saldo / 24) + ', ou\n' +
-    '- 36x de ' + fmt(saldo / 36) + ',\n' +
+    '- 12x de ' + textoPrestacao(saldo, 12) + ', ou\n' +
+    '- 24x de ' + textoPrestacao(saldo, 24) + ', ou\n' +
+    '- 36x de ' + textoPrestacao(saldo, 36) + ',\n' +
     'Ou, ainda, se quiser pagar à vista, conseguimos chegar no incrível valor de ' +
     fmt(valorAVista(preco, desc)) + ' 😱\n\n' +
     'O que acha?' + (linhaLoja() ? '\n\n' + linhaLoja() : '');
+}
+
+/* aviso dentro de um popup + marca o campo com erro */
+function mostrarAviso(idAviso, texto, campo){
+  const a = document.getElementById(idAviso);
+  if (a){ if (texto) a.textContent = texto; a.classList.add('on'); }
+  if (campo){
+    campo.classList.add('erro');
+    campo.focus();
+    campo.addEventListener('input', () => {
+      campo.classList.remove('erro');
+      if (a) a.classList.remove('on');
+    }, {once:true});
+  }
+  return false;
 }
 
 /* ==========================================================
@@ -3176,6 +3271,76 @@ async function descarregarFila(){
   renderEstadoRede();
 }
 
+/* ==========================================================
+   EXPORTAR — CSV e PDF (funciona offline, sem bibliotecas)
+   ========================================================== */
+const dataCurta = t => {
+  const d = new Date(t), p = n => String(n).padStart(2, '0');
+  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+};
+
+function linhasCSV(){
+  const cab = ['Carro','Cliente','Telefone','Data','Estado','Preco','IVA 14%','Total com IVA','Entrada','Saldo'];
+  const corpo = ORCAMENTOS.map(o => {
+    const c = CARROS.find(x => x.id === o.carro);
+    const saldo = Math.max(o.preco - (o.entrada || 0), 0);
+    return [nomeDoCarro(o), o.nome, '+244 ' + o.tel, dataCurta(o.data), o.estado,
+            o.preco, ivaDe(o.preco), totalComIva(o.preco), o.entrada || 0, saldo];
+  });
+  return [cab].concat(corpo);
+}
+
+function celulaCSV(v){
+  const t = String(v == null ? '' : v).replace(/"/g, '""');
+  return /[",;\n]/.test(t) ? '"' + t + '"' : t;
+}
+
+function exportarCSV(){
+  if (!ORCAMENTOS.length){ toast('Ainda não há orçamentos para exportar'); return; }
+  const txt = linhasCSV().map(l => l.map(celulaCSV).join(';')).join('\r\n');
+  const url = URL.createObjectURL(new Blob(['\uFEFF' + txt], {type:'text/csv;charset=utf-8'}));
+  const a = document.createElement('a');
+  a.href = url; a.download = 'orcamentos-vendacar-' + dataCurta(Date.now()) + '.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+  toast('CSV exportado — ' + ORCAMENTOS.length + (ORCAMENTOS.length === 1 ? ' orçamento' : ' orçamentos'));
+}
+
+/* PDF: abre uma janela de impressão só com a tabela (o utilizador escolhe “Guardar como PDF”) */
+function exportarPDF(){
+  if (!ORCAMENTOS.length){ toast('Ainda não há orçamentos para exportar'); return; }
+  const linhaLoja = LOJA.dados ? esc(LOJA.dados) + (LOJA.zap ? ' · +244 ' + esc(mascaraZap(LOJA.zap)) : '') : '';
+  const linhas = ORCAMENTOS.map(o => {
+    const c = CARROS.find(x => x.id === o.carro);
+    return '<tr><td>' + esc(nomeDoCarro(o)) + '</td><td>' + esc(o.nome) + '</td>' +
+      '<td>+244 ' + esc(o.tel) + '</td><td>' + esc(dataCurta(o.data)) + '</td><td>' + esc(o.estado) + '</td>' +
+      '<td class="n">' + fmt(o.preco) + '</td><td class="n">' + fmt(ivaDe(o.preco)) + '</td>' +
+      '<td class="n b">' + fmt(totalComIva(o.preco)) + '</td></tr>';
+  }).join('');
+
+  const html = '<!DOCTYPE html><html lang="pt"><head><meta charset="utf-8"><title>Orçamentos — VendaCar</title>' +
+    '<style>body{font-family:Arial,Helvetica,sans-serif;color:#1e2724;margin:26px}' +
+    'h1{font-size:19px;margin:0 0 4px}p.sub{font-size:12px;color:#6b7b74;margin:0 0 16px}' +
+    'table{width:100%;border-collapse:collapse;font-size:12px}' +
+    'th{text-align:left;font-size:10.5px;letter-spacing:.4px;text-transform:uppercase;color:#6b7b74;' +
+    'border-bottom:1px solid #d8dedb;padding:7px 8px}' +
+    'td{border-bottom:1px solid #eef1ef;padding:7px 8px}.n{text-align:right;white-space:nowrap}.b{font-weight:700}' +
+    'tfoot td{border:0;padding-top:14px;font-size:10.5px;color:#6b7b74}</style></head><body>' +
+    '<h1>Orçamentos — VendaCar</h1><p class="sub">' + (linhaLoja ? linhaLoja + ' · ' : '') +
+    'emitido em ' + esc(new Date().toLocaleString('pt-PT')) + ' · IVA 14% apresentado à parte</p>' +
+    '<table><thead><tr><th>Carro</th><th>Cliente</th><th>Telefone</th><th>Data</th><th>Estado</th>' +
+    '<th class="n">Valor</th><th class="n">IVA 14%</th><th class="n">Total c/ IVA</th></tr></thead><tbody>' +
+    linhas + '</tbody><tfoot><tr><td colspan="8">Simulação sem juros — sujeita a aprovação de financiamento. ' +
+    'Valores em Kwanzas (Kz).</td></tr></tfoot></table></body></html>';
+
+  const w = window.open('', '_blank');
+  if (!w){ toast('O navegador bloqueou a janela — permita popups para exportar PDF'); return; }
+  w.document.write(html); w.document.close();
+  w.focus();
+  setTimeout(() => { try{ w.print(); }catch(e){} }, 350);
+  toast('PDF pronto — escolha “Guardar como PDF”');
+}
+
 function abrirWhatsApp(nome, telDigits, texto){
   const url = 'https://wa.me/244' + telDigits + '?text=' + encodeURIComponent(texto);
   window.open(url, '_blank');
@@ -3186,8 +3351,13 @@ document.getElementById('btnZap').addEventListener('click', () => {
   const nome = document.getElementById('mNome').value.trim();
   const digitos = document.getElementById('mTel').value.replace(/\D/g, '');
 
-  if (!nome)              { document.getElementById('mNome').focus(); return; }
-  if (digitos.length < 9) { document.getElementById('mTel').focus();  return; }
+  if (!nome){
+    mostrarAviso('avisoEnvio', 'Indique o nome do cliente.', document.getElementById('mNome')); return;
+  }
+  if (digitos.length < 9){
+    mostrarAviso('avisoEnvio', 'Telefone incompleto — precisa dos 9 dígitos (ex.: 923 456 789).',
+                 document.getElementById('mTel')); return;
+  }
 
   let carro, preco, entrada, desc, texto;
   let orcIdRegistado = null;
@@ -3258,7 +3428,7 @@ document.getElementById('pg-cliente').addEventListener('click', e => {
   if (!orc) return;
 
   // reabre o popup de envio com os dados do orçamento
-  const carro = CARROS.find(c => c.id === orc.carro) || CARROS[0];
+  const carro = CARROS.find(c => c.id === orc.carro) || { id:'', nome: nomeDoCarro(orc), tipo:'', preco:orc.preco };
   atual = carro;
 
   document.getElementById('mNome').value = orc.nome;
@@ -3288,10 +3458,23 @@ function fmtTel(digitos){
 }
 
 /* ---------- ORÇAMENTOS (tabela) ---------- */
+/* filtro da lista: todos · ainda em curso · já fechados */
+let filtroOrc = 'Todos';
+const ORC_FECHADOS = ['Venda concluída', 'Cancelado'];
+const orcVisivel = o => filtroOrc === 'Todos' ? true
+  : filtroOrc === 'Fechados' ? ORC_FECHADOS.includes(o.estado)
+  : !ORC_FECHADOS.includes(o.estado);
+
+function renderFiltrosOrc(){
+  document.querySelectorAll('#filtrosOrc .chip').forEach(b =>
+    b.classList.toggle('on', b.dataset.forc === filtroOrc));
+}
+
 function renderTabelaOrc(){
   const tbody = document.getElementById('tblOrc');
 
   document.querySelectorAll('[data-cnt="orcs"]').forEach(el => el.textContent = ORCAMENTOS.length);
+  renderFiltrosOrc();
 
   if (!ORCAMENTOS.length){
     tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#a2afa9;padding:30px">
@@ -3299,12 +3482,19 @@ function renderTabelaOrc(){
     return;
   }
 
-  document.querySelectorAll('[data-cnt="orcs"]').forEach(el => el.textContent = ORCAMENTOS.length);
+  const lista = ORCAMENTOS.filter(orcVisivel);
+  if (!lista.length){
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#a2afa9;padding:30px">' +
+      (filtroOrc === 'Fechados'
+        ? 'Ainda não há orçamentos fechados. Marque um como “Venda concluída”.'
+        : 'Nenhum orçamento em curso neste momento.') + '</td></tr>';
+    return;
+  }
 
-  tbody.innerHTML = ORCAMENTOS.map(o => {
+  tbody.innerHTML = lista.map(o => {
     const c = CARROS.find(x => x.id === o.carro) || CARROS[0];
     return `<tr class="cli" data-abrirorc="${o.id}">
-      <td><div class="cell-car"><img src="${c.img}" alt=""><span class="b">${c.nome}</span></div></td>
+      <td><div class="cell-car">${o.carro ? '<img src="' + c.img + '" alt="">' : ''}<span class="b">${nomeDoCarro(o)}</span></div></td>
       <td>${o.nome}</td><td>${fmtTel(o.tel)}</td><td>${fmtData(o.data)}</td>
       <td><span class="pill${classeEstado(o.estado)}">${o.estado}</span></td>
       <td style="text-align:right" class="b" data-valor="${o.preco}">${fmt(o.preco)}</td>
@@ -3345,10 +3535,12 @@ function abrirOrcDetalhe(id){
   orcAberto = orc.id;
   orcOriginal = Object.assign({}, orc);
 
-  const c = CARROS.find(x => x.id === orc.carro) || CARROS[0];
-  document.getElementById('odImg').src = c.img;
-  document.getElementById('odCarro').textContent = c.nome;
-  document.getElementById('odTipo').textContent = c.tipo;
+  const c = CARROS.find(x => x.id === orc.carro) || null;
+  const imgEl = document.getElementById('odImg');
+  if (c){ imgEl.src = c.img; imgEl.style.display = ''; }
+  else { imgEl.removeAttribute('src'); imgEl.style.display = 'none'; }
+  document.getElementById('odCarro').textContent = nomeDoCarro(orc);
+  document.getElementById('odTipo').textContent = c ? c.tipo : 'Modelo já não está no estoque';
 
   document.getElementById('odAv').textContent = iniciais(orc.nome);
   document.getElementById('odNome').textContent = orc.nome;
@@ -3396,9 +3588,9 @@ function orcResumo(){
     odTotalMini: totalComIva(preco),
     odREnt: entrada,
     odRSaldo: saldo,
-    odR12: saldo / 12,
-    odR24: saldo / 24,
-    odR36: saldo / 36,
+    odR12: prestacao(saldo, 12).base,
+    odR24: prestacao(saldo, 24).base,
+    odR36: prestacao(saldo, 36).base,
     odRVista: valorAVista(preco, desc)
   });
 }
@@ -3469,7 +3661,7 @@ document.getElementById('odGuardar').addEventListener('click', () => {
 document.getElementById('odReenviar').addEventListener('click', () => {
   const orc = ORCAMENTOS.find(o => o.id === orcAberto);
   if (!orc) return;
-  const carro = CARROS.find(c => c.id === orc.carro) || CARROS[0];
+  const carro = CARROS.find(c => c.id === orc.carro) || { id:'', nome: nomeDoCarro(orc), tipo:'', preco:orc.preco };
   atual = carro;
   document.getElementById('mNome').value = orc.nome;
   document.getElementById('mTel').value  = String(orc.tel).replace(/^(\d{3})(\d{3})(\d{3})$/, '$1 $2 $3');
@@ -3491,6 +3683,53 @@ document.getElementById('odApagar').addEventListener('click', () => {
   orcAberto = null;
   ir('listaorc');
   toast('Orçamento apagado');
+});
+
+/* ---------- EXPORTAR MODELOS (CSV do estoque) ---------- */
+document.getElementById('btnExportarModelos').addEventListener('click', () => {
+  if (!CARROS.length){ toast('Não há modelos para exportar'); return; }
+  const cab = ['Modelo','Tipo','Categoria','Preco','Desconto a vista','IVA 14%','Total com IVA'];
+  const linhas = [cab].concat(CARROS.map(c => [c.nome, c.tipo, c.cat, c.preco, c.desc,
+    ivaDe(c.preco), totalComIva(c.preco)]));
+  const txt = linhas.map(l => l.map(celulaCSV).join(';')).join('\r\n');
+  const url = URL.createObjectURL(new Blob(['\uFEFF' + txt], {type:'text/csv;charset=utf-8'}));
+  const a = document.createElement('a');
+  a.href = url; a.download = 'estoque-vendacar-' + dataCurta(Date.now()) + '.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+  toast('CSV do estoque exportado — ' + CARROS.length + ' modelos');
+});
+
+/* ---------- EXPORTAR (botões do Perfil) ---------- */
+document.getElementById('pg-perfil').addEventListener('click', e => {
+  const b = e.target.closest('[data-exportar]');
+  if (!b) return;
+  if (b.dataset.exportar === 'pdf') exportarPDF(); else exportarCSV();
+});
+
+/* ---------- MODELO DE MENSAGEM (ver o texto que vai para o WhatsApp) ---------- */
+document.getElementById('btnVerModelo').addEventListener('click', async () => {
+  const ex = ORCAMENTOS[0];
+  const carro = ex ? (CARROS.find(c => c.id === ex.carro) || { nome: nomeDoCarro(ex), preco: ex.preco }) : CARROS[0];
+  const texto = textoOrcamento(
+    ex ? ex.nome : 'Cliente',
+    carro,
+    ex ? ex.preco : carro.preco,
+    ex ? ex.entrada : Math.round(carro.preco / 10),
+    ex ? ex.desc : carro.desc
+  );
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    try{ await navigator.clipboard.writeText(texto); toast('Modelo de mensagem copiado'); }
+    catch(err){ toast('Modelo de mensagem gerado'); }
+  } else toast('Modelo de mensagem gerado');
+  const w = window.open('', '_blank');
+  if (!w) return;
+  w.document.write('<!DOCTYPE html><html lang="pt"><head><meta charset="utf-8"><title>Modelo de mensagem</title>' +
+    '<style>body{font-family:Arial,sans-serif;margin:26px;color:#1e2724}h1{font-size:16px}' +
+    'pre{white-space:pre-wrap;font-family:inherit;font-size:13px;line-height:1.55;background:#f6f9f7;' +
+    'border:1px solid #d8dedb;border-radius:10px;padding:16px}</style></head><body>' +
+    '<h1>Modelo de mensagem — o que o cliente recebe</h1><pre>' + esc(texto) + '</pre></body></html>');
+  w.document.close();
 });
 
 /* ---------- CLIENTES (agrupados) ---------- */
@@ -3578,10 +3817,10 @@ function abrirCliente(nome, tel, semNavegar){
     const saldo = o.preco - o.entrada;
     return `<article class="orc-card">
       <div class="orc-top">
-        <img src="${c.img}" alt="">
+        ${o.carro ? '<img src="' + c.img + '" alt="">' : ''}
         <div class="orc-info">
-          <div class="n">${c.nome}</div>
-          <div class="m">${c.tipo}</div>
+          <div class="n">${nomeDoCarro(o)}</div>
+          <div class="m">${o.carro ? c.tipo : 'Modelo já não está no estoque'}</div>
           <div class="d">${o.estado === 'Pendente' ? 'Criado' : 'Enviado'} em ${fmtData(o.data)}${o.reenvios ? ' · reenviado ' + o.reenvios + '×' : ''}</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
@@ -3596,9 +3835,9 @@ function abrirCliente(nome, tel, semNavegar){
       <div class="orc-rows">
         <div class="r"><span>Valor da Entrada</span><b>${fmt(o.entrada)}</b></div>
         <div class="r"><span>Saldo a Pagar</span><b>${fmt(saldo)}</b></div>
-        <div class="r"><span>Saldo em 12x de</span><b>${fmt(saldo / 12)}</b></div>
-        <div class="r"><span>Saldo em 24x de</span><b>${fmt(saldo / 24)}</b></div>
-        <div class="r"><span>Saldo em 36x de</span><b>${fmt(saldo / 36)}</b></div>
+        <div class="r"><span>Saldo em 12x de</span><b>${fmt(prestacao(saldo,12).base)}</b></div>
+        <div class="r"><span>Saldo em 24x de</span><b>${fmt(prestacao(saldo,24).base)}</b></div>
+        <div class="r"><span>Saldo em 36x de</span><b>${fmt(prestacao(saldo,36).base)}</b></div>
         <div class="r hl"><span>À Vista por</span><b>${fmt(valorAVista(o.preco, o.desc))}</b></div>
       </div>
 

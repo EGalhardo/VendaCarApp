@@ -65,11 +65,13 @@ async def main():
               return {saldo:n(g('oSaldo')), d12:n(g('o12')), d24:n(g('o24')), d36:n(g('o36')), vista:n(g('oVista'))};
             }""")
             saldo = preco - entrada
+            # R44: as prestações são arredondadas a 1.000 Kz (nenhum vendedor envia cêntimos)
+            def prest(m): return (saldo // m) // 1000 * 1000
             esperado = {
               'saldo': saldo,
-              'd12': round(saldo/12,2), 'd24': round(saldo/24,2), 'd36': round(saldo/36,2)
+              'd12': prest(12), 'd24': prest(24), 'd36': prest(36)
             }
-            bate = all(abs(dados[k]-v) <= 0.01 for k,v in esperado.items())
+            bate = all(abs(dados[k]-v) <= 1 for k,v in esperado.items())
             ok(f"Aritmética · {nome}", bate,
                f"saldo {dados['saldo']:,} | 12x {dados['d12']:,} (esperado {esperado['d12']:,})")
 
@@ -125,11 +127,14 @@ async def main():
         ok("Novo modelo não grava sem dados",
            await pg.evaluate("()=>document.getElementById('mNovoModelo').classList.contains('open')"),
            "modal mantém-se aberto")
+        ok("Novo modelo mostra o motivo (aviso visível)",
+           await pg.evaluate("()=>document.getElementById('avisoModelo').classList.contains('on')"),
+           "aviso escondido")
 
         # marca input: capitalização
         await pg.fill("#fMarca","  mitsubishi   motors "); await pg.fill("#fModelo","L200")
         await pg.select_option("#fAno","2022"); await pg.select_option("#fTipo","Novo")
-        await pg.type("#fPreco","300000"); await pg.type("#fDesc","20000")
+        await pg.type("#fPreco","30000000"); await pg.type("#fDesc","20000")
         await pg.click("#btnGuardarModelo"); await pg.wait_for_timeout(500)
         nome = await pg.inner_text("#dNome")
         ok("Marca normalizada/capitalizada", nome.startswith("Mitsubishi Motors L200"), nome)
@@ -145,9 +150,18 @@ async def main():
            await pg.evaluate("()=>document.getElementById('mNovoModelo').classList.contains('open')"), "")
         await pg.wait_for_timeout(1300)
 
-        # desconto maior que o preço
-        await pg.type("#fPreco","50000"); await pg.type("#fDesc","80000")
-        await pg.click("#btnGuardarModelo"); await pg.wait_for_timeout(500)
+        # desconto maior que o preço é recusado (R44)
+        await pg.fill("#fPreco",""); await pg.type("#fPreco","5000000")
+        await pg.fill("#fDesc","");  await pg.type("#fDesc","80000000")
+        await pg.click("#btnGuardarModelo"); await pg.wait_for_timeout(400)
+        ok("Desconto >= preço é recusado com aviso",
+           await pg.evaluate("()=>document.getElementById('mNovoModelo').classList.contains('open')")
+           and await pg.evaluate("()=>document.getElementById('avisoModelo').classList.contains('on')"),
+           await pg.inner_text("#avisoModelo"))
+
+        # com desconto válido, o valor à vista nunca fica negativo
+        await pg.fill("#fDesc",""); await pg.type("#fDesc","900000")
+        await pg.click("#btnGuardarModelo"); await pg.wait_for_timeout(600)
         await pg.click("#btnCriarOrc"); await pg.wait_for_timeout(300)
         await pg.click("#btnSalvar"); await pg.wait_for_timeout(350)
         vista = await pg.inner_text("#oVista")
@@ -1017,7 +1031,7 @@ async def main():
         ok("IVA · preço do carro não é inflacionado",
            await iv.inner_text("#oPrecoN") == "9,750,000 Kz", await iv.inner_text("#oPrecoN"))
         ok("IVA · parcelas calculadas sobre o preço sem IVA",
-           await iv.evaluate("()=>{document.getElementById('oEntrada').value='2,000,000 Kz';calc();return document.getElementById('o12').textContent;}") == "645,833.33 Kz",
+           await iv.evaluate("()=>{document.getElementById('oEntrada').value='2,000,000 Kz';calc();return document.getElementById('o12').textContent;}") == "645,000 Kz",
            await iv.inner_text("#o12"))
         await iv.click("#btnEnviar"); await iv.wait_for_timeout(350)
         await iv.fill("#mNome", "Renato"); await iv.fill("#mTel", "923111999")
@@ -1084,7 +1098,7 @@ async def main():
            (await lo.input_value("#fLojaDados"), await lo.input_value("#fLojaZap")))
         await lo.fill("#fMarca", "Kia"); await lo.fill("#fModelo", "Sportage")
         await lo.select_option("#fAno", "2024"); await lo.select_option("#fTipo", "Novo")
-        await lo.fill("#fCor", "Branco"); await lo.fill("#fPreco", "99000")
+        await lo.fill("#fCor", "Branco"); await lo.fill("#fPreco", "29900000")
         await lo.fill("#fLojaDados", "Auto Kadumbo · Talatona"); await lo.fill("#fLojaZap", "934111222")
         await lo.click("#btnGuardarModelo"); await lo.wait_for_timeout(900)
         await lo.evaluate("()=>ir('perfil')"); await lo.wait_for_timeout(300)
@@ -1182,7 +1196,7 @@ async def main():
            (await d.input_value("#odPrecoInp"))=="13,500,000 Kz" and (await d.input_value("#odEntradaInp"))=="2,700,000 Kz", "")
         await d.fill("#odEntradaInp",""); await d.type("#odEntradaInp","4000000"); await d.wait_for_timeout(300)
         ok("Resumo recalcula ao editar a entrada",
-           (await d.inner_text("#odRSaldo"))=="9,500,000 Kz" and (await d.inner_text("#odR12"))=="791,666.67 Kz",
+           (await d.inner_text("#odRSaldo"))=="9,500,000 Kz" and (await d.inner_text("#odR12"))=="791,000 Kz",
            await d.inner_text("#odRSaldo"))
         await d.fill("#odNomeInp","Ana Silva Editada")
         await d.click("#odGuardar"); await d.wait_for_timeout(500)
@@ -1569,6 +1583,92 @@ async def main():
           return {n:bs.length, dentroDoEcra: r.every(q=>q.w>0&&q.h>0&&q.h<=44), ecra:innerWidth};}""")
         ok("R42 · dois botões também no telemóvel, dentro do ecrã", M2["n"]==2 and M2["dentroDoEcra"], str(M2))
         await r41m.close()
+
+        # ============ R44 · CORREÇÕES DA AUDITORIA (filtros, exportar, avisos, prestações) ============
+        r44 = await b.new_page(viewport={"width":1440,"height":900})
+        r44e = []; r44.on("pageerror", lambda e: r44e.append(str(e)))
+        dl = []; r44.on("download", lambda d: dl.append(d.suggested_filename))
+        await novo(r44)
+
+        E1 = await r44.evaluate("()=>{abrirOrcDetalhe(ORCAMENTOS[0].id);const o=[...document.querySelectorAll('#odEstadoInp option')].map(x=>x.textContent);return {op:o, unicos:new Set(o).size};}")
+        ok("R44 · Estado sem opções duplicadas", len(E1["op"])==E1["unicos"] and E1["unicos"]==5, str(E1))
+
+        CL = await r44.evaluate("()=>['Enviado','Em negociação','Pendente','Venda concluída','Cancelado'].map(e=>classeEstado(e).trim())")
+        ok("R44 · cada estado com a sua cor", len(set(CL))==5 and CL[1]=="p" and CL[2]=="pd" and CL[3]=="v" and CL[4]=="c", str(CL))
+
+        PR = await r44.evaluate("()=>{const p=prestacao(7750000,12);return {base:p.base, ultima:p.ultima, soma:p.base*11+p.ultima};}")
+        ok("R44 · prestações redondas e soma exata",
+           PR["base"]==645000 and PR["soma"]==7750000 and PR["ultima"]==655000, str(PR))
+        ok("R44 · prestação aparece sem cêntimos no ecrã",
+           "645,000 Kz" == (await r44.inner_text("#odR12")), await r44.inner_text("#odR12"))
+
+        await r44.evaluate("()=>ir('listaorc')"); await r44.wait_for_timeout(500)
+        F = {}
+        F["todos"] = len(await r44.query_selector_all("#tblOrc tr"))
+        await r44.click('[data-forc="Fechados"]'); await r44.wait_for_timeout(350)
+        F["fechados"] = len(await r44.query_selector_all("#tblOrc tr"))
+        F["txt"] = await r44.inner_text("#tblOrc")
+        await r44.click('[data-forc="Abertos"]'); await r44.wait_for_timeout(350)
+        F["abertos"] = len(await r44.query_selector_all("#tblOrc tr"))
+        await r44.click('[data-forc="Todos"]'); await r44.wait_for_timeout(250)
+        ok("R44 · filtros da lista funcionam (em curso / fechados / todos)",
+           F["fechados"]==1 and "fechados" in F["txt"] and F["abertos"]==F["todos"] and F["todos"]==6, str(F))
+
+        await r44.evaluate("()=>ir('perfil')"); await r44.wait_for_timeout(400)
+        await r44.click('[data-exportar="csv"]'); await r44.wait_for_timeout(800)
+        ok("R44 · Exportar orçamentos em CSV descarrega", len(dl)==1 and dl[0].endswith(".csv"), str(dl))
+        janelas = []
+        r44.context.on("page", lambda np: janelas.append(np))
+        await r44.click('[data-exportar="pdf"]'); await r44.wait_for_timeout(1200)
+        pdf_txt = (await janelas[0].inner_text("body")) if janelas else ""
+        ok("R44 · Exportar em PDF abre a folha de impressão", len(janelas)==1 and "Orçamentos" in pdf_txt, str(len(janelas)))
+        if janelas:
+            ok("R44 · PDF diz que o IVA vai à parte", "IVA 14% apresentado à parte" in pdf_txt, "")
+            await janelas[0].close()
+
+        await r44.evaluate("()=>ir('modelos')"); await r44.wait_for_timeout(400)
+        await r44.click("#btnExportarModelos"); await r44.wait_for_timeout(800)
+        ok("R44 · Exportar estoque em CSV descarrega", len(dl)==2 and "estoque" in dl[1], str(dl))
+
+        await r44.evaluate("()=>ir('perfil')"); await r44.wait_for_timeout(300)
+        await r44.click("#btnVerModelo"); await r44.wait_for_timeout(900)
+        msg_txt = (await janelas[1].inner_text("body")) if len(janelas)>1 else ""
+        ok("R44 · Ver modelo de mensagem abre o texto", len(janelas)==2
+           and "Olá" in msg_txt and "IVA 14%" in msg_txt, str(len(janelas)))
+        if len(janelas)>1: await janelas[1].close()
+
+        # avisos de validação no popup de envio
+        await r44.evaluate("()=>{atual=CARROS[0];abrirOrcamento();}"); await r44.wait_for_timeout(400)
+        await r44.evaluate("()=>[...document.querySelectorAll('#pg-orcamento button')].find(b=>/WhatsApp/i.test(b.textContent)).click()")
+        await r44.wait_for_timeout(500)
+        await r44.evaluate("()=>document.getElementById('btnZap').click()"); await r44.wait_for_timeout(350)
+        ok("R44 · envio sem nome mostra aviso dentro do popup",
+           await r44.evaluate("()=>document.getElementById('avisoEnvio').classList.contains('on')"),
+           await r44.inner_text("#avisoEnvio"))
+        await r44.fill("#mNome", "Teste Aviso"); await r44.fill("#mTel", "923")
+        await r44.evaluate("()=>document.getElementById('btnZap').click()"); await r44.wait_for_timeout(350)
+        ok("R44 · telefone curto mostra aviso específico",
+           "Telefone" in await r44.inner_text("#avisoEnvio"), await r44.inner_text("#avisoEnvio"))
+
+        # prestações no texto do WhatsApp com aviso de juros
+        MSG = await r44.evaluate("()=>{document.getElementById('mTel').value='923111999';return mensagem();}")
+        ok("R44 · mensagem avisa que a simulação é sem juros",
+           "Simulação sem juros" in MSG and MSG.count("Simulação sem juros")==1, MSG[-90:])
+        ok("R44 · mensagem com prestações redondas", "645" in MSG or "731" in MSG, MSG[:120])
+
+        # eliminado do estoque: orçamento mantém nome e não mostra foto errada
+        await r44.evaluate("()=>{document.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));ir('modelos');}")
+        await r44.wait_for_timeout(300)
+        await r44.click("[data-delcar]"); await r44.wait_for_timeout(400)
+        await r44.click("#btnApagarModelo"); await r44.wait_for_timeout(600)
+        DEL = await r44.evaluate("()=>({nomes:ORCAMENTOS.filter(o=>o.carroNome).map(o=>o.carroNome), total:ORCAMENTOS.length})")
+        ok("R44 · orçamentos guardam o nome do modelo eliminado", len(DEL["nomes"])>0, str(DEL))
+        await r44.evaluate("()=>ir('listaorc')"); await r44.wait_for_timeout(500)
+        ok("R44 · lista mantém o modelo eliminado legível", "Corolla" in await r44.inner_text("#tblOrc"), "")
+        ok("R44 · sem imagens partidas depois de eliminar",
+           await r44.evaluate("()=>[...document.images].filter(i=>i.offsetParent&&i.complete&&i.naturalWidth===0).length")==0, "")
+        ok("R44 · sem erros de consola", len(r44e)==0, str(r44e[:2]))
+        await r44.close()
 
         await b.close()
 
