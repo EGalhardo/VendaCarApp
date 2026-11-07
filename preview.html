@@ -115,8 +115,15 @@
     display:flex;align-items:center;justify-content:center;color:#6c7a75;cursor:pointer;flex:0 0 auto;
   }
   .ic-btn:hover{background:#f6f8f7}
+  /* ---------- botão de tema (claro / escuro) ---------- */
+  .tema-btn .ico-sol{display:none}
+  html[data-tema="escuro"] .tema-btn .ico-lua{display:none}
+  html[data-tema="escuro"] .tema-btn .ico-sol{display:block}
+
   .who{display:flex;align-items:center;gap:9px;padding-left:16px;border-left:1px solid #eef1ef;flex:0 0 auto}
-  .bar .ic-btn{margin-left:auto}
+  .bar .ic-btn{margin-left:0}
+  /* o primeiro ícone da appbar (tema) empurra os restantes para a direita */
+  .bar .ic-btn.tema-btn{margin-left:auto}
   .who .av{
     width:34px;height:34px;border-radius:50%;background:var(--green-soft);color:var(--green-ink);
     font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center;
@@ -303,6 +310,8 @@
   .btn.ghost{background:#fff;color:#5d6b66;border:1px solid #e2e8e5}
   .btn.ghost:hover{background:#f6f8f7}
   .btn.big{height:46px;font-size:14.5px;width:100%}
+  /* botão "Criar" reduzido a "+" — quadrado, alinhado com o botão Exportar */
+  .btn-mais{width:40px;height:40px;padding:0;border-radius:9px}
   .btn-criar-mobile{display:none}
 
   /* filtros */
@@ -702,6 +711,154 @@
 
   .hidden{display:none!important}
 
+
+
+  /* ==========================================================
+     MODO ESCURO
+     ========================================================== */
+  html[data-tema="escuro"]{
+    color-scheme:dark;
+    --ink:#e9efec;--ink-2:#dbe3df;--ink-3:#a9b6b0;
+    --muted:#8d9c96;--muted-2:#8d9c96;
+    --line:#28342f;--line-2:#232d29;--gray-line:#2f3d37;
+    --bg:#101714;--green-soft:#17301f;--green-ink:#6fd487;--red:#ef8b7f;
+  }
+  html[data-tema="escuro"] body{background:#0e1512;color:#cdd7d2}
+
+  html[data-tema="escuro"] .brand{background:#151c19}
+  html[data-tema="escuro"] .bar{background:#151c19}
+  html[data-tema="escuro"] .search-top{color:#88968f}
+  html[data-tema="escuro"] .search-top input::placeholder{color:#88968f}
+  html[data-tema="escuro"] .toast{background:#0b1210}
+  html[data-tema="escuro"] .net-pill{background:#17301f;color:#7fd694;border:1px solid #22402b}
+  html[data-tema="escuro"] .net-pill.off{background:#3a2b12;color:#e2bc6a;border-color:#4a3a18}
+  html[data-tema="escuro"] .net-pill.save{background:#1b2a3d;color:#8fb6ec;border-color:#2b3f57}
+  html[data-tema="escuro"] .ic-btn{background:#151c19;color:#a5b2ac}
+  html[data-tema="escuro"] .ic-btn:hover{background:#1b2421}
+  html[data-tema="escuro"] .who{border-left:1px solid #232d29}
+  html[data-tema="escuro"] .who .nm{color:#e4ebe7}
+  html[data-tema="escuro"] .side{background:#151c19}
+  html[data-tema="escuro"] .side .lbl{color:#7b8a84}
+  html[data-tema="escuro"] .nav:hover{background:#1b2421}
+  html[data-tema="escuro"] .nav .cnt{background:#212a27;color:#93a29c}
+  html[data-tema="escuro"] .nav.on .cnt{background:#22402b}
+  html[data-tema="escuro"] .side .store{background:#1a2320;border:1px solid #24312c}
+  html[data-tema="escuro"] .side .store .n{color:#e4ebe7}
+  html[data-tema="escuro"] .content{background:#151c19}
+  html[data-tema="escuro"] .content::-webkit-scrollbar-thumb{background:#2f3d37;border:3px solid #151c19}
+  html[data-tema="escuro"] .content::-webkit-scrollbar-thumb:hover{background:#3a4943}
+  html[data-tema="escuro"] .btn.ghost{background:#151c19;color:#b6c2bc;border:1px solid #2b3833}
+  html[data-tema="escuro"] .btn.ghost:hover{background:#1b2421}
+  html[data-tema="escuro"] .chip{border:1px solid #2b3833;background:#151c19;color:#9daba5}
+  html[data-tema="escuro"] .chip:hover{border-color:#2b4136}
+  html[data-tema="escuro"] .car{background:#151c19}
+  html[data-tema="escuro"] .car .ph{background:#1e2724}
+  html[data-tema="escuro"] .car .del-car{color:#b6c2bc}
+  html[data-tema="escuro"] .car .del-car:hover,html[data-tema="escuro"] .car .del-car:focus-visible{background:#3a1e1c;color:#ef8b7f;border-color:#482421}
+  html[data-tema="escuro"] .conf-txt b{color:#e9efec}
+  html[data-tema="escuro"] .conf-box{border:1px solid #3a1e1c;color:#c0aaa4}
+  html[data-tema="escuro"] .conf-box b{color:#d8a49c}
+  html[data-tema="escuro"] .ic-danger{background:#3a1e1c!important}
+  html[data-tema="escuro"] .car .nm{color:#e9efec}
+  html[data-tema="escuro"] .empty{background:#151c19;border:1px dashed #2b3833}
+  html[data-tema="escuro"] .panel{background:#151c19}
+  html[data-tema="escuro"] .hero{background:#1e2724}
+  html[data-tema="escuro"] .specs{border-top:1px solid #232d29}
+  html[data-tema="escuro"] .spec{border-bottom:1px solid #1b2421}
+  html[data-tema="escuro"] .spec b{color:#e9efec}
+  html[data-tema="escuro"] .mini .n{color:#e9efec}
+  html[data-tema="escuro"] .lbl{color:#a5b2ac}
+  html[data-tema="escuro"] .inp{border:1px solid #2b3833;background:#151c19;color:#cdd7d2}
+  html[data-tema="escuro"] .inp:focus{border-color:#31503d}
+  html[data-tema="escuro"] .rows .r b{color:#e9efec}
+  html[data-tema="escuro"] .grp{color:#e4ebe7}
+  html[data-tema="escuro"] .total{background:#17231d;border:1px solid #24352c}
+  html[data-tema="escuro"] .tbl-wrap{background:#151c19}
+  html[data-tema="escuro"] .tbl th{background:#1a2320}
+  html[data-tema="escuro"] .tbl td{color:#c4cec9;border-bottom:1px solid #232d29}
+  html[data-tema="escuro"] .tbl tr:hover td{background:#1a2320}
+  html[data-tema="escuro"] .b{color:#e9efec}
+  html[data-tema="escuro"] .pill.d{background:#212a27;color:#93a29c}
+  html[data-tema="escuro"] .pill.p{background:#1b2a3d;color:#8fb6ec}
+  html[data-tema="escuro"] .stat-card{background:#151c19}
+  html[data-tema="escuro"] .modal{background:#151c19}
+  html[data-tema="escuro"] .modal .body{scrollbar-color:#3a4943 transparent}
+  html[data-tema="escuro"] .modal .body::-webkit-scrollbar-thumb{background:#2b3a34;border:2px solid #151c19}
+  html[data-tema="escuro"] .modal .foot{border-top:1px solid #232d29;background:#151c19}
+  html[data-tema="escuro"] .modal .x{background:#151c19;color:#93a29c}
+  html[data-tema="escuro"] .prefilled{background:#17231d;border-color:#31503d}
+  html[data-tema="escuro"] .upload{border:1.5px dashed #2b4136;background:#1a2320}
+  html[data-tema="escuro"] .upload:hover,html[data-tema="escuro"] .upload.drag{background:#182a20}
+  html[data-tema="escuro"] .upload .ic{background:#17301f}
+  html[data-tema="escuro"] .upload .t{color:#cbd5d0}
+  html[data-tema="escuro"] .upload .s{color:#8d9c96}
+  html[data-tema="escuro"] .up{border:1px solid #26322d;background:#1e2724}
+  html[data-tema="escuro"] .up-count{color:#8d9c96}
+  html[data-tema="escuro"] .iva-mini{color:#e2bc6a}
+  html[data-tema="escuro"] .iva-mini b{color:#e2bc6a}
+  html[data-tema="escuro"] .iva-col{color:#e2bc6a}
+  html[data-tema="escuro"] .resumo-envio{background:#1a2320;border:1px solid #24352c}
+  html[data-tema="escuro"] .resumo-envio .re b{color:#e9efec}
+  html[data-tema="escuro"] .resumo-envio .re.total{border-top:1px dashed #26332c}
+  html[data-tema="escuro"] .imposto{color:#e2bc6a;background:#3a2b12}
+  html[data-tema="escuro"] .r.total-iva,html[data-tema="escuro"] .od-row.total-iva{background:#1a2320}
+  html[data-tema="escuro"] .sep-lbl{color:#93a29c}
+  html[data-tema="escuro"] .sep-lbl span{color:#88968f}
+  html[data-tema="escuro"] .tbl tr.editavel:hover{background:#1b2421}
+  html[data-tema="escuro"] .edit-mini{background:#151c19}
+  html[data-tema="escuro"] .edit-mini:hover{border-color:#3f7a52;background:#17231d}
+  html[data-tema="escuro"] .upload-video .ic{background:#1b2a3d}
+  html[data-tema="escuro"] .upload-video:hover,html[data-tema="escuro"] .upload-video.drag{background:#1b2a3d}
+  html[data-tema="escuro"] .stat-card.link:hover{border-color:#31503d}
+  html[data-tema="escuro"] .search-inline{background:#151c19;color:#88968f}
+  html[data-tema="escuro"] .search-inline input::placeholder{color:#88968f}
+  html[data-tema="escuro"] .tbl tr.cli:hover td{background:#17231d}
+  html[data-tema="escuro"] .od-head{border-bottom:1px solid #232d29}
+  html[data-tema="escuro"] .od-info .n{color:#e9efec}
+  html[data-tema="escuro"] .od-info .d{color:#7b8a84}
+  html[data-tema="escuro"] .od-cliente{background:#1a2320;border:1px solid #24312c}
+  html[data-tema="escuro"] .od-cliente .n{color:#e9efec}
+  html[data-tema="escuro"] .od-row{border-bottom:1px dashed #232d29}
+  html[data-tema="escuro"] .od-row b{color:#e9efec}
+  html[data-tema="escuro"] .od-note{color:#8d9c96}
+  html[data-tema="escuro"] .od-actions .btn.danger{background:#151c19;color:#ef8b7f;border:1px solid #482421}
+  html[data-tema="escuro"] .od-actions .btn.danger:hover{background:#3a1e1c}
+  html[data-tema="escuro"] .od-save{color:#8d9c96}
+  html[data-tema="escuro"] .orc-card{background:#151c19}
+  html[data-tema="escuro"] .orc-info .n{color:#e9efec}
+  html[data-tema="escuro"] .orc-info .d{color:#7b8a84}
+  html[data-tema="escuro"] .orc-rows{border-top:1px solid #232d29}
+  html[data-tema="escuro"] .orc-rows .r b{color:#e9efec}
+
+  @media (max-width:900px){
+    html[data-tema="escuro"] .bar{background:#151c19}
+    html[data-tema="escuro"] .bar .back{background:#1e2724}
+    html[data-tema="escuro"] .navbar{background:#151c19}
+    html[data-tema="escuro"] .nav-item{color:#7b8a84}
+    html[data-tema="escuro"] .tbl tr{background:#151c19}
+  }
+
+  /* ajustes manuais do modo escuro */
+  html[data-tema="escuro"] .car .ph img{opacity:.94}
+  html[data-tema="escuro"] .car .del-car{background:rgba(24,32,29,.92);border-color:#33413b;color:#c4cec9}
+  html[data-tema="escuro"] .conf-box{background:#241a19}
+  html[data-tema="escuro"] .tbl tr:hover td{background:#1b2421}
+  html[data-tema="escuro"] .tbl tr.editavel:hover td{background:#1a2721}
+  html[data-tema="escuro"] .upload{border-color:#2b4136;background:#16211c}
+  html[data-tema="escuro"] .upload:hover,html[data-tema="escuro"] .upload.drag{background:#182a20;border-color:var(--green)}
+  html[data-tema="escuro"] .upload-video .ic{background:#1b2a3d}
+  html[data-tema="escuro"] .up{background:#1e2724;border-color:#26322d}
+  html[data-tema="escuro"] .hero video{background:#0b1210}
+  html[data-tema="escuro"] .modal .body::-webkit-scrollbar-thumb{background:#33413b;border-color:#151c19}
+  html[data-tema="escuro"] .ov{background:rgba(4,9,7,.66)}
+  html[data-tema="escuro"] .modal{box-shadow:0 24px 60px rgba(0,0,0,.55)}
+  html[data-tema="escuro"] .toast{background:#22332c;color:#e4ebe7}
+  html[data-tema="escuro"] .net-pill.save{background:#1b2a3d}
+  html[data-tema="escuro"] .badge-sent{color:var(--green-ink);background:var(--green-soft)}
+  html[data-tema="escuro"] .car .tag.u{background:rgba(120,144,156,.95)}
+  html[data-tema="escuro"] .car .tag.s{background:rgba(214,136,20,.96)}
+  html[data-tema="escuro"] img{color-scheme:only light}
+
   /* ==========================================================
      RESPONSIVO
      ========================================================== */
@@ -751,7 +908,7 @@
     .bar .crumb,.search-top,.who{display:none}
     .net-pill{display:inline-flex;height:24px;padding:0 8px;font-size:10px;gap:5px}
     .net-pill i{width:6px;height:6px}
-    .bar .ic-btn{width:34px;height:34px;margin-left:0}
+    .bar .ic-btn,.bar .ic-btn.tema-btn{width:34px;height:34px;margin-left:0}
 
     .side{display:none}
 
@@ -777,8 +934,8 @@
     .filters{gap:8px;margin-bottom:14px;flex-wrap:nowrap}
     .chip{font-size:11.5px;padding:7px 11px}
     .btn-criar-mobile{
-      display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 13px;border-radius:20px;
-      font-size:12px;flex:0 0 auto;
+      display:inline-flex;align-items:center;justify-content:center;
+      height:34px;width:34px;padding:0;border-radius:17px;flex:0 0 auto;
     }
     .btn-criar-desktop{display:none}
 
@@ -872,6 +1029,13 @@
     <div class="crumb" id="barCrumb">Gestão de estoque de veículos</div>
 
     <span class="net-pill" id="netPill" title="Estado da ligação"><i></i><span id="netTxt">Online</span></span>
+    <button class="ic-btn tema-btn" id="btnTema" title="Modo escuro" aria-label="Alternar modo claro/escuro" aria-pressed="false">
+      <svg class="ico-lua" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+        <path d="M20 14.6A8.5 8.5 0 019.4 4 8.5 8.5 0 1020 14.6z"/></svg>
+      <svg class="ico-sol" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+        <circle cx="12" cy="12" r="4.2"/>
+        <path d="M12 2.4v2.2M12 19.4v2.2M2.4 12h2.2M19.4 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"/></svg>
+    </button>
     <button class="ic-btn" title="Notificações" aria-label="Notificações">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
         <path d="M18 8a6 6 0 10-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10.3 21a2 2 0 003.4 0"/></svg>
@@ -931,18 +1095,16 @@
         <div><h2>Modelos</h2><p id="subModelos">4 veículos no estoque</p></div>
         <div class="right">
           <button class="btn ghost">Exportar</button>
-          <button class="btn btn-criar-desktop" data-criar>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
-            Criar
+          <button class="btn btn-criar-desktop btn-mais" data-criar aria-label="Criar novo modelo de carro" title="Novo modelo">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
           </button>
         </div>
       </div>
 
       <div class="filters">
         <div class="chips-inline" id="filtros"></div>
-        <button class="btn btn-criar-mobile" data-criar>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
-          Criar
+        <button class="btn btn-criar-mobile" data-criar aria-label="Criar novo modelo de carro" title="Novo modelo">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
         </button>
       </div>
 
@@ -3075,6 +3237,41 @@ renderTabelaOrc();
 renderClientes();
 ir('modelos');
 renderEstadoRede();
+/* ==========================================================
+   TEMA — CLARO / ESCURO (botão na appbar, memorizado)
+   ========================================================== */
+const TEMA_KEY = 'modelo_tema_v1';
+
+function temaAtual(){ return document.documentElement.dataset.tema === 'escuro' ? 'escuro' : 'claro'; }
+
+function aplicarTema(tema, guardar){
+  const escuro = tema === 'escuro';
+  if (escuro) document.documentElement.dataset.tema = 'escuro';
+  else delete document.documentElement.dataset.tema;
+  const b = document.getElementById('btnTema');
+  if (b){
+    b.title = escuro ? 'Modo claro' : 'Modo escuro';
+    b.setAttribute('aria-pressed', escuro ? 'true' : 'false');
+  }
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', escuro ? '#101714' : '#ffffff');
+  if (guardar){ try{ localStorage.setItem(TEMA_KEY, escuro ? 'escuro' : 'claro'); }catch(e){} }
+}
+
+function alternarTema(){
+  const novo = temaAtual() === 'escuro' ? 'claro' : 'escuro';
+  aplicarTema(novo, true);
+  if (typeof toast === 'function') toast(novo === 'escuro' ? 'Modo escuro ativado' : 'Modo claro ativado');
+}
+
+(function iniciarTema(){
+  let guardado = null;
+  try{ guardado = localStorage.getItem(TEMA_KEY); }catch(e){}
+  aplicarTema(guardado === 'escuro' ? 'escuro' : 'claro', false);
+  const b = document.getElementById('btnTema');
+  if (b) b.addEventListener('click', alternarTema);
+})();
+
 </script>
 </body>
 </html>

@@ -227,6 +227,125 @@ async def main():
         ok("Sem erros no modo offline", len(oe)==0, str(oe[:2]))
         await ctxo.close()
 
+        # ============ R30 · BOTÃO "CRIAR" SÓ COM "+" ============
+        cr = await b.new_page(viewport={"width":1440,"height":900})
+        cre=[]; cr.on("pageerror", lambda e: cre.append(str(e)))
+        await novo(cr)
+        C = await cr.evaluate("""()=>{
+          const btns=[...document.querySelectorAll('[data-criar]')];
+          const vis=btns.filter(x=>x.offsetParent!==null);
+          const b=vis[0], r=b.getBoundingClientRect(), svg=b.querySelector('svg');
+          const chips=document.querySelector('#filtros').getBoundingClientRect();
+          return {n:vis.length, texto:b.textContent.trim(), temSvg:!!svg,
+                  altura:Math.round(r.height), largura:Math.round(r.width),
+                  etiqueta:b.getAttribute('aria-label')||'',
+                  direita:Math.round(r.right), contentDireita:Math.round(document.querySelector('.content').getBoundingClientRect().right)};
+        }""")
+        ok("R30 · botão Criar mostra apenas o símbolo +", C["texto"]=="" and C["temSvg"], str(C))
+        ok("R30 · botão + quadrado (40×40) na linha dos filtros", C["altura"]==40 and C["largura"]==40, str(C))
+        ok("R30 · botão + tem etiqueta acessível", "Criar" in C["etiqueta"], C["etiqueta"])
+        ok("R30 · botão + alinhado ao canto direito", C["contentDireita"]-C["direita"]<=32, str(C))
+        await cr.locator("[data-criar]:visible").click(); await cr.wait_for_timeout(600)
+        abriu = await cr.evaluate("()=>document.querySelector('#mNovoModelo').classList.contains('open')")
+        ok("R30 · botão + abre o popup Novo Modelo", abriu, str(abriu))
+        ok("R30 · criação sem erros de consola", len(cre)==0, str(cre[:2]))
+        await cr.close()
+
+        cm = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        cme=[]; cm.on("pageerror", lambda e: cme.append(str(e)))
+        await novo(cm)
+        MC = await cm.evaluate("""()=>{
+          const b=[...document.querySelectorAll('[data-criar]')].filter(x=>x.offsetParent!==null)[0];
+          const r=b.getBoundingClientRect();
+          return {texto:b.textContent.trim(), altura:Math.round(r.height),
+                  largura:Math.round(r.width), direita:Math.round(r.right),
+                  semOverflow:document.documentElement.scrollWidth<=390};
+        }""")
+        ok("R30 · mobile · Criar também é só +", MC["texto"]=="" and MC["largura"]<=36, str(MC))
+        ok("R30 · mobile · botão + com altura de toque", 30<=MC["altura"]<=40, str(MC))
+        ok("R30 · mobile · sem overflow com o novo botão", MC["semOverflow"], str(MC))
+        ok("R30 · mobile · sem erros de consola", len(cme)==0, str(cme[:2]))
+        await cm.close()
+
+        # ============ R30 · MODO CLARO / ESCURO ============
+        tm = await b.new_page(viewport={"width":1440,"height":900})
+        tme=[]; tm.on("pageerror", lambda e: tme.append(str(e)))
+        await novo(tm)
+        T = await tm.evaluate("""()=>{
+          const b=document.getElementById('btnTema');
+          const ic=[...document.querySelectorAll('.bar .ic-btn')];
+          const r=b.getBoundingClientRect(), sino=ic[ic.length-1].getBoundingClientRect();
+          const lua=getComputedStyle(b.querySelector('.ico-lua')).display;
+          const sol=getComputedStyle(b.querySelector('.ico-sol')).display;
+          return {existe:!!b, antesDoSino:Math.round(r.right)<=Math.round(sino.left),
+                  lua:lua, sol:sol, tema:document.documentElement.dataset.tema||'claro',
+                  titulo:b.title, pressed:b.getAttribute('aria-pressed')};
+        }""")
+        ok("R30 · botão de tema presente na appbar", T["existe"], str(T))
+        ok("R30 · botão de tema à esquerda das notificações", T["antesDoSino"], str(T))
+        ok("R30 · tema começa claro (ícone de lua)", T["lua"]=="block" and T["sol"]=="none" and T["tema"]=="claro", str(T))
+        ok("R30 · botão de tema com tooltip e aria-pressed", T["titulo"]=="Modo escuro" and T["pressed"]=="false", str(T))
+        await tm.click("#btnTema"); await tm.wait_for_timeout(400)
+        E = await tm.evaluate("""()=>{
+          const b=document.getElementById('btnTema');
+          const cs=s=>getComputedStyle(document.querySelector(s));
+          return {tema:document.documentElement.dataset.tema,
+                  lua:getComputedStyle(b.querySelector('.ico-lua')).display,
+                  sol:getComputedStyle(b.querySelector('.ico-sol')).display,
+                  appbar:cs('.bar').backgroundColor, cartao:cs('.car').backgroundColor,
+                  textoTitulo:cs('.page-head h2').color,
+                  meta:document.querySelector('meta[name=theme-color]').content,
+                  titulo:b.title, pressed:b.getAttribute('aria-pressed')};
+        }""")
+        ok("R30 · clique ativa o modo escuro", E["tema"]=="escuro", str(E))
+        ok("R30 · ícone muda para sol no modo escuro", E["sol"]=="block" and E["lua"]=="none", str(E))
+        ok("R30 · appbar e cartões ficam escuros", E["appbar"]=="rgb(21, 28, 25)" and E["cartao"]=="rgb(21, 28, 25)", str(E))
+        ok("R30 · texto do título legível no escuro", E["textoTitulo"]=="rgb(233, 239, 236)", str(E))
+        ok("R30 · barra do sistema acompanha o tema", E["meta"]=="#101714", E["meta"])
+        ok("R30 · estado do botão atualizado", E["titulo"]=="Modo claro" and E["pressed"]=="true", str(E))
+        Contraste = await tm.evaluate("""()=>{
+          const lum=c=>{const [r,g,b]=c.match(/[0-9]+/g).map(Number).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);});
+            return .2126*r+.7152*g+.0722*b;};
+          const pares=[['.page-head h2','.content'],['.car .nm','.car'],['.tbl td','.tbl-wrap'],['.nav','.side']];
+          return pares.map(([f,bg])=>{
+            const a=lum(getComputedStyle(document.querySelector(f)).color);
+            const c=lum(getComputedStyle(document.querySelector(bg)).backgroundColor);
+            const r=(Math.max(a,c)+.05)/(Math.min(a,c)+.05);
+            return [f, +r.toFixed(2)];
+          });
+        }""")
+        ok("R30 · contraste mínimo 3:1 no modo escuro", all(r>=3 for _, r in Contraste), str(Contraste))
+        await tm.reload(); await tm.wait_for_timeout(700)
+        P = await tm.evaluate("()=>({tema:document.documentElement.dataset.tema, fundo:getComputedStyle(document.querySelector('.content')).backgroundColor})")
+        ok("R30 · tema escuro é memorizado após recarregar", P["tema"]=="escuro" and P["fundo"]=="rgb(21, 28, 25)", str(P))
+        await tm.click("#btnTema"); await tm.wait_for_timeout(400)
+        V = await tm.evaluate("()=>({tema:document.documentElement.dataset.tema||'claro', guardado:localStorage.getItem('modelo_tema_v1'), fundo:getComputedStyle(document.querySelector('.content')).backgroundColor})")
+        ok("R30 · volta ao modo claro e memoriza a escolha", V["tema"]=="claro" and V["guardado"]=="claro" and V["fundo"]=="rgb(255, 255, 255)", str(V))
+        ok("R30 · alternância de tema sem erros de consola", len(tme)==0, str(tme[:2]))
+        await tm.close()
+
+        tmb = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        tbe=[]; tmb.on("pageerror", lambda e: tbe.append(str(e)))
+        await novo(tmb)
+        TM = await tmb.evaluate("""()=>{
+          const b=document.getElementById('btnTema'), r=b.getBoundingClientRect();
+          const pill=document.querySelector('#netPill').getBoundingClientRect();
+          const sino=document.querySelector('.bar .ic-btn:last-of-type').getBoundingClientRect();
+          const back=document.querySelector('.bar .back').getBoundingClientRect();
+          return {alt:Math.round(r.height), larg:Math.round(r.width),
+                  entrePillESino: r.left>=pill.right-0.5 && r.right<=sino.left+0.5,
+                  tituloAinda:b.innerText===undefined?null:document.querySelector('.bar h1').getBoundingClientRect().width>0,
+                  semOverflow:document.documentElement.scrollWidth<=390};
+        }""")
+        ok("R30 · mobile · botão de tema entre Online e o sino", TM["entrePillESino"], str(TM))
+        ok("R30 · mobile · botão de tema com 34px", TM["alt"]==34 and TM["larg"]==34, str(TM))
+        ok("R30 · mobile · appbar continua sem overflow", TM["semOverflow"], str(TM))
+        await tmb.click("#btnTema"); await tmb.wait_for_timeout(400)
+        TM2 = await tmb.evaluate("()=>({tema:document.documentElement.dataset.tema, fundo:getComputedStyle(document.querySelector('.navbar')).backgroundColor})")
+        ok("R30 · mobile · modo escuro aplica-se à navbar", TM2["tema"]=="escuro" and TM2["fundo"]=="rgb(21, 28, 25)", str(TM2))
+        ok("R30 · mobile · tema sem erros de consola", len(tbe)==0, str(tbe[:2]))
+        await tmb.close()
+
         # ============ R29 · LOGÓTIPO NA APPBAR ============
         lg = await b.new_page(viewport={"width":1440,"height":900})
         le=[]; lg.on("pageerror", lambda e: le.append(str(e)))
@@ -716,7 +835,7 @@ async def main():
           const vis=s=>{const e=document.querySelector(s); if(!e) return 'inexistente';
             return getComputedStyle(e).display==='none'?'oculto':'visivel';};
           const bar=document.querySelector('.bar').getBoundingClientRect();
-          const sino=document.querySelector('.bar .ic-btn').getBoundingClientRect();
+          const sino=document.querySelector('.bar .ic-btn:last-of-type').getBoundingClientRect();
           return {busca:vis('.search-top'), titulo:vis('#barTitle'), pill:vis('#netPill'),
                   sinoAFrente: sino.right > bar.left + bar.width/2,
                   utilizador: vis('.who')};
