@@ -198,10 +198,11 @@ async def main():
         o = await ctxo.new_page()
         oe=[]; o.on("pageerror", lambda e: oe.append(str(e)))
         await novo(o)
-        ok("Arranque online", (await o.inner_text("#netTxt")).strip()=="Online", "")
-        await ctxo.set_offline(True); await o.wait_for_timeout(500)
-        ok("Offline detetado pela app", (await o.inner_text("#netTxt")).strip().startswith("Offline"),
-           await o.inner_text("#netTxt"))
+        ok("Arranque online", (await o.inner_text("#linhaOffline")).strip().startswith("Ativo"),
+           await o.inner_text("#linhaOffline"))
+        await ctxo.set_offline(True); await o.wait_for_timeout(600)
+        ok("Offline detetado pela app", (await o.inner_text("#linhaOffline")).strip().startswith("Sem ligação"),
+           await o.inner_text("#linhaOffline"))
         await o.click("[data-car='corolla']"); await o.wait_for_timeout(600)
         await o.click("#btnCriarOrc"); await o.wait_for_timeout(500)
         await o.click("#btnSalvar"); await o.wait_for_timeout(700)
@@ -541,15 +542,15 @@ async def main():
         await novo(tmb)
         TM = await tmb.evaluate("""()=>{
           const b=document.getElementById('btnTema'), r=b.getBoundingClientRect();
-          const pill=document.querySelector('#netPill').getBoundingClientRect();
           const sino=document.getElementById('whoBtn').getBoundingClientRect();
           const back=document.querySelector('.bar .back').getBoundingClientRect();
+          const tit=document.querySelector('.bar h1').getBoundingClientRect();
           return {alt:Math.round(r.height), larg:Math.round(r.width),
-                  entrePillESino: r.left>=pill.right-0.5 && r.right<=sino.left+0.5,
+                  entrePillESino: r.left>=tit.right-0.5 && r.right<=sino.left+0.5,
                   tituloAinda:b.innerText===undefined?null:document.querySelector('.bar h1').getBoundingClientRect().width>0,
                   semOverflow:document.documentElement.scrollWidth<=390};
         }""")
-        ok("R35 · mobile · botão de tema entre Online e a foto de perfil", TM["entrePillESino"], str(TM))
+        ok("R36 · mobile · botão de tema entre o título e a foto de perfil", TM["entrePillESino"], str(TM))
         ok("R30 · mobile · botão de tema com 34px", TM["alt"]==34 and TM["larg"]==34, str(TM))
         ok("R30 · mobile · appbar continua sem overflow", TM["semOverflow"], str(TM))
         await tmb.click("#btnTema"); await tmb.wait_for_timeout(400)
@@ -587,15 +588,15 @@ async def main():
         M = await lm.evaluate("""()=>{
           const img=document.querySelector('.brand .logo');
           const r=img.getBoundingClientRect(), h1=document.querySelector('.bar h1').getBoundingClientRect();
-          const pill=document.querySelector('#netPill').getBoundingClientRect();
+          const quem=document.querySelector('.bar-acoes').getBoundingClientRect();
           return {altura:Math.round(r.height), largura:Math.round(r.width),
                   semSobreposicao: r.right<=h1.left+0.5,
-                  tituloInteiro: h1.right<=pill.left+0.5,
+                  tituloInteiro: h1.right<=quem.left+0.5,
                   semOverflow: document.documentElement.scrollWidth<=390};
         }""")
         ok("R29 · logótipo compacto no telemóvel (≤28px)", M["altura"]<=28, str(M))
         ok("R29 · título não sobrepõe o logótipo no telemóvel", M["semSobreposicao"], str(M))
-        ok("R29 · título completo antes de 'Online'", M["tituloInteiro"], str(M))
+        ok("R29 · título completo antes das ações da appbar", M["tituloInteiro"], str(M))
         ok("R29 · appbar do telemóvel sem overflow horizontal", M["semOverflow"], str(M))
         await lm.evaluate("()=>{atual=CARROS[0]; abrirDetalhe();}"); await lm.wait_for_timeout(500)
         V = await lm.evaluate("""()=>{
@@ -612,14 +613,14 @@ async def main():
         await novo(ab)
         g = await ab.evaluate("""()=>{
           const q=s=>document.querySelector(s).getBoundingClientRect();
-          const brand=q('.brand'), pill=q('#netPill'), sino=q('#whoBtn'), cont=q('.content');
+          const brand=q('.brand'), pill=q('.bar-acoes'), sino=q('#whoBtn'), cont=q('.content');
           return {appbar:Math.round(brand.height), topoConteudo:Math.round(cont.top),
                   barraExtra:Math.round(q('.bar').top),
                   pillDentro: pill.top>=brand.top && pill.bottom<=brand.bottom,
                   sinoDentro: sino.top>=brand.top && sino.bottom<=brand.bottom};
         }""")
         ok("Mobile · appbar única (sem barra extra)", g["appbar"]==58 and g["topoConteudo"]==58 and g["barraExtra"]==0, str(g))
-        ok("Mobile · 'Online' na appbar", g["pillDentro"], str(g))
+        ok("R36 · mobile · ações da appbar dentro da barra", g["pillDentro"], str(g))
         ok("R35 · mobile · foto de perfil no lugar das notificações", g["sinoDentro"], str(g))
         await ab.evaluate("()=>{atual=CARROS[0]; abrirDetalhe();}"); await ab.wait_for_timeout(500)
         d = await ab.evaluate("""()=>{
@@ -1048,13 +1049,13 @@ async def main():
             return getComputedStyle(e).display==='none'?'oculto':'visivel';};
           const bar=document.querySelector('.bar').getBoundingClientRect();
           const sino=document.getElementById('whoBtn').getBoundingClientRect();
-          return {busca:vis('.search-top'), titulo:vis('#barTitle'), pill:vis('#netPill'),
+          return {busca:vis('.search-top'), titulo:vis('#barTitle'), pill: (document.querySelector('#netPill') ? vis('#netPill') : 'inexistente'),
                   sinoAFrente: sino.right > bar.left + bar.width/2,
                   utilizador: vis('#whoBtn'), oi: (document.querySelector('.who .oi')||{}).textContent||''};
         }""")
         ok("Desktop · campo de procura removido", gd["busca"]=="inexistente", str(gd))
         ok("Desktop · nome da página fora da appbar", gd["titulo"]=="oculto", str(gd))
-        ok("Desktop · modo Online fora da appbar", gd["pill"]=="oculto", str(gd))
+        ok("Desktop · modo Online fora da appbar", gd["pill"] in ("oculto","inexistente"), str(gd))
         ok("Desktop · foto de perfil alinhada à direita (sem notificações)", gd["sinoAFrente"] and gd["utilizador"] in ("visivel","flex"), str(gd))
         ok("Desktop · appbar sem erros", len(dde)==0, str(dde[:2]))
         est = await da.evaluate("""()=>{
@@ -1206,7 +1207,6 @@ async def main():
         M = await r5m.evaluate("""()=>{
           const who=document.getElementById('whoBtn');
           const r=who.getBoundingClientRect(), bar=document.querySelector('.bar').getBoundingClientRect();
-          const pill=document.getElementById('netPill').getBoundingClientRect();
           const tema=document.getElementById('btnTema').getBoundingClientRect();
           const av=document.querySelector('.who .av').getBoundingClientRect();
           const oi=document.querySelector('.who .oi').getBoundingClientRect();
@@ -1214,7 +1214,7 @@ async def main():
           return {visivel:getComputedStyle(who).display!=='none' && r.width>0,
                   lugarDoSino: r.left>=tema.right-0.5 && r.right<=bar.right+0.5,
                   dentroDaBarra: r.top>=bar.top && r.bottom<=bar.bottom,
-                  depoisDoOnline: r.left>=pill.right-0.5,
+                  depoisDoTema: r.left>=tema.right-0.5,
                   fotoAcima: av.bottom<=oi.top+1,
                   bordas: t.borderTopWidth + '|' + t.backgroundColor,
                   overflow: document.documentElement.scrollWidth-390,
@@ -1236,6 +1236,69 @@ async def main():
         ok("R35 · foto de perfil escolhida aparece na appbar", F["fundo"] and F["texto"]=="", str(F))
         await r5f.evaluate("()=>{LOJA.avatar=''; renderAvatarLoja();}")
         await r5f.close()
+
+        # ============ R36 · APPBAR SEM 'ONLINE' E ORGANIZADA ============
+        r6 = await b.new_page(viewport={"width":1440,"height":900})
+        r6e=[]; r6.on("pageerror", lambda e: r6e.append(str(e)))
+        await novo(r6)
+        A6 = await r6.evaluate("""()=>{
+          const grupo=document.querySelector('.bar-acoes');
+          const tema=document.getElementById('btnTema').getBoundingClientRect();
+          const sep=document.querySelector('.bar-sep').getBoundingClientRect();
+          const who=document.getElementById('whoBtn').getBoundingClientRect();
+          const bar=document.querySelector('.bar').getBoundingClientRect();
+          return {pill:!!document.getElementById('netPill'),
+                  online:document.querySelector('.bar').innerText.includes('Online'),
+                  grupoExiste:!!grupo,
+                  grupoADireita: grupo?getComputedStyle(grupo).marginLeft:'-',
+                  temaAntesDoSep: tema.right<=sep.left+0.5,
+                  sepAntesDoPerfil: sep.right<=who.left+0.5,
+                  margemDireita: Math.round(bar.right-who.right),
+                  espacoMeio: document.querySelector('.bar-acoes').parentElement==document.querySelector('.bar')};
+        }""")
+        ok("R36 · cápsula 'Online' removida da appbar", not A6["pill"] and not A6["online"], str(A6))
+        ok("R36 · ações agrupadas e encostadas à direita", A6["grupoExiste"] and A6["margemDireita"]<=32, str(A6))
+        ok("R36 · ordem: tema · divisor · perfil", A6["temaAntesDoSep"] and A6["sepAntesDoPerfil"], str(A6))
+        ok("R36 · margem direita harmoniosa", 12<=A6["margemDireita"]<=32, str(A6["margemDireita"]))
+        ok("R36 · desktop sem erros de consola", len(r6e)==0, str(r6e[:2]))
+        await r6.close()
+
+        r6m = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        r6me=[]; r6m.on("pageerror", lambda e: r6me.append(str(e)))
+        await novo(r6m)
+        M6 = await r6m.evaluate("""()=>{
+          const h=document.querySelector('.bar h1');
+          const tema=document.getElementById('btnTema').getBoundingClientRect();
+          const who=document.getElementById('whoBtn').getBoundingClientRect();
+          const bar=document.querySelector('.bar').getBoundingClientRect();
+          const sep=document.querySelector('.bar-sep');
+          return {semPill: !document.getElementById('netPill'),
+                  tituloInteiro: h.scrollWidth<=h.clientWidth,
+                  espacoTitulo: Math.round(tema.left - h.getBoundingClientRect().right),
+                  whoDentro: who.right<=bar.right+0.5 && who.top>=bar.top-0.5,
+                  sepVisivel: getComputedStyle(sep).display!=='none',
+                  overflow: document.documentElement.scrollWidth-390};
+        }""")
+        ok("R36 · mobile · sem 'Online' na appbar", M6["semPill"], str(M6))
+        ok("R36 · mobile · título e ações com folga", M6["tituloInteiro"] and M6["espacoTitulo"]>=6, str(M6))
+        ok("R36 · mobile · perfil dentro da barra", M6["whoDentro"] and M6["sepVisivel"], str(M6))
+        ok("R36 · mobile · sem overflow", M6["overflow"]<=0, str(M6["overflow"]))
+        await r6m.evaluate("()=>ir('listaorc')"); await r6m.wait_for_timeout(500)
+        ok("R36 · mobile · título longo continua legível",
+           await r6m.evaluate("()=>{const h=document.querySelector('.bar h1');return h.scrollWidth<=h.clientWidth;}"), "")
+        ok("R36 · mobile · sem erros de consola", len(r6me)==0, str(r6me[:2]))
+        await r6m.close()
+
+        r6o = await b.new_context(viewport={"width":1440,"height":860})
+        p6 = await r6o.new_page()
+        await novo(p6)
+        await r6o.set_offline(True); await p6.wait_for_timeout(600)
+        ok("R36 · estado offline continua visível no Perfil",
+           (await p6.inner_text("#linhaOffline")).strip().startswith("Sem ligação"), "")
+        await p6.evaluate("()=>ir('perfil')"); await p6.wait_for_timeout(400)
+        ok("R36 · Perfil mostra o estado da ligação",
+           "Sem ligação" in await p6.inner_text("#pg-perfil"), "")
+        await r6o.close()
 
         await b.close()
 

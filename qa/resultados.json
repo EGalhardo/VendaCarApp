@@ -132,12 +132,12 @@
  {
   "r": "PASS",
   "n": "Arranque online",
-  "d": ""
+  "d": "Ativo — dados guardados no dispositivo"
  },
  {
   "r": "PASS",
   "n": "Offline detetado pela app",
-  "d": "Offline"
+  "d": "Sem ligação · tudo funcional"
  },
  {
   "r": "PASS",
@@ -181,17 +181,397 @@
  },
  {
   "r": "PASS",
+  "n": "R34 · popup Dados da Loja tem carregador de foto",
+  "d": "{'existe': True, 'visivel': True, 'redondo': '50%', 'iniciais': 'AS', 'input': True, 'aceita': 'image/*', 'removerEscondido': True, 'dentro': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · foto por omissão mostra as iniciais da loja",
+  "d": "{'existe': True, 'visivel': True, 'redondo': '50%', 'iniciais': 'AS', 'input': True, 'aceita': 'image/*', 'removerEscondido': True, 'dentro': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · carregador aceita apenas imagens",
+  "d": "{'existe': True, 'visivel': True, 'redondo': '50%', 'iniciais': 'AS', 'input': True, 'aceita': 'image/*', 'removerEscondido': True, 'dentro': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · botão Remover começa escondido",
+  "d": "{'existe': True, 'visivel': True, 'redondo': '50%', 'iniciais': 'AS', 'input': True, 'aceita': 'image/*', 'removerEscondido': True, 'dentro': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · escolher imagem mostra a pré-visualização",
+  "d": "{'previa': True, 'tmp': True, 'dados': 'data:image/jpeg;base64', 'lado': 256, 'removerVisivel': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · imagem é recortada em quadrado 256px",
+  "d": "{'previa': True, 'tmp': True, 'dados': 'data:image/jpeg;base64', 'lado': 256, 'removerVisivel': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · botão Remover aparece com foto escolhida",
+  "d": "{'previa': True, 'tmp': True, 'dados': 'data:image/jpeg;base64', 'lado': 256, 'removerVisivel': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · foto é guardada e memorizada",
+  "d": "{'guardada': 'data:image/jpeg;base64', 'noPerfil': True, 'appbar': True, 'texto': ''}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · appbar mostra a foto de perfil",
+  "d": "{'guardada': 'data:image/jpeg;base64', 'noPerfil': True, 'appbar': True, 'texto': ''}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · foto persiste depois de recarregar",
+  "d": "{'guardada': True, 'appbar': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · Remover volta às iniciais",
+  "d": "{'semPrevia': True, 'iniciais': 'AS'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · remover a foto limpa a appbar",
+  "d": "{'foto': '', 'appbar': 'none'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · carregador visível também no modo escuro",
+  "d": "{'fundo': 'rgb(4, 43, 37)', 'visivel': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · foto de perfil sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R33 · rodapé da barra lateral sem 'ABC Seminovos / Plano Pro'",
+  "d": "{'texto': '', 'semNome': True, 'temLogo': True, 'soUmLogo': 1, 'visivel': True, 'topo': 821}"
+ },
+ {
+  "r": "PASS",
+  "n": "R33 · rodapé mantém apenas o logótipo",
+  "d": "{'texto': '', 'semNome': True, 'temLogo': True, 'soUmLogo': 1, 'visivel': True, 'topo': 821}"
+ },
+ {
+  "r": "PASS",
+  "n": "R33 · rodapé continua no fundo da barra lateral",
+  "d": "{'texto': '', 'semNome': True, 'temLogo': True, 'soUmLogo': 1, 'visivel': True, 'topo': 821}"
+ },
+ {
+  "r": "PASS",
+  "n": "R33 · rodapé sem texto também no modo escuro",
+  "d": "{'texto': '', 'logoEscuro': 'block'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R33 · rodapé sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R32 · escuro · nome da página ativa a verde",
+  "d": "{'ativoTexto': 'rgb(52, 217, 122)', 'ativoIcone': 'rgb(52, 217, 122)', 'inativoTexto': 'rgb(179, 198, 224)', 'ativoVerde': True, 'inativoNao': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R32 · escuro · o verde acompanha a página aberta",
+  "d": "{'nome': 'Clientes4', 'verde': True, 'so1': 1}"
+ },
+ {
+  "r": "PASS",
+  "n": "R32 · escuro memorizado mantém o ativo a verde",
+  "d": "{'tema': 'escuro', 'verde': True, 'cor': 'rgb(52, 217, 122)'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R32 · ativo a verde sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R32 · mobile escuro · ícone e nome ativos a verde",
+  "d": "{'nome': 'Modelos', 'texto': True, 'icone': True, 'inativo': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R32 · mobile escuro · verde segue a página (Perfil)",
+  "d": "{'nome': 'Perfil', 'verde': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R32 · mobile escuro sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R32 · modo claro mantém o verde do item ativo",
+  "d": "{'cor': 'rgb(63, 158, 70)', 'verde': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R31 · logótipo mostra todos os elementos (carro + nome + 3 ticks)",
+  "d": "{'ratio': 3.042, 'natRatio': 3.042, 'completa': True, 'altura': 38, 'etiqueta': 'VendaCar'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R31 · logótipo completo não é esticado",
+  "d": "{'ratio': 3.042, 'natRatio': 3.042, 'completa': True, 'altura': 38, 'etiqueta': 'VendaCar'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R31 · modo escuro · fundo azul-marinho em todos os painéis",
+  "d": "{'.brand': 'rgb(4, 13, 31)', '.bar': 'rgb(4, 13, 31)', '.side': 'rgb(4, 13, 31)', '.content': 'rgb(4, 13, 31)', '.car': 'rgb(4, 13, 31)', '.tbl-wrap': 'rgb(4, 13, 31)'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R31 · modo escuro · mesmo tom da referência (#040d1f)",
+  "d": "{'.brand': 'rgb(4, 13, 31)', '.bar': 'rgb(4, 13, 31)', '.side': 'rgb(4, 13, 31)', '.content': 'rgb(4, 13, 31)', '.car': 'rgb(4, 13, 31)', '.tbl-wrap': 'rgb(4, 13, 31)'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R31 · modo escuro · bordas azuis visíveis",
+  "d": "['rgb(23, 55, 94)', 'rgb(23, 55, 94)', 'rgb(23, 55, 94)']"
+ },
+ {
+  "r": "PASS",
+  "n": "R31 · modo escuro · logótipo troca para a variante clara",
+  "d": "block"
+ },
+ {
+  "r": "PASS",
+  "n": "R31 · variante escura mantém os 3 ticks e a proporção",
+  "d": "{'visivel': True, 'ratio': 3.04, 'nat': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R31 · logótipo/paleta sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · botão Criar mostra apenas o símbolo +",
+  "d": "{'n': 1, 'texto': '', 'temSvg': True, 'altura': 40, 'largura': 40, 'etiqueta': 'Criar novo modelo de carro', 'direita': 1410, 'contentDireita': 1440}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · botão + quadrado (40×40) na linha dos filtros",
+  "d": "{'n': 1, 'texto': '', 'temSvg': True, 'altura': 40, 'largura': 40, 'etiqueta': 'Criar novo modelo de carro', 'direita': 1410, 'contentDireita': 1440}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · botão + tem etiqueta acessível",
+  "d": "Criar novo modelo de carro"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · botão + alinhado ao canto direito",
+  "d": "{'n': 1, 'texto': '', 'temSvg': True, 'altura': 40, 'largura': 40, 'etiqueta': 'Criar novo modelo de carro', 'direita': 1410, 'contentDireita': 1440}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · botão + abre o popup Novo Modelo",
+  "d": "True"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · criação sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · mobile · Criar também é só +",
+  "d": "{'texto': '', 'altura': 34, 'largura': 34, 'direita': 375, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · mobile · botão + com altura de toque",
+  "d": "{'texto': '', 'altura': 34, 'largura': 34, 'direita': 375, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · mobile · sem overflow com o novo botão",
+  "d": "{'texto': '', 'altura': 34, 'largura': 34, 'direita': 375, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · mobile · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · botão de tema presente na appbar",
+  "d": "{'existe': True, 'antesDoSino': True, 'lua': 'block', 'sol': 'none', 'tema': 'claro', 'titulo': 'Modo escuro', 'pressed': 'false'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · botão de tema à esquerda da foto de perfil",
+  "d": "{'existe': True, 'antesDoSino': True, 'lua': 'block', 'sol': 'none', 'tema': 'claro', 'titulo': 'Modo escuro', 'pressed': 'false'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · tema começa claro (ícone de lua)",
+  "d": "{'existe': True, 'antesDoSino': True, 'lua': 'block', 'sol': 'none', 'tema': 'claro', 'titulo': 'Modo escuro', 'pressed': 'false'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · botão de tema com tooltip e aria-pressed",
+  "d": "{'existe': True, 'antesDoSino': True, 'lua': 'block', 'sol': 'none', 'tema': 'claro', 'titulo': 'Modo escuro', 'pressed': 'false'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · clique ativa o modo escuro",
+  "d": "{'tema': 'escuro', 'lua': 'none', 'sol': 'block', 'appbar': 'rgb(4, 13, 31)', 'cartao': 'rgb(4, 13, 31)', 'textoTitulo': 'rgb(255, 255, 255)', 'meta': '#040d1f', 'titulo': 'Modo claro', 'pressed': 'true'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · ícone muda para sol no modo escuro",
+  "d": "{'tema': 'escuro', 'lua': 'none', 'sol': 'block', 'appbar': 'rgb(4, 13, 31)', 'cartao': 'rgb(4, 13, 31)', 'textoTitulo': 'rgb(255, 255, 255)', 'meta': '#040d1f', 'titulo': 'Modo claro', 'pressed': 'true'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · appbar e cartões ficam escuros",
+  "d": "{'tema': 'escuro', 'lua': 'none', 'sol': 'block', 'appbar': 'rgb(4, 13, 31)', 'cartao': 'rgb(4, 13, 31)', 'textoTitulo': 'rgb(255, 255, 255)', 'meta': '#040d1f', 'titulo': 'Modo claro', 'pressed': 'true'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · texto do título legível no escuro",
+  "d": "{'tema': 'escuro', 'lua': 'none', 'sol': 'block', 'appbar': 'rgb(4, 13, 31)', 'cartao': 'rgb(4, 13, 31)', 'textoTitulo': 'rgb(255, 255, 255)', 'meta': '#040d1f', 'titulo': 'Modo claro', 'pressed': 'true'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · barra do sistema acompanha o tema",
+  "d": "#040d1f"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · estado do botão atualizado",
+  "d": "{'tema': 'escuro', 'lua': 'none', 'sol': 'block', 'appbar': 'rgb(4, 13, 31)', 'cartao': 'rgb(4, 13, 31)', 'textoTitulo': 'rgb(255, 255, 255)', 'meta': '#040d1f', 'titulo': 'Modo claro', 'pressed': 'true'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · contraste mínimo 3:1 no modo escuro",
+  "d": "[['.page-head h2', 19.4], ['.car .nm', 19.4], ['.tbl td', 14.49], ['.nav', 10.49]]"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · tema escuro é memorizado após recarregar",
+  "d": "{'tema': 'escuro', 'fundo': 'rgb(4, 13, 31)'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · volta ao modo claro e memoriza a escolha",
+  "d": "{'tema': 'claro', 'guardado': 'claro', 'fundo': 'rgb(255, 255, 255)'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · alternância de tema sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · mobile · botão de tema entre o título e a foto de perfil",
+  "d": "{'alt': 34, 'larg': 34, 'entrePillESino': True, 'tituloAinda': True, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · mobile · botão de tema com 34px",
+  "d": "{'alt': 34, 'larg': 34, 'entrePillESino': True, 'tituloAinda': True, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · mobile · appbar continua sem overflow",
+  "d": "{'alt': 34, 'larg': 34, 'entrePillESino': True, 'tituloAinda': True, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · mobile · modo escuro aplica-se à navbar",
+  "d": "{'tema': 'escuro', 'fundo': 'rgb(4, 13, 31)'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · mobile · tema sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · logótipo presente na appbar",
+  "d": "{'existe': True, 'carregou': True, 'altura': 38, 'largura': 116, 'proporcao': '3.04', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · logótipo carregado (sem imagem partida)",
+  "d": "{'existe': True, 'carregou': True, 'altura': 38, 'largura': 116, 'proporcao': '3.04', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · logótipo com altura harmoniosa (32–40px)",
+  "d": "{'existe': True, 'carregou': True, 'altura': 38, 'largura': 116, 'proporcao': '3.04', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · logótipo na proporção original (~3:1, com os 3 ticks)",
+  "d": "{'existe': True, 'carregou': True, 'altura': 38, 'largura': 116, 'proporcao': '3.04', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · nome 'Modelo' e ícone antigo removidos da marca",
+  "d": "{'existe': True, 'carregou': True, 'altura': 38, 'largura': 116, 'proporcao': '3.04', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · título do documento menciona VendaCar",
+  "d": "VendaCar — Orçamento de Carros por WhatsApp"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · logótipo compacto no telemóvel (≤28px)",
+  "d": "{'altura': 24, 'largura': 73, 'semSobreposicao': True, 'tituloInteiro': True, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · título não sobrepõe o logótipo no telemóvel",
+  "d": "{'altura': 24, 'largura': 73, 'semSobreposicao': True, 'tituloInteiro': True, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · título completo antes das ações da appbar",
+  "d": "{'altura': 24, 'largura': 73, 'semSobreposicao': True, 'tituloInteiro': True, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · appbar do telemóvel sem overflow horizontal",
+  "d": "{'altura': 24, 'largura': 73, 'semSobreposicao': True, 'tituloInteiro': True, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · página interior: voltar encostado à esquerda",
+  "d": "{'voltar': 10, 'semLogo': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · sem erros de consola com o novo logótipo",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
   "n": "Mobile · appbar única (sem barra extra)",
   "d": "{'appbar': 58, 'topoConteudo': 58, 'barraExtra': 0, 'pillDentro': True, 'sinoDentro': True}"
  },
  {
   "r": "PASS",
-  "n": "Mobile · 'Online' na appbar",
+  "n": "R36 · mobile · ações da appbar dentro da barra",
   "d": "{'appbar': 58, 'topoConteudo': 58, 'barraExtra': 0, 'pillDentro': True, 'sinoDentro': True}"
  },
  {
   "r": "PASS",
-  "n": "Mobile · ícone de notificações na appbar",
+  "n": "R35 · mobile · foto de perfil no lugar das notificações",
   "d": "{'appbar': 58, 'topoConteudo': 58, 'barraExtra': 0, 'pillDentro': True, 'sinoDentro': True}"
  },
  {
@@ -292,7 +672,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "-32,210.41 Kz"
+  "d": "26,301.31 Kz"
  },
  {
   "r": "PASS",
@@ -302,12 +682,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,589,233.35 Kz"
+  "d": "9,588,925.23 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,999.10 Kz"
+  "d": "9,749,998.99 Kz"
  },
  {
   "r": "PASS",
@@ -323,10 +703,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   320473,
-   2892403,
-   4881976,
-   6363079
+   320794,
+   2893159,
+   4882168,
+   6363218
   ]
  },
  {
@@ -422,7 +802,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34565
+   3.34669
   ]
  },
  {
@@ -762,22 +1142,22 @@
  {
   "r": "PASS",
   "n": "Desktop · campo de procura removido",
-  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'oculto', 'sinoAFrente': True, 'utilizador': 'visivel'}"
+  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi, ABC Seminovos'}"
  },
  {
   "r": "PASS",
   "n": "Desktop · nome da página fora da appbar",
-  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'oculto', 'sinoAFrente': True, 'utilizador': 'visivel'}"
+  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi, ABC Seminovos'}"
  },
  {
   "r": "PASS",
   "n": "Desktop · modo Online fora da appbar",
-  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'oculto', 'sinoAFrente': True, 'utilizador': 'visivel'}"
+  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi, ABC Seminovos'}"
  },
  {
   "r": "PASS",
-  "n": "Desktop · notificações e utilizador alinhados à direita",
-  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'oculto', 'sinoAFrente': True, 'utilizador': 'visivel'}"
+  "n": "Desktop · foto de perfil alinhada à direita (sem notificações)",
+  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi, ABC Seminovos'}"
  },
  {
   "r": "PASS",
@@ -907,6 +1287,136 @@
  {
   "r": "PASS",
   "n": "Mobile · edição utilizável",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · desktop · ícone de notificações removido",
+  "d": "{'sino': False, 'semTextoNotif': True, 'bordas': '0px', 'fundoBtn': 'rgba(0, 0, 0, 0)', 'fotoAcimaDoNome': True, 'nomeAbaixo': True, 'centrado': True, 'oiTexto': 'Oi, ABC Seminovos'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · ícones da appbar sem bordas",
+  "d": "{'sino': False, 'semTextoNotif': True, 'bordas': '0px', 'fundoBtn': 'rgba(0, 0, 0, 0)', 'fotoAcimaDoNome': True, 'nomeAbaixo': True, 'centrado': True, 'oiTexto': 'Oi, ABC Seminovos'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · nome da loja debaixo da foto de perfil",
+  "d": "{'sino': False, 'semTextoNotif': True, 'bordas': '0px', 'fundoBtn': 'rgba(0, 0, 0, 0)', 'fotoAcimaDoNome': True, 'nomeAbaixo': True, 'centrado': True, 'oiTexto': 'Oi, ABC Seminovos'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · cumprimento 'Oi, <nome da loja>'",
+  "d": "Oi, ABC Seminovos"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · o nome segue os Dados da Loja",
+  "d": "Oi, Seminovos Kianda"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · clicar na foto abre o Perfil",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · sem erros de consola (desktop)",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · mobile · foto de perfil no lugar das notificações",
+  "d": "{'visivel': True, 'lugarDoSino': True, 'dentroDaBarra': True, 'depoisDoTema': True, 'fotoAcima': True, 'bordas': '0px|rgba(0, 0, 0, 0)', 'overflow': 0, 'oi': 'Oi, ABC Seminovos'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · mobile · nome debaixo da foto",
+  "d": "{'visivel': True, 'lugarDoSino': True, 'dentroDaBarra': True, 'depoisDoTema': True, 'fotoAcima': True, 'bordas': '0px|rgba(0, 0, 0, 0)', 'overflow': 0, 'oi': 'Oi, ABC Seminovos'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · mobile · ícones sem bordas",
+  "d": "0px|rgba(0, 0, 0, 0)"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · mobile · appbar mantém-se dentro do ecrã",
+  "d": "0"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · mobile · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · foto de perfil escolhida aparece na appbar",
+  "d": "{'fundo': True, 'texto': ''}"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · cápsula 'Online' removida da appbar",
+  "d": "{'pill': False, 'online': False, 'grupoExiste': True, 'grupoADireita': '976.969px', 'temaAntesDoSep': True, 'sepAntesDoPerfil': True, 'margemDireita': 24, 'espacoMeio': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · ações agrupadas e encostadas à direita",
+  "d": "{'pill': False, 'online': False, 'grupoExiste': True, 'grupoADireita': '976.969px', 'temaAntesDoSep': True, 'sepAntesDoPerfil': True, 'margemDireita': 24, 'espacoMeio': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · ordem: tema · divisor · perfil",
+  "d": "{'pill': False, 'online': False, 'grupoExiste': True, 'grupoADireita': '976.969px', 'temaAntesDoSep': True, 'sepAntesDoPerfil': True, 'margemDireita': 24, 'espacoMeio': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · margem direita harmoniosa",
+  "d": "24"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · desktop sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · mobile · sem 'Online' na appbar",
+  "d": "{'semPill': True, 'tituloInteiro': True, 'espacoTitulo': 6, 'whoDentro': True, 'sepVisivel': True, 'overflow': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · mobile · título e ações com folga",
+  "d": "{'semPill': True, 'tituloInteiro': True, 'espacoTitulo': 6, 'whoDentro': True, 'sepVisivel': True, 'overflow': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · mobile · perfil dentro da barra",
+  "d": "{'semPill': True, 'tituloInteiro': True, 'espacoTitulo': 6, 'whoDentro': True, 'sepVisivel': True, 'overflow': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · mobile · sem overflow",
+  "d": "0"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · mobile · título longo continua legível",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · mobile · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · estado offline continua visível no Perfil",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · Perfil mostra o estado da ligação",
   "d": ""
  }
 ]
