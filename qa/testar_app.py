@@ -36,12 +36,12 @@ async def main():
         # ---------- 1. ARITMÉTICA ----------
         await ir_orcamento_de(pg)
         casos = [
-            ("Corolla 75.000 / entrada 25.000", 75000, 25000),
-            ("Entrada sugerida 10%", 75000, 7500),
-            ("Entrada = preço (100%)", 75000, 75000),
-            ("Entrada 1 Kz", 75000, 1),
-            ("Hilux 210.000 / 30.000", 210000, 30000),
-            ("Tucson 95.000 / 95.000", 95000, 95000),
+            ("Corolla 4,5M / entrada 1,5M", 4500000, 1500000),
+            ("Entrada sugerida 10%", 4500000, 450000),
+            ("Entrada = preço (100%)", 4500000, 4500000),
+            ("Entrada 1 Kz", 4500000, 1),
+            ("Hilux 18,5M / 4M", 18500000, 4000000),
+            ("Tucson 6,2M / 6,2M", 6200000, 6200000),
         ]
         for nome, preco, entrada in casos:
             # garantir que o carro em ecrã tem o preço do caso
@@ -77,10 +77,10 @@ async def main():
         await pg.click("#btnCriarOrc"); await pg.wait_for_timeout(250)
         await pg.click("#btnSalvar"); await pg.wait_for_timeout(300)
         v = await pg.evaluate("()=>document.getElementById('oVista').textContent")
-        ok("À vista com desconto (75.000 − 15.000)", "60,000" in v, v)
+        ok("À vista com desconto (4.500.000 − 250.000)", "4,250,000" in v, v)
 
         # ---------- 3. ENTRADA ACIMA DO PREÇO ----------
-        await pg.fill("#oEntrada","999999999"); await pg.wait_for_timeout(200)
+        await pg.fill("#oEntrada","99999999999"); await pg.wait_for_timeout(200)
         s = await pg.evaluate("()=>document.getElementById('oSaldo').textContent")
         ok("Entrada acima do preço é limitada", "0 Kz" in s, f"saldo = {s}")
 
@@ -89,7 +89,7 @@ async def main():
         ok("Saldo 0 → parcelas 0 (sem erro)", d[0].startswith("0") and d[1].startswith("0"), str(d))
 
         # ---------- 5. PERSISTÊNCIA DO ORÇAMENTO ----------
-        await pg.evaluate("()=>{document.getElementById('oEntrada').value='25,000 Kz'; calc();}")
+        await pg.evaluate("()=>{document.getElementById('oEntrada').value='1,500,000 Kz'; calc();}")
         await pg.click("#btnEnviar"); await pg.wait_for_timeout(300)
         await pg.fill("#mNome","Cliente Teste"); await pg.fill("#mTel","923111999")
         await pg.evaluate("window.__u=null; window.open=(u)=>{window.__u=u;}")
@@ -98,7 +98,7 @@ async def main():
         ok("WhatsApp abre com +244 e texto", u.startswith("https://wa.me/244923111999?text="), u.split('?')[0])
         txt = up.unquote(u.split('text=')[1])
         ok("Mensagem contém carro, entrada e parcelas",
-           "Corolla" in txt and "25,000 Kz" in txt and "12x" in txt and "60,000" in txt,
+           "Corolla" in txt and "1,500,000 Kz" in txt and "12x" in txt and "4,250,000" in txt,
            txt.split("\n")[3] + " …")
 
         # ---------- 6. CLIENTES / REENVIO ----------
@@ -325,25 +325,69 @@ async def main():
                await vd.evaluate(f"()=>!document.getElementById('{pgid}').classList.contains('hidden')"), pgid)
         await vd.close()
 
+        # ============ ELIMINAR MODELO (card + confirmação) ============
+        dl = await b.new_page(viewport={"width":1440,"height":900})
+        de=[]; dl.on("pageerror", lambda e: de.append(str(e)))
+        await novo(dl)
+        n0 = await dl.evaluate("()=>CARROS.length")
+        ok("Card · botão eliminar em todos os modelos",
+           await dl.locator("#grid [data-delcar]").count() == n0, f"{await dl.locator('#grid [data-delcar]').count()} de {n0}")
+        ok("Card · botão no canto superior direito",
+           await dl.evaluate("()=>{const c=document.querySelector('#grid .car'),d=c.querySelector('[data-delcar]');const a=c.getBoundingClientRect(),b=d.getBoundingClientRect();return (a.right-b.right)<16&&(b.top-a.top)<16;}"), "")
+        alvo = await dl.evaluate("()=>CARROS[1].nome")
+        await dl.locator("#grid [data-delcar]").nth(1).click(); await dl.wait_for_timeout(500)
+        ok("Eliminar · abre popup de confirmação",
+           await dl.evaluate("()=>document.getElementById('mApagarModelo').classList.contains('open')"), "")
+        ok("Eliminar · popup identifica o carro", (await dl.inner_text("#apNome")) == alvo, await dl.inner_text("#apNome"))
+        await dl.click("#mApagarModelo .btn.ghost"); await dl.wait_for_timeout(400)
+        ok("Eliminar · cancelar mantém o modelo", await dl.evaluate("()=>CARROS.length") == n0, await dl.evaluate("()=>CARROS.length"))
+        await dl.locator("#grid .car").first.click(); await dl.wait_for_timeout(400)
+        ok("Card · clique normal continua a abrir o Detalhe",
+           await dl.evaluate("()=>!document.getElementById('pg-detalhe').classList.contains('hidden')"), "")
+        await dl.evaluate("()=>ir('modelos')"); await dl.wait_for_timeout(300)
+        await dl.locator("#grid [data-delcar]").nth(1).click(); await dl.wait_for_timeout(400)
+        await dl.click("#btnApagarModelo"); await dl.wait_for_timeout(600)
+        ok("Eliminar · confirmar remove o modelo", await dl.evaluate("()=>CARROS.length") == n0 - 1, await dl.evaluate("()=>CARROS.length"))
+        ok("Eliminar · modelo sai da grelha", alvo not in (await dl.inner_text("#grid")), alvo)
+        ok("Eliminar · remoção guardada no dispositivo",
+           alvo not in ((await dl.evaluate("()=>localStorage.getItem('modelo_orcamento_carros_v1')")) or ""), "")
+        ok("Eliminar · popup fecha depois de apagar",
+           not await dl.evaluate("()=>document.getElementById('mApagarModelo').classList.contains('open')"), "")
+        ok("Eliminar · sem erros de consola", len(de) == 0, str(de[:2]))
+        await dl.close()
+
+        # ============ PREÇOS REALISTAS (Angola ≥ 3.000.000 Kz) ============
+        pr = await b.new_page(viewport={"width":1440,"height":900})
+        await novo(pr)
+        precos = await pr.evaluate("()=>CARROS.map(c=>c.preco)")
+        ok("Preços · catálogo todo ≥ 3.000.000 Kz", all(x >= 3000000 for x in precos), precos)
+        orcos = await pr.evaluate("()=>ORCAMENTOS.map(o=>o.preco)")
+        ok("Preços · orçamentos alinhados com o catálogo", all(x >= 3000000 for x in orcos), orcos)
+        ok("Preços · IVA sobre 4.500.000 = 630.000",
+           await pr.evaluate("()=>fmt(ivaDe(4500000))") == "630,000 Kz", await pr.evaluate("()=>fmt(ivaDe(4500000))"))
+        ok("Preços · total com IVA 4.500.000 = 5.130.000",
+           await pr.evaluate("()=>fmt(totalComIva(4500000))") == "5,130,000 Kz", await pr.evaluate("()=>fmt(totalComIva(4500000))"))
+        await pr.close()
+
         # ============ IVA 14% (imposto à parte) ============
         iv = await b.new_page(viewport={"width":1440,"height":900})
         ie=[]; iv.on("pageerror", lambda e: ie.append(str(e)))
         await novo(iv)
         await iv.evaluate("()=>{atual=CARROS.find(c=>c.id==='corolla');abrirDetalhe();}"); await iv.wait_for_timeout(400)
-        ok("IVA · linha no Detalhe do Carro (75.000 → 10.500)",
-           await iv.inner_text("#sIva") == "10,500 Kz", await iv.inner_text("#sIva"))
+        ok("IVA · linha no Detalhe do Carro (4,5M → 630.000)",
+           await iv.inner_text("#sIva") == "630,000 Kz", await iv.inner_text("#sIva"))
         ok("IVA · etiquetado como imposto no Detalhe",
            await iv.locator("#pg-detalhe .imposto").count() == 1, "")
         await iv.click("#btnCriarOrc"); await iv.wait_for_timeout(300)
         await iv.click("#btnSalvar"); await iv.wait_for_timeout(400)
         ok("IVA · mostrado à parte no Orçamento",
-           await iv.inner_text("#oIva") == "10,500 Kz", await iv.inner_text("#oIva"))
+           await iv.inner_text("#oIva") == "630,000 Kz", await iv.inner_text("#oIva"))
         ok("IVA · total com IVA = 85.500",
-           await iv.inner_text("#oTotalIva") == "85,500 Kz", await iv.inner_text("#oTotalIva"))
+           await iv.inner_text("#oTotalIva") == "5,130,000 Kz", await iv.inner_text("#oTotalIva"))
         ok("IVA · preço do carro não é inflacionado",
-           await iv.inner_text("#oPrecoN") == "75,000 Kz", await iv.inner_text("#oPrecoN"))
+           await iv.inner_text("#oPrecoN") == "4,500,000 Kz", await iv.inner_text("#oPrecoN"))
         ok("IVA · parcelas calculadas sobre o preço sem IVA",
-           await iv.evaluate("()=>{document.getElementById('oEntrada').value='25,000 Kz';calc();return document.getElementById('o12').textContent;}") == "4,166.67 Kz",
+           await iv.evaluate("()=>{document.getElementById('oEntrada').value='1,500,000 Kz';calc();return document.getElementById('o12').textContent;}") == "250,000 Kz",
            await iv.inner_text("#o12"))
         await iv.click("#btnEnviar"); await iv.wait_for_timeout(350)
         await iv.fill("#mNome", "Renato"); await iv.fill("#mTel", "923111999")
@@ -351,31 +395,31 @@ async def main():
         await iv.click("#btnZap"); await iv.wait_for_timeout(350)
         uu = up.unquote((await iv.evaluate("window.__u")).split("text=")[1])
         ok("IVA · discriminado na mensagem do WhatsApp",
-           "IVA 14%: 10,500 Kz" in uu and "Total com IVA: 85,500 Kz" in uu, uu.split(chr(10))[4])
+           "IVA 14%: 630,000 Kz" in uu and "Total com IVA: 5,130,000 Kz" in uu, uu.split(chr(10))[4])
         await iv.evaluate("()=>{const id=ORCAMENTOS[0].id; abrirOrcDetalhe(id);}"); await iv.wait_for_timeout(400)
         ok("IVA · presente no orçamento guardado",
-           await iv.inner_text("#odRIva") == "10,500 Kz" and await iv.inner_text("#odRTotalIva") == "85,500 Kz",
+           await iv.inner_text("#odRIva") == "630,000 Kz" and await iv.inner_text("#odRTotalIva") == "5,130,000 Kz",
            (await iv.inner_text("#odRIva"), await iv.inner_text("#odRTotalIva")))
         ok("IVA · visível no cartão do carro no topo do Orçamento",
-           await iv.inner_text("#oIvaMini") == "10,500 Kz" and await iv.inner_text("#oTotalIvaMini") == "85,500 Kz",
+           await iv.inner_text("#oIvaMini") == "630,000 Kz" and await iv.inner_text("#oTotalIvaMini") == "5,130,000 Kz",
            (await iv.inner_text("#oIvaMini"), await iv.inner_text("#oTotalIvaMini")))
         await iv.evaluate("()=>{atual=CARROS.find(c=>c.id==='corolla');abrirOrcamento();}"); await iv.wait_for_timeout(300)
         await iv.click("#btnEnviar"); await iv.wait_for_timeout(450)
         ok("IVA · resumo dentro do popup de envio",
-           await iv.inner_text("#reIva") == "10,500 Kz" and await iv.inner_text("#reTotal") == "85,500 Kz",
+           await iv.inner_text("#reIva") == "630,000 Kz" and await iv.inner_text("#reTotal") == "5,130,000 Kz",
            (await iv.inner_text("#reIva"), await iv.inner_text("#reTotal")))
         await iv.evaluate("()=>document.getElementById('mEnviar').classList.remove('open')")
         await iv.evaluate("()=>ir('listaorc')"); await iv.wait_for_timeout(350)
         linha_orc = await iv.evaluate("()=>{const t=document.querySelector('#tblOrc tr');return t?t.innerText:''}")
         ok("IVA · coluna na lista de Orçamentos",
-           "10,500 Kz" in linha_orc and "85,500 Kz" in linha_orc, linha_orc.replace(chr(9)," | ")[-40:])
+           "630,000 Kz" in linha_orc and "5,130,000 Kz" in linha_orc, linha_orc.replace(chr(9)," | ")[-40:])
         await iv.evaluate("()=>abrirOrcDetalhe(ORCAMENTOS[0].id)"); await iv.wait_for_timeout(400)
         ok("IVA · linha de topo no detalhe do orçamento",
-           await iv.inner_text("#odIvaMini") == "10,500 Kz" and await iv.inner_text("#odTotalMini") == "85,500 Kz",
+           await iv.inner_text("#odIvaMini") == "630,000 Kz" and await iv.inner_text("#odTotalMini") == "5,130,000 Kz",
            (await iv.inner_text("#odIvaMini"), await iv.inner_text("#odTotalMini")))
-        ok("IVA · 14% aplicado também a 210.000 (Hilux)",
-           await iv.evaluate("()=>fmt(ivaDe(210000))") == "29,400 Kz",
-           await iv.evaluate("()=>fmt(ivaDe(210000))"))
+        ok("IVA · 14% aplicado também a 18.500.000 (Hilux)",
+           await iv.evaluate("()=>fmt(ivaDe(18500000))") == "2,590,000 Kz",
+           await iv.evaluate("()=>fmt(ivaDe(18500000))"))
         ok("IVA · sem erros de consola", len(ie) == 0, str(ie[:2]))
         await iv.close()
 
@@ -505,10 +549,10 @@ async def main():
            await d.evaluate("()=>!document.getElementById('pg-orcdetalhe').classList.contains('hidden')"), "")
         ok("Abre o orçamento correto", await d.input_value("#odNomeInp")=="Ana Silva", await d.input_value("#odNomeInp"))
         ok("Campos vêm preenchidos com os valores guardados",
-           (await d.input_value("#odPrecoInp"))=="100,000 Kz" and (await d.input_value("#odEntradaInp"))=="20,000 Kz", "")
-        await d.fill("#odEntradaInp",""); await d.type("#odEntradaInp","40000"); await d.wait_for_timeout(300)
+           (await d.input_value("#odPrecoInp"))=="7,800,000 Kz" and (await d.input_value("#odEntradaInp"))=="2,000,000 Kz", "")
+        await d.fill("#odEntradaInp",""); await d.type("#odEntradaInp","4000000"); await d.wait_for_timeout(300)
         ok("Resumo recalcula ao editar a entrada",
-           (await d.inner_text("#odRSaldo"))=="60,000 Kz" and (await d.inner_text("#odR12"))=="5,000 Kz",
+           (await d.inner_text("#odRSaldo"))=="3,800,000 Kz" and (await d.inner_text("#odR12"))=="316,666.67 Kz",
            await d.inner_text("#odRSaldo"))
         await d.fill("#odNomeInp","Ana Silva Editada")
         await d.click("#odGuardar"); await d.wait_for_timeout(500)

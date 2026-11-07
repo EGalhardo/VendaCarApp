@@ -1,13 +1,13 @@
 [
  {
   "r": "PASS",
-  "n": "Aritmética · Corolla 75.000 / entrada 25.000",
-  "d": "saldo 50,000 | 12x 4,166.67 (esperado 4,166.67)"
+  "n": "Aritmética · Corolla 4,5M / entrada 1,5M",
+  "d": "saldo 3,000,000 | 12x 250,000 (esperado 250,000.0)"
  },
  {
   "r": "PASS",
   "n": "Aritmética · Entrada sugerida 10%",
-  "d": "saldo 67,500 | 12x 5,625 (esperado 5,625.0)"
+  "d": "saldo 4,050,000 | 12x 337,500 (esperado 337,500.0)"
  },
  {
   "r": "PASS",
@@ -17,22 +17,22 @@
  {
   "r": "PASS",
   "n": "Aritmética · Entrada 1 Kz",
-  "d": "saldo 74,999 | 12x 6,249.92 (esperado 6,249.92)"
+  "d": "saldo 4,499,999 | 12x 374,999.92 (esperado 374,999.92)"
  },
  {
   "r": "PASS",
-  "n": "Aritmética · Hilux 210.000 / 30.000",
-  "d": "saldo 180,000 | 12x 15,000 (esperado 15,000.0)"
+  "n": "Aritmética · Hilux 18,5M / 4M",
+  "d": "saldo 14,500,000 | 12x 1,208,333.33 (esperado 1,208,333.33)"
  },
  {
   "r": "PASS",
-  "n": "Aritmética · Tucson 95.000 / 95.000",
+  "n": "Aritmética · Tucson 6,2M / 6,2M",
   "d": "saldo 0 | 12x 0 (esperado 0.0)"
  },
  {
   "r": "PASS",
-  "n": "À vista com desconto (75.000 − 15.000)",
-  "d": "60,000 Kz"
+  "n": "À vista com desconto (4.500.000 − 250.000)",
+  "d": "4,250,000 Kz"
  },
  {
   "r": "PASS",
@@ -291,8 +291,94 @@
  },
  {
   "r": "PASS",
-  "n": "IVA · linha no Detalhe do Carro (75.000 → 10.500)",
-  "d": "10,500 Kz"
+  "n": "Card · botão eliminar em todos os modelos",
+  "d": "4 de 4"
+ },
+ {
+  "r": "PASS",
+  "n": "Card · botão no canto superior direito",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Eliminar · abre popup de confirmação",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Eliminar · popup identifica o carro",
+  "d": "Honda CR-V 2018"
+ },
+ {
+  "r": "PASS",
+  "n": "Eliminar · cancelar mantém o modelo",
+  "d": 4
+ },
+ {
+  "r": "PASS",
+  "n": "Card · clique normal continua a abrir o Detalhe",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Eliminar · confirmar remove o modelo",
+  "d": 3
+ },
+ {
+  "r": "PASS",
+  "n": "Eliminar · modelo sai da grelha",
+  "d": "Honda CR-V 2018"
+ },
+ {
+  "r": "PASS",
+  "n": "Eliminar · remoção guardada no dispositivo",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Eliminar · popup fecha depois de apagar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Eliminar · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Preços · catálogo todo ≥ 3.000.000 Kz",
+  "d": [
+   4500000,
+   7800000,
+   18500000,
+   6200000
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "Preços · orçamentos alinhados com o catálogo",
+  "d": [
+   4500000,
+   7800000,
+   18500000,
+   6200000,
+   4500000
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "Preços · IVA sobre 4.500.000 = 630.000",
+  "d": "630,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Preços · total com IVA 4.500.000 = 5.130.000",
+  "d": "5,130,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · linha no Detalhe do Carro (4,5M → 630.000)",
+  "d": "630,000 Kz"
  },
  {
   "r": "PASS",
@@ -302,69 +388,69 @@
  {
   "r": "PASS",
   "n": "IVA · mostrado à parte no Orçamento",
-  "d": "10,500 Kz"
+  "d": "630,000 Kz"
  },
  {
   "r": "PASS",
   "n": "IVA · total com IVA = 85.500",
-  "d": "85,500 Kz"
+  "d": "5,130,000 Kz"
  },
  {
   "r": "PASS",
   "n": "IVA · preço do carro não é inflacionado",
-  "d": "75,000 Kz"
+  "d": "4,500,000 Kz"
  },
  {
   "r": "PASS",
   "n": "IVA · parcelas calculadas sobre o preço sem IVA",
-  "d": "4,166.67 Kz"
+  "d": "250,000 Kz"
  },
  {
   "r": "PASS",
   "n": "IVA · discriminado na mensagem do WhatsApp",
-  "d": "💰 Valor: 75,000 Kz"
+  "d": "💰 Valor: 4,500,000 Kz"
  },
  {
   "r": "PASS",
   "n": "IVA · presente no orçamento guardado",
   "d": [
-   "10,500 Kz",
-   "85,500 Kz"
+   "630,000 Kz",
+   "5,130,000 Kz"
   ]
  },
  {
   "r": "PASS",
   "n": "IVA · visível no cartão do carro no topo do Orçamento",
   "d": [
-   "10,500 Kz",
-   "85,500 Kz"
+   "630,000 Kz",
+   "5,130,000 Kz"
   ]
  },
  {
   "r": "PASS",
   "n": "IVA · resumo dentro do popup de envio",
   "d": [
-   "10,500 Kz",
-   "85,500 Kz"
+   "630,000 Kz",
+   "5,130,000 Kz"
   ]
  },
  {
   "r": "PASS",
   "n": "IVA · coluna na lista de Orçamentos",
-  "d": "iado | 75,000 Kz | 10,500 Kz | 85,500 Kz"
+  "d": "4,500,000 Kz | 630,000 Kz | 5,130,000 Kz"
  },
  {
   "r": "PASS",
   "n": "IVA · linha de topo no detalhe do orçamento",
   "d": [
-   "10,500 Kz",
-   "85,500 Kz"
+   "630,000 Kz",
+   "5,130,000 Kz"
   ]
  },
  {
   "r": "PASS",
-  "n": "IVA · 14% aplicado também a 210.000 (Hilux)",
-  "d": "29,400 Kz"
+  "n": "IVA · 14% aplicado também a 18.500.000 (Hilux)",
+  "d": "2,590,000 Kz"
  },
  {
   "r": "PASS",
@@ -540,7 +626,7 @@
  {
   "r": "PASS",
   "n": "Resumo recalcula ao editar a entrada",
-  "d": "60,000 Kz"
+  "d": "3,800,000 Kz"
  },
  {
   "r": "PASS",
