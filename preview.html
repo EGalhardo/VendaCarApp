@@ -159,6 +159,80 @@
   .navbar{display:none}
 
   /* ==========================================================
+     ANIMAÇÃO DOS ÍCONES DE NAVEGAÇÃO
+     ========================================================== */
+  .nav .ico,.nav-item .ico{
+    display:inline-flex;align-items:center;justify-content:center;
+    position:relative;transform-origin:50% 50%;
+  }
+  .nav .ico svg,.nav-item .ico svg{display:block}
+  .nav .ico .head,.nav-item .ico .head{transform-origin:12px 7px}
+
+  /* Perfil — a "cabeça" vai de um lado para o outro */
+  @keyframes perfilCabeca{
+    0%,100%{transform:translate(-4.6px,-.4px) rotate(-18deg)}
+    50%    {transform:translate(4.6px,-.4px)  rotate(18deg)}
+  }
+  @keyframes perfilCorpo{
+    0%,100%{transform:translateX(-2px)}
+    50%    {transform:translateX(2px)}
+  }
+  @keyframes perfilPulso{
+    0%,100%{transform:translateY(0) scale(1)}
+    50%    {transform:translateY(-1px) scale(1.06)}
+  }
+
+  /* Modelos — os quatro blocos "respiram" em sequência */
+  @keyframes modelosBloco{
+    0%,100%{transform:scale(1);opacity:1}
+    50%    {transform:scale(1.18);opacity:.65}
+  }
+  /* Orçamentos — folha a balançar */
+  @keyframes orcSheet{
+    0%,100%{transform:rotate(-7deg)}
+    50%    {transform:rotate(7deg)}
+  }
+  /* Clientes — as duas pessoas a cumprimentar */
+  @keyframes clientesOnda{
+    0%,100%{transform:rotate(-6deg)}
+    50%    {transform:rotate(10deg)}
+  }
+
+  /* ativo: animação contínua e suave */
+  .nav.on[data-go="perfil"]   .ico svg, .nav-item.on[data-go="perfil"]   .ico svg{animation:perfilPulso 2.4s ease-in-out infinite}
+  .nav.on[data-go="perfil"]   .ico .head,.nav-item.on[data-go="perfil"] .ico .head{animation:perfilCabeca 2.4s ease-in-out infinite}
+  .nav.on[data-go="perfil"]   .ico svg > path, .nav-item.on[data-go="perfil"] .ico svg > path{animation:perfilCorpo 2.4s ease-in-out infinite}
+
+  .nav[data-go="modelos"] .ico svg path, .nav-item[data-go="modelos"] .ico svg path{
+    transform-box:fill-box;transform-origin:center;
+  }
+  .nav.on[data-go="modelos"]  .ico svg path, .nav-item.on[data-go="modelos"]  .ico svg path{
+    animation:modelosBloco 1.8s ease-in-out infinite;
+  }
+  .nav.on[data-go="modelos"]  .ico svg path:nth-child(1){animation-delay:0s}
+  .nav.on[data-go="modelos"]  .ico svg path:nth-child(2){animation-delay:.18s}
+  .nav.on[data-go="modelos"]  .ico svg path:nth-child(3){animation-delay:.36s}
+  .nav.on[data-go="modelos"]  .ico svg path:nth-child(4){animation-delay:.54s}
+
+  .nav.on[data-go="listaorc"] .ico svg, .nav-item.on[data-go="listaorc"] .ico svg{animation:orcSheet 2.2s ease-in-out infinite;transform-origin:60% 30%}
+
+  .nav.on[data-go="clientes"] .ico svg, .nav-item.on[data-go="clientes"] .ico svg{animation:clientesOnda 2s ease-in-out infinite;transform-origin:30% 60%}
+
+  /* toque / clique: dá um "salto" rápido e fica animado enquanto está ativo */
+  @keyframes icoTapa{
+    0%{transform:scale(1)}
+    40%{transform:scale(.82) rotate(-6deg)}
+    70%{transform:scale(1.14) rotate(4deg)}
+    100%{transform:scale(1)}
+  }
+  .nav.tap .ico,.nav-item.tap .ico{animation:icoTapa .42s ease-out}
+
+  @media (prefers-reduced-motion:reduce){
+    .nav .ico,.nav-item .ico,.nav .ico svg,.nav-item .ico svg,
+    .nav .ico .head,.nav-item .ico .head{animation:none!important}
+  }
+
+  /* ==========================================================
      CONTEÚDO
      ========================================================== */
   .content{
@@ -771,23 +845,24 @@
   <aside class="side">
     <div class="lbl">MENU</div>
     <button class="nav on" data-go="modelos">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>
+      <span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg></span>
       <span class="tx">Modelos</span><span class="cnt" data-cnt="carros">4</span>
     </button>
     <button class="nav" data-go="listaorc">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M6 2h9l5 5v15H6zM15 2v5h5M9 12h8M9 16h8M9 8h3"/></svg>
+      <span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M6 2h9l5 5v15H6zM15 2v5h5M9 12h8M9 16h8M9 8h3"/></svg></span>
       <span class="tx">Orçamentos</span><span class="cnt" data-cnt="orcs">5</span>
     </button>
     <button class="nav" data-go="clientes">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 3a4 4 0 100 8 4 4 0 000-8M22 21v-2a4 4 0 00-3-3.9"/></svg>
+      <span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 3a4 4 0 100 8 4 4 0 000-8M22 21v-2a4 4 0 00-3-3.9"/></svg></span>
       <span class="tx">Clientes</span><span class="cnt" data-cnt="clientes">4</span>
     </button>
     <button class="nav" data-go="perfil">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 3a4 4 0 100 8 4 4 0 000-8"/></svg>
+      <span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <g class="head"><circle cx="12" cy="7" r="4"/></g>
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg></span>
       <span class="tx">Perfil</span>
     </button>
 
@@ -1118,23 +1193,24 @@
   <!-- ================= NAVBAR (mobile) ================= -->
   <nav class="navbar">
     <button class="nav-item on" data-go="modelos">
-      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>
+      <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg></span>
       Modelos
     </button>
     <button class="nav-item" data-go="listaorc">
-      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M6 2h9l5 5v15H6zM15 2v5h5M9 12h8M9 16h8M9 8h3"/></svg>
+      <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M6 2h9l5 5v15H6zM15 2v5h5M9 12h8M9 16h8M9 8h3"/></svg></span>
       Orçamentos
     </button>
     <button class="nav-item" data-go="clientes">
-      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 3a4 4 0 100 8 4 4 0 000-8M22 21v-2a4 4 0 00-3-3.9"/></svg>
+      <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 3a4 4 0 100 8 4 4 0 000-8M22 21v-2a4 4 0 00-3-3.9"/></svg></span>
       Clientes
     </button>
     <button class="nav-item" data-go="perfil">
-      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 3a4 4 0 100 8 4 4 0 000-8"/></svg>
+      <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <g class="head"><circle cx="12" cy="7" r="4"/></g>
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg></span>
       Perfil
     </button>
   </nav>
@@ -1598,13 +1674,27 @@ function ir(page){
   const raiz = (page === 'detalhe' || page === 'orcamento') ? 'modelos'
              : (page === 'cliente') ? 'clientes'
              : (page === 'orcdetalhe') ? 'listaorc' : page;
-  document.querySelectorAll('.nav, .nav-item').forEach(n =>
-    n.classList.toggle('on', n.dataset.go === raiz));
+  document.querySelectorAll('.nav, .nav-item').forEach(n => {
+    const ativo = n.dataset.go === raiz;
+    if (ativo && !n.classList.contains('on')) tocarIcone(n);
+    n.classList.toggle('on', ativo);
+  });
 
   document.querySelector('.content').scrollTop = 0;
 }
 
+/* "toque" no ícone: animação curta de confirmação */
+function tocarIcone(el){
+  if (!el) return;
+  el.classList.remove('tap');
+  void el.offsetWidth;          /* reinicia a animação */
+  el.classList.add('tap');
+  setTimeout(() => el.classList.remove('tap'), 460);
+}
+
 document.addEventListener('click', e => {
+  const navIco = e.target.closest('.nav, .nav-item');
+  if (navIco) tocarIcone(navIco);
   const g = e.target.closest('[data-go]');
   if (g) { ir(g.dataset.go); return; }
   const c = e.target.closest('[data-close]');

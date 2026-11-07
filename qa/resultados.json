@@ -291,6 +291,51 @@
  },
  {
   "r": "PASS",
+  "n": "Animação · ícone ativo está animado",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · ícone 'salta' ao tocar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · Perfil animado quando ativo",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · cabeça do Perfil move-se para os dois lados",
+  "d": 3.19
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · 'listaorc' animado quando ativo",
+  "d": "orcSheet"
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · 'clientes' animado quando ativo",
+  "d": "clientesOnda"
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · 'modelos' animado quando ativo",
+  "d": "modelosBloco"
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · respeita 'reduzir movimento'",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
   "n": "Migração · browser com dados antigos passa a mostrar preços novos",
   "d": ""
  },

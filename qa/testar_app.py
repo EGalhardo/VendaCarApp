@@ -325,6 +325,40 @@ async def main():
                await vd.evaluate(f"()=>!document.getElementById('{pgid}').classList.contains('hidden')"), pgid)
         await vd.close()
 
+        # ============ ANIMAÇÃO DOS ÍCONES DE NAVEGAÇÃO ============
+        an = await b.new_page(viewport={"width":390,"height":844})
+        ae=[]; an.on("pageerror", lambda e: ae.append(str(e)))
+        await novo(an)
+        ok("Animação · ícone ativo está animado",
+           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"modelos\"] .ico svg path')).animationName") == "modelosBloco", "")
+        await an.click(".nav-item[data-go='perfil']"); await an.wait_for_timeout(120)
+        ok("Animação · ícone 'salta' ao tocar",
+           await an.evaluate("()=>document.querySelector('.nav-item[data-go=\"perfil\"]').className.includes('tap')"), "")
+        await an.wait_for_timeout(700)
+        ok("Animação · Perfil animado quando ativo",
+           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"perfil\"] .ico .head')).animationName") == "perfilCabeca", "")
+        mov = await an.evaluate("""async ()=>{
+            const h=document.querySelector('.nav-item.on[data-go="perfil"] .ico .head');
+            const xs=[];
+            for(let i=0;i<8;i++){ xs.push(+h.getBoundingClientRect().left.toFixed(2));
+              await new Promise(r=>setTimeout(r,140)); }
+            return {min:Math.min(...xs), max:Math.max(...xs)};
+        }""")
+        ok("Animação · cabeça do Perfil move-se para os dois lados", (mov["max"]-mov["min"]) > 1.5, round(mov["max"]-mov["min"],2))
+        for pgid, esperado in [("listaorc","orcSheet"), ("clientes","clientesOnda"), ("modelos","modelosBloco")]:
+            await an.click(f".nav-item[data-go='{pgid}']"); await an.wait_for_timeout(650)
+            if pgid == "modelos":
+                anim = await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"modelos\"] .ico svg path')).animationName")
+            else:
+                anim = await an.evaluate(f"()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"{pgid}\"] .ico svg')).animationName")
+            ok(f"Animação · '{pgid}' animado quando ativo", anim == esperado, anim)
+        rd = await b.new_context(reduced_motion="reduce")
+        rp = await rd.new_page(); await rp.goto(URL); await rp.wait_for_timeout(700)
+        ok("Animação · respeita 'reduzir movimento'",
+           await rp.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on .ico svg')).animationName") == "none", "")
+        ok("Animação · sem erros de consola", len(ae) == 0, str(ae[:2]))
+        await rd.close(); await an.close()
+
         # ============ MIGRAÇÃO DE DADOS ANTIGOS (localStorage) ============
         mg = await b.new_context()
         mp = await mg.new_page(); me=[]
