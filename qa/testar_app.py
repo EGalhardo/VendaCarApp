@@ -297,30 +297,43 @@ async def main():
         ok("R34 · foto de perfil sem erros de consola", len(fpe)==0, str(fpe[:2]))
         await fp.close()
 
-        # ============ R33 · RODAPÉ DA BARRA LATERAL SEM NOME/PLANO ============
+        # ============ R37 · BARRA LATERAL SEM O CONTAINER DA LOGOMARCA ============
         sd = await b.new_page(viewport={"width":1440,"height":900})
         sde=[]; sd.on("pageerror", lambda e: sde.append(str(e)))
         await novo(sd)
-        ROD = await sd.evaluate("""()=>{
-          const st=document.querySelector('.side .store');
-          const txt=st.textContent.trim();
-          const r=st.getBoundingClientRect();
-          return {texto:txt, semNome:!document.body.innerHTML.match(/Plano Pro/),
-                  temLogo:!!st.querySelector('.store-logo img'),
-                  soUmLogo:[...st.querySelectorAll('img')].filter(i=>getComputedStyle(i).display!=='none').length,
-                  visivel:r.width>0&&r.height>0, topo:Math.round(r.top)};
+        L = await sd.evaluate("""()=>{
+          const side=document.querySelector('.side');
+          const filhos=[...side.children];
+          const ultimo=filhos[filhos.length-1];
+          const navs=[...side.querySelectorAll('.nav')];
+          const ultimoNav=navs[navs.length-1].getBoundingClientRect();
+          const s=side.getBoundingClientRect();
+          return {semStore: !document.querySelector('.side .store'),
+                  semLogo: side.querySelectorAll('img').length===0,
+                  semPlano: !document.body.innerText.includes('Plano Pro'),
+                  ultimoFilho: ultimo.className,
+                  espacoAbaixoNav: Math.round(s.bottom - ultimoNav.bottom),
+                  semCaixa: [...side.children].every(e=>getComputedStyle(e).borderTopWidth==='0px' ||
+                            e.className==='nav' || e.className==='nav on' || e.className==='lbl'),
+                  navsVisiveis: navs.length};
         }""")
-        ok("R33 · rodapé da barra lateral sem 'ABC Seminovos / Plano Pro'", ROD["semNome"] and ROD["texto"]=="", str(ROD))
-        ok("R33 · rodapé mantém apenas o logótipo", ROD["temLogo"] and ROD["soUmLogo"]==1, str(ROD))
-        ok("R33 · rodapé continua no fundo da barra lateral", ROD["visivel"] and ROD["topo"]>600, str(ROD))
+        ok("R37 · barra lateral sem o container da logomarca", L["semStore"] and L["semLogo"], str(L))
+        ok("R37 · sem 'Plano Pro' no rodapé", L["semPlano"], str(L))
+        ok("R37 · barra lateral termina na navegação", L["ultimoFilho"]=="nav" and L["navsVisiveis"]==4, str(L))
+        ok("R37 · área inferior livre (sem caixas nem molduras)", L["semCaixa"] and L["espacoAbaixoNav"]>0, str(L))
         await sd.click("#btnTema"); await sd.wait_for_timeout(450)
-        ROD2 = await sd.evaluate("""()=>{
-          const st=document.querySelector('.side .store');
-          return {texto:st.textContent.trim(),
-                  logoEscuro:getComputedStyle(st.querySelector('.logo-escuro')).display};
+        L2 = await sd.evaluate("""()=>{
+          const side=document.querySelector('.side'), s=side.getBoundingClientRect();
+          const navs=[...side.querySelectorAll('.nav')];
+          const u=navs[navs.length-1].getBoundingClientRect();
+          return {semLogo: side.querySelectorAll('img').length===0,
+                  fundo:getComputedStyle(side).backgroundColor,
+                  espaco:Math.round(s.bottom-u.bottom),
+                  semCaixa: !document.querySelector('.side .store') && [...side.querySelectorAll('div')].every(d=>d.className==='lbl')};
         }""")
-        ok("R33 · rodapé sem texto também no modo escuro", ROD2["texto"]=="" and ROD2["logoEscuro"]=="block", str(ROD2))
-        ok("R33 · rodapé sem erros de consola", len(sde)==0, str(sde[:2]))
+        ok("R37 · modo escuro também sem a logomarca no rodapé", L2["semLogo"] and L2["fundo"]=="rgb(4, 13, 31)", str(L2))
+        ok("R37 · modo escuro mantém a área inferior livre", L2["semCaixa"], str(L2))
+        ok("R37 · barra lateral sem erros de consola", len(sde)==0, str(sde[:2]))
         await sd.close()
 
         # ============ R32 · MODO ESCURO · ATIVO A VERDE ============

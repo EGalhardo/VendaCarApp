@@ -251,27 +251,37 @@
  },
  {
   "r": "PASS",
-  "n": "R33 · rodapé da barra lateral sem 'ABC Seminovos / Plano Pro'",
-  "d": "{'texto': '', 'semNome': True, 'temLogo': True, 'soUmLogo': 1, 'visivel': True, 'topo': 821}"
+  "n": "R37 · barra lateral sem o container da logomarca",
+  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'nav', 'espacoAbaixoNav': 615, 'semCaixa': True, 'navsVisiveis': 4}"
  },
  {
   "r": "PASS",
-  "n": "R33 · rodapé mantém apenas o logótipo",
-  "d": "{'texto': '', 'semNome': True, 'temLogo': True, 'soUmLogo': 1, 'visivel': True, 'topo': 821}"
+  "n": "R37 · sem 'Plano Pro' no rodapé",
+  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'nav', 'espacoAbaixoNav': 615, 'semCaixa': True, 'navsVisiveis': 4}"
  },
  {
   "r": "PASS",
-  "n": "R33 · rodapé continua no fundo da barra lateral",
-  "d": "{'texto': '', 'semNome': True, 'temLogo': True, 'soUmLogo': 1, 'visivel': True, 'topo': 821}"
+  "n": "R37 · barra lateral termina na navegação",
+  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'nav', 'espacoAbaixoNav': 615, 'semCaixa': True, 'navsVisiveis': 4}"
  },
  {
   "r": "PASS",
-  "n": "R33 · rodapé sem texto também no modo escuro",
-  "d": "{'texto': '', 'logoEscuro': 'block'}"
+  "n": "R37 · área inferior livre (sem caixas nem molduras)",
+  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'nav', 'espacoAbaixoNav': 615, 'semCaixa': True, 'navsVisiveis': 4}"
  },
  {
   "r": "PASS",
-  "n": "R33 · rodapé sem erros de consola",
+  "n": "R37 · modo escuro também sem a logomarca no rodapé",
+  "d": "{'semLogo': True, 'fundo': 'rgb(4, 13, 31)', 'espaco': 615, 'semCaixa': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R37 · modo escuro mantém a área inferior livre",
+  "d": "{'semLogo': True, 'fundo': 'rgb(4, 13, 31)', 'espaco': 615, 'semCaixa': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R37 · barra lateral sem erros de consola",
   "d": "[]"
  },
  {
@@ -672,7 +682,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "26,301.31 Kz"
+  "d": "-16,096.35 Kz"
  },
  {
   "r": "PASS",
@@ -682,12 +692,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,588,925.23 Kz"
+  "d": "9,590,155.35 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.99 Kz"
+  "d": "9,749,999.35 Kz"
  },
  {
   "r": "PASS",
@@ -703,9 +713,9 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   320794,
+   321115,
    2893159,
-   4882168,
+   4882359,
    6363218
   ]
  },
@@ -727,13 +737,13 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "417,649.81 Kz"
+  "d": "417,294.70 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "417,649.81 Kz",
+   "417,294.70 Kz",
    "4,063,003.47 Kz"
   ]
  },
@@ -775,7 +785,7 @@
  {
   "r": "PASS",
   "n": "Animação · cabeça do Perfil move-se para os dois lados",
-  "d": 3.19
+  "d": 3.18
  },
  {
   "r": "PASS",
@@ -802,7 +812,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34669
+   3.34634
   ]
  },
  {
