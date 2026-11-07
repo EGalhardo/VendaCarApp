@@ -227,6 +227,54 @@ async def main():
         ok("Sem erros no modo offline", len(oe)==0, str(oe[:2]))
         await ctxo.close()
 
+        # ============ R29 · LOGÓTIPO NA APPBAR ============
+        lg = await b.new_page(viewport={"width":1440,"height":900})
+        le=[]; lg.on("pageerror", lambda e: le.append(str(e)))
+        await novo(lg)
+        L = await lg.evaluate("""()=>{
+          const img=document.querySelector('.brand .logo');
+          const r=img.getBoundingClientRect(), p=document.querySelector('.brand').getBoundingClientRect();
+          return {existe:!!img, carregou:img.naturalWidth>0,
+                  altura:Math.round(r.height), largura:Math.round(r.width),
+                  proporcao:(r.width/r.height).toFixed(2),
+                  semTexto:!document.querySelector('.brand b') && !document.querySelector('.brand .mark'),
+                  dentro: r.top>=p.top-1 && r.bottom<=p.bottom+1 && r.left>=p.left-1,
+                  titulo:document.title};
+        }""")
+        ok("R29 · logótipo presente na appbar", L["existe"] and L["dentro"], str(L))
+        ok("R29 · logótipo carregado (sem imagem partida)", L["carregou"], str(L))
+        ok("R29 · logótipo com altura harmoniosa (32–40px)", 32<=L["altura"]<=40, str(L))
+        ok("R29 · logótipo na proporção original (~2,7:1)", 2.5<=float(L["proporcao"])<=2.95, str(L))
+        ok("R29 · nome 'Modelo' e ícone antigo removidos da marca", L["semTexto"], str(L))
+        ok("R29 · título do documento menciona VendaCar", "VendaCar" in L["titulo"], L["titulo"])
+        Lm = await lg.evaluate("""()=>{void ir; return 1}""")
+        await lg.close()
+
+        lm = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        lme=[]; lm.on("pageerror", lambda e: lme.append(str(e)))
+        await novo(lm)
+        M = await lm.evaluate("""()=>{
+          const img=document.querySelector('.brand .logo');
+          const r=img.getBoundingClientRect(), h1=document.querySelector('.bar h1').getBoundingClientRect();
+          const pill=document.querySelector('#netPill').getBoundingClientRect();
+          return {altura:Math.round(r.height), largura:Math.round(r.width),
+                  semSobreposicao: r.right<=h1.left+0.5,
+                  tituloInteiro: h1.right<=pill.left+0.5,
+                  semOverflow: document.documentElement.scrollWidth<=390};
+        }""")
+        ok("R29 · logótipo compacto no telemóvel (≤28px)", M["altura"]<=28, str(M))
+        ok("R29 · título não sobrepõe o logótipo no telemóvel", M["semSobreposicao"], str(M))
+        ok("R29 · título completo antes de 'Online'", M["tituloInteiro"], str(M))
+        ok("R29 · appbar do telemóvel sem overflow horizontal", M["semOverflow"], str(M))
+        await lm.evaluate("()=>{atual=CARROS[0]; abrirDetalhe();}"); await lm.wait_for_timeout(500)
+        V = await lm.evaluate("""()=>{
+          const back=document.getElementById('btnBack').getBoundingClientRect();
+          return {voltar:Math.round(back.left), semLogo:getComputedStyle(document.querySelector('.brand .logo')).display==='none'};
+        }""")
+        ok("R29 · página interior: voltar encostado à esquerda", V["voltar"]<=14, str(V))
+        ok("R29 · sem erros de consola com o novo logótipo", len(le)==0 and len(lme)==0, str((le+lme)[:2]))
+        await lm.close()
+
         # ============ APPBAR MOBILE ÚNICA ============
         ab = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
         ae=[]; ab.on("pageerror", lambda e: ae.append(str(e)))
@@ -244,7 +292,7 @@ async def main():
         ok("Mobile · ícone de notificações na appbar", g["sinoDentro"], str(g))
         await ab.evaluate("()=>{atual=CARROS[0]; abrirDetalhe();}"); await ab.wait_for_timeout(500)
         d = await ab.evaluate("""()=>{
-          const back=document.getElementById('btnBack'), mark=document.querySelector('.brand .mark');
+          const back=document.getElementById('btnBack'), mark=document.querySelector('.brand .logo');
           const rb=back.getBoundingClientRect(), rm=mark.getBoundingClientRect();
           return {voltar:getComputedStyle(back).visibility==='visible',
                   logoEscondido:getComputedStyle(mark).display==='none',
