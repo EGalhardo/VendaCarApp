@@ -227,6 +227,32 @@ async def main():
         ok("Sem erros no modo offline", len(oe)==0, str(oe[:2]))
         await ctxo.close()
 
+        # ============ R33 · RODAPÉ DA BARRA LATERAL SEM NOME/PLANO ============
+        sd = await b.new_page(viewport={"width":1440,"height":900})
+        sde=[]; sd.on("pageerror", lambda e: sde.append(str(e)))
+        await novo(sd)
+        ROD = await sd.evaluate("""()=>{
+          const st=document.querySelector('.side .store');
+          const txt=st.textContent.trim();
+          const r=st.getBoundingClientRect();
+          return {texto:txt, semNome:!document.body.innerHTML.match(/Plano Pro/),
+                  temLogo:!!st.querySelector('.store-logo img'),
+                  soUmLogo:[...st.querySelectorAll('img')].filter(i=>getComputedStyle(i).display!=='none').length,
+                  visivel:r.width>0&&r.height>0, topo:Math.round(r.top)};
+        }""")
+        ok("R33 · rodapé da barra lateral sem 'ABC Seminovos / Plano Pro'", ROD["semNome"] and ROD["texto"]=="", str(ROD))
+        ok("R33 · rodapé mantém apenas o logótipo", ROD["temLogo"] and ROD["soUmLogo"]==1, str(ROD))
+        ok("R33 · rodapé continua no fundo da barra lateral", ROD["visivel"] and ROD["topo"]>600, str(ROD))
+        await sd.click("#btnTema"); await sd.wait_for_timeout(450)
+        ROD2 = await sd.evaluate("""()=>{
+          const st=document.querySelector('.side .store');
+          return {texto:st.textContent.trim(),
+                  logoEscuro:getComputedStyle(st.querySelector('.logo-escuro')).display};
+        }""")
+        ok("R33 · rodapé sem texto também no modo escuro", ROD2["texto"]=="" and ROD2["logoEscuro"]=="block", str(ROD2))
+        ok("R33 · rodapé sem erros de consola", len(sde)==0, str(sde[:2]))
+        await sd.close()
+
         # ============ R32 · MODO ESCURO · ATIVO A VERDE ============
         nv = await b.new_page(viewport={"width":1440,"height":900})
         nve=[]; nv.on("pageerror", lambda e: nve.append(str(e)))
