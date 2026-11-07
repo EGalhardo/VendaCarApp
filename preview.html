@@ -317,6 +317,28 @@
   .nav.on[data-go="modelos"]  .ico svg path:nth-child(3){animation-delay:.36s}
   .nav.on[data-go="modelos"]  .ico svg path:nth-child(4){animation-delay:.54s}
 
+  /* Vendas — o funil "escorre": cada etapa pulsa em sequência, como o negócio a descer */
+  @keyframes funilEtapa{
+    0%,100%{opacity:.42;transform:translateY(-1.1px)}
+    40%    {opacity:1;transform:translateY(0)}
+    70%    {opacity:1;transform:translateY(1.1px)}
+  }
+  .nav[data-go="vendas"] .ico svg path,
+  .nav-item[data-go="vendas"] .ico svg path{
+    transform-box:fill-box;transform-origin:center;
+  }
+  .nav.on[data-go="vendas"] .ico svg path,
+  .nav-item.on[data-go="vendas"] .ico svg path{animation:funilEtapa 2.2s ease-in-out infinite}
+  .nav.on[data-go="vendas"] .ico svg path:nth-child(1),
+  .nav-item.on[data-go="vendas"] .ico svg path:nth-child(1){animation-delay:0s}
+  .nav.on[data-go="vendas"] .ico svg path:nth-child(2),
+  .nav-item.on[data-go="vendas"] .ico svg path:nth-child(2){animation-delay:.34s}
+  .nav.on[data-go="vendas"] .ico svg path:nth-child(3),
+  .nav-item.on[data-go="vendas"] .ico svg path:nth-child(3){animation-delay:.68s}
+  /* inativo: funil inteiro, parado */
+  .nav:not(.on)[data-go="vendas"] .ico svg path,
+  .nav-item:not(.on)[data-go="vendas"] .ico svg path{opacity:1}
+
   /* linhas do orçamento: escrevem-se de cima para baixo */
   .nav .ico .linha,.nav-item .ico .linha{
     stroke-dasharray:9;stroke-dashoffset:9;opacity:0;
@@ -353,7 +375,8 @@
 
   @media (prefers-reduced-motion:reduce){
     .nav .ico,.nav-item .ico,.nav .ico svg,.nav-item .ico svg,
-    .nav .ico .head,.nav-item .ico .head{animation:none!important}
+    .nav .ico .head,.nav-item .ico .head,
+    .nav .ico svg path,.nav-item .ico svg path{animation:none!important}
   }
 
   /* ==========================================================
@@ -1916,7 +1939,11 @@ function SEED_ORCAMENTOS(){
     { id:'o2', nome:'Ana Silva',   tel:'912887340', carro:'crv',     preco:13500000, entrada:2700000, desc:650000, data: agora - 1.1*dia,  estado:'Enviado'  },
     { id:'o3', nome:'João Mendes', tel:'934120556', carro:'hilux',   preco:28500000, entrada:6000000, desc:1300000, data: agora - 3.2*dia,  estado:'Enviado'  },
     { id:'o4', nome:'Maria Costa', tel:'921445010', carro:'tucson',  preco:12900000, entrada:2600000, desc:600000, data: agora - 8.4*dia,  estado:'Enviado'  },
-    { id:'o5', nome:'Maria Costa', tel:'921445010', carro:'corolla', preco:9750000,  entrada:2000000, desc:450000, data: agora - 12.6*dia, estado:'Enviado'  }
+    { id:'o5', nome:'Maria Costa', tel:'921445010', carro:'corolla', preco:9750000,  entrada:2000000, desc:450000, data: agora - 12.6*dia, estado:'Enviado'  },
+    /* negócio já em negociação: aparece na página Vendas (pagamento a prestações) */
+    { id:'o6', nome:'Paulo Neto',  tel:'924118733', carro:'tucson',  preco:12900000, entrada:2600000, desc:600000,
+      data: agora - 2.4*dia, estado:'Em negociação',
+      notas:'Cliente quer 24 prestações e pediu avaliação do carro antigo à retoma.' }
   ];
 }
 let atual = null;
@@ -2085,7 +2112,7 @@ const totalComIva = preco => (Number(preco) || 0) + ivaDe(preco);
    PERSISTÊNCIA
    ========================================================== */
 const VERSAO_KEY = 'modelo_versao_dados';
-const VERSAO_DADOS = 3;      // 3 = preços de mercado de Luanda (nov/2026)
+const VERSAO_DADOS = 4;      // 4 = orçamento de demonstração em negociação (página Vendas)
 
 function carregar(){
   try{
@@ -2093,7 +2120,7 @@ function carregar(){
     const arr = raw ? JSON.parse(raw) : null;
     CARROS = Array.isArray(arr) && arr.length ? arr : PADRAO.slice();
   }catch(e){ CARROS = PADRAO.slice(); }
-  migrarVersao();
+  const versaoAnterior = migrarVersao();
   atual = CARROS[0];
 
   try{
@@ -2103,6 +2130,7 @@ function carregar(){
   }catch(e){ ORCAMENTOS = SEED_ORCAMENTOS(); }
 
   migrarPrecos();
+  garantirExemploVendas(versaoAnterior);
   carregarLoja();
   renderAvatarLoja();
 }
@@ -2114,7 +2142,7 @@ function carregar(){
 function migrarVersao(){
   let v = 0;
   try{ v = Number(localStorage.getItem(VERSAO_KEY)) || 0; }catch(e){}
-  if (v >= VERSAO_DADOS) return;
+  if (v >= VERSAO_DADOS) return v;
 
   /* 1) catálogo de demonstração: os 4 modelos de origem recebem os valores novos;
         modelos criados pelo utilizador mantêm-se intactos */
@@ -2139,11 +2167,27 @@ function migrarVersao(){
   }catch(e){/* quota */}
 
   try{ localStorage.setItem(VERSAO_KEY, String(VERSAO_DADOS)); }catch(e){}
+  return v;
 }
 
 /* preço mínimo de referência no mercado angolano */
 /* os orçamentos de demonstração (o1..o5) acompanham sempre o preço atual do catálogo;
    orçamentos criados pelo utilizador nunca são tocados */
+/* acrescenta o negócio de demonstração em negociação a quem já tinha dados guardados
+   (uma só vez: a versão de dados impede que reapareça depois de ser apagado) */
+function garantirExemploVendas(versaoAnterior){
+  if (ORCAMENTOS.some(o => o.id === 'o6')) return;
+  /* só para quem já tinha a app aberta antes da versão 4 — nunca repõe depois de apagado */
+  if (!(versaoAnterior < VERSAO_DADOS)) return;
+  const exemplo = SEED_ORCAMENTOS().find(o => o.id === 'o6');
+  if (!exemplo) return;
+  const c = CARROS.find(x => x.id === exemplo.carro);
+  if (c){ exemplo.preco = c.preco; exemplo.desc = c.desc; }
+  ORCAMENTOS.push(exemplo);
+  guardarOrc();
+  try{ localStorage.setItem(VERSAO_KEY, String(VERSAO_DADOS)); }catch(e){}
+}
+
 function migrarPrecos(){
   let mudou = false;
   ORCAMENTOS.forEach(o => {

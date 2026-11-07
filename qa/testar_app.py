@@ -933,7 +933,9 @@ async def main():
         ok("Migração · orçamento de demonstração acompanha o catálogo",
            await mp.evaluate("()=>ORCAMENTOS.find(o=>o.id==='o1').preco") == 9750000, "")
         ok("Migração · versão de dados gravada",
-           await mp.evaluate("()=>localStorage.getItem('modelo_versao_dados')") == "3", "")
+           await mp.evaluate("()=>localStorage.getItem('modelo_versao_dados')") == "4", "")
+        ok("R41 · migração acrescenta o negócio de demonstração em Vendas",
+           await mp.evaluate("()=>ORCAMENTOS.some(o=>o.id==='o6' && o.estado==='Em negociação')"), "")
         await mp.evaluate("()=>{CARROS.find(c=>c.id==='corolla').preco=8800000; guardar();}")
         await mp.reload(); await mp.wait_for_timeout(700)
         ok("Migração · não volta a correr (respeita edições seguintes)",
@@ -1449,6 +1451,64 @@ async def main():
         ok("R39 · modo escuro aplica-se ao funil", D1["fundo"]=="rgb(4, 13, 31)" and D1["etapaFundo"]=="rgb(7, 21, 40)", str(D1))
         ok("R39 · menu ativo a verde no escuro", D1["ativoVerde"]=="rgb(52, 217, 122)", str(D1["ativoVerde"]))
         await rvd.close()
+
+        # ============ R41 · NEGÓCIO EM CURSO + ANIMAÇÃO DO ÍCONE VENDAS ============
+        r41 = await b.new_page(viewport={"width":1440,"height":900})
+        r41e=[]; r41.on("pageerror", lambda e: r41e.append(str(e)))
+        await novo(r41)
+        N1 = await r41.evaluate("""()=>{
+          const o=ORCAMENTOS.find(x=>x.id==='o6');
+          const c=CARROS.find(x=>x.id===(o||{}).carro);
+          return {existe:!!o, estado:(o||{}).estado, nome:(o||{}).nome,
+                  precoIgualCatalogo: !!o && !!c && Number(o.preco)===Number(c.preco),
+                  notas: !!(o&&o.notas)};
+        }""")
+        ok("R41 · negócio de demonstração existe em negociação", N1["existe"] and N1["estado"]=="Em negociação", str(N1))
+        ok("R41 · negócio com preço atual do catálogo", N1["precoIgualCatalogo"], str(N1))
+        await r41.evaluate("()=>ir('vendas')"); await r41.wait_for_timeout(700)
+        N2 = await r41.evaluate("""()=>{
+          const cartoes=[...document.querySelectorAll('.vneg')];
+          const alvo=cartoes.find(c=>c.innerText.includes('Paulo Neto'));
+          return {cartoes:cartoes.length, encontrado:!!alvo,
+                  temBotao: !!alvo && !!alvo.querySelector('[data-etapa]'),
+                  valor: (document.getElementById('vtNeg').textContent||'').includes('Kz'),
+                  funilNeg: Number(document.getElementById('fnNegociacao').textContent)};
+        }""")
+        ok("R41 · aparece na lista 'Negócios em curso'", N2["encontrado"] and N2["cartoes"]>=1 and N2["funilNeg"]>=1, str(N2))
+        ok("R41 · cartão com botão 'Marcar como vendido'", N2["temBotao"], str(N2))
+        await r41.click(".vneg [data-etapa]"); await r41.wait_for_timeout(800)
+        N3 = await r41.evaluate("""()=>({estado:ORCAMENTOS.find(o=>o.id==='o6').estado,
+            vendas:Number(document.getElementById('fnVendas').textContent),
+            fechado: !!document.querySelector('.vneg.fechado')})""")
+        ok("R41 · marcar como vendido funciona neste negócio", N3["estado"]=="Venda concluída" and N3["vendas"]>=1 and N3["fechado"], str(N3))
+
+        # animação do ícone (desktop e mobile)
+        A1 = await r41.evaluate("""()=>{
+          const on=document.querySelector('.nav.on[data-go="vendas"] .ico svg path');
+          return {nome:on?getComputedStyle(on).animationName:'', dur:on?getComputedStyle(on).animationDuration:'',
+                  iter:on?getComputedStyle(on).animationIterationCount:''};
+        }""")
+        ok("R41 · ícone Vendas animado quando ativo", A1["nome"]=="funilEtapa" and A1["iter"]=="infinite", str(A1))
+        await r41.evaluate("()=>ir('modelos')"); await r41.wait_for_timeout(400)
+        A2 = await r41.evaluate("""()=>{
+          const off=document.querySelector('.nav[data-go="vendas"] .ico svg path');
+          return {nome:getComputedStyle(off).animationName, opac:getComputedStyle(off).opacity};
+        }""")
+        ok("R41 · ícone Vendas parado quando inativo", A2["nome"]=="none" and A2["opac"]=="1", str(A2))
+        ok("R41 · sem erros de consola", len(r41e)==0, str(r41e[:2]))
+        await r41.close()
+
+        r41m = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        await novo(r41m)
+        await r41m.evaluate("()=>ir('vendas')"); await r41m.wait_for_timeout(700)
+        A3 = await r41m.evaluate("""()=>{
+          const p=document.querySelector('.nav-item.on[data-go="vendas"] .ico svg path');
+          const cs=getComputedStyle(p);
+          return {nome:cs.animationName, iter:cs.animationIterationCount,
+                  itens:document.querySelectorAll('.nav-item').length};
+        }""")
+        ok("R41 · animação também na navbar do telemóvel", A3["nome"]=="funilEtapa" and A3["iter"]=="infinite", str(A3))
+        await r41m.close()
 
         await b.close()
 
