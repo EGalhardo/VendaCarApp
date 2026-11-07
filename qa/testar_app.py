@@ -227,6 +227,78 @@ async def main():
         ok("Sem erros no modo offline", len(oe)==0, str(oe[:2]))
         await ctxo.close()
 
+        # ============ R32 · MODO ESCURO · ATIVO A VERDE ============
+        nv = await b.new_page(viewport={"width":1440,"height":900})
+        nve=[]; nv.on("pageerror", lambda e: nve.append(str(e)))
+        await novo(nv)
+        await nv.click("#btnTema"); await nv.wait_for_timeout(450)
+        N1 = await nv.evaluate("""()=>{
+          const cs=s=>getComputedStyle(document.querySelector(s));
+          const rgb=c=>c.match(/[0-9]+/g).map(Number);
+          const verde=c=>{const [r,g,b]=rgb(c); return g>150 && g>r+60 && g>b+30;};
+          return {ativoTexto:cs('.side .nav.on').color, ativoIcone:cs('.side .nav.on .ico svg').color,
+                  inativoTexto:cs('.side .nav:not(.on)').color,
+                  ativoVerde:verde(cs('.side .nav.on').color) && verde(cs('.side .nav.on .ico svg').color),
+                  inativoNao:!verde(cs('.side .nav:not(.on)').color)};
+        }""")
+        ok("R32 · escuro · nome da página ativa a verde", N1["ativoVerde"] and N1["inativoNao"], str(N1))
+        await nv.evaluate("()=>ir('clientes')"); await nv.wait_for_timeout(500)
+        N2 = await nv.evaluate("""()=>{
+          const item=[...document.querySelectorAll('.side .nav.on')];
+          const rgb=c=>c.match(/[0-9]+/g).map(Number);
+          const verde=c=>{const [r,g,b]=rgb(c); return g>150 && g>r+60 && g>b+30;};
+          return {nome:item.length?item[0].textContent.trim():'', verde:item.length?verde(getComputedStyle(item[0]).color):false,
+                  so1:document.querySelectorAll('.side .nav.on').length};
+        }""")
+        ok("R32 · escuro · o verde acompanha a página aberta", N2["nome"].startswith("Clientes") and N2["verde"] and N2["so1"]==1, str(N2))
+        await nv.reload(); await nv.wait_for_timeout(600)
+        N3 = await nv.evaluate("""()=>{
+          const it=document.querySelector('.side .nav.on');
+          const rgb=c=>c.match(/[0-9]+/g).map(Number);
+          const c=getComputedStyle(it).color; const [r,g,b]=rgb(c);
+          return {tema:document.documentElement.dataset.tema, verde:g>150&&g>r+60&&g>b+30, cor:c};
+        }""")
+        ok("R32 · escuro memorizado mantém o ativo a verde", N3["tema"]=="escuro" and N3["verde"], str(N3))
+        ok("R32 · ativo a verde sem erros de consola", len(nve)==0, str(nve[:2]))
+        await nv.close()
+
+        nm2 = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        nme=[]; nm2.on("pageerror", lambda e: nme.append(str(e)))
+        await novo(nm2)
+        await nm2.click("#btnTema"); await nm2.wait_for_timeout(450)
+        M1 = await nm2.evaluate("""()=>{
+          const on=document.querySelector('.navbar .nav-item.on');
+          const off=document.querySelector('.navbar .nav-item:not(.on)');
+          const rgb=c=>c.match(/[0-9]+/g).map(Number);
+          const verde=c=>{const [r,g,b]=rgb(c); return g>150 && g>r+60 && g>b+30;};
+          return {nome:on.textContent.trim(), texto:verde(getComputedStyle(on).color),
+                  icone:verde(getComputedStyle(on.querySelector('.ico svg')).color),
+                  inativo:!verde(getComputedStyle(off).color)};
+        }""")
+        ok("R32 · mobile escuro · ícone e nome ativos a verde", M1["texto"] and M1["icone"] and M1["inativo"], str(M1))
+        await nm2.evaluate("()=>ir('perfil')"); await nm2.wait_for_timeout(500)
+        M2 = await nm2.evaluate("""()=>{
+          const on=document.querySelector('.navbar .nav-item.on');
+          const rgb=c=>c.match(/[0-9]+/g).map(Number);
+          const [r,g,b]=rgb(getComputedStyle(on).color);
+          return {nome:on.textContent.trim(), verde:g>150&&g>r+60&&g>b+30};
+        }""")
+        ok("R32 · mobile escuro · verde segue a página (Perfil)", M2["nome"].startswith("Perfil") and M2["verde"], str(M2))
+        ok("R32 · mobile escuro sem erros de consola", len(nme)==0, str(nme[:2]))
+        await nm2.close()
+
+        # no modo claro continua igual
+        cl = await b.new_page(viewport={"width":1440,"height":900})
+        await novo(cl)
+        C0 = await cl.evaluate("""()=>{
+          const on=document.querySelector('.side .nav.on');
+          const rgb=c=>c.match(/[0-9]+/g).map(Number);
+          const [r,g,b]=rgb(getComputedStyle(on).color);
+          return {cor:getComputedStyle(on).color, verde:g>r+40&&g>b+20};
+        }""")
+        ok("R32 · modo claro mantém o verde do item ativo", C0["verde"], str(C0))
+        await cl.close()
+
         # ============ R31 · LOGÓTIPO COMPLETO + PALETA DA IMAGEM ============
         lg2 = await b.new_page(viewport={"width":1440,"height":900})
         lge=[]; lg2.on("pageerror", lambda e: lge.append(str(e)))
