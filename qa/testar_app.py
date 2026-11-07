@@ -156,9 +156,29 @@ async def main():
         # ---------- 9. UPLOAD ----------
         await pg.evaluate("ir('modelos')"); await pg.wait_for_timeout(200)
         await pg.locator("[data-criar]:visible").click(); await pg.wait_for_timeout(300)
-        await pg.set_input_files("#fFotos",["/home/user/docs/foto1.jpg","/home/user/docs/foto2.jpg","/home/user/docs/foto3.jpg",
-                                            "/home/user/docs/foto4.jpg","/home/user/docs/foto5.jpg","/home/user/docs/foto6.jpg",
-                                            "/home/user/docs/foto7.jpg"])
+        # fotos de teste geradas na hora (o projeto já não guarda ficheiros extra)
+        import tempfile, struct, zlib
+        def _foto(caminho, cor, n):
+            raw=b""
+            for y in range(60):
+                raw += b"\x00" + bytes(cor*n if False else (cor*(n))) 
+            # PNG mínimo 60x60 gerado com zlib
+            def chunk(t,d):
+                c=struct.pack(">I",len(d))+t+d
+                return c+struct.pack(">I",zlib.crc32(t+d)&0xffffffff)
+            linhas=b""
+            for y in range(60):
+                linhas += b"\x00" + bytes([ (cor[0]+y)%256, (cor[1]+n)%256, (cor[2]+y)%256 ])*60
+            png=(b"\x89PNG\r\n\x1a\n"
+                 + chunk(b"IHDR", struct.pack(">IIBBBBB",60,60,8,2,0,0,0))
+                 + chunk(b"IDAT", zlib.compress(linhas))
+                 + chunk(b"IEND", b""))
+            open(caminho,"wb").write(png)
+        tmpd = tempfile.mkdtemp()
+        fotos = []
+        for i,c in enumerate([(200,40,40),(40,160,80),(60,90,200),(220,170,40),(150,60,200),(30,180,180),(200,90,140)],1):
+            caminho = f"{tmpd}/foto{i}.png"; _foto(caminho,c,i*20); fotos.append(caminho)
+        await pg.set_input_files("#fFotos", fotos)
         await pg.wait_for_timeout(900)
         n = await pg.eval_on_selector_all(".up","e=>e.length")
         ok("Limite de 6 imagens respeitado", n==6, f"{n} miniaturas (enviei 7)")

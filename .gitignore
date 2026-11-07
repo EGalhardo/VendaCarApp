@@ -1,5 +1,6 @@
 .cache/
 .config/
+.local/
 .arena/
 __pycache__/
 *.pyc
