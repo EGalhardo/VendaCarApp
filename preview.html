@@ -713,6 +713,24 @@
 
 
 
+
+  /* ---------- foto de perfil da loja (popup Dados da Loja) ---------- */
+  .avatar-up{display:flex;align-items:center;gap:14px}
+  .avatar-prev{
+    position:relative;width:64px;height:64px;border-radius:50%;flex:0 0 auto;overflow:hidden;
+    background:var(--green-soft);color:var(--green-ink);display:flex;align-items:center;
+    justify-content:center;font-weight:800;font-size:19px;letter-spacing:.5px;
+    border:1px solid #cfe0d4;
+  }
+  .avatar-prev img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .avatar-acoes{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:0}
+  .avatar-acoes .btn{height:34px;font-size:12.5px;padding:0 13px}
+  .avatar-escolher{cursor:pointer}
+  .avatar-acoes .hint{margin-top:0}
+  html[data-tema="escuro"] .avatar-prev{background:#042b25;color:#63dc92;border-color:#0a3b30}
+  html[data-tema="escuro"] .avatar-acoes .btn.ghost{background:#040d1f;border-color:#17375e;color:#c6d6ec}
+  html[data-tema="escuro"] .avatar-acoes .btn.ghost:hover{background:#071528;border-color:#24507f}
+
   /* ==========================================================
      MODO ESCURO
      ========================================================== */
@@ -1018,6 +1036,8 @@
     .modal .foot .btn.ghost{height:46px;min-height:46px;font-size:14.5px;flex:0 0 auto;width:100%}
     .grid3,.grid2{grid-template-columns:1fr;gap:0}
     .ups{grid-template-columns:repeat(4,1fr)}
+    .avatar-prev{width:56px;height:56px;font-size:17px}
+    .avatar-acoes .btn{height:36px;width:auto}
     .upload .s-desk{display:none}
     .upload .s-mob{display:block}
     .cli-head{flex-wrap:wrap;gap:10px}
@@ -1634,6 +1654,25 @@
     </div>
     <div class="body">
       <div class="fg">
+        <p class="lbl">Foto de Perfil</p>
+        <div class="avatar-up">
+          <div class="avatar-prev" id="lAvatarPrev" aria-hidden="true">
+            <span class="ini" id="lAvatarIni">AS</span>
+            <img id="lAvatarImg" alt="" class="hidden">
+          </div>
+          <div class="avatar-acoes">
+            <label class="btn ghost avatar-escolher" for="lAvatarInput">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 8h3l1.6-2.4h6.8L17 8h3v12H4z"/><circle cx="12" cy="13.4" r="3.4"/></svg>
+              Escolher foto
+            </label>
+            <input type="file" id="lAvatarInput" accept="image/*" hidden>
+            <button type="button" class="btn ghost avatar-remover hidden" id="lAvatarRemover">Remover</button>
+            <div class="hint"><span>JPG ou PNG · é guardada no dispositivo e aparece no seu perfil.</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="fg">
         <p class="lbl">Dados da Loja</p>
         <input class="inp" id="lDados" placeholder="Ex: ABC Seminovos · Luanda, Angola" autocomplete="off" maxlength="90">
       </div>
@@ -1938,6 +1977,7 @@ function carregar(){
 
   migrarPrecos();
   carregarLoja();
+  renderAvatarLoja();
 }
 
 /* ------------------------------------------------------------------
@@ -1995,15 +2035,50 @@ function migrarPrecos(){
 
 /* ---- dados da loja (Perfil / popup de novo modelo / orçamento enviado) ---- */
 const LOJA_KEY = 'modelo_loja_v1';
-let LOJA = { dados:'', zap:'' };
+const AVATAR_MAX = 2.5 * 1024 * 1024;      /* 2,5 MB — cabe folgado no localStorage */
+let LOJA = { dados:'', zap:'', avatar:'' };
+let AVATAR_TMP = null;                     /* foto escolhida mas ainda não guardada */
 
 function carregarLoja(){
   try{
     const raw = localStorage.getItem(LOJA_KEY);
     const o = raw ? JSON.parse(raw) : null;
-    LOJA = { dados: (o && o.dados) ? String(o.dados) : '',
-             zap:   (o && o.zap)   ? String(o.zap).replace(/\D/g,'').slice(0,9) : '' };
-  }catch(e){ LOJA = { dados:'', zap:'' }; }
+    LOJA = { dados:  (o && o.dados)  ? String(o.dados) : '',
+             zap:    (o && o.zap)    ? String(o.zap).replace(/\D/g,'').slice(0,9) : '',
+             avatar: (o && o.avatar) ? String(o.avatar) : '' };
+  }catch(e){ LOJA = { dados:'', zap:'', avatar:'' }; }
+}
+
+/* iniciais do nome da loja para a foto por omissão */
+function iniciaisLoja(){
+  const t = (LOJA.dados || '').trim();
+  if (!t) return 'AS';
+  const p = t.split(/\s+/).filter(Boolean);
+  return ((p[0] || '')[0] + (p[1] ? p[1][0] : '')).toUpperCase();
+}
+
+/* desenha a foto (imagem carregada ou iniciais) em todos os avatares */
+function renderAvatarLoja(){
+  const img  = document.getElementById('lAvatarImg');
+  const ini  = document.getElementById('lAvatarIni');
+  const rem  = document.getElementById('lAvatarRemover');
+  const foto = AVATAR_TMP !== null ? AVATAR_TMP : LOJA.avatar;
+  if (img){
+    if (foto){ img.src = foto; img.classList.remove('hidden'); }
+    else { img.removeAttribute('src'); img.classList.add('hidden'); }
+  }
+  if (ini) ini.textContent = iniciaisLoja();
+  if (rem) rem.classList.toggle('hidden', !foto);
+  const av = document.querySelector('.who .av');
+  if (av){
+    if (foto){
+      av.textContent = '';
+      av.style.background = 'center/cover no-repeat url("' + foto + '")';
+    } else {
+      av.textContent = iniciaisLoja();
+      av.style.background = '';
+    }
+  }
 }
 function guardarLoja(){
   try{ localStorage.setItem(LOJA_KEY, JSON.stringify(LOJA)); }catch(e){/* quota */}
@@ -2507,6 +2582,8 @@ document.getElementById('btnApagarModelo').addEventListener('click', () => {
    ========================================================== */
 function abrirLoja(foco){
   carregarLoja();
+  AVATAR_TMP = null;
+  renderAvatarLoja();
   document.getElementById('lDados').value = LOJA.dados;
   document.getElementById('lZap').value   = mascaraZap(LOJA.zap);
   document.getElementById('mLoja').classList.add('open');
@@ -2529,12 +2606,46 @@ document.getElementById('pg-perfil').addEventListener('keydown', e => {
   if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); abrirLoja(tr.dataset.abrirLoja); }
 });
 
+/* ---- foto de perfil da loja ---- */
+document.getElementById('lAvatarInput').addEventListener('change', e => {
+  const f = e.target.files && e.target.files[0];
+  e.target.value = '';
+  if (!f) return;
+  if (!/^image\//.test(f.type)){ toast('Escolha um ficheiro de imagem'); return; }
+  if (f.size > AVATAR_MAX){ toast('Imagem demasiado grande (máx. 2,5 MB)'); return; }
+  const fr = new FileReader();
+  fr.onload = () => {
+    /* recorta ao centro num quadrado de 256 px para poupar espaço */
+    const im = new Image();
+    im.onload = () => {
+      const lado = Math.min(im.width, im.height);
+      const c = document.createElement('canvas');
+      c.width = c.height = 256;
+      c.getContext('2d').drawImage(im, (im.width-lado)/2, (im.height-lado)/2, lado, lado, 0, 0, 256, 256);
+      AVATAR_TMP = c.toDataURL('image/jpeg', 0.86);
+      renderAvatarLoja();
+      toast('Foto pronta — clique em Guardar Dados');
+    };
+    im.onerror = () => toast('Não foi possível ler a imagem');
+    im.src = fr.result;
+  };
+  fr.onerror = () => toast('Não foi possível ler o ficheiro');
+  fr.readAsDataURL(f);
+});
+
+document.getElementById('lAvatarRemover').addEventListener('click', () => {
+  AVATAR_TMP = '';
+  renderAvatarLoja();
+});
+
 document.getElementById('btnGuardarLoja').addEventListener('click', () => {
   LOJA = {
     dados: document.getElementById('lDados').value.trim().replace(/\s+/g,' '),
-    zap:   document.getElementById('lZap').value.replace(/\D/g,'').slice(0,9)
+    zap:   document.getElementById('lZap').value.replace(/\D/g,'').slice(0,9),
+    avatar: AVATAR_TMP !== null ? AVATAR_TMP : LOJA.avatar
   };
-  guardarLoja(); renderPerfilLoja();
+  AVATAR_TMP = null;
+  guardarLoja(); renderPerfilLoja(); renderAvatarLoja();
   document.getElementById('mLoja').classList.remove('open');
   toast('Dados da loja atualizados');
 });

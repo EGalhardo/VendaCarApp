@@ -227,6 +227,75 @@ async def main():
         ok("Sem erros no modo offline", len(oe)==0, str(oe[:2]))
         await ctxo.close()
 
+        # ============ R34 · FOTO DE PERFIL NO POPUP DADOS DA LOJA ============
+        import base64 as _b64
+        _img = _b64.b64decode(
+            "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0a"
+            "HBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPDg8PDs8Ozw8PDz/wAALCAAQABABAREA/8QAFAAB"
+            "AAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AKp//2Q==")
+        avpath = "/tmp/qa_avatar.jpg"
+        with open(avpath, "wb") as fh: fh.write(_img)
+        fp = await b.new_page(viewport={"width":1440,"height":900})
+        fpe=[]; fp.on("pageerror", lambda e: fpe.append(str(e)))
+        await novo(fp)
+        await fp.evaluate("()=>{ir('perfil'); abrirLoja('dados');}"); await fp.wait_for_timeout(600)
+        AV0 = await fp.evaluate("""()=>{
+          const p=document.getElementById('lAvatarPrev'), inp=document.getElementById('lAvatarInput');
+          const r=p.getBoundingClientRect();
+          return {existe:!!p, visivel:r.width>0, redondo:getComputedStyle(p).borderRadius,
+                  iniciais:document.getElementById('lAvatarIni').textContent.trim(),
+                  input:!!inp, aceita:inp?inp.accept:'', removerEscondido:document.getElementById('lAvatarRemover').classList.contains('hidden'),
+                  dentro:!!document.querySelector('#mLoja .body #lAvatarPrev')};
+        }""")
+        ok("R34 · popup Dados da Loja tem carregador de foto", AV0["existe"] and AV0["visivel"] and AV0["input"], str(AV0))
+        ok("R34 · foto por omissão mostra as iniciais da loja", len(AV0["iniciais"])==2, str(AV0))
+        ok("R34 · carregador aceita apenas imagens", AV0["aceita"]=="image/*", str(AV0))
+        ok("R34 · botão Remover começa escondido", AV0["removerEscondido"], str(AV0))
+        await fp.set_input_files("#lAvatarInput", avpath); await fp.wait_for_timeout(700)
+        AV1 = await fp.evaluate("""()=>{
+          const img=document.getElementById('lAvatarImg');
+          return {previa:!img.classList.contains('hidden') && img.naturalWidth>0,
+                  tmp:!!AVATAR_TMP, dados:(AVATAR_TMP||'').slice(0,22),
+                  lado:img.naturalWidth, removerVisivel:!document.getElementById('lAvatarRemover').classList.contains('hidden')};
+        }""")
+        ok("R34 · escolher imagem mostra a pré-visualização", AV1["previa"], str(AV1))
+        ok("R34 · imagem é recortada em quadrado 256px", AV1["lado"]==256 and AV1["dados"].startswith("data:image/jpeg"), str(AV1))
+        ok("R34 · botão Remover aparece com foto escolhida", AV1["removerVisivel"], str(AV1))
+        await fp.click("#btnGuardarLoja"); await fp.wait_for_timeout(500)
+        AV2 = await fp.evaluate("""()=>{
+          const av=document.querySelector('.who .av');
+          const st=getComputedStyle(av);
+          return {guardada:(LOJA.avatar||'').slice(0,22), noPerfil:!!(JSON.parse(localStorage.getItem('modelo_loja_v1')||'{}').avatar||''),
+                  appbar:st.backgroundImage.indexOf('data:image')>=0, texto:av.textContent.trim()};
+        }""")
+        ok("R34 · foto é guardada e memorizada", AV2["guardada"].startswith("data:image/jpeg") and AV2["noPerfil"], str(AV2))
+        ok("R34 · appbar mostra a foto de perfil", AV2["appbar"] and AV2["texto"]=="", str(AV2))
+        await fp.reload(); await fp.wait_for_timeout(800)
+        AV3 = await fp.evaluate("""()=>{
+          const av=document.querySelector('.who .av');
+          return {guardada:(LOJA.avatar||'').length>100, appbar:getComputedStyle(av).backgroundImage.indexOf('data:image')>=0};
+        }""")
+        ok("R34 · foto persiste depois de recarregar", AV3["guardada"] and AV3["appbar"], str(AV3))
+        await fp.evaluate("()=>abrirLoja('dados')"); await fp.wait_for_timeout(500)
+        await fp.click("#lAvatarRemover"); await fp.wait_for_timeout(300)
+        AV4 = await fp.evaluate("""()=>{
+          const img=document.getElementById('lAvatarImg');
+          return {semPrevia:img.classList.contains('hidden'), iniciais:document.getElementById('lAvatarIni').textContent.trim()};
+        }""")
+        ok("R34 · Remover volta às iniciais", AV4["semPrevia"] and len(AV4["iniciais"])==2, str(AV4))
+        await fp.click("#btnGuardarLoja"); await fp.wait_for_timeout(500)
+        AV5 = await fp.evaluate("()=>({foto:LOJA.avatar, appbar:getComputedStyle(document.querySelector('.who .av')).backgroundImage})")
+        ok("R34 · remover a foto limpa a appbar", AV5["foto"]=="" and AV5["appbar"]=="none", str(AV5))
+        await fp.click("#btnTema"); await fp.wait_for_timeout(400)
+        await fp.evaluate("()=>abrirLoja('dados')"); await fp.wait_for_timeout(500)
+        AV6 = await fp.evaluate("""()=>{
+          const p=document.getElementById('lAvatarPrev'); const st=getComputedStyle(p);
+          return {fundo:st.backgroundColor, visivel:p.getBoundingClientRect().width>0};
+        }""")
+        ok("R34 · carregador visível também no modo escuro", AV6["visivel"] and AV6["fundo"]=="rgb(4, 43, 37)", str(AV6))
+        ok("R34 · foto de perfil sem erros de consola", len(fpe)==0, str(fpe[:2]))
+        await fp.close()
+
         # ============ R33 · RODAPÉ DA BARRA LATERAL SEM NOME/PLANO ============
         sd = await b.new_page(viewport={"width":1440,"height":900})
         sde=[]; sd.on("pageerror", lambda e: sde.append(str(e)))
