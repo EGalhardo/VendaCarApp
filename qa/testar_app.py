@@ -1476,11 +1476,28 @@ async def main():
         }""")
         ok("R41 · aparece na lista 'Negócios em curso'", N2["encontrado"] and N2["cartoes"]>=1 and N2["funilNeg"]>=1, str(N2))
         ok("R41 · cartão com botão 'Marcar como vendido'", N2["temBotao"], str(N2))
-        await r41.click(".vneg [data-etapa]"); await r41.wait_for_timeout(800)
+        N2b = await r41.evaluate("""()=>{const c=document.querySelector('.vneg');
+          const bs=[...c.querySelectorAll('.est button')].map(x=>({t:x.textContent.trim(),e:x.dataset.etapa}));
+          return {n:bs.length, textos:bs.map(x=>x.t).join(' / '),
+                  temVend:bs.some(x=>x.e==='Venda concluída'), temPend:bs.some(x=>x.e==='Pendente')};}""")
+        ok("R42 · cada item tem 2 botões (pendente + vendido)", N2b["n"]==2 and N2b["temVend"] and N2b["temPend"], str(N2b))
+        await r41.click('.vneg .pend'); await r41.wait_for_timeout(700)
+        P1 = await r41.evaluate("""()=>({estado:ORCAMENTOS.find(o=>o.id==='o6').estado,
+            pill:(document.querySelector('.vneg .pill')||{}).textContent.trim(),
+            neg:Number(document.getElementById('fnNegociacao').textContent),
+            cartoes:[...document.querySelectorAll('.vneg:not(.fechado)')].length,
+            pressed:(document.querySelector('.vneg .pend')||{}).getAttribute?document.querySelector('.vneg .pend').getAttribute('aria-pressed'):''})""")
+        ok("R42 · 'Marcar pendente' põe o negócio pendente", P1["estado"]=="Pendente" and P1["pill"]=="Pendente" and P1["neg"]==0 and P1["cartoes"]==1, str(P1))
+        await r41.click('.vneg .pend'); await r41.wait_for_timeout(700)
+        P2 = await r41.evaluate("()=>ORCAMENTOS.find(o=>o.id==='o6').estado")
+        ok("R42 · segundo clique no pendente volta a 'Em negociação'", P2=="Em negociação", str(P2))
+        await r41.click(".vneg [data-etapa='Venda concluída']"); await r41.wait_for_timeout(800)
         N3 = await r41.evaluate("""()=>({estado:ORCAMENTOS.find(o=>o.id==='o6').estado,
             vendas:Number(document.getElementById('fnVendas').textContent),
-            fechado: !!document.querySelector('.vneg.fechado')})""")
+            fechado: !!document.querySelector('.vneg.fechado'),
+            botoesFechado: document.querySelectorAll('.vneg.fechado .est button').length})""")
         ok("R41 · marcar como vendido funciona neste negócio", N3["estado"]=="Venda concluída" and N3["vendas"]>=1 and N3["fechado"], str(N3))
+        ok("R42 · negócio fechado deixa de mostrar os dois botões", N3["botoesFechado"]==0, str(N3))
 
         # animação do ícone (desktop e mobile)
         A1 = await r41.evaluate("""()=>{
@@ -1508,6 +1525,10 @@ async def main():
                   itens:document.querySelectorAll('.nav-item').length};
         }""")
         ok("R41 · animação também na navbar do telemóvel", A3["nome"]=="funilEtapa" and A3["iter"]=="infinite", str(A3))
+        M2 = await r41m.evaluate("""()=>{const bs=[...document.querySelectorAll('.vneg .est button')];
+          const r=bs.map(b=>{const q=b.getBoundingClientRect();return {w:q.width,h:q.height}});
+          return {n:bs.length, dentroDoEcra: r.every(q=>q.w>0&&q.h>0&&q.h<=44), ecra:innerWidth};}""")
+        ok("R42 · dois botões também no telemóvel, dentro do ecrã", M2["n"]==2 and M2["dentroDoEcra"], str(M2))
         await r41m.close()
 
         await b.close()

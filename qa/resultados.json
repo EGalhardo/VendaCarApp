@@ -707,7 +707,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "7,676.11 Kz"
+  "d": "154,928.32 Kz"
  },
  {
   "r": "PASS",
@@ -717,12 +717,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,587,474.19 Kz"
+  "d": "9,596,946.75 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.41 Kz"
+  "d": "9,750,000 Kz"
  },
  {
   "r": "PASS",
@@ -738,10 +738,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   267397,
-   2851223,
-   4850307,
-   6340053
+   320152,
+   2892403,
+   4881593,
+   6362801
   ]
  },
  {
@@ -762,14 +762,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "418,360.01 Kz"
+  "d": "416,584.44 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "418,360.01 Kz",
-   "4,063,513.95 Kz"
+   "416,584.44 Kz",
+   "4,062,492.97 Kz"
   ]
  },
  {
@@ -810,7 +810,7 @@
  {
   "r": "PASS",
   "n": "Animação · cabeça do Perfil move-se para os dois lados",
-  "d": 3.19
+  "d": 3.18
  },
  {
   "r": "PASS",
@@ -837,7 +837,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34683
+   3.34705
   ]
  },
  {
@@ -1582,8 +1582,28 @@
  },
  {
   "r": "PASS",
+  "n": "R42 · cada item tem 2 botões (pendente + vendido)",
+  "d": "{'n': 2, 'textos': 'Marcar pendente / Marcar como vendido', 'temVend': True, 'temPend': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R42 · 'Marcar pendente' põe o negócio pendente",
+  "d": "{'estado': 'Pendente', 'pill': 'Pendente', 'neg': 0, 'cartoes': 1, 'pressed': 'true'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R42 · segundo clique no pendente volta a 'Em negociação'",
+  "d": "Em negociação"
+ },
+ {
+  "r": "PASS",
   "n": "R41 · marcar como vendido funciona neste negócio",
-  "d": "{'estado': 'Venda concluída', 'vendas': 1, 'fechado': True}"
+  "d": "{'estado': 'Venda concluída', 'vendas': 1, 'fechado': True, 'botoesFechado': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R42 · negócio fechado deixa de mostrar os dois botões",
+  "d": "{'estado': 'Venda concluída', 'vendas': 1, 'fechado': True, 'botoesFechado': 0}"
  },
  {
   "r": "PASS",
@@ -1604,5 +1624,10 @@
   "r": "PASS",
   "n": "R41 · animação também na navbar do telemóvel",
   "d": "{'nome': 'funilEtapa', 'iter': 'infinite', 'itens': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R42 · dois botões também no telemóvel, dentro do ecrã",
+  "d": "{'n': 2, 'dentroDoEcra': True, 'ecra': 390}"
  }
 ]

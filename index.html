@@ -178,10 +178,14 @@
   .vneg .nm{font-size:13px;font-weight:800;color:#2b3532;line-height:1.2}
   .vneg .cr{font-size:11.5px;color:var(--muted-2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .vneg .vl{margin-left:auto;font-size:13px;font-weight:800;color:var(--green-ink);white-space:nowrap}
-  .vneg .est{margin-top:10px;display:flex;align-items:center;gap:8px}
-  .vneg .prox{margin-left:auto;border:1px solid #cfe6d4;background:var(--green-soft);color:#2e7d32;
+  .vneg .est{margin-top:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .vneg .acao{margin-left:auto;display:flex;align-items:center;gap:6px}
+  .vneg .prox,.vneg .pend{border:1px solid #cfe6d4;background:var(--green-soft);color:#2e7d32;
               font-family:inherit;font-size:11.5px;font-weight:800;border-radius:8px;padding:6px 10px;cursor:pointer;white-space:nowrap}
   .vneg .prox:hover{background:#d8efdb}
+  .vneg .pend{border-color:#f0dcb4;background:#fdf6e6;color:#8a6100}
+  .vneg .pend:hover{background:#fbeecb}
+  .vneg .pend[aria-pressed="true"]{border-color:#e0c27f;background:#f8e7bd}
   .vneg.fechado{border-color:#d3ecd6;background:#fbfefc}
   .vneg.fechado .vl{color:#2e7d32}
   .vneg .nota{margin-top:9px;font-size:11px;color:var(--muted-2);display:flex;align-items:center;gap:6px}
@@ -211,6 +215,9 @@
   html[data-tema="escuro"] .vneg .cr,html[data-tema="escuro"] .vneg .nota{color:#93a7c4}
   html[data-tema="escuro"] .vneg .vl{color:#63dc92}
   html[data-tema="escuro"] .vneg .prox{background:#042b25;border-color:#0a3b30;color:#63dc92}
+  html[data-tema="escuro"] .vneg .pend{background:#2a1e04;border-color:#4a3608;color:#f0c15c}
+  html[data-tema="escuro"] .vneg .pend:hover{background:#34260a}
+  html[data-tema="escuro"] .vneg .pend[aria-pressed="true"]{background:#3a2a0c;border-color:#5c440c}
   html[data-tema="escuro"] .vneg.fechado{background:#042b25;border-color:#0a3b30}
   html[data-tema="escuro"] .vneg.fechado .vl{color:#63dc92}
 
@@ -1434,7 +1441,7 @@
             <div class="fg">
               <p class="lbl">Estado</p>
               <select class="inp" id="odEstadoInp">
-                <option>Enviado</option><option>Em negociação</option><option>Venda concluída</option>
+                <option>Enviado</option><option>Em negociação</option><option>Pendente</option><option>Venda concluída</option>
                 <option>Pendente</option><option>Cancelado</option>
               </select>
             </div>
@@ -2365,7 +2372,7 @@ function classeEstado(e){
 function dadosFunil(){
   const total = ORCAMENTOS.length;
   const contactos = clientesAgrupados().length;
-  const enviados = ORCAMENTOS.filter(o => o.estado !== 'Pendente' && o.estado !== 'Cancelado').length;
+  const enviados = ORCAMENTOS.filter(o => o.estado !== 'Cancelado').length;
   const negoc = ORCAMENTOS.filter(o => o.estado === 'Em negociação').length;
   const vendas = ORCAMENTOS.filter(o => o.estado === 'Venda concluída').length;
   return { total, contactos, enviados, negoc, vendas };
@@ -2378,7 +2385,7 @@ function renderVendas(){
   if (!lista) return;
   const f = dadosFunil();
   const soma = arr => arr.reduce((t,o) => t + totalComIva(o.preco), 0);
-  const emCurso = ORCAMENTOS.filter(o => o.estado === 'Em negociação');
+  const emCurso = ORCAMENTOS.filter(o => o.estado === 'Em negociação' || o.estado === 'Pendente');
   const fechadas = ORCAMENTOS.filter(o => o.estado === 'Venda concluída');
 
   /* cartões do funil */
@@ -2422,7 +2429,10 @@ function renderVendas(){
         <div class="vl">${fmt(totalComIva(o.preco))}</div>
       </div>
       <div class="est"><span class="pill${classeEstado(o.estado)}">${o.estado}</span>
-        ${fechado ? '' : `<button class="prox" data-etapa="Venda concluída" data-id="${o.id}">Marcar como vendido</button>`}
+        ${fechado ? '' : `<span class="acao">
+          <button class="pend" data-etapa="Pendente" data-id="${o.id}" aria-pressed="${o.estado === 'Pendente'}">Marcar pendente</button>
+          <button class="prox" data-etapa="Venda concluída" data-id="${o.id}">Marcar como vendido</button>
+        </span>`}
       </div>
       <div class="nota"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg>
         ${o.estado} · ${fmtData(o.data)}${o.reenvios ? ' · reenviado ' + o.reenvios + '×' : ''}</div>
@@ -2434,13 +2444,15 @@ function renderVendas(){
          na página de edição do orçamento para o acompanhar aqui.</p>`;
 }
 
-/* marcar como vendido a partir da lista de vendas */
+/* marcar como vendido / pendente a partir da lista de vendas */
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-etapa]');
   if (!b) return;
   const o = ORCAMENTOS.find(x => x.id === b.dataset.id);
   if (!o) return;
-  o.estado = b.dataset.etapa;
+  /* o mesmo botão desliga o pendente (volta a “Em negociação”) */
+  const alvo = b.dataset.etapa;
+  o.estado = (alvo === 'Pendente' && o.estado === 'Pendente') ? 'Em negociação' : alvo;
   guardarOrc();
   renderVendas();
   renderTabelaOrc();
