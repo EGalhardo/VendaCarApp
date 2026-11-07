@@ -364,7 +364,7 @@ async def main():
         }""")
         ok("R37 · barra lateral sem o container da logomarca", L["semStore"] and L["semLogo"], str(L))
         ok("R37 · sem 'Plano Pro' no rodapé", L["semPlano"], str(L))
-        ok("R37 · barra lateral termina na navegação", L["ultimoFilho"]=="nav" and L["navsVisiveis"]==4, str(L))
+        ok("R37 · barra lateral termina na navegação", L["ultimoFilho"]=="nav" and L["navsVisiveis"]==5, str(L))
         ok("R37 · área inferior livre (sem caixas nem molduras)", L["semCaixa"] and L["espacoAbaixoNav"]>0, str(L))
         await sd.click("#btnTema"); await sd.wait_for_timeout(450)
         L2 = await sd.evaluate("""()=>{
@@ -1357,6 +1357,98 @@ async def main():
         ok("R36 · Perfil mostra o estado da ligação",
            "Sem ligação" in await p6.inner_text("#pg-perfil"), "")
         await r6o.close()
+
+        # ============ R39 · PÁGINA VENDAS ============
+        rv = await b.new_page(viewport={"width":1440,"height":900})
+        rve=[]; rv.on("pageerror", lambda e: rve.append(str(e)))
+        await novo(rv)
+        V1 = await rv.evaluate("""()=>{
+          const menu=[...document.querySelectorAll('.side .nav')].map(n=>n.dataset.go);
+          return {pagina: PAGES.includes('vendas'), titulo: TITLES.vendas[0],
+                  menu: menu, ordem: menu.indexOf('vendas')===2};
+        }""")
+        ok("R39 · página Vendas registada no app", V1["pagina"] and V1["titulo"]=="Vendas", str(V1))
+        ok("R39 · Vendas no menu entre Orçamentos e Clientes", V1["ordem"], str(V1["menu"]))
+        await rv.evaluate("()=>ir('vendas')"); await rv.wait_for_timeout(700)
+        V2 = await rv.evaluate("""()=>{
+          const s=document.getElementById('pg-vendas');
+          const n=[...s.querySelectorAll('.funil .n')].map(e=>Number(e.textContent));
+          return {visivel:!s.classList.contains('hidden'),
+                  etapas:[...s.querySelectorAll('.funil .l')].map(e=>e.textContent),
+                  nums:n, contadoresDerivados: JSON.stringify(n)===JSON.stringify([clientesAgrupados().length,
+                    ORCAMENTOS.filter(o=>o.estado!=='Pendente'&&o.estado!=='Cancelado').length,
+                    ORCAMENTOS.filter(o=>o.estado==='Em negociação').length,
+                    ORCAMENTOS.filter(o=>o.estado==='Venda concluída').length]),
+                  semDemo: !s.innerText.includes('demonstração')};
+        }""")
+        ok("R39 · quatro etapas do funil", V2["visivel"] and V2["etapas"]==["Contactos captados","Orçamentos enviados","Em negociação","Vendas concluídas"], str(V2["etapas"]))
+        ok("R39 · números do funil vêm dos dados reais", V2["contadoresDerivados"] and V2["semDemo"], str(V2["nums"]))
+        # mudar de etapa na edição do orçamento e refletir em Vendas
+        await rv.evaluate("()=>{ir('listaorc'); abrirOrcDetalhe('o2');}"); await rv.wait_for_timeout(500)
+        await rv.select_option("#odEstadoInp","Em negociação"); await rv.click("#odGuardar"); await rv.wait_for_timeout(600)
+        await rv.evaluate("()=>ir('vendas')"); await rv.wait_for_timeout(700)
+        V3 = await rv.evaluate("""()=>({neg:Number(document.getElementById('fnNegociacao').textContent),
+            cartoes:document.querySelectorAll('.vneg').length,
+            menu:Number(document.querySelector('.side [data-cnt=\"vendas\"]').textContent)})""")
+        ok("R39 · orçamento em negociação aparece na página", V3["neg"]>=1 and V3["cartoes"]>=1, str(V3))
+        ok("R39 · contador do menu acompanha", V3["menu"]==V3["neg"], str(V3))
+        await rv.click("[data-etapa='Venda concluída']"); await rv.wait_for_timeout(900)
+        V4 = await rv.evaluate("""()=>({vend:Number(document.getElementById('fnVendas').textContent),
+            estado:ORCAMENTOS.find(o=>o.id==='o2').estado, guardado:(JSON.parse(localStorage.getItem('modelo_orcamentos_v1')).find(o=>o.id==='o2')||{}).estado,
+            stVendas:document.getElementById('stVendas').textContent,
+            toast:document.getElementById('toast').textContent})""")
+        ok("R39 · 'Marcar como vendido' muda o estado", V4["estado"]=="Venda concluída" and V4["vend"]>=1, str(V4))
+        ok("R39 · estado persistido no dispositivo", V4["guardado"]=="Venda concluída", str(V4))
+        ok("R39 · cartão do Perfil conta as vendas", V4["stVendas"]==str(V4["vend"]), str(V4))
+        ok("R39 · confirmação por toast", "Venda concluída" in V4["toast"], V4["toast"])
+        # coerência nas outras páginas
+        await rv.evaluate("()=>ir('listaorc')"); await rv.wait_for_timeout(600)
+        ok("R39 · tabela de Orçamentos mostra a mesma etiqueta",
+           "Venda concluída" in await rv.inner_text("#tblOrc"), "")
+        await rv.evaluate("()=>{ir('clientes'); abrirCliente('Ana Silva','912887340');}"); await rv.wait_for_timeout(700)
+        ok("R39 · página do Cliente mostra a mesma etiqueta",
+           "Venda concluída" in await rv.inner_text("#pg-cliente"), "")
+        ok("R39 · Vendas sem erros de consola", len(rve)==0, str(rve[:2]))
+        await rv.close()
+
+        rvm = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        rvme=[]; rvm.on("pageerror", lambda e: rvme.append(str(e)))
+        await novo(rvm)
+        M1 = await rvm.evaluate("""()=>{
+          const itens=[...document.querySelectorAll('.nav-item')];
+          const alvo=itens.find(n=>n.dataset.go==='vendas');
+          const r=alvo.getBoundingClientRect();
+          return {itens:itens.length, existe:!!alvo, largura:Math.round(r.width),
+                  dentro: r.left>=0 && r.right<=document.documentElement.clientWidth,
+                  overflow: document.documentElement.scrollWidth-390};
+        }""")
+        ok("R39 · telemóvel · Vendas no menu inferior (5 áreas)", M1["existe"] and M1["itens"]==5, str(M1))
+        ok("R39 · telemóvel · menu sem overflow", M1["overflow"]<=0 and M1["dentro"], str(M1))
+        await rvm.evaluate("()=>ir('vendas')"); await rvm.wait_for_timeout(700)
+        M2 = await rvm.evaluate("""()=>{
+          const s=document.getElementById('pg-vendas');
+          const etapas=[...s.querySelectorAll('.etapa')];
+          const prim=etapas[0].getBoundingClientRect(), seg=etapas[1].getBoundingClientRect();
+          return {empilhado: seg.top>=prim.bottom-1, semScroll: document.documentElement.scrollWidth-390,
+                  titulo: document.getElementById('barTitle').textContent};
+        }""")
+        ok("R39 · telemóvel · funil em lista empilhada", M2["empilhado"], str(M2))
+        ok("R39 · telemóvel · título 'Vendas' na appbar", M2["titulo"]=="Vendas", str(M2))
+        ok("R39 · telemóvel · sem erros de consola", len(rvme)==0, str(rvme[:2]))
+        await rvm.close()
+
+        rvd = await b.new_page(viewport={"width":1440,"height":900})
+        await novo(rvd); await rvd.click("#btnTema"); await rvd.wait_for_timeout(400)
+        await rvd.evaluate("()=>ir('vendas')"); await rvd.wait_for_timeout(700)
+        D1 = await rvd.evaluate("""()=>{
+          const f=document.querySelector('.funil'), e=document.querySelector('.etapa'), n=document.querySelector('.etapa .n');
+          return {fundo:getComputedStyle(f).backgroundColor, borda:getComputedStyle(f).borderColor,
+                  etapaFundo:getComputedStyle(e).backgroundColor, num:getComputedStyle(n).color,
+                  ativoVerde:getComputedStyle(document.querySelector('.side .nav.on')).color};
+        }""")
+        ok("R39 · modo escuro aplica-se ao funil", D1["fundo"]=="rgb(4, 13, 31)" and D1["etapaFundo"]=="rgb(7, 21, 40)", str(D1))
+        ok("R39 · menu ativo a verde no escuro", D1["ativoVerde"]=="rgb(52, 217, 122)", str(D1["ativoVerde"]))
+        await rvd.close()
 
         await b.close()
 

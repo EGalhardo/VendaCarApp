@@ -152,6 +152,103 @@
   }
   .nav.on .cnt{background:#d3ecd6;color:var(--green-ink)}
 
+
+  /* ==========================================================
+     VENDAS — funil, negócios em curso e estados do orçamento
+     ========================================================== */
+  .funil{margin:2px 0 18px;background:#fff;border:1px solid var(--gray-line);border-radius:14px;padding:18px 20px 16px}
+  .funil-top{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+  .funil-top h3{font-size:15px;font-weight:800;color:#2b3532;display:flex;align-items:center;gap:9px}
+  .funil-top h3 .ico{width:26px;height:26px;border-radius:8px;background:var(--green-soft);color:var(--green-ink);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .funil-top .sub{font-size:11.5px;color:var(--muted-2);line-height:1.35}
+  .funil-top .sub b{color:var(--green-ink)}
+  .funil-top .chipP{margin-left:auto;font-size:11px;font-weight:800;color:var(--green-ink);background:var(--green-soft);border-radius:20px;padding:5px 11px;white-space:nowrap}
+  .funil-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .etapa{border:1px solid var(--line);border-radius:11px;padding:12px 13px 11px;background:#fbfdfc}
+  .etapa .n{font-size:26px;font-weight:800;color:#2b3532;letter-spacing:-1px;line-height:1}
+  .etapa .l{font-size:12px;font-weight:700;color:#5c6b64;margin-top:6px}
+  .etapa .pb{height:5px;border-radius:4px;background:#e9efec;margin-top:10px;overflow:hidden}
+  .etapa .pb i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#66bb6a,#3f9e46);transition:width .6s}
+  .etapa.q .pb i{background:linear-gradient(90deg,#f0b45a,#e0a03a)}
+  .etapa .p{font-size:10.5px;font-weight:800;color:var(--green-ink);margin-top:8px;display:flex;align-items:center;gap:5px}
+  .etapa .p i{width:6px;height:6px;border-radius:50%;background:#4caf50;display:block;flex:0 0 auto}
+  .etapa.q .p{color:#b3730f}
+  .etapa.q .p i{background:#e0a03a}
+  .etapa:last-child{background:#eef8ef;border-color:#d3ecd6}
+  .funil-base{display:flex;align-items:center;gap:8px;margin-top:13px;font-size:11.5px;color:var(--muted-2);flex-wrap:wrap}
+  .funil-base b{color:var(--green-ink);font-weight:800}
+  .vendas-head{display:flex;align-items:center;gap:12px;margin-bottom:11px}
+  .vendas-head h3{font-size:14px;font-weight:800;color:#2b3532}
+  .vendas-tot{margin-left:auto;display:flex;gap:9px;flex-wrap:wrap}
+  .vendas-tot span{font-size:11px;color:var(--muted-2);background:#f7faf8;border:1px solid var(--line);border-radius:20px;padding:4px 10px}
+  .vendas-tot b{color:var(--ink-2);font-weight:800}
+  .vendas-lista{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .vneg{border:1px solid var(--gray-line);border-radius:12px;padding:13px 14px;background:#fff}
+  .vneg .topo{display:flex;align-items:center;gap:11px}
+  .vneg .topo>div{min-width:0}
+  .vneg .topo img{width:52px;height:38px;border-radius:7px;object-fit:cover;flex:0 0 auto}
+  .vneg .nm{font-size:13px;font-weight:800;color:#2b3532;line-height:1.2}
+  .vneg .cr{font-size:11.5px;color:var(--muted-2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .vneg .vl{margin-left:auto;font-size:13px;font-weight:800;color:var(--green-ink);white-space:nowrap}
+  .vneg .est{margin-top:10px;display:flex;align-items:center;gap:8px}
+  .vneg .prox{margin-left:auto;border:1px solid #cfe6d4;background:var(--green-soft);color:#2e7d32;
+              font-family:inherit;font-size:11.5px;font-weight:800;border-radius:8px;padding:6px 10px;cursor:pointer;white-space:nowrap}
+  .vneg .prox:hover{background:#d8efdb}
+  .vneg.fechado{border-color:#d3ecd6;background:#fbfefc}
+  .vneg.fechado .vl{color:#2e7d32}
+  .vneg .nota{margin-top:9px;font-size:11px;color:var(--muted-2);display:flex;align-items:center;gap:6px}
+  .vneg .nota svg{flex:0 0 auto}
+
+  /* vendas — modo escuro */
+  html[data-tema="escuro"] .funil{background:#040d1f;border-color:#17375e}
+  html[data-tema="escuro"] .funil-top h3{color:#fff}
+  html[data-tema="escuro"] .funil-top .sub{color:#93a7c4}
+  html[data-tema="escuro"] .funil-top .sub b{color:#63dc92}
+  html[data-tema="escuro"] .funil-top h3 .ico{background:#042b25;color:#63dc92}
+  html[data-tema="escuro"] .funil-top .chipP{background:#042b25;color:#63dc92}
+  html[data-tema="escuro"] .etapa{background:#071528;border-color:#17375e}
+  html[data-tema="escuro"] .etapa .pb{background:#0e2440}
+  html[data-tema="escuro"] .etapa .n{color:#fff}
+  html[data-tema="escuro"] .etapa .l{color:#b3c6e0}
+  html[data-tema="escuro"] .etapa .p{color:#63dc92}
+  html[data-tema="escuro"] .etapa.q .p{color:#e7c276}
+  html[data-tema="escuro"] .etapa:last-child{background:#042b25;border-color:#0a3b30}
+  html[data-tema="escuro"] .funil-base{color:#93a7c4}
+  html[data-tema="escuro"] .funil-base b{color:#63dc92}
+  html[data-tema="escuro"] .vendas-head h3{color:#fff}
+  html[data-tema="escuro"] .vendas-tot span{background:#071528;border-color:#17375e;color:#93a7c4}
+  html[data-tema="escuro"] .vendas-tot b{color:#eaf1fb}
+  html[data-tema="escuro"] .vneg{background:#040d1f;border-color:#17375e}
+  html[data-tema="escuro"] .vneg .nm{color:#fff}
+  html[data-tema="escuro"] .vneg .cr,html[data-tema="escuro"] .vneg .nota{color:#93a7c4}
+  html[data-tema="escuro"] .vneg .vl{color:#63dc92}
+  html[data-tema="escuro"] .vneg .prox{background:#042b25;border-color:#0a3b30;color:#63dc92}
+  html[data-tema="escuro"] .vneg.fechado{background:#042b25;border-color:#0a3b30}
+  html[data-tema="escuro"] .vneg.fechado .vl{color:#63dc92}
+
+  @media (max-width:1100px){ .vendas-lista{grid-template-columns:1fr} }
+  @media (max-width:900px){
+    .funil{padding:14px;margin:2px 0 14px}
+    .funil-top{flex-wrap:wrap;gap:6px 10px}
+    .funil-top h3{flex:1 1 auto;white-space:nowrap;min-width:0;font-size:14px}
+    .funil-top h3 .ico{width:22px;height:22px;border-radius:7px}
+    .funil-top .sub{width:100%;order:2}
+    .funil-top .chipP{font-size:10.5px;padding:3px 9px}
+    .funil-grid{grid-template-columns:1fr;gap:8px}
+    .etapa{display:flex;align-items:center;gap:11px;padding:9px 11px}
+    .etapa .n{font-size:19px;min-width:42px}
+    .etapa .l{font-size:12px;margin:0;flex:1}
+    .etapa .pb{display:none}
+    .etapa .p{margin:0;font-size:10.5px}
+    .funil-base{font-size:11px}
+    .vendas-head{flex-wrap:wrap;margin-bottom:9px}
+    .vendas-tot{margin-left:0;width:100%;gap:6px}
+    .vendas-tot span{font-size:10.5px;padding:3px 8px}
+    .vendas-lista{grid-template-columns:1fr}
+    .vneg .topo{flex-wrap:wrap;row-gap:6px}
+    .vneg .vl{font-size:12.5px;margin-left:0;width:100%;text-align:right}
+  }
+
   /* ---------- navbar (mobile) ---------- */
   .navbar{display:none}
 
@@ -1124,6 +1221,13 @@
         <path class="linha l3" d="M8.4 16.8h4.6"/></svg></span>
       <span class="tx">Orçamentos</span><span class="cnt" data-cnt="orcs">5</span>
     </button>
+    <button class="nav" data-go="vendas">
+      <span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 4h18l-6.6 7.6V19l-4.8 2v-9.4z"/></svg></span>
+      <span class="tx">Vendas</span>
+      <span class="cnt" data-cnt="vendas">0</span>
+    </button>
+
     <button class="nav" data-go="clientes">
       <span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
         <clipPath id="espreitaLado"><rect x="0" y="-6" width="24" height="18.4"/></clipPath>
@@ -1327,7 +1431,8 @@
             <div class="fg">
               <p class="lbl">Estado</p>
               <select class="inp" id="odEstadoInp">
-                <option>Enviado</option><option>Pendente</option><option>Cancelado</option>
+                <option>Enviado</option><option>Em negociação</option><option>Venda concluída</option>
+                <option>Pendente</option><option>Cancelado</option>
               </select>
             </div>
           </div>
@@ -1410,6 +1515,43 @@
       <div id="cOrcs"></div>
     </section>
 
+    <!-- ---------- VENDAS ---------- -->
+    <section id="pg-vendas" class="hidden">
+      <div class="page-head">
+        <div><h2>Vendas</h2><p>Funil comercial e negócios em curso</p></div>
+        <div class="right"><button class="btn ghost" data-go="listaorc">Ver orçamentos</button></div>
+      </div>
+
+      <div class="funil">
+        <div class="funil-top">
+          <h3><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18l-7 8v7l-4 2v-9z"/></svg></span>
+            Funil de vendas</h3>
+          <div class="sub">Últimos 90 dias<br>Conversão global <b id="fnConversao">—</b></div>
+          <span class="chipP" id="fnVendasPill">0 vendas</span>
+        </div>
+        <div class="funil-grid">
+          <div class="etapa"><div class="n" id="fnContactos">0</div><div class="l">Contactos captados</div>
+            <div class="pb"><i id="fnPbContactos" style="width:100%"></i></div><div class="p"><i></i>entrada do funil</div></div>
+          <div class="etapa"><div class="n" id="fnEnviados">0</div><div class="l">Orçamentos enviados</div>
+            <div class="pb"><i id="fnPbEnviados" style="width:100%"></i></div><div class="p" id="fnTxEnviados"><i></i>—</div></div>
+          <div class="etapa q"><div class="n" id="fnNegociacao">0</div><div class="l">Em negociação</div>
+            <div class="pb"><i id="fnPbNegociacao" style="width:0%"></i></div><div class="p q" id="fnTxNegociacao"><i></i>—</div></div>
+          <div class="etapa"><div class="n" id="fnVendas">0</div><div class="l">Vendas concluídas</div>
+            <div class="pb"><i id="fnPbVendas" style="width:0%"></i></div><div class="p" id="fnTxVendas"><i></i>—</div></div>
+        </div>
+        <div class="funil-base"><span id="fnResumo">—</span></div>
+      </div>
+
+      <div class="vendas-head">
+        <h3>Negócios em curso</h3>
+        <div class="vendas-tot">
+          <span>Em negociação <b id="vtNeg">0 Kz</b></span>
+          <span>Vendas fechadas <b id="vtFech">0 Kz</b></span>
+        </div>
+      </div>
+      <div class="vendas-lista" id="vendasLista"></div>
+    </section>
+
     <!-- ---------- PERFIL ---------- -->
     <section id="pg-perfil" class="hidden">
       <div class="page-head">
@@ -1430,6 +1572,11 @@
           <span class="go">›</span>
           <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 3a4 4 0 100 8 4 4 0 000-8"/></svg></div>
           <div class="n" id="stClientes">4</div><div class="l">Clientes</div>
+        </div>
+        <div class="stat-card link" data-perfil="vendas" role="button" tabindex="0" title="Ver vendas">
+          <span class="go">›</span>
+          <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18l-6.6 7.6V19l-4.8 2v-9.4z"/></svg></div>
+          <div class="n" id="stVendas">0</div><div class="l">Vendas concluídas</div>
         </div>
       </div>
       <div class="tbl-wrap">
@@ -1474,6 +1621,11 @@
         <path class="linha l2" d="M8.4 14.2h7.2"/>
         <path class="linha l3" d="M8.4 16.8h4.6"/></svg></span>
       Orçamentos
+    </button>
+    <button class="nav-item" data-go="vendas">
+      <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 4h18l-6.6 7.6V19l-4.8 2v-9.4z"/></svg></span>
+      Vendas
     </button>
     <button class="nav-item" data-go="clientes">
       <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
@@ -2131,9 +2283,10 @@ const TITLES = {
   orcdetalhe:['Orçamento','Detalhe e edição do orçamento'],
   clientes:['Clientes','Clientes que receberam orçamentos'],
   cliente:['Cliente','Orçamentos enviados a este cliente'],
+  vendas:['Vendas','Funil comercial e negócios em curso'],
   perfil:['Perfil','Dados da loja e preferências']
 };
-const PAGES = ['modelos','detalhe','orcamento','listaorc','orcdetalhe','clientes','cliente','perfil'];
+const PAGES = ['modelos','detalhe','orcamento','listaorc','orcdetalhe','clientes','cliente','vendas','perfil'];
 
 function ir(page){
   PAGES.forEach(p => document.getElementById('pg-' + p).classList.toggle('hidden', p !== page));
@@ -2144,6 +2297,7 @@ function ir(page){
   document.getElementById('btnBack').style.visibility = voltar ? 'visible' : 'hidden';
   document.querySelector('.brand').classList.toggle('com-voltar', voltar);
 
+  if (page === 'vendas') renderVendas();
   const raiz = (page === 'detalhe' || page === 'orcamento') ? 'modelos'
              : (page === 'cliente') ? 'clientes'
              : (page === 'orcdetalhe') ? 'listaorc' : page;
@@ -2156,11 +2310,12 @@ function ir(page){
   document.querySelector('.content').scrollTop = 0;
 
   /* valores da página que fica visível contam de 0 até ao valor (6 s) */
-  if (['modelos','orcamento','orcdetalhe','detalhe','listaorc','clientes'].includes(page)){
+  if (['modelos','orcamento','orcdetalhe','detalhe','listaorc','clientes','vendas'].includes(page)){
     setTimeout(() => {
       if (page === 'modelos') contagemCards();
       else if (page === 'listaorc') contarTabela('#tblOrc');
       else if (page === 'clientes') contarTabela('#tblClientes');
+      else if (page === 'vendas') contarTabela('#vendasLista');
       else recomecarValores('pg-' + page);
       observarValores('#pg-' + page);
     }, 40);
@@ -2175,6 +2330,105 @@ function tocarIcone(el){
   el.classList.add('tap');
   setTimeout(() => el.classList.remove('tap'), 460);
 }
+
+
+/* ==========================================================
+   VENDAS — funil, negócios em curso e mudança de etapa
+   ========================================================== */
+const ESTADOS = ['Enviado','Em negociação','Venda concluída'];
+
+/* cor da etiqueta de estado: âmbar para o que espera resposta, verde para o resto */
+function classeEstado(e){
+  return (e === 'Pendente' || e === 'Em negociação') ? ' p' : '';
+}
+
+/* números do funil: contactos = clientes únicos · enviados / negociação / vendas = orçamentos */
+function dadosFunil(){
+  const total = ORCAMENTOS.length;
+  const contactos = clientesAgrupados().length;
+  const enviados = ORCAMENTOS.filter(o => o.estado !== 'Pendente' && o.estado !== 'Cancelado').length;
+  const negoc = ORCAMENTOS.filter(o => o.estado === 'Em negociação').length;
+  const vendas = ORCAMENTOS.filter(o => o.estado === 'Venda concluída').length;
+  return { total, contactos, enviados, negoc, vendas };
+}
+
+function pct(a, b){ return b > 0 ? Math.round((a / b) * 100) : 0; }
+
+function renderVendas(){
+  const lista = document.getElementById('vendasLista');
+  if (!lista) return;
+  const f = dadosFunil();
+  const soma = arr => arr.reduce((t,o) => t + totalComIva(o.preco), 0);
+  const emCurso = ORCAMENTOS.filter(o => o.estado === 'Em negociação');
+  const fechadas = ORCAMENTOS.filter(o => o.estado === 'Venda concluída');
+
+  /* cartões do funil */
+  document.getElementById('fnContactos').textContent  = f.contactos;
+  document.getElementById('fnEnviados').textContent   = f.enviados;
+  document.getElementById('fnNegociacao').textContent = f.negoc;
+  document.getElementById('fnVendas').textContent     = f.vendas;
+  document.getElementById('fnVendasPill').textContent = f.vendas + (f.vendas === 1 ? ' venda' : ' vendas');
+  document.getElementById('fnConversao').textContent  = pct(f.vendas, f.contactos) + '%';
+
+  /* um cliente pode ter mais de um orçamento: nesse caso não se mostra uma percentagem acima de 100% */
+  const tx = (n, base) => n > base ? 'mais orçamentos que contactos' : pct(n, base) + '% do anterior';
+  document.getElementById('fnTxEnviados').innerHTML   = '<i></i>' + tx(f.enviados, f.contactos);
+  document.getElementById('fnTxNegociacao').innerHTML = '<i></i>' + pct(f.negoc, f.enviados) + '% do anterior';
+  document.getElementById('fnTxVendas').innerHTML     = '<i></i>' + pct(f.vendas, f.negoc) + '% do anterior';
+
+  const larg = (n, base) => Math.max(n ? 6 : 0, Math.round((n / (base || 1)) * 100));
+  document.getElementById('fnPbEnviados').style.width   = larg(f.enviados, f.contactos) + '%';
+  document.getElementById('fnPbNegociacao').style.width = larg(f.negoc, f.enviados) + '%';
+  document.getElementById('fnPbVendas').style.width     = larg(f.vendas, f.negoc) + '%';
+
+  const semResposta = Math.max(0, f.enviados - f.negoc - f.vendas);
+  document.getElementById('fnResumo').innerHTML =
+    '<b>' + f.contactos + ' → ' + f.vendas + '</b> = ' + pct(f.vendas, f.contactos) +
+    '% de conversão global · ' + semResposta +
+    (semResposta === 1 ? ' orçamento ficou sem resposta após o envio' : ' orçamentos ficaram sem resposta após o envio');
+
+  /* totais */
+  document.getElementById('vtNeg').textContent  = fmt(soma(emCurso));
+  document.getElementById('vtFech').textContent = fmt(soma(fechadas));
+  document.querySelectorAll('[data-cnt="vendas"]').forEach(el => el.textContent = f.negoc);
+  const stv = document.getElementById('stVendas');
+  if (stv) stv.textContent = f.vendas;
+
+  /* lista de negócios */
+  const cartao = (o, fechado) => {
+    const c = CARROS.find(x => x.id === o.carro) || CARROS[0];
+    return `<article class="vneg${fechado ? ' fechado' : ''}">
+      <div class="topo"><img src="${c.img}" alt="">
+        <div><div class="nm">${o.nome}</div><div class="cr">${c.nome} · ${fmtTel(o.tel)}</div></div>
+        <div class="vl">${fmt(totalComIva(o.preco))}</div>
+      </div>
+      <div class="est"><span class="pill${classeEstado(o.estado)}">${o.estado}</span>
+        ${fechado ? '' : `<button class="prox" data-etapa="Venda concluída" data-id="${o.id}">Marcar como vendido</button>`}
+      </div>
+      <div class="nota"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg>
+        ${o.estado} · ${fmtData(o.data)}${o.reenvios ? ' · reenviado ' + o.reenvios + '×' : ''}</div>
+    </article>`;
+  };
+
+  lista.innerHTML = (emCurso.map(o => cartao(o,false)).join('') + fechadas.map(o => cartao(o,true)).join(''))
+    || `<p style="color:var(--muted-2);padding:16px 2px">Ainda não há negócios em curso. Marque um orçamento como “Em negociação”
+         na página de edição do orçamento para o acompanhar aqui.</p>`;
+}
+
+/* marcar como vendido a partir da lista de vendas */
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-etapa]');
+  if (!b) return;
+  const o = ORCAMENTOS.find(x => x.id === b.dataset.id);
+  if (!o) return;
+  o.estado = b.dataset.etapa;
+  guardarOrc();
+  renderVendas();
+  renderTabelaOrc();
+  if (typeof renderClientes === 'function') renderClientes();
+  if (typeof renderPerfilLoja === 'function') renderPerfilLoja();
+  toast('Orçamento de ' + o.nome + ' marcado como “' + o.estado + '”');
+});
 
 document.addEventListener('click', e => {
   const navIco = e.target.closest('.nav, .nav-item');
@@ -3009,7 +3263,7 @@ function renderTabelaOrc(){
     return `<tr class="cli" data-abrirorc="${o.id}">
       <td><div class="cell-car"><img src="${c.img}" alt=""><span class="b">${c.nome}</span></div></td>
       <td>${o.nome}</td><td>${fmtTel(o.tel)}</td><td>${fmtData(o.data)}</td>
-      <td><span class="pill${o.estado === 'Enviado' ? '' : o.estado === 'Pendente' ? ' p' : ' d'}">${o.estado}</span></td>
+      <td><span class="pill${classeEstado(o.estado)}">${o.estado}</span></td>
       <td style="text-align:right" class="b" data-valor="${o.preco}">${fmt(o.preco)}</td>
       <td style="text-align:right" class="iva-col" data-valor="${ivaDe(o.preco)}">${fmt(ivaDe(o.preco))}</td>
       <td style="text-align:right" class="b" data-valor="${totalComIva(o.preco)}">${fmt(totalComIva(o.preco))}</td>
@@ -3023,7 +3277,7 @@ function renderTabelaOrc(){
 document.getElementById('pg-perfil').addEventListener('click', e => {
   const c = e.target.closest('.stat-card[data-perfil]');
   if (!c) return;
-  const destino = { estoque:'modelos', orcs:'listaorc', clientes:'clientes' }[c.dataset.perfil];
+  const destino = { estoque:'modelos', orcs:'listaorc', clientes:'clientes', vendas:'vendas' }[c.dataset.perfil];
   if (destino) ir(destino);
 });
 document.getElementById('pg-perfil').addEventListener('keydown', e => {
@@ -3031,7 +3285,7 @@ document.getElementById('pg-perfil').addEventListener('keydown', e => {
   const c = e.target.closest('.stat-card[data-perfil]');
   if (!c) return;
   e.preventDefault();
-  const destino = { estoque:'modelos', orcs:'listaorc', clientes:'clientes' }[c.dataset.perfil];
+  const destino = { estoque:'modelos', orcs:'listaorc', clientes:'clientes', vendas:'vendas' }[c.dataset.perfil];
   if (destino) ir(destino);
 });
 
@@ -3076,7 +3330,7 @@ function orcLinhaData(orc){
     (orc.reenvios ? ' · reenviado ' + orc.reenvios + '×' : '');
   const pill = document.getElementById('odEstado');
   pill.textContent = orc.estado;
-  pill.className = 'pill' + (orc.estado === 'Enviado' ? '' : orc.estado === 'Pendente' ? ' p' : ' d');
+  pill.className = 'pill' + classeEstado(orc.estado);
 }
 
 /* lê os campos em edição */
