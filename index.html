@@ -1574,7 +1574,7 @@ const num = t => Number(String(t).replace(/[^\d]/g, '')) || 0;
    CONTADOR DOS VALORES — 0 até ao valor em 6 segundos
    ========================================================== */
 /* 6 s por omissão; "#rapido" no endereço desliga a contagem (usado nos testes) */
-const DURACAO_CONTAGEM = (location.hash.indexOf('rapido') >= 0) ? 0 : 6000;
+const DURACAO_CONTAGEM = (location.hash.indexOf('rapido') >= 0) ? 0 : 8000;
 const _cont = new WeakMap();        /* valor atual mostrado por elemento */
 const _alvo = new WeakMap();        /* valor final pretendido por elemento */
 const _raf  = new WeakMap();        /* animação em curso */
@@ -1624,6 +1624,50 @@ function contarPara(el, destino, desde){
   _raf.set(el, requestAnimationFrame(passo));
 }
 
+/* ------------------------------------------------------------------
+   Sempre que um valor volta a ficar visível (scroll), reconta de 0
+   ------------------------------------------------------------------ */
+const SEL_VALORES = '[data-valor], .pr, .d-price, #oPreco, #tSaldo, #oVista, ' +
+  '#o12, #o24, #o36, #oSaldo, #oEnt, #oPrecoN, #oIva, #oTotalIva, #oIvaMini, ' +
+  '#oTotalIvaMini, #rePreco, #reIva, #reTotal, #sPreco, #sIva, #sDesc, #sEnt, ' +
+  '#odRPreco, #odREnt, #odRSaldo, #odR12, #odR24, #odR36, #odRVista, #odRIva, ' +
+  '#odRTotalIva, #odIvaMini, #odTotalMini';
+
+let obsValores = null;
+const obsRegistados = new WeakSet();
+
+function iniciarObservador(){
+  if (obsValores || DURACAO_CONTAGEM <= 0) return;
+  const raiz = document.querySelector('.content');
+  obsValores = new IntersectionObserver(entradas => {
+    entradas.forEach(e => {
+      const el = e.target;
+      if (e.isIntersecting){
+        if (el._emVista) return;         /* já estava visível — não reinicia a meio */
+        el._emVista = true;
+        const alvo = _alvo.has(el) ? _alvo.get(el)
+                   : (el.dataset.valor != null ? Number(el.dataset.valor) : 0);
+        _alvo.set(el, alvo);
+        contarPara(el, alvo, 0);         /* recomeça do 0 */
+      } else {
+        el._emVista = false;             /* saiu do ecrã — ao voltar recontа */
+      }
+    });
+  }, { root: raiz || null, threshold: 0.35 });
+}
+
+/* regista os valores de uma zona para passarem a contar ao ficarem visíveis */
+function observarValores(raiz){
+  iniciarObservador();
+  const sec = raiz ? (typeof raiz === 'string' ? document.querySelector(raiz) : raiz) : document;
+  if (!sec) return;
+  const lista = sec.querySelectorAll(SEL_VALORES);
+  lista.forEach(el => {
+    if (!obsValores){ return; }
+    if (!obsRegistados.has(el)){ obsRegistados.add(el); obsValores.observe(el); }
+  });
+}
+
 /* aplica um conjunto de valores: { idDoElemento: numero } — todos contam de 0 */
 function definirValores(mapa, recomecar){
   Object.keys(mapa).forEach(id => {
@@ -1631,8 +1675,17 @@ function definirValores(mapa, recomecar){
     if (!el) return;
     const r = _raf.get(el); if (r){ cancelAnimationFrame(r); _raf.delete(el); }
     const de = recomecar ? 0 : (_cont.get(el) || 0);
+    _alvo.set(el, Number(mapa[id]) || 0);
     contarPara(el, mapa[id], de);
   });
+  observarValores(document.getElementById('pg-' + paginaAtual()));
+}
+
+/* página visível neste momento */
+function paginaAtual(){
+  const p = ['modelos','detalhe','orcamento','listaorc','orcdetalhe','clientes','cliente','perfil']
+    .find(x => { const el = document.getElementById('pg-' + x); return el && !el.classList.contains('hidden'); });
+  return p || 'modelos';
 }
 
 /* volta a contar do zero os valores de uma página (mantendo o valor final) */
@@ -1827,6 +1880,7 @@ function ir(page){
       else if (page === 'listaorc') contarTabela('#tblOrc');
       else if (page === 'clientes') contarTabela('#tblClientes');
       else recomecarValores('pg-' + page);
+      observarValores('#pg-' + page);
     }, 40);
   }
 }
@@ -1915,16 +1969,20 @@ function contarTabela(sel){
   document.querySelectorAll(sel + ' [data-valor]').forEach(el => {
     const v = Number(el.dataset.valor) || 0;
     _alvo.set(el, v);
+    el._emVista = true;
     contarPara(el, v, 0);
   });
+  observarValores(sel);
 }
 
 function contagemCards(){
   document.querySelectorAll('#grid .pr[data-valor]').forEach(el => {
     const v = Number(el.dataset.valor) || 0;
     _alvo.set(el, v);
+    el._emVista = true;
     contarPara(el, v, 0);
   });
+  observarValores('#grid');
 }
 
 document.getElementById('filtros').addEventListener('click', e => {
@@ -3010,6 +3068,7 @@ document.getElementById('netPill').addEventListener('click', () => {
    ARRANQUE
    ========================================================== */
 carregar();
+observarValores('#pg-' + paginaAtual());
 guardar();          // garante o catálogo em cache local desde o primeiro arranque
 renderFiltros();
 renderGrid();

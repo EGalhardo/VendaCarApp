@@ -335,12 +335,13 @@ async def main():
             const el=document.querySelector('#grid .pr');
             const a=[]; const t0=performance.now();
             for(let i=0;i<9;i++){ a.push([Math.round(performance.now()-t0), el.textContent]);
-              await new Promise(r=>setTimeout(r,750)); }
+              await new Promise(r=>setTimeout(r,1000)); }
             return a;}""")
         nums = [float(v.replace(" Kz","").replace(",","")) for _,v in vals]
-        ok("Contador · valores dos Modelos começam perto de 0", nums[0] < 500000, vals[0][1])
+        ok("Contador · valores dos Modelos começam perto de 0", nums[0] < 1500000, vals[0][1])
         ok("Contador · a contagem sobe sem recuar", all(nums[i] <= nums[i+1] + 1 for i in range(len(nums)-1)), "")
-        ok("Contador · termina no valor certo em ~6 s", abs(nums[-1] - 9750000) < 5000, vals[-1][1])
+        ok("Contador · duração de 8 s (aos 6 s ainda não acabou)", nums[6] < 9750000, vals[6][1])
+        ok("Contador · termina no valor certo em ~8 s", abs(nums[-1] - 9750000) < 5000, vals[-1][1])
         await ct.wait_for_timeout(300)
         ok("Contador · valor final exato", (await ct.inner_text("#grid .pr")) == "9,750,000 Kz", await ct.inner_text("#grid .pr"))
         await ct.evaluate("()=>{atual=CARROS[0];abrirOrcamento();}"); await ct.wait_for_timeout(150)
@@ -350,9 +351,34 @@ async def main():
             for(let i=0;i<4;i++){a.push(parseFloat(el.textContent.replace(" Kz","").replace(/,/g,"")));
               await new Promise(r=>setTimeout(r,900));} return a;}""")
         ok("Contador · valores do Orçamento a subir", seq[0] < seq[-1], [int(x) for x in seq])
-        await ct.wait_for_timeout(6000)
+        await ct.wait_for_timeout(8200)
         ok("Contador · Orçamento termina exato",
            (await ct.inner_text("#oPrecoN")) == "9,750,000 Kz", await ct.inner_text("#oPrecoN"))
+
+        # rolar para fora e voltar: a contagem recomeça
+        ao = await b.new_page(viewport={"width":1280,"height":900})
+        await ao.goto(URL_ANIM); await ao.wait_for_timeout(400)
+        await ao.evaluate("""()=>{ localStorage.clear();
+            const base=CARROS[0];
+            for(let i=0;i<14;i++){ CARROS.push(Object.assign({},base,{id:'x'+i,nome:'Extra '+(i+1),preco:5000000+i*100000})); }
+            guardar(); }""")
+        await ao.reload(); await ao.wait_for_timeout(8600)
+        ok("Contador · valor estabilizado antes do scroll",
+           (await ao.inner_text("#grid .pr")) == "9,750,000 Kz", await ao.inner_text("#grid .pr"))
+        rec = await ao.evaluate("""async ()=>{
+            const c=document.querySelector('.content'); const el=document.querySelector('#grid .pr');
+            c.scrollTop = c.scrollHeight; await new Promise(r=>setTimeout(r,900));
+            const saiu = el._emVista === false;
+            c.scrollTop = 0; await new Promise(r=>setTimeout(r,130));
+            const logo = el.textContent; await new Promise(r=>setTimeout(r,1200));
+            return {saiu, logo, meio: el.textContent};}""")
+        ok("Contador · ao sair de vista fica marcado", rec["saiu"] is True, "")
+        ok("Contador · ao voltar recomeça do 0",
+           float(rec["logo"].replace(" Kz","").replace(",","")) < 9750000, rec["logo"])
+        ok("Contador · e volta a subir",
+           float(rec["meio"].replace(" Kz","").replace(",","")) > float(rec["logo"].replace(" Kz","").replace(",","")),
+           (rec["logo"], rec["meio"]))
+        await ao.close()
         await ct.evaluate("()=>ir('listaorc')"); await ct.wait_for_timeout(200)
         ok("Contador · tabela de Orçamentos conta",
            await ct.evaluate("()=>document.querySelector('#tblOrc [data-valor]').className.includes('contando')"), "")

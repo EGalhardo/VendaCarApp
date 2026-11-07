@@ -292,7 +292,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "44,781.27 Kz"
+  "d": "-32,210.41 Kz"
  },
  {
   "r": "PASS",
@@ -301,8 +301,13 @@
  },
  {
   "r": "PASS",
-  "n": "Contador · termina no valor certo em ~6 s",
-  "d": "9,749,997.89 Kz"
+  "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
+  "d": "9,589,233.35 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · termina no valor certo em ~8 s",
+  "d": "9,749,999.10 Kz"
  },
  {
   "r": "PASS",
@@ -318,16 +323,39 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   649314,
-   3852775,
-   6079673,
-   7507284
+   320473,
+   2892403,
+   4881976,
+   6363079
   ]
  },
  {
   "r": "PASS",
   "n": "Contador · Orçamento termina exato",
   "d": "9,750,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · valor estabilizado antes do scroll",
+  "d": "9,750,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · ao sair de vista fica marcado",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · ao voltar recomeça do 0",
+  "d": "417,649.81 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · e volta a subir",
+  "d": [
+   "417,649.81 Kz",
+   "4,063,003.47 Kz"
+  ]
  },
  {
   "r": "PASS",
@@ -394,7 +422,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34657
+   3.34565
   ]
  },
  {
