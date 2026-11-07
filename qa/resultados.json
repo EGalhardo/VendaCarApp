@@ -311,18 +311,36 @@
  },
  {
   "r": "PASS",
-  "n": "Animação · 'listaorc' animado quando ativo",
-  "d": "orcSheet"
+  "n": "Animação · 'Modelos' animado quando ativo",
+  "d": ""
  },
  {
   "r": "PASS",
-  "n": "Animação · 'clientes' animado quando ativo",
-  "d": "clientesOnda"
+  "n": "Animação · folha de trás entra e sai",
+  "d": ""
  },
  {
   "r": "PASS",
-  "n": "Animação · 'modelos' animado quando ativo",
-  "d": "modelosBloco"
+  "n": "Animação · segunda folha entra depois",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · as folhas aparecem e desaparecem (opacidade varia)",
+  "d": [
+   0.03,
+   1
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · cabeça de Clientes tem animação de espreitar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · a cabeça esconde-se e volta a aparecer",
+  "d": 9.82
  },
  {
   "r": "PASS",

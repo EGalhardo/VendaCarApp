@@ -345,13 +345,32 @@ async def main():
             return {min:Math.min(...xs), max:Math.max(...xs)};
         }""")
         ok("Animação · cabeça do Perfil move-se para os dois lados", (mov["max"]-mov["min"]) > 1.5, round(mov["max"]-mov["min"],2))
-        for pgid, esperado in [("listaorc","orcSheet"), ("clientes","clientesOnda"), ("modelos","modelosBloco")]:
-            await an.click(f".nav-item[data-go='{pgid}']"); await an.wait_for_timeout(650)
-            if pgid == "modelos":
-                anim = await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"modelos\"] .ico svg path')).animationName")
-            else:
-                anim = await an.evaluate(f"()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"{pgid}\"] .ico svg')).animationName")
-            ok(f"Animação · '{pgid}' animado quando ativo", anim == esperado, anim)
+        await an.click(".nav-item[data-go='modelos']"); await an.wait_for_timeout(600)
+        ok("Animação · 'Modelos' animado quando ativo",
+           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"modelos\"] .ico svg path')).animationName") == "modelosBloco", "")
+
+        # Orçamentos: folhas a empilhar
+        await an.click(".nav-item[data-go='listaorc']"); await an.wait_for_timeout(500)
+        ok("Animação · folha de trás entra e sai",
+           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"listaorc\"] .ico .f3')).animationName") == "folhaEntra", "")
+        ok("Animação · segunda folha entra depois",
+           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"listaorc\"] .ico .f2')).animationName") == "folhaEntra2", "")
+        ops = await an.evaluate("""async ()=>{
+            const f=document.querySelector('.nav-item.on[data-go="listaorc"] .ico .f3');
+            const a=[]; for(let i=0;i<10;i++){a.push(+getComputedStyle(f).opacity); await new Promise(r=>setTimeout(r,180));}
+            return a;}""")
+        ok("Animação · as folhas aparecem e desaparecem (opacidade varia)",
+           max(ops) > 0.6 and min(ops) < 0.2, (round(min(ops),2), round(max(ops),2)))
+
+        # Clientes: cabeça a espreitar
+        await an.click(".nav-item[data-go='clientes']"); await an.wait_for_timeout(500)
+        ok("Animação · cabeça de Clientes tem animação de espreitar",
+           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"clientes\"] .ico .cabeca-espreita')).animationName") == "espreita", "")
+        ys = await an.evaluate("""async ()=>{
+            const h=document.querySelector('.nav-item.on[data-go="clientes"] .ico .cabeca-espreita');
+            const a=[]; for(let i=0;i<10;i++){a.push(+h.getBoundingClientRect().top.toFixed(2)); await new Promise(r=>setTimeout(r,200));}
+            return a;}""")
+        ok("Animação · a cabeça esconde-se e volta a aparecer", max(ys)-min(ys) > 5, round(max(ys)-min(ys),2))
         rd = await b.new_context(reduced_motion="reduce")
         rp = await rd.new_page(); await rp.goto(URL); await rp.wait_for_timeout(700)
         ok("Animação · respeita 'reduzir movimento'",
