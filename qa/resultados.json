@@ -291,6 +291,66 @@
  },
  {
   "r": "PASS",
+  "n": "Contador · valores dos Modelos começam perto de 0",
+  "d": "44,781.27 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · a contagem sobe sem recuar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · termina no valor certo em ~6 s",
+  "d": "9,749,997.89 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · valor final exato",
+  "d": "9,750,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · página Orçamento também conta",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · valores do Orçamento a subir",
+  "d": [
+   649314,
+   3852775,
+   6079673,
+   7507284
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · Orçamento termina exato",
+  "d": "9,750,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · tabela de Orçamentos conta",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · tabela de Clientes conta",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · Detalhe do Carro conta",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
   "n": "Animação · ícone ativo está animado",
   "d": ""
  },
@@ -334,7 +394,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34591
+   3.34657
   ]
  },
  {

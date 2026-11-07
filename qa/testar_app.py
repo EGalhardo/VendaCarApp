@@ -3,7 +3,8 @@
 import asyncio, json, urllib.parse as up
 from playwright.async_api import async_playwright
 
-URL = "file:///home/user/index.html"
+URL = "file:///home/user/index.html#rapido"   # sem contagem: testes deterministas
+URL_ANIM = "file:///home/user/index.html"      # com contagem de 6 s
 R = []          # resultados
 def ok(nome, cond, detalhe=""):
     R.append((("PASS" if cond else "FALHA"), nome, detalhe))
@@ -324,6 +325,45 @@ async def main():
             ok(f"Perfil · cartão '{chave}' abre a página respetiva",
                await vd.evaluate(f"()=>!document.getElementById('{pgid}').classList.contains('hidden')"), pgid)
         await vd.close()
+
+        # ============ CONTADOR DOS VALORES (0 → valor) ============
+        ct = await b.new_page(viewport={"width":1440,"height":900})
+        ce=[]; ct.on("pageerror", lambda e: ce.append(str(e)))
+        await ct.goto(URL_ANIM); await ct.wait_for_timeout(300)
+        await ct.evaluate("localStorage.clear()"); await ct.reload()
+        vals = await ct.evaluate("""async ()=>{
+            const el=document.querySelector('#grid .pr');
+            const a=[]; const t0=performance.now();
+            for(let i=0;i<9;i++){ a.push([Math.round(performance.now()-t0), el.textContent]);
+              await new Promise(r=>setTimeout(r,750)); }
+            return a;}""")
+        nums = [float(v.replace(" Kz","").replace(",","")) for _,v in vals]
+        ok("Contador · valores dos Modelos começam perto de 0", nums[0] < 500000, vals[0][1])
+        ok("Contador · a contagem sobe sem recuar", all(nums[i] <= nums[i+1] + 1 for i in range(len(nums)-1)), "")
+        ok("Contador · termina no valor certo em ~6 s", abs(nums[-1] - 9750000) < 5000, vals[-1][1])
+        await ct.wait_for_timeout(300)
+        ok("Contador · valor final exato", (await ct.inner_text("#grid .pr")) == "9,750,000 Kz", await ct.inner_text("#grid .pr"))
+        await ct.evaluate("()=>{atual=CARROS[0];abrirOrcamento();}"); await ct.wait_for_timeout(150)
+        ok("Contador · página Orçamento também conta",
+           await ct.evaluate("()=>document.getElementById('oSaldo').className.includes('contando')"), "")
+        seq = await ct.evaluate("""async ()=>{const el=document.getElementById('oSaldo');const a=[];
+            for(let i=0;i<4;i++){a.push(parseFloat(el.textContent.replace(" Kz","").replace(/,/g,"")));
+              await new Promise(r=>setTimeout(r,900));} return a;}""")
+        ok("Contador · valores do Orçamento a subir", seq[0] < seq[-1], [int(x) for x in seq])
+        await ct.wait_for_timeout(6000)
+        ok("Contador · Orçamento termina exato",
+           (await ct.inner_text("#oPrecoN")) == "9,750,000 Kz", await ct.inner_text("#oPrecoN"))
+        await ct.evaluate("()=>ir('listaorc')"); await ct.wait_for_timeout(200)
+        ok("Contador · tabela de Orçamentos conta",
+           await ct.evaluate("()=>document.querySelector('#tblOrc [data-valor]').className.includes('contando')"), "")
+        await ct.evaluate("()=>ir('clientes')"); await ct.wait_for_timeout(200)
+        ok("Contador · tabela de Clientes conta",
+           await ct.evaluate("()=>document.querySelector('#tblClientes [data-valor]').className.includes('contando')"), "")
+        await ct.evaluate("()=>{atual=CARROS[0];abrirDetalhe();}"); await ct.wait_for_timeout(200)
+        ok("Contador · Detalhe do Carro conta",
+           await ct.evaluate("()=>document.getElementById('sPreco').className.includes('contando')"), "")
+        ok("Contador · sem erros de consola", len(ce) == 0, str(ce[:2]))
+        await ct.close()
 
         # ============ ANIMAÇÃO DOS ÍCONES DE NAVEGAÇÃO ============
         an = await b.new_page(viewport={"width":390,"height":844})

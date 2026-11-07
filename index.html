@@ -158,6 +158,9 @@
   /* ---------- navbar (mobile) ---------- */
   .navbar{display:none}
 
+  /* valores a contar: dígitos de largura fixa para não "tremer" */
+  .contando{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+
   /* ==========================================================
      ANIMAÇÃO DOS ÍCONES DE NAVEGAÇÃO
      ========================================================== */
@@ -1566,6 +1569,84 @@ const fmt = v => {
   return n.toLocaleString('en-US', { minimumFractionDigits: c ? 2 : 0, maximumFractionDigits: 2 }) + ' Kz';
 };
 const num = t => Number(String(t).replace(/[^\d]/g, '')) || 0;
+
+/* ==========================================================
+   CONTADOR DOS VALORES — 0 até ao valor em 6 segundos
+   ========================================================== */
+/* 6 s por omissão; "#rapido" no endereço desliga a contagem (usado nos testes) */
+const DURACAO_CONTAGEM = (location.hash.indexOf('rapido') >= 0) ? 0 : 6000;
+const _cont = new WeakMap();        /* valor atual mostrado por elemento */
+const _alvo = new WeakMap();        /* valor final pretendido por elemento */
+const _raf  = new WeakMap();        /* animação em curso */
+
+/* formata em Kwanzas (mesmas regras do fmt) */
+function fmtNum(n){
+  const c = Math.round(n * 100) % 100 !== 0;
+  return Number(n).toLocaleString('en-US',
+    { minimumFractionDigits: c ? 2 : 0, maximumFractionDigits: 2 }) + ' Kz';
+}
+
+/* anima um elemento de onde está até ao destino */
+function contarPara(el, destino, desde){
+  if (!el) return;
+  destino = Number(destino) || 0;
+  const de = (desde != null) ? Number(desde) : (_cont.has(el) ? _cont.get(el) : 0);
+
+  const anterior = _raf.get(el);
+  if (anterior) cancelAnimationFrame(anterior);
+  _alvo.set(el, destino);
+  _cont.set(el, de);
+  el.classList.add('contando');
+
+  if (DURACAO_CONTAGEM <= 0){          /* modo instantâneo */
+    el.textContent = fmtNum(destino);
+    _cont.set(el, destino);
+    el.classList.remove('contando');
+    return;
+  }
+
+  const t0 = performance.now();
+  const passo = agora => {
+    const t = Math.min((agora - t0) / DURACAO_CONTAGEM, 1);
+    const e = 1 - Math.pow(1 - t, 3);             /* easeOutCubic */
+    const v = de + (destino - de) * e;
+    el.textContent = fmtNum(v);
+    _cont.set(el, v);
+    if (t < 1){
+      _raf.set(el, requestAnimationFrame(passo));
+    } else {
+      el.textContent = fmtNum(destino);
+      _cont.set(el, destino);
+      _raf.delete(el);
+      el.classList.remove('contando');
+    }
+  };
+  _raf.set(el, requestAnimationFrame(passo));
+}
+
+/* aplica um conjunto de valores: { idDoElemento: numero } — todos contam de 0 */
+function definirValores(mapa, recomecar){
+  Object.keys(mapa).forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const r = _raf.get(el); if (r){ cancelAnimationFrame(r); _raf.delete(el); }
+    const de = recomecar ? 0 : (_cont.get(el) || 0);
+    contarPara(el, mapa[id], de);
+  });
+}
+
+/* volta a contar do zero os valores de uma página (mantendo o valor final) */
+function recomecarValores(raiz){
+  const sec = typeof raiz === 'string' ? document.getElementById(raiz) : raiz;
+  if (!sec) return;
+  sec.querySelectorAll('[data-valor], .pr, .d-price, #oPreco, #tSaldo').forEach(el => {
+    const r = _raf.get(el); if (r){ cancelAnimationFrame(r); _raf.delete(el); }
+    const alvo = _alvo.has(el) ? _alvo.get(el) : (Number(el.dataset.valor) || 0);
+    _cont.set(el, 0);
+    if (alvo) contarPara(el, alvo, 0);
+  });
+}
+
 const tagClass = c => c === 'Novo' ? '' : c === 'Usado' ? ' u' : ' s';
 const galeria = c => (c.fotos && c.fotos.length) ? c.fotos : [c.img];
 const temVideos = c => !!(c && c.videos && c.videos.length);
@@ -1738,6 +1819,16 @@ function ir(page){
   });
 
   document.querySelector('.content').scrollTop = 0;
+
+  /* valores da página que fica visível contam de 0 até ao valor (6 s) */
+  if (['modelos','orcamento','orcdetalhe','detalhe','listaorc','clientes'].includes(page)){
+    setTimeout(() => {
+      if (page === 'modelos') contagemCards();
+      else if (page === 'listaorc') contarTabela('#tblOrc');
+      else if (page === 'clientes') contarTabela('#tblClientes');
+      else recomecarValores('pg-' + page);
+    }, 40);
+  }
 }
 
 /* "toque" no ícone: animação curta de confirmação */
@@ -1811,9 +1902,29 @@ function renderGrid(){
       <div class="bd">
         <div class="nm">${c.nome}</div>
         <div class="mt">${c.tipo}</div>
-        <div class="pr">${fmt(c.preco)}</div>
+        <div class="pr" data-valor="${c.preco}">${fmt(c.preco)}</div>
       </div>
     </article>`).join('');
+
+  contagemCards();
+}
+
+/* os preços dos cards contam de 0 até ao valor ao aparecerem */
+/* conta de 0 até ao valor todas as células com data-valor de uma tabela */
+function contarTabela(sel){
+  document.querySelectorAll(sel + ' [data-valor]').forEach(el => {
+    const v = Number(el.dataset.valor) || 0;
+    _alvo.set(el, v);
+    contarPara(el, v, 0);
+  });
+}
+
+function contagemCards(){
+  document.querySelectorAll('#grid .pr[data-valor]').forEach(el => {
+    const v = Number(el.dataset.valor) || 0;
+    _alvo.set(el, v);
+    contarPara(el, v, 0);
+  });
 }
 
 document.getElementById('filtros').addEventListener('click', e => {
@@ -1851,11 +1962,13 @@ function abrirDetalhe(){
   document.getElementById('dSub').textContent = atual.tipo;
   document.getElementById('dPreco').textContent = fmt(atual.preco);
   document.getElementById('dOff').textContent = 'À vista por ' + fmt(valorAVista(atual.preco, atual.desc));
-  document.getElementById('sPreco').textContent = fmt(atual.preco);
-  document.getElementById('sIva').textContent   = fmt(ivaDe(atual.preco));
-  document.getElementById('sDesc').textContent = fmt(atual.desc);
-  document.getElementById('sEnt').textContent = fmt(atual.preco / 10);
   document.getElementById('sEstado').textContent = atual.cat;
+  definirValores({
+    sPreco: atual.preco,
+    sIva: ivaDe(atual.preco),
+    sDesc: atual.desc,
+    sEnt: atual.preco / 10
+  }, true);
 
   /* miniatura 0..n = fotos · miniatura "v0..vn" = vídeos (na mesma lista) */
   const vids = videosDe(atual);
@@ -2197,18 +2310,20 @@ function calc(){
   const preco = atual.preco;
   const entrada = Math.min(num(document.getElementById('oEntrada').value), preco);
   const saldo = preco - entrada;
-  document.getElementById('oPrecoN').textContent = fmt(preco);
-  document.getElementById('oIva').textContent = fmt(ivaDe(preco));
-  document.getElementById('oTotalIva').textContent = fmt(totalComIva(preco));
-  document.getElementById('oIvaMini').textContent = fmt(ivaDe(preco));
-  document.getElementById('oTotalIvaMini').textContent = fmt(totalComIva(preco));
-  document.getElementById('oEnt').textContent = fmt(entrada);
-  document.getElementById('oSaldo').textContent = fmt(saldo);
-  document.getElementById('tSaldo').textContent = fmt(saldo);
-  document.getElementById('o12').textContent = fmt(saldo / 12);
-  document.getElementById('o24').textContent = fmt(saldo / 24);
-  document.getElementById('o36').textContent = fmt(saldo / 36);
-  document.getElementById('oVista').textContent = fmt(valorAVista(preco, atual.desc));
+  definirValores({
+    oPrecoN: preco,
+    oIva: ivaDe(preco),
+    oTotalIva: totalComIva(preco),
+    oIvaMini: ivaDe(preco),
+    oTotalIvaMini: totalComIva(preco),
+    oEnt: entrada,
+    oSaldo: saldo,
+    tSaldo: saldo,
+    o12: saldo / 12,
+    o24: saldo / 24,
+    o36: saldo / 36,
+    oVista: valorAVista(preco, atual.desc)
+  });
 }
 
 document.getElementById('oEntrada').addEventListener('input', e => {
@@ -2221,9 +2336,7 @@ function preencherResumoEnvio(preco){
   const g = id => document.getElementById(id);
   if (!g('rePreco')) return;
   g('reCarro').textContent = atual ? atual.nome : '—';
-  g('rePreco').textContent = fmt(preco);
-  g('reIva').textContent   = fmt(ivaDe(preco));
-  g('reTotal').textContent = fmt(totalComIva(preco));
+  definirValores({ rePreco: preco, reIva: ivaDe(preco), reTotal: totalComIva(preco) }, true);
 }
 
 document.getElementById('btnEnviar').addEventListener('click', () => {
@@ -2541,11 +2654,13 @@ function renderTabelaOrc(){
       <td><div class="cell-car"><img src="${c.img}" alt=""><span class="b">${c.nome}</span></div></td>
       <td>${o.nome}</td><td>${fmtTel(o.tel)}</td><td>${fmtData(o.data)}</td>
       <td><span class="pill${o.estado === 'Enviado' ? '' : o.estado === 'Pendente' ? ' p' : ' d'}">${o.estado}</span></td>
-      <td style="text-align:right" class="b">${fmt(o.preco)}</td>
-      <td style="text-align:right" class="iva-col">${fmt(ivaDe(o.preco))}</td>
-      <td style="text-align:right" class="b">${fmt(totalComIva(o.preco))}</td>
+      <td style="text-align:right" class="b" data-valor="${o.preco}">${fmt(o.preco)}</td>
+      <td style="text-align:right" class="iva-col" data-valor="${ivaDe(o.preco)}">${fmt(ivaDe(o.preco))}</td>
+      <td style="text-align:right" class="b" data-valor="${totalComIva(o.preco)}">${fmt(totalComIva(o.preco))}</td>
     </tr>`;
   }).join('');
+
+  contarTabela('#tblOrc');
 }
 
 /* atalhos do Perfil: cada cartão abre a página respetiva */
@@ -2620,17 +2735,19 @@ function valoresOrcForm(){
 function orcResumo(){
   const { preco, entrada, desc } = valoresOrcForm();
   const saldo = Math.max(preco - entrada, 0);
-  document.getElementById('odRPreco').textContent = fmt(preco);
-  document.getElementById('odRIva').textContent   = fmt(ivaDe(preco));
-  document.getElementById('odIvaMini').textContent   = fmt(ivaDe(preco));
-  document.getElementById('odTotalMini').textContent = fmt(totalComIva(preco));
-  document.getElementById('odRTotalIva').textContent = fmt(totalComIva(preco));
-  document.getElementById('odREnt').textContent   = fmt(entrada);
-  document.getElementById('odRSaldo').textContent = fmt(saldo);
-  document.getElementById('odR12').textContent    = fmt(saldo / 12);
-  document.getElementById('odR24').textContent    = fmt(saldo / 24);
-  document.getElementById('odR36').textContent    = fmt(saldo / 36);
-  document.getElementById('odRVista').textContent = fmt(valorAVista(preco, desc));
+  definirValores({
+    odRPreco: preco,
+    odRIva: ivaDe(preco),
+    odRTotalIva: totalComIva(preco),
+    odIvaMini: ivaDe(preco),
+    odTotalMini: totalComIva(preco),
+    odREnt: entrada,
+    odRSaldo: saldo,
+    odR12: saldo / 12,
+    odR24: saldo / 24,
+    odR36: saldo / 36,
+    odRVista: valorAVista(preco, desc)
+  });
 }
 
 /* máscara de moeda nos campos do orçamento */
@@ -2776,10 +2893,12 @@ function renderClientes(filtroTexto){
       <td><div class="cell-car"><div class="avx">${ini}</div><span class="b">${c.nome}</span></div></td>
       <td>${fmtTel(c.tel)}</td>
       <td>${c.orcs.length} orç.</td>
-      <td class="b">${fmt(c.total)}</td>
+      <td class="b" data-valor="${c.total}">${fmt(c.total)}</td>
       <td>${fmtData(c.ultimo)}</td>
     </tr>`;
   }).join('');
+
+  contarTabela('#tblClientes');
 }
 
 /* ---------- DETALHE DO CLIENTE ---------- */
