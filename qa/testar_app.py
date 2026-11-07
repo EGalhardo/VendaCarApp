@@ -325,6 +325,42 @@ async def main():
                await vd.evaluate(f"()=>!document.getElementById('{pgid}').classList.contains('hidden')"), pgid)
         await vd.close()
 
+        # ============ MIGRAÇÃO DE DADOS ANTIGOS (localStorage) ============
+        mg = await b.new_context()
+        mp = await mg.new_page(); me=[]
+        mp.on("pageerror", lambda e: me.append(str(e)))
+        await mp.goto(URL); await mp.wait_for_timeout(500)
+        await mp.evaluate("""([carros,orcs])=>{
+            localStorage.setItem('modelo_orcamento_carros_v1', JSON.stringify(carros));
+            localStorage.setItem('modelo_orcamentos_v1', JSON.stringify(orcs));
+            localStorage.removeItem('modelo_versao_dados');
+        }""", [
+            [{"id":"corolla","nome":"Toyota Corolla 2018","tipo":"Sedan · 2018 · Branco","cat":"Usado","preco":4500000,"desc":250000,"img":""},
+             {"id":"crv","nome":"Honda CR-V 2018","tipo":"SUV · 2018 · Prata","cat":"Usado","preco":7800000,"desc":400000,"img":""},
+             {"id":"hilux","nome":"Toyota Hilux 2020","tipo":"Pickup · 2020 · Branco","cat":"Novo","preco":18500000,"desc":900000,"img":""},
+             {"id":"tucson","nome":"Hyundai Tucson 2019","tipo":"SUV · 2019 · Azul","cat":"Semi-usado","preco":6200000,"desc":300000,"img":""},
+             {"id":"meu-carro","nome":"Kia Sportage 2024","tipo":"Novo · 2024 · Branco","cat":"Novo","preco":15000000,"desc":0,"img":""}],
+            [{"id":"o1","nome":"Renato","tel":"923456789","carro":"corolla","preco":4500000,"entrada":1500000,"desc":250000,"data":1794000000000,"estado":"Enviado"},
+             {"id":"user9","nome":"Cliente Real","tel":"924000111","carro":"meu-carro","preco":15000000,"entrada":3000000,"desc":0,"data":1794000000000,"estado":"Enviado"}]
+        ])
+        await mp.reload(); await mp.wait_for_timeout(900)
+        ok("Migração · browser com dados antigos passa a mostrar preços novos",
+           await mp.evaluate("()=>CARROS.find(c=>c.id==='corolla').preco") == 9750000, "")
+        ok("Migração · carro do utilizador não é alterado",
+           await mp.evaluate("()=>CARROS.find(c=>c.id==='meu-carro').preco") == 15000000, "")
+        ok("Migração · orçamento do utilizador não é alterado",
+           await mp.evaluate("()=>ORCAMENTOS.find(o=>o.id==='user9').preco") == 15000000, "")
+        ok("Migração · orçamento de demonstração acompanha o catálogo",
+           await mp.evaluate("()=>ORCAMENTOS.find(o=>o.id==='o1').preco") == 9750000, "")
+        ok("Migração · versão de dados gravada",
+           await mp.evaluate("()=>localStorage.getItem('modelo_versao_dados')") == "3", "")
+        await mp.evaluate("()=>{CARROS.find(c=>c.id==='corolla').preco=8800000; guardar();}")
+        await mp.reload(); await mp.wait_for_timeout(700)
+        ok("Migração · não volta a correr (respeita edições seguintes)",
+           await mp.evaluate("()=>CARROS.find(c=>c.id==='corolla').preco") == 8800000, "")
+        ok("Migração · sem erros de consola", len(me) == 0, str(me[:2]))
+        await mg.close()
+
         # ============ ELIMINAR MODELO (card + confirmação) ============
         dl = await b.new_page(viewport={"width":1440,"height":900})
         de=[]; dl.on("pageerror", lambda e: de.append(str(e)))

@@ -291,6 +291,41 @@
  },
  {
   "r": "PASS",
+  "n": "Migração · browser com dados antigos passa a mostrar preços novos",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Migração · carro do utilizador não é alterado",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Migração · orçamento do utilizador não é alterado",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Migração · orçamento de demonstração acompanha o catálogo",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Migração · versão de dados gravada",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Migração · não volta a correr (respeita edições seguintes)",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Migração · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
   "n": "Card · botão eliminar em todos os modelos",
   "d": "4 de 4"
  },

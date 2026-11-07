@@ -1449,12 +1449,16 @@ const totalComIva = preco => (Number(preco) || 0) + ivaDe(preco);
 /* ==========================================================
    PERSISTÊNCIA
    ========================================================== */
+const VERSAO_KEY = 'modelo_versao_dados';
+const VERSAO_DADOS = 3;      // 3 = preços de mercado de Luanda (nov/2026)
+
 function carregar(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
     const arr = raw ? JSON.parse(raw) : null;
     CARROS = Array.isArray(arr) && arr.length ? arr : PADRAO.slice();
   }catch(e){ CARROS = PADRAO.slice(); }
+  migrarVersao();
   atual = CARROS[0];
 
   try{
@@ -1465,6 +1469,40 @@ function carregar(){
 
   migrarPrecos();
   carregarLoja();
+}
+
+/* ------------------------------------------------------------------
+   Migração de dados por versão (o que está gravado no dispositivo é
+   atualizado quando a app muda de versão, sem apagar o que é do utilizador)
+   ------------------------------------------------------------------ */
+function migrarVersao(){
+  let v = 0;
+  try{ v = Number(localStorage.getItem(VERSAO_KEY)) || 0; }catch(e){}
+  if (v >= VERSAO_DADOS) return;
+
+  /* 1) catálogo de demonstração: os 4 modelos de origem recebem os valores novos;
+        modelos criados pelo utilizador mantêm-se intactos */
+  CARROS = CARROS.map(c => {
+    const base = PADRAO.find(p => p.id === c.id);
+    return base ? Object.assign({}, c, { preco: base.preco, desc: base.desc }) : c;
+  });
+  guardar();
+
+  /* 2) orçamentos de demonstração seguem o carro */
+  try{
+    const rawO = localStorage.getItem(ORC_KEY);
+    const lista = rawO ? JSON.parse(rawO) : null;
+    if (Array.isArray(lista)){
+      lista.forEach(o => {
+        if (!/^o[1-5]$/.test(o.id)) return;
+        const c = CARROS.find(x => x.id === o.carro);
+        if (c){ o.preco = c.preco; o.entrada = Math.round(c.preco * 0.2); o.desc = c.desc; }
+      });
+      localStorage.setItem(ORC_KEY, JSON.stringify(lista));
+    }
+  }catch(e){/* quota */}
+
+  try{ localStorage.setItem(VERSAO_KEY, String(VERSAO_DADOS)); }catch(e){}
 }
 
 /* preço mínimo de referência no mercado angolano */
