@@ -349,28 +349,40 @@ async def main():
         ok("Animação · 'Modelos' animado quando ativo",
            await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"modelos\"] .ico svg path')).animationName") == "modelosBloco", "")
 
-        # Orçamentos: folhas a empilhar
+        # Orçamentos: linha a linha, de cima para baixo
         await an.click(".nav-item[data-go='listaorc']"); await an.wait_for_timeout(500)
-        ok("Animação · folha de trás entra e sai",
-           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"listaorc\"] .ico .f3')).animationName") == "folhaEntra", "")
-        ok("Animação · segunda folha entra depois",
-           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"listaorc\"] .ico .f2')).animationName") == "folhaEntra2", "")
-        ops = await an.evaluate("""async ()=>{
-            const f=document.querySelector('.nav-item.on[data-go="listaorc"] .ico .f3');
-            const a=[]; for(let i=0;i<10;i++){a.push(+getComputedStyle(f).opacity); await new Promise(r=>setTimeout(r,180));}
+        ok("Animação · folha de Orçamentos tem 3 linhas de texto",
+           await an.locator(".nav-item.on[data-go='listaorc'] .ico .linha").count() == 3, "")
+        ok("Animação · as linhas são escritas (escreveLinha)",
+           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"listaorc\"] .ico .l2')).animationName") == "escreveLinha", "")
+        ok("Animação · linhas escrevem-se em sequência (atraso crescente)",
+           await an.evaluate("""()=>{const g=s=>parseFloat(getComputedStyle(document.querySelector('.nav-item.on[data-go="listaorc"] .ico '+s)).animationDelay);
+              return g('.l1')<g('.l2') && g('.l2')<g('.l3');}"""), "")
+        prog = await an.evaluate("""async ()=>{
+            const l=document.querySelector('.nav-item.on[data-go="listaorc"] .ico .l1');
+            const a=[]; for(let i=0;i<12;i++){a.push(parseFloat(getComputedStyle(l).strokeDashoffset)); await new Promise(r=>setTimeout(r,160));}
             return a;}""")
-        ok("Animação · as folhas aparecem e desaparecem (opacidade varia)",
-           max(ops) > 0.6 and min(ops) < 0.2, (round(min(ops),2), round(max(ops),2)))
+        ok("Animação · o traço da linha cresce (dashoffset diminui)", (max(prog)-min(prog)) > 3, (min(prog), max(prog)))
 
-        # Clientes: cabeça a espreitar
+        # Clientes: os bonecos revezam-se
         await an.click(".nav-item[data-go='clientes']"); await an.wait_for_timeout(500)
-        ok("Animação · cabeça de Clientes tem animação de espreitar",
-           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"clientes\"] .ico .cabeca-espreita')).animationName") == "espreita", "")
-        ys = await an.evaluate("""async ()=>{
-            const h=document.querySelector('.nav-item.on[data-go="clientes"] .ico .cabeca-espreita');
-            const a=[]; for(let i=0;i<10;i++){a.push(+h.getBoundingClientRect().top.toFixed(2)); await new Promise(r=>setTimeout(r,200));}
-            return a;}""")
-        ok("Animação · a cabeça esconde-se e volta a aparecer", max(ys)-min(ys) > 5, round(max(ys)-min(ys),2))
+        ok("Animação · boneco da frente espreita (espreitaA)",
+           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"clientes\"] .ico .cabeca-frente')).animationName") == "espreitaA", "")
+        ok("Animação · boneco de trás tem a sua própria animação (espreitaB)",
+           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"clientes\"] .ico .cabeca-tras')).animationName") == "espreitaB", "")
+        rev = await an.evaluate("""async ()=>{
+            const f=document.querySelector('.nav-item.on[data-go="clientes"] .ico .cabeca-frente');
+            const t=document.querySelector('.nav-item.on[data-go="clientes"] .ico .cabeca-tras');
+            const sy=()=>parseFloat(getComputedStyle(f).transform.split(',')[5]||0);
+            const sz=()=>parseFloat(getComputedStyle(t).transform.split(',')[5]||0);
+            let frenteEscondidaComTrasVisivel=false;
+            for(let i=0;i<20;i++){
+               const ey=sy()>3, vz=sz()<3;
+               if (ey && vz) frenteEscondidaComTrasVisivel=true;
+               await new Promise(r=>setTimeout(r,110));
+            }
+            return frenteEscondidaComTrasVisivel;}""")
+        ok("Animação · quando o da frente se esconde, o de trás aparece", rev, "")
         rd = await b.new_context(reduced_motion="reduce")
         rp = await rd.new_page(); await rp.goto(URL); await rp.wait_for_timeout(700)
         ok("Animação · respeita 'reduzir movimento'",

@@ -307,7 +307,7 @@
  {
   "r": "PASS",
   "n": "Animação · cabeça do Perfil move-se para os dois lados",
-  "d": 3.19
+  "d": 3.18
  },
  {
   "r": "PASS",
@@ -316,31 +316,41 @@
  },
  {
   "r": "PASS",
-  "n": "Animação · folha de trás entra e sai",
+  "n": "Animação · folha de Orçamentos tem 3 linhas de texto",
   "d": ""
  },
  {
   "r": "PASS",
-  "n": "Animação · segunda folha entra depois",
+  "n": "Animação · as linhas são escritas (escreveLinha)",
   "d": ""
  },
  {
   "r": "PASS",
-  "n": "Animação · as folhas aparecem e desaparecem (opacidade varia)",
+  "n": "Animação · linhas escrevem-se em sequência (atraso crescente)",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
-   0.03,
-   1
+   0,
+   3.34637
   ]
  },
  {
   "r": "PASS",
-  "n": "Animação · cabeça de Clientes tem animação de espreitar",
+  "n": "Animação · boneco da frente espreita (espreitaA)",
   "d": ""
  },
  {
   "r": "PASS",
-  "n": "Animação · a cabeça esconde-se e volta a aparecer",
-  "d": 9.82
+  "n": "Animação · boneco de trás tem a sua própria animação (espreitaB)",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · quando o da frente se esconde, o de trás aparece",
+  "d": ""
  },
  {
   "r": "PASS",

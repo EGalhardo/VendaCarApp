@@ -187,29 +187,32 @@
     0%,100%{transform:scale(1);opacity:1}
     50%    {transform:scale(1.18);opacity:.65}
   }
-  /* Orçamentos — folhas a aparecer uma acima da outra */
-  @keyframes folhaEntra{
-    0%   {opacity:0;transform:translate(-4.5px,4.5px)}
-    22%  {opacity:1;transform:translate(-3.2px,3.2px)}
-    62%  {opacity:1;transform:translate(-3.2px,3.2px)}
-    84%  {opacity:0;transform:translate(-3.2px,3.2px)}
-    100% {opacity:0;transform:translate(-4.5px,4.5px)}
-  }
-  @keyframes folhaEntra2{
-    0%,25%{opacity:0;transform:translate(-1.5px,1.5px)}
-    42%   {opacity:1;transform:translate(-1.5px,1.5px)}
-    74%   {opacity:1;transform:translate(-1.5px,1.5px)}
-    92%   {opacity:0;transform:translate(-1.5px,1.5px)}
-    100%  {opacity:0;transform:translate(-1.5px,1.5px)}
+  /* Orçamentos — a folha vai sendo escrita de cima para baixo */
+  @keyframes escreveLinha{
+    0%   {stroke-dashoffset:9;opacity:0}
+    6%   {opacity:1}
+    30%  {stroke-dashoffset:0;opacity:1}
+    88%  {stroke-dashoffset:0;opacity:1}
+    97%  {stroke-dashoffset:0;opacity:0}
+    100% {stroke-dashoffset:9;opacity:0}
   }
 
-  /* Clientes — cabeça a espreitar e a esconder-se */
-  @keyframes espreita{
+  /* Clientes — os dois bonecos revezam-se a espreitar */
+  @keyframes espreitaA{
     0%   {transform:translateY(9.8px)}
-    14%  {transform:translateY(-1.6px)}
-    28%  {transform:translateY(0)}
-    50%  {transform:translateY(-1.3px)}
-    68%  {transform:translateY(9.8px)}
+    12%  {transform:translateY(-1.4px)}
+    24%  {transform:translateY(0)}
+    42%  {transform:translateY(-.8px)}
+    52%  {transform:translateY(9.8px)}
+    100% {transform:translateY(9.8px)}
+  }
+  @keyframes espreitaB{
+    0%   {transform:translateY(9.8px)}
+    50%  {transform:translateY(9.8px)}
+    60%  {transform:translateY(-1.2px)}
+    70%  {transform:translateY(0)}
+    88%  {transform:translateY(-.7px)}
+    96%  {transform:translateY(9.8px)}
     100% {transform:translateY(9.8px)}
   }
 
@@ -229,19 +232,28 @@
   .nav.on[data-go="modelos"]  .ico svg path:nth-child(3){animation-delay:.36s}
   .nav.on[data-go="modelos"]  .ico svg path:nth-child(4){animation-delay:.54s}
 
-  /* folhas: escondidas por omissão, entram em sequência quando ativo */
-  .nav .ico .folha,.nav-item .ico .folha{opacity:0}
-  .nav.on[data-go="listaorc"] .ico .f3, .nav-item.on[data-go="listaorc"] .ico .f3{
-    animation:folhaEntra 2.6s ease-in-out infinite;
+  /* linhas do orçamento: escrevem-se de cima para baixo */
+  .nav .ico .linha,.nav-item .ico .linha{
+    stroke-dasharray:9;stroke-dashoffset:9;opacity:0;
   }
-  .nav.on[data-go="listaorc"] .ico .f2, .nav-item.on[data-go="listaorc"] .ico .f2{
-    animation:folhaEntra2 2.6s ease-in-out infinite;
+  .nav.on[data-go="listaorc"] .ico .linha,
+  .nav-item.on[data-go="listaorc"] .ico .linha{
+    animation:escreveLinha 2.8s ease-in-out infinite;
   }
+  .nav.on[data-go="listaorc"] .ico .l1,.nav-item.on[data-go="listaorc"] .ico .l1{animation-delay:0s}
+  .nav.on[data-go="listaorc"] .ico .l2,.nav-item.on[data-go="listaorc"] .ico .l2{animation-delay:.28s}
+  .nav.on[data-go="listaorc"] .ico .l3,.nav-item.on[data-go="listaorc"] .ico .l3{animation-delay:.56s}
 
-  /* cabeça: escondida em baixo, espreita e volta a esconder-se */
-  .nav.on[data-go="clientes"] .ico .cabeca-espreita,
-  .nav-item.on[data-go="clientes"] .ico .cabeca-espreita{
-    animation:espreita 2.8s ease-in-out infinite;
+  /* cabeças: escondidas em baixo, revezam-se a espreitar */
+  .nav .ico .cabeca-frente,.nav .ico .cabeca-tras,
+  .nav-item .ico .cabeca-frente,.nav-item .ico .cabeca-tras{transform:translateY(9.8px)}
+  .nav.on[data-go="clientes"] .ico .cabeca-frente,
+  .nav-item.on[data-go="clientes"] .ico .cabeca-frente{
+    animation:espreitaA 3.4s ease-in-out infinite;
+  }
+  .nav.on[data-go="clientes"] .ico .cabeca-tras,
+  .nav-item.on[data-go="clientes"] .ico .cabeca-tras{
+    animation:espreitaB 3.4s ease-in-out infinite;
   }
 
   /* toque / clique: dá um "salto" rápido e fica animado enquanto está ativo */
@@ -876,17 +888,22 @@
       <span class="tx">Modelos</span><span class="cnt" data-cnt="carros">4</span>
     </button>
     <button class="nav" data-go="listaorc">
-      <span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
-        <path class="folha f3" d="M6 3h9l5 5v14H6z"/>
-        <path class="folha f2" d="M6 3h9l5 5v14H6z"/>
-        <path class="f1" d="M6 3h9l5 5v14H6zM15 3v5h5M9 13h8M9 17h6"/></svg></span>
+      <span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 3h9l5 5v13H5zM14 3v5h5"/>
+        <path class="linha l1" d="M8.4 11.6h7.2"/>
+        <path class="linha l2" d="M8.4 14.2h7.2"/>
+        <path class="linha l3" d="M8.4 16.8h4.6"/></svg></span>
       <span class="tx">Orçamentos</span><span class="cnt" data-cnt="orcs">5</span>
     </button>
     <button class="nav" data-go="clientes">
       <span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
         <clipPath id="espreitaLado"><rect x="0" y="-6" width="24" height="18.4"/></clipPath>
-        <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M22 21v-2a4 4 0 00-3-3.9"/>
-        <g clip-path="url(#espreitaLado)"><circle class="cabeca-espreita" cx="9" cy="7" r="3.8"/></g></svg></span>
+        <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/>
+        <g clip-path="url(#espreitaLado)">
+          <circle class="cabeca-frente" cx="9" cy="7" r="3.8"/>
+          <circle class="cabeca-tras" cx="17.4" cy="9.4" r="3.1"/>
+        </g>
+        <path d="M22 21v-2a4 4 0 00-2.8-3.8"/></svg></span>
       <span class="tx">Clientes</span><span class="cnt" data-cnt="clientes">4</span>
     </button>
     <button class="nav" data-go="perfil">
@@ -1228,17 +1245,22 @@
       Modelos
     </button>
     <button class="nav-item" data-go="listaorc">
-      <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
-        <path class="folha f3" d="M6 3h9l5 5v14H6z"/>
-        <path class="folha f2" d="M6 3h9l5 5v14H6z"/>
-        <path class="f1" d="M6 3h9l5 5v14H6zM15 3v5h5M9 13h8M9 17h6"/></svg></span>
+      <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 3h9l5 5v13H5zM14 3v5h5"/>
+        <path class="linha l1" d="M8.4 11.6h7.2"/>
+        <path class="linha l2" d="M8.4 14.2h7.2"/>
+        <path class="linha l3" d="M8.4 16.8h4.6"/></svg></span>
       Orçamentos
     </button>
     <button class="nav-item" data-go="clientes">
       <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
         <clipPath id="espreitaNav"><rect x="0" y="-6" width="24" height="18.4"/></clipPath>
-        <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M22 21v-2a4 4 0 00-3-3.9"/>
-        <g clip-path="url(#espreitaNav)"><circle class="cabeca-espreita" cx="9" cy="7" r="3.8"/></g></svg></span>
+        <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/>
+        <g clip-path="url(#espreitaNav)">
+          <circle class="cabeca-frente" cx="9" cy="7" r="3.8"/>
+          <circle class="cabeca-tras" cx="17.4" cy="9.4" r="3.1"/>
+        </g>
+        <path d="M22 21v-2a4 4 0 00-2.8-3.8"/></svg></span>
       Clientes
     </button>
     <button class="nav-item" data-go="perfil">
