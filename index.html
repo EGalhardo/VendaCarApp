@@ -126,10 +126,9 @@
   }
   .who:hover .av, .who:focus-visible .av{box-shadow:0 0 0 3px rgba(76,175,80,.16)}
   .who .oi{
-    display:block;font-size:10.5px;line-height:1.15;color:var(--muted-2);
+    display:block;font-size:10.5px;font-weight:700;line-height:1.15;color:#3a4441;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:132px;text-align:center;
   }
-  .who .oi i{font-style:normal;color:var(--muted)}
   .who .oi b{font-weight:700;color:#3a4441}
 
   /* ---------- barra lateral ---------- */
@@ -744,8 +743,8 @@
   html[data-tema="escuro"] .ic-btn:hover{background:#071528}
   html[data-tema="escuro"] .who{background:transparent}
   html[data-tema="escuro"] .bar-sep{background:#17375e}
-  html[data-tema="escuro"] .who .oi{color:#93a7c4}
-  html[data-tema="escuro"] .who .oi b{color:#eaf1fb}
+  html[data-tema="escuro"] .who .oi{color:#cfe0f5}
+  html[data-tema="escuro"] .who .oi b{color:#ffffff}
   html[data-tema="escuro"] .who:hover .av{box-shadow:0 0 0 3px rgba(22,194,90,.18)}
   html[data-tema="escuro"] .side{background:#040d1f}
   html[data-tema="escuro"] .side .lbl{color:#7c90ae}
@@ -1104,7 +1103,7 @@
       <span class="bar-sep" aria-hidden="true"></span>
       <button class="who" id="whoBtn" data-go="perfil" title="Perfil" aria-label="Perfil">
         <span class="av">AS</span>
-        <span class="oi"><i>Oi,</i> <b id="whoNome">ABC Seminovos</b></span>
+        <span class="oi">Oi <b id="whoNome">ABC Seminovos</b></span>
       </button>
     </div>
   </div>

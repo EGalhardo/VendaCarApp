@@ -251,6 +251,31 @@
  },
  {
   "r": "PASS",
+  "n": "R38 · todo o cumprimento em bold",
+  "d": "{'texto': 'Oi ABC Seminovos', 'pesoOi': '700', 'pesoNome': '700', 'pesoBloco': '400', 'corOi': 'rgb(58, 68, 65)', 'corNome': 'rgb(58, 68, 65)', 'umSoTexto': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R38 · texto 'Oi <nome>' numa só linha",
+  "d": "{'texto': 'Oi ABC Seminovos', 'pesoOi': '700', 'pesoNome': '700', 'pesoBloco': '400', 'corOi': 'rgb(58, 68, 65)', 'corNome': 'rgb(58, 68, 65)', 'umSoTexto': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R38 · aceita nome curto de empresa (ex.: 123)",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R38 · bold mantém-se no modo escuro",
+  "d": "{'p': '700', 'c': 'rgb(207, 224, 245)'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R38 · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
   "n": "R37 · barra lateral sem o container da logomarca",
   "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'nav', 'espacoAbaixoNav': 615, 'semCaixa': True, 'navsVisiveis': 4}"
  },
@@ -682,7 +707,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "-16,096.35 Kz"
+  "d": "-21,587.79 Kz"
  },
  {
   "r": "PASS",
@@ -692,12 +717,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,590,155.35 Kz"
+  "d": "9,589,824.78 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,999.35 Kz"
+  "d": "9,749,999.26 Kz"
  },
  {
   "r": "PASS",
@@ -713,10 +738,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   321115,
-   2893159,
-   4882359,
-   6363218
+   320473,
+   2892907,
+   4881976,
+   6363079
   ]
  },
  {
@@ -737,14 +762,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "417,294.70 Kz"
+  "d": "417,649.81 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "417,294.70 Kz",
-   "4,063,003.47 Kz"
+   "417,649.81 Kz",
+   "4,063,258.71 Kz"
   ]
  },
  {
@@ -812,7 +837,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34634
+   3.34733
   ]
  },
  {
@@ -1152,22 +1177,22 @@
  {
   "r": "PASS",
   "n": "Desktop · campo de procura removido",
-  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi, ABC Seminovos'}"
+  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi ABC Seminovos'}"
  },
  {
   "r": "PASS",
   "n": "Desktop · nome da página fora da appbar",
-  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi, ABC Seminovos'}"
+  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi ABC Seminovos'}"
  },
  {
   "r": "PASS",
   "n": "Desktop · modo Online fora da appbar",
-  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi, ABC Seminovos'}"
+  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi ABC Seminovos'}"
  },
  {
   "r": "PASS",
   "n": "Desktop · foto de perfil alinhada à direita (sem notificações)",
-  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi, ABC Seminovos'}"
+  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi ABC Seminovos'}"
  },
  {
   "r": "PASS",
@@ -1302,27 +1327,27 @@
  {
   "r": "PASS",
   "n": "R35 · desktop · ícone de notificações removido",
-  "d": "{'sino': False, 'semTextoNotif': True, 'bordas': '0px', 'fundoBtn': 'rgba(0, 0, 0, 0)', 'fotoAcimaDoNome': True, 'nomeAbaixo': True, 'centrado': True, 'oiTexto': 'Oi, ABC Seminovos'}"
+  "d": "{'sino': False, 'semTextoNotif': True, 'bordas': '0px', 'fundoBtn': 'rgba(0, 0, 0, 0)', 'fotoAcimaDoNome': True, 'nomeAbaixo': True, 'centrado': True, 'oiTexto': 'Oi ABC Seminovos'}"
  },
  {
   "r": "PASS",
   "n": "R35 · ícones da appbar sem bordas",
-  "d": "{'sino': False, 'semTextoNotif': True, 'bordas': '0px', 'fundoBtn': 'rgba(0, 0, 0, 0)', 'fotoAcimaDoNome': True, 'nomeAbaixo': True, 'centrado': True, 'oiTexto': 'Oi, ABC Seminovos'}"
+  "d": "{'sino': False, 'semTextoNotif': True, 'bordas': '0px', 'fundoBtn': 'rgba(0, 0, 0, 0)', 'fotoAcimaDoNome': True, 'nomeAbaixo': True, 'centrado': True, 'oiTexto': 'Oi ABC Seminovos'}"
  },
  {
   "r": "PASS",
   "n": "R35 · nome da loja debaixo da foto de perfil",
-  "d": "{'sino': False, 'semTextoNotif': True, 'bordas': '0px', 'fundoBtn': 'rgba(0, 0, 0, 0)', 'fotoAcimaDoNome': True, 'nomeAbaixo': True, 'centrado': True, 'oiTexto': 'Oi, ABC Seminovos'}"
+  "d": "{'sino': False, 'semTextoNotif': True, 'bordas': '0px', 'fundoBtn': 'rgba(0, 0, 0, 0)', 'fotoAcimaDoNome': True, 'nomeAbaixo': True, 'centrado': True, 'oiTexto': 'Oi ABC Seminovos'}"
  },
  {
   "r": "PASS",
-  "n": "R35 · cumprimento 'Oi, <nome da loja>'",
-  "d": "Oi, ABC Seminovos"
+  "n": "R38 · cumprimento 'Oi <nome da loja>' sem vírgula",
+  "d": "Oi ABC Seminovos"
  },
  {
   "r": "PASS",
-  "n": "R35 · o nome segue os Dados da Loja",
-  "d": "Oi, Seminovos Kianda"
+  "n": "R38 · o nome segue os Dados da Loja",
+  "d": "Oi Seminovos Kianda"
  },
  {
   "r": "PASS",
@@ -1337,12 +1362,12 @@
  {
   "r": "PASS",
   "n": "R35 · mobile · foto de perfil no lugar das notificações",
-  "d": "{'visivel': True, 'lugarDoSino': True, 'dentroDaBarra': True, 'depoisDoTema': True, 'fotoAcima': True, 'bordas': '0px|rgba(0, 0, 0, 0)', 'overflow': 0, 'oi': 'Oi, ABC Seminovos'}"
+  "d": "{'visivel': True, 'lugarDoSino': True, 'dentroDaBarra': True, 'depoisDoTema': True, 'fotoAcima': True, 'bordas': '0px|rgba(0, 0, 0, 0)', 'overflow': 0, 'oi': 'Oi ABC Seminovos'}"
  },
  {
   "r": "PASS",
   "n": "R35 · mobile · nome debaixo da foto",
-  "d": "{'visivel': True, 'lugarDoSino': True, 'dentroDaBarra': True, 'depoisDoTema': True, 'fotoAcima': True, 'bordas': '0px|rgba(0, 0, 0, 0)', 'overflow': 0, 'oi': 'Oi, ABC Seminovos'}"
+  "d": "{'visivel': True, 'lugarDoSino': True, 'dentroDaBarra': True, 'depoisDoTema': True, 'fotoAcima': True, 'bordas': '0px|rgba(0, 0, 0, 0)', 'overflow': 0, 'oi': 'Oi ABC Seminovos'}"
  },
  {
   "r": "PASS",
@@ -1367,17 +1392,17 @@
  {
   "r": "PASS",
   "n": "R36 · cápsula 'Online' removida da appbar",
-  "d": "{'pill': False, 'online': False, 'grupoExiste': True, 'grupoADireita': '976.969px', 'temaAntesDoSep': True, 'sepAntesDoPerfil': True, 'margemDireita': 24, 'espacoMeio': True}"
+  "d": "{'pill': False, 'online': False, 'grupoExiste': True, 'grupoADireita': '979.688px', 'temaAntesDoSep': True, 'sepAntesDoPerfil': True, 'margemDireita': 24, 'espacoMeio': True}"
  },
  {
   "r": "PASS",
   "n": "R36 · ações agrupadas e encostadas à direita",
-  "d": "{'pill': False, 'online': False, 'grupoExiste': True, 'grupoADireita': '976.969px', 'temaAntesDoSep': True, 'sepAntesDoPerfil': True, 'margemDireita': 24, 'espacoMeio': True}"
+  "d": "{'pill': False, 'online': False, 'grupoExiste': True, 'grupoADireita': '979.688px', 'temaAntesDoSep': True, 'sepAntesDoPerfil': True, 'margemDireita': 24, 'espacoMeio': True}"
  },
  {
   "r": "PASS",
   "n": "R36 · ordem: tema · divisor · perfil",
-  "d": "{'pill': False, 'online': False, 'grupoExiste': True, 'grupoADireita': '976.969px', 'temaAntesDoSep': True, 'sepAntesDoPerfil': True, 'margemDireita': 24, 'espacoMeio': True}"
+  "d": "{'pill': False, 'online': False, 'grupoExiste': True, 'grupoADireita': '979.688px', 'temaAntesDoSep': True, 'sepAntesDoPerfil': True, 'margemDireita': 24, 'espacoMeio': True}"
  },
  {
   "r": "PASS",

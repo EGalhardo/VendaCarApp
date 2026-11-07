@@ -297,6 +297,31 @@ async def main():
         ok("R34 · foto de perfil sem erros de consola", len(fpe)==0, str(fpe[:2]))
         await fp.close()
 
+        # ============ R38 · CUMPRIMENTO EM BOLD NA APPBAR ============
+        r8 = await b.new_page(viewport={"width":1440,"height":900})
+        r8e=[]; r8.on("pageerror", lambda e: r8e.append(str(e)))
+        await novo(r8)
+        B8 = await r8.evaluate("""()=>{
+          const oi=document.querySelector('.who .oi'), b=document.getElementById('whoNome');
+          const co=getComputedStyle(oi), cb=getComputedStyle(b);
+          const pai=getComputedStyle(document.querySelector('.who'));
+          return {texto:oi.textContent.trim(), pesoOi:co.fontWeight, pesoNome:cb.fontWeight,
+                  pesoBloco:pai.fontWeight, corOi:co.color, corNome:cb.color,
+                  umSoTexto: oi.children.length===1 && b.textContent.trim()==='ABC Seminovos'};
+        }""")
+        ok("R38 · todo o cumprimento em bold", B8["pesoOi"] in ("700","bold") and B8["pesoNome"] in ("700","bold"), str(B8))
+        ok("R38 · texto 'Oi <nome>' numa só linha", B8["texto"]=="Oi ABC Seminovos" and B8["umSoTexto"], str(B8))
+        await r8.evaluate("()=>{LOJA.dados='123'; guardarLoja(); renderAvatarLoja();}")
+        await r8.wait_for_timeout(250)
+        ok("R38 · aceita nome curto de empresa (ex.: 123)",
+           await r8.evaluate("()=>document.querySelector('.who .oi').textContent.trim()")=="Oi 123", "")
+        await r8.click("#btnTema"); await r8.wait_for_timeout(450)
+        B9 = await r8.evaluate("()=>{const o=getComputedStyle(document.querySelector('.who .oi'));return {p:o.fontWeight,c:o.color};}")
+        ok("R38 · bold mantém-se no modo escuro", B9["p"] in ("700","bold") and B9["c"]=="rgb(207, 224, 245)", str(B9))
+        await r8.evaluate("()=>{LOJA.dados=''; guardarLoja(); renderAvatarLoja();}")
+        ok("R38 · sem erros de consola", len(r8e)==0, str(r8e[:2]))
+        await r8.close()
+
         # ============ R37 · BARRA LATERAL SEM O CONTAINER DA LOGOMARCA ============
         sd = await b.new_page(viewport={"width":1440,"height":900})
         sde=[]; sd.on("pageerror", lambda e: sde.append(str(e)))
@@ -1202,11 +1227,11 @@ async def main():
         ok("R35 · desktop · ícone de notificações removido", not A["sino"] and A["semTextoNotif"], str(A))
         ok("R35 · ícones da appbar sem bordas", A["bordas"]=="0px" and A["fundoBtn"]=="rgba(0, 0, 0, 0)", str(A))
         ok("R35 · nome da loja debaixo da foto de perfil", A["fotoAcimaDoNome"] and A["centrado"], str(A))
-        ok("R35 · cumprimento 'Oi, <nome da loja>'", A["oiTexto"].startswith("Oi,"), A["oiTexto"])
+        ok("R38 · cumprimento 'Oi <nome da loja>' sem vírgula", A["oiTexto"].startswith("Oi ") and "," not in A["oiTexto"], A["oiTexto"])
         await r5.evaluate("()=>{LOJA.dados='Seminovos Kianda'; guardarLoja(); renderAvatarLoja();}")
         await r5.wait_for_timeout(250)
         N = await r5.evaluate("()=>document.querySelector('.who .oi').textContent.trim()")
-        ok("R35 · o nome segue os Dados da Loja", N=="Oi, Seminovos Kianda", N)
+        ok("R38 · o nome segue os Dados da Loja", N=="Oi Seminovos Kianda", N)
         await r5.click("#whoBtn"); await r5.wait_for_timeout(600)
         ok("R35 · clicar na foto abre o Perfil",
            await r5.evaluate("()=>!document.getElementById('pg-perfil').classList.contains('hidden')"), "")
