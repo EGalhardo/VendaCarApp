@@ -245,8 +245,9 @@
   .nav.on[data-go="listaorc"] .ico .l3,.nav-item.on[data-go="listaorc"] .ico .l3{animation-delay:.56s}
 
   /* cabeças: escondidas em baixo, revezam-se a espreitar */
-  .nav .ico .cabeca-frente,.nav .ico .cabeca-tras,
-  .nav-item .ico .cabeca-frente,.nav-item .ico .cabeca-tras{transform:translateY(9.8px)}
+  /* fora da página Clientes: só o primeiro boneco mostra a cabeça */
+  .nav .ico .cabeca-frente,.nav-item .ico .cabeca-frente{transform:translateY(0)}
+  .nav .ico .cabeca-tras,.nav-item .ico .cabeca-tras{transform:translateY(9.8px)}
   .nav.on[data-go="clientes"] .ico .cabeca-frente,
   .nav-item.on[data-go="clientes"] .ico .cabeca-frente{
     animation:espreitaA 3.4s ease-in-out infinite;

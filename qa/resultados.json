@@ -307,7 +307,7 @@
  {
   "r": "PASS",
   "n": "Animação · cabeça do Perfil move-se para os dois lados",
-  "d": 3.18
+  "d": 3.19
  },
  {
   "r": "PASS",
@@ -334,7 +334,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34637
+   3.34591
   ]
  },
  {
@@ -351,6 +351,16 @@
   "r": "PASS",
   "n": "Animação · quando o da frente se esconde, o de trás aparece",
   "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · fora da página Clientes mostra a cabeça do 1.º boneco",
+  "d": 0
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · fora da página Clientes o 2.º boneco fica sem cabeça",
+  "d": 9.8
  },
  {
   "r": "PASS",

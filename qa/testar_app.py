@@ -383,6 +383,17 @@ async def main():
             }
             return frenteEscondidaComTrasVisivel;}""")
         ok("Animação · quando o da frente se esconde, o de trás aparece", rev, "")
+        # ícone de Clientes fora da página: mostra a cabeça do primeiro boneco
+        await an.click(".nav-item[data-go='modelos']"); await an.wait_for_timeout(600)
+        estado_inativo = await an.evaluate("""()=>{
+            const ty = sel => parseFloat(getComputedStyle(document.querySelector(sel)).transform.split(',')[5]||0);
+            return { frente: ty('.nav-item[data-go="clientes"] .cabeca-frente'),
+                     tras:   ty('.nav-item[data-go="clientes"] .cabeca-tras') };}""")
+        ok("Animação · fora da página Clientes mostra a cabeça do 1.º boneco",
+           abs(estado_inativo["frente"]) < 0.5, estado_inativo["frente"])
+        ok("Animação · fora da página Clientes o 2.º boneco fica sem cabeça",
+           estado_inativo["tras"] > 7, estado_inativo["tras"])
+
         rd = await b.new_context(reduced_motion="reduce")
         rp = await rd.new_page(); await rp.goto(URL); await rp.wait_for_timeout(700)
         ok("Animação · respeita 'reduzir movimento'",
