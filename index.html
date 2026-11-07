@@ -178,6 +178,11 @@
   .vneg .nm{font-size:13px;font-weight:800;color:#2b3532;line-height:1.2}
   .vneg .cr{font-size:11.5px;color:var(--muted-2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .vneg .vl{margin-left:auto;font-size:13px;font-weight:800;color:var(--green-ink);white-space:nowrap}
+  .funil-tot{display:flex;align-items:center;justify-content:flex-end;gap:7px;margin-top:10px;
+             font-size:12px;font-weight:700;color:var(--muted-2)}
+  .funil-tot b{font-size:15px;font-weight:800;color:var(--green-ink);letter-spacing:-.2px}
+  html[data-tema="escuro"] .funil-tot{color:#93a7c4}
+  html[data-tema="escuro"] .funil-tot b{color:#63dc92}
   .vneg .est{margin-top:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .vneg .acao{margin-left:auto;display:flex;align-items:center;gap:6px}
   .vneg .prox,.vneg .pend{border:1px solid #cfe6d4;background:var(--green-soft);color:#2e7d32;
@@ -1540,16 +1545,17 @@
           <span class="chipP" id="fnVendasPill">0 vendas</span>
         </div>
         <div class="funil-grid">
-          <div class="etapa"><div class="n" id="fnContactos">0</div><div class="l">Contactos captados</div>
+          <div class="etapa"><div class="n" id="fnContactos" data-int="1">0</div><div class="l">Contactos captados</div>
             <div class="pb"><i id="fnPbContactos" style="width:100%"></i></div><div class="p"><i></i>entrada do funil</div></div>
-          <div class="etapa"><div class="n" id="fnEnviados">0</div><div class="l">Orçamentos enviados</div>
+          <div class="etapa"><div class="n" id="fnEnviados" data-int="1">0</div><div class="l">Orçamentos enviados</div>
             <div class="pb"><i id="fnPbEnviados" style="width:100%"></i></div><div class="p" id="fnTxEnviados"><i></i>—</div></div>
-          <div class="etapa q"><div class="n" id="fnNegociacao">0</div><div class="l">Em negociação</div>
+          <div class="etapa q"><div class="n" id="fnNegociacao" data-int="1">0</div><div class="l">Em negociação</div>
             <div class="pb"><i id="fnPbNegociacao" style="width:0%"></i></div><div class="p q" id="fnTxNegociacao"><i></i>—</div></div>
-          <div class="etapa"><div class="n" id="fnVendas">0</div><div class="l">Vendas concluídas</div>
+          <div class="etapa"><div class="n" id="fnVendas" data-int="1">0</div><div class="l">Vendas concluídas</div>
             <div class="pb"><i id="fnPbVendas" style="width:0%"></i></div><div class="p" id="fnTxVendas"><i></i>—</div></div>
         </div>
         <div class="funil-base"><span id="fnResumo">—</span></div>
+        <div class="funil-tot">Valor em negociação <b id="vnTotal">0 Kz</b></div>
       </div>
 
       <div class="vendas-head">
@@ -1989,6 +1995,12 @@ function fmtNum(n){
     { minimumFractionDigits: c ? 2 : 0, maximumFractionDigits: 2 }) + ' Kz';
 }
 
+/* números inteiros (funil) usam a mesma contagem, só muda a formatação */
+function fmtContador(el, v){
+  if (el.dataset.int != null) return String(Math.round(v));
+  return fmtNum(v);
+}
+
 /* anima um elemento de onde está até ao destino */
 function contarPara(el, destino, desde){
   if (!el) return;
@@ -2002,7 +2014,7 @@ function contarPara(el, destino, desde){
   el.classList.add('contando');
 
   if (DURACAO_CONTAGEM <= 0){          /* modo instantâneo */
-    el.textContent = fmtNum(destino);
+    el.textContent = fmtContador(el, destino);
     _cont.set(el, destino);
     el.classList.remove('contando');
     return;
@@ -2013,12 +2025,12 @@ function contarPara(el, destino, desde){
     const t = Math.min((agora - t0) / DURACAO_CONTAGEM, 1);
     const e = 1 - Math.pow(1 - t, 3);             /* easeOutCubic */
     const v = de + (destino - de) * e;
-    el.textContent = fmtNum(v);
+    el.textContent = fmtContador(el, v);
     _cont.set(el, v);
     if (t < 1){
       _raf.set(el, requestAnimationFrame(passo));
     } else {
-      el.textContent = fmtNum(destino);
+      el.textContent = fmtContador(el, destino);
       _cont.set(el, destino);
       _raf.delete(el);
       el.classList.remove('contando');
@@ -2031,6 +2043,7 @@ function contarPara(el, destino, desde){
    Sempre que um valor volta a ficar visível (scroll), reconta de 0
    ------------------------------------------------------------------ */
 const SEL_VALORES = '[data-valor], .pr, .d-price, #oPreco, #tSaldo, #oVista, ' +
+  '#fnContactos, #fnEnviados, #fnNegociacao, #fnVendas, #vnTotal, .vneg .vl, ' +
   '#o12, #o24, #o36, #oSaldo, #oEnt, #oPrecoN, #oIva, #oTotalIva, #oIvaMini, ' +
   '#oTotalIvaMini, #rePreco, #reIva, #reTotal, #sPreco, #sIva, #sDesc, #sEnt, ' +
   '#odRPreco, #odREnt, #odRSaldo, #odR12, #odR24, #odR36, #odRVista, #odRIva, ' +
@@ -2388,11 +2401,13 @@ function renderVendas(){
   const emCurso = ORCAMENTOS.filter(o => o.estado === 'Em negociação' || o.estado === 'Pendente');
   const fechadas = ORCAMENTOS.filter(o => o.estado === 'Venda concluída');
 
-  /* cartões do funil */
-  document.getElementById('fnContactos').textContent  = f.contactos;
-  document.getElementById('fnEnviados').textContent   = f.enviados;
-  document.getElementById('fnNegociacao').textContent = f.negoc;
-  document.getElementById('fnVendas').textContent     = f.vendas;
+  /* cartões do funil — os números contam de 0 até ao valor (8 s) */
+  const negTotal = soma(emCurso);
+  contarPara(document.getElementById('fnContactos'),  f.contactos, 0);
+  contarPara(document.getElementById('fnEnviados'),   f.enviados,  0);
+  contarPara(document.getElementById('fnNegociacao'), f.negoc,     0);
+  contarPara(document.getElementById('fnVendas'),     f.vendas,    0);
+  contarPara(document.getElementById('vnTotal'), negTotal, 0);
   document.getElementById('fnVendasPill').textContent = f.vendas + (f.vendas === 1 ? ' venda' : ' vendas');
   document.getElementById('fnConversao').textContent  = pct(f.vendas, f.contactos) + '%';
 
@@ -2413,9 +2428,9 @@ function renderVendas(){
     '% de conversão global · ' + semResposta +
     (semResposta === 1 ? ' orçamento ficou sem resposta após o envio' : ' orçamentos ficaram sem resposta após o envio');
 
-  /* totais */
-  document.getElementById('vtNeg').textContent  = fmt(soma(emCurso));
-  document.getElementById('vtFech').textContent = fmt(soma(fechadas));
+  /* totais — também contam de 0 até ao valor (8 s) */
+  contarPara(document.getElementById('vtNeg'),  negTotal, 0);
+  contarPara(document.getElementById('vtFech'), soma(fechadas), 0);
   document.querySelectorAll('[data-cnt="vendas"]').forEach(el => el.textContent = f.negoc);
   const stv = document.getElementById('stVendas');
   if (stv) stv.textContent = f.vendas;
@@ -2423,10 +2438,11 @@ function renderVendas(){
   /* lista de negócios */
   const cartao = (o, fechado) => {
     const c = CARROS.find(x => x.id === o.carro) || CARROS[0];
+    const valor = totalComIva(o.preco);
     return `<article class="vneg${fechado ? ' fechado' : ''}">
       <div class="topo"><img src="${c.img}" alt="">
         <div><div class="nm">${o.nome}</div><div class="cr">${c.nome} · ${fmtTel(o.tel)}</div></div>
-        <div class="vl">${fmt(totalComIva(o.preco))}</div>
+        <div class="vl" data-valor="${valor}">${fmt(valor)}</div>
       </div>
       <div class="est"><span class="pill${classeEstado(o.estado)}">${o.estado}</span>
         ${fechado ? '' : `<span class="acao">
@@ -2442,6 +2458,9 @@ function renderVendas(){
   lista.innerHTML = (emCurso.map(o => cartao(o,false)).join('') + fechadas.map(o => cartao(o,true)).join(''))
     || `<p style="color:var(--muted-2);padding:16px 2px">Ainda não há negócios em curso. Marque um orçamento como “Em negociação”
          na página de edição do orçamento para o acompanhar aqui.</p>`;
+
+  /* valores dos cartões contam de 0 até ao valor, como nas outras páginas */
+  contarTabela('#vendasLista');
 }
 
 /* marcar como vendido / pendente a partir da lista de vendas */

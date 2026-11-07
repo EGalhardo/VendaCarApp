@@ -1515,6 +1515,45 @@ async def main():
         ok("R41 · sem erros de consola", len(r41e)==0, str(r41e[:2]))
         await r41.close()
 
+        # ============ R43 · CONTADOR 0 -> VALOR (8 s) NA PÁGINA VENDAS ============
+        r43 = await b.new_page(viewport={"width":1440,"height":900})
+        r43e = []; r43.on("pageerror", lambda e: r43e.append(str(e)))
+        await r43.goto(URL_ANIM); await r43.wait_for_timeout(400)
+        await r43.evaluate("localStorage.clear()"); await r43.reload(); await r43.wait_for_timeout(600)
+        await r43.evaluate("()=>ir('vendas')")
+        C1 = await r43.evaluate("""()=>({dur:DURACAO_CONTAGEM,
+            inteiros:[...document.querySelectorAll('.etapa .n')].map(e=>e.dataset.int),
+            total:document.getElementById('vtNeg').dataset.valor===undefined?'':document.getElementById('vtNeg').dataset.valor})""")
+        ok("R43 · contagem de 8 s configurada", C1["dur"]==8000, str(C1))
+        ok("R43 · números do funil contam como inteiros", C1["inteiros"]==["1","1","1","1"], str(C1))
+        meio = []
+        for _ in range(3):
+            await r43.wait_for_timeout(700)
+            meio.append(await r43.evaluate("""()=>{const v=document.getElementById('vtNeg');
+              return {fn:Number(document.getElementById('fnEnviados').textContent),
+                      vt:v.textContent, temKz:v.textContent.includes('Kz'),
+                      contando:document.querySelectorAll('#pg-vendas .contando').length};}"""))
+        ok("R43 · valores a meio da contagem ainda não chegaram ao fim",
+           any(m["fn"]<6 for m in meio) and all(m["temKz"] for m in meio)
+           and any(m["contando"]>=4 for m in meio), str(meio))
+        await r43.wait_for_timeout(8000)
+        C3 = await r43.evaluate("""()=>({fn:[...document.querySelectorAll('.etapa .n')].map(e=>e.textContent),
+            vtNeg:document.getElementById('vtNeg').textContent,
+            vtFech:document.getElementById('vtFech').textContent,
+            vn:document.getElementById('vnTotal').textContent,
+            vl:document.querySelector('.vneg .vl').textContent,
+            contando:document.querySelectorAll('#pg-vendas .contando').length})""")
+        ok("R43 · valores finais exatos nos 8 s",
+           C3["fn"]==["5","6","1","0"] and C3["vtNeg"]=="14,706,000 Kz" and C3["vn"]=="14,706,000 Kz"
+           and C3["vl"]=="14,706,000 Kz" and C3["vtFech"]=="0 Kz" and C3["contando"]==0, str(C3))
+        await r43.evaluate("()=>ir('modelos')"); await r43.wait_for_timeout(400)
+        await r43.evaluate("()=>ir('vendas')"); await r43.wait_for_timeout(700)
+        C4 = await r43.evaluate("()=>({fn:document.getElementById('fnEnviados').textContent, vt:document.getElementById('vtNeg').textContent})")
+        ok("R43 · ao voltar à página a contagem recomeça do 0",
+           int(C4["fn"])<6 and C4["vt"]!="14,706,000 Kz", str(C4))
+        ok("R43 · sem erros de consola", len(r43e)==0, str(r43e[:2]))
+        await r43.close()
+
         r41m = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
         await novo(r41m)
         await r41m.evaluate("()=>ir('vendas')"); await r41m.wait_for_timeout(700)

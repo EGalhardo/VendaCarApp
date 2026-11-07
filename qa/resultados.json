@@ -707,7 +707,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "154,928.32 Kz"
+  "d": "17,904.65 Kz"
  },
  {
   "r": "PASS",
@@ -717,12 +717,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,596,946.75 Kz"
+  "d": "9,588,402.91 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,750,000 Kz"
+  "d": "9,749,998.81 Kz"
  },
  {
   "r": "PASS",
@@ -738,10 +738,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   320152,
-   2892403,
-   4881593,
-   6362801
+   320794,
+   2893159,
+   4882168,
+   6363218
   ]
  },
  {
@@ -762,14 +762,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "416,584.44 Kz"
+  "d": "416,939.57 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "416,584.44 Kz",
-   "4,062,492.97 Kz"
+   "416,939.57 Kz",
+   "4,062,748.23 Kz"
   ]
  },
  {
@@ -837,7 +837,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34705
+   3.34736
   ]
  },
  {
@@ -1618,6 +1618,36 @@
  {
   "r": "PASS",
   "n": "R41 · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R43 · contagem de 8 s configurada",
+  "d": "{'dur': 8000, 'inteiros': ['1', '1', '1', '1'], 'total': ''}"
+ },
+ {
+  "r": "PASS",
+  "n": "R43 · números do funil contam como inteiros",
+  "d": "{'dur': 8000, 'inteiros': ['1', '1', '1', '1'], 'total': ''}"
+ },
+ {
+  "r": "PASS",
+  "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
+  "d": "[{'fn': 1, 'vt': '3,542,497.55 Kz', 'temKz': True, 'contando': 8}, {'fn': 3, 'vt': '6,456,606.12 Kz', 'temKz': True, 'contando': 8}, {'fn': 4, 'vt': '8,863,180.82 Kz', 'temKz': True, 'contando': 8}]"
+ },
+ {
+  "r": "PASS",
+  "n": "R43 · valores finais exatos nos 8 s",
+  "d": "{'fn': ['5', '6', '1', '0'], 'vtNeg': '14,706,000 Kz', 'vtFech': '0 Kz', 'vn': '14,706,000 Kz', 'vl': '14,706,000 Kz', 'contando': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R43 · ao voltar à página a contagem recomeça do 0",
+  "d": "{'fn': '1', 'vt': '3,540,661.80 Kz'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R43 · sem erros de consola",
   "d": "[]"
  },
  {
