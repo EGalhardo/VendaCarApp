@@ -227,6 +227,52 @@ async def main():
         ok("Sem erros no modo offline", len(oe)==0, str(oe[:2]))
         await ctxo.close()
 
+        # ============ R31 · LOGÓTIPO COMPLETO + PALETA DA IMAGEM ============
+        lg2 = await b.new_page(viewport={"width":1440,"height":900})
+        lge=[]; lg2.on("pageerror", lambda e: lge.append(str(e)))
+        await novo(lg2)
+        LOGO = await lg2.evaluate("""()=>{
+          const img=document.querySelector('.brand .logo');
+          const r=img.getBoundingClientRect();
+          // os 3 ticks ocupam o último terço direito da imagem
+          return {ratio:+(r.width/r.height).toFixed(3), natRatio:+(img.naturalWidth/img.naturalHeight).toFixed(3),
+                  completa: (img.naturalWidth/img.naturalHeight)>2.9,
+                  altura:Math.round(r.height), etiqueta:img.alt};
+        }""")
+        ok("R31 · logótipo mostra todos os elementos (carro + nome + 3 ticks)",
+           LOGO["completa"] and abs(LOGO["ratio"]-LOGO["natRatio"])<0.05, str(LOGO))
+        ok("R31 · logótipo completo não é esticado", LOGO["altura"]==38, str(LOGO))
+        await lg2.click("#btnTema"); await lg2.wait_for_timeout(500)
+        PAL = await lg2.evaluate("""()=>{
+          const cs=s=>getComputedStyle(document.querySelector(s));
+          const rgb=c=>c.match(/[0-9]+/g).map(Number);
+          const azul=c=>{const [r,g,b]=rgb(c); return b>r+15 && b>25 && r<60;};
+          const alvos={'.brand':cs('.brand').backgroundColor,'.bar':cs('.bar').backgroundColor,
+                       '.side':cs('.side').backgroundColor,'.content':cs('.content').backgroundColor,
+                       '.car':cs('.car').backgroundColor,'.tbl-wrap':cs('.tbl-wrap').backgroundColor};
+          const tudoAzul=Object.values(alvos).every(azul);
+          // todas as superfícies idênticas à referência (4,13,31)
+          const iguais=Object.values(alvos).every(c=>rgb(c).join()==='4,13,31');
+          // bordas azuis visíveis nos painéis
+          const b1=cs('.content').borderTopColor, b2=cs('.car').borderTopColor, b3=cs('.side').borderRightColor;
+          return {alvos, tudoAzul, iguais, bordas:[b1,b2,b3],
+                  bordasAzuis:[b1,b2,b3].every(c=>{const [r,g,b]=rgb(c); return b>r+15;}),
+                  logoClaro:getComputedStyle(document.querySelector('.brand .logo-escuro')).display};
+        }""")
+        ok("R31 · modo escuro · fundo azul-marinho em todos os painéis", PAL["tudoAzul"], str(PAL["alvos"]))
+        ok("R31 · modo escuro · mesmo tom da referência (#040d1f)", PAL["iguais"], str(PAL["alvos"]))
+        ok("R31 · modo escuro · bordas azuis visíveis", PAL["bordasAzuis"], str(PAL["bordas"]))
+        ok("R31 · modo escuro · logótipo troca para a variante clara", PAL["logoClaro"]=="block", str(PAL["logoClaro"]))
+        LOGOD = await lg2.evaluate("""()=>{
+          const img=document.querySelector('.brand .logo-escuro');
+          const r=img.getBoundingClientRect();
+          return {visivel:r.width>0, ratio:+(r.width/r.height).toFixed(2), nat:img.naturalWidth>0};
+        }""")
+        ok("R31 · variante escura mantém os 3 ticks e a proporção",
+           LOGOD["visivel"] and LOGOD["nat"] and LOGOD["ratio"]>2.9, str(LOGOD))
+        ok("R31 · logótipo/paleta sem erros de consola", len(lge)==0, str(lge[:2]))
+        await lg2.close()
+
         # ============ R30 · BOTÃO "CRIAR" SÓ COM "+" ============
         cr = await b.new_page(viewport={"width":1440,"height":900})
         cre=[]; cr.on("pageerror", lambda e: cre.append(str(e)))
@@ -299,9 +345,9 @@ async def main():
         }""")
         ok("R30 · clique ativa o modo escuro", E["tema"]=="escuro", str(E))
         ok("R30 · ícone muda para sol no modo escuro", E["sol"]=="block" and E["lua"]=="none", str(E))
-        ok("R30 · appbar e cartões ficam escuros", E["appbar"]=="rgb(21, 28, 25)" and E["cartao"]=="rgb(21, 28, 25)", str(E))
-        ok("R30 · texto do título legível no escuro", E["textoTitulo"]=="rgb(233, 239, 236)", str(E))
-        ok("R30 · barra do sistema acompanha o tema", E["meta"]=="#101714", E["meta"])
+        ok("R30 · appbar e cartões ficam escuros", E["appbar"]=="rgb(4, 13, 31)" and E["cartao"]=="rgb(4, 13, 31)", str(E))
+        ok("R30 · texto do título legível no escuro", E["textoTitulo"]=="rgb(255, 255, 255)", str(E))
+        ok("R30 · barra do sistema acompanha o tema", E["meta"]=="#040d1f", E["meta"])
         ok("R30 · estado do botão atualizado", E["titulo"]=="Modo claro" and E["pressed"]=="true", str(E))
         Contraste = await tm.evaluate("""()=>{
           const lum=c=>{const [r,g,b]=c.match(/[0-9]+/g).map(Number).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);});
@@ -317,7 +363,7 @@ async def main():
         ok("R30 · contraste mínimo 3:1 no modo escuro", all(r>=3 for _, r in Contraste), str(Contraste))
         await tm.reload(); await tm.wait_for_timeout(700)
         P = await tm.evaluate("()=>({tema:document.documentElement.dataset.tema, fundo:getComputedStyle(document.querySelector('.content')).backgroundColor})")
-        ok("R30 · tema escuro é memorizado após recarregar", P["tema"]=="escuro" and P["fundo"]=="rgb(21, 28, 25)", str(P))
+        ok("R30 · tema escuro é memorizado após recarregar", P["tema"]=="escuro" and P["fundo"]=="rgb(4, 13, 31)", str(P))
         await tm.click("#btnTema"); await tm.wait_for_timeout(400)
         V = await tm.evaluate("()=>({tema:document.documentElement.dataset.tema||'claro', guardado:localStorage.getItem('modelo_tema_v1'), fundo:getComputedStyle(document.querySelector('.content')).backgroundColor})")
         ok("R30 · volta ao modo claro e memoriza a escolha", V["tema"]=="claro" and V["guardado"]=="claro" and V["fundo"]=="rgb(255, 255, 255)", str(V))
@@ -342,7 +388,7 @@ async def main():
         ok("R30 · mobile · appbar continua sem overflow", TM["semOverflow"], str(TM))
         await tmb.click("#btnTema"); await tmb.wait_for_timeout(400)
         TM2 = await tmb.evaluate("()=>({tema:document.documentElement.dataset.tema, fundo:getComputedStyle(document.querySelector('.navbar')).backgroundColor})")
-        ok("R30 · mobile · modo escuro aplica-se à navbar", TM2["tema"]=="escuro" and TM2["fundo"]=="rgb(21, 28, 25)", str(TM2))
+        ok("R30 · mobile · modo escuro aplica-se à navbar", TM2["tema"]=="escuro" and TM2["fundo"]=="rgb(4, 13, 31)", str(TM2))
         ok("R30 · mobile · tema sem erros de consola", len(tbe)==0, str(tbe[:2]))
         await tmb.close()
 
@@ -363,7 +409,7 @@ async def main():
         ok("R29 · logótipo presente na appbar", L["existe"] and L["dentro"], str(L))
         ok("R29 · logótipo carregado (sem imagem partida)", L["carregou"], str(L))
         ok("R29 · logótipo com altura harmoniosa (32–40px)", 32<=L["altura"]<=40, str(L))
-        ok("R29 · logótipo na proporção original (~2,7:1)", 2.5<=float(L["proporcao"])<=2.95, str(L))
+        ok("R29 · logótipo na proporção original (~3:1, com os 3 ticks)", 2.9<=float(L["proporcao"])<=3.2, str(L))
         ok("R29 · nome 'Modelo' e ícone antigo removidos da marca", L["semTexto"], str(L))
         ok("R29 · título do documento menciona VendaCar", "VendaCar" in L["titulo"], L["titulo"])
         Lm = await lg.evaluate("""()=>{void ir; return 1}""")
