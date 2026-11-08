@@ -717,7 +717,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "16,809.08 Kz"
+  "d": "7,310.67 Kz"
  },
  {
   "r": "PASS",
@@ -727,12 +727,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,588,141.32 Kz"
+  "d": "9,587,521.90 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.70 Kz"
+  "d": "9,749,998.43 Kz"
  },
  {
   "r": "PASS",
@@ -748,10 +748,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   318546,
-   2891395,
-   4881019,
-   6362244
+   320152,
+   2892655,
+   4881785,
+   6363079
   ]
  },
  {
@@ -779,7 +779,7 @@
   "n": "Contador · e volta a subir",
   "d": [
    "415,874.16 Kz",
-   "4,061,727.16 Kz"
+   "4,061,982.44 Kz"
   ]
  },
  {
@@ -820,7 +820,7 @@
  {
   "r": "PASS",
   "n": "Animação · cabeça do Perfil move-se para os dois lados",
-  "d": 3.18
+  "d": 3.17
  },
  {
   "r": "PASS",
@@ -847,7 +847,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.05617
+   3.05615
   ]
  },
  {
@@ -1643,7 +1643,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '3,587,410.60 Kz', 'temKz': True, 'contando': 8}, {'fn': 3, 'vt': '6,493,311.09 Kz', 'temKz': True, 'contando': 8}, {'fn': 4, 'vt': '8,842,890.51 Kz', 'temKz': True, 'contando': 8}]"
+  "d": "[{'fn': 1, 'vt': '3,611,193.01 Kz', 'temKz': True, 'contando': 8}, {'fn': 3, 'vt': '6,512,742.92 Kz', 'temKz': True, 'contando': 8}, {'fn': 4, 'vt': '8,858,112.64 Kz', 'temKz': True, 'contando': 8}]"
  },
  {
   "r": "PASS",
@@ -1653,7 +1653,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '3,499,764.29 Kz'}"
+  "d": "{'fn': '1', 'vt': '3,493,321.89 Kz'}"
  },
  {
   "r": "PASS",
