@@ -1670,6 +1670,25 @@ async def main():
         ok("R44 · sem erros de consola", len(r44e)==0, str(r44e[:2]))
         await r44.close()
 
+        # ============ R48 · ROBUSTEZ DE CODIFICAÇÃO / ARRANQUE ============
+        import re as _re
+        _html = open("/home/user/index.html", encoding="utf-8").read()
+        _js = "\n".join(_re.findall(r"<script>(.*?)</script>", _html, _re.S))
+        ok("R48 · JavaScript 100% ASCII (imune a codificação corrompida)",
+           all(ord(c) < 128 for c in _js),
+           str(sorted({c for c in _js if ord(c) > 127})[:5]))
+        ok("R48 · charset declarado duas vezes (meta + http-equiv)",
+           _html.count('charset') >= 2 and 'http-equiv="Content-Type"' in _html, "")
+        r48 = await b.new_page(viewport={"width":1280,"height":860})
+        _e48 = []; r48.on("pageerror", lambda e: _e48.append(str(e)))
+        await r48.goto(URL); await r48.wait_for_timeout(900)
+        ok("R48 · arranque concluído sem mostrar o aviso de falha",
+           await r48.evaluate("()=>window.__arranqueOK===true")
+           and await r48.evaluate("()=>getComputedStyle(document.getElementById('falhaArranque')).display==='none'"), str(_e48[:2]))
+        _msg = await r48.evaluate("()=>{const c=CARROS[0];return textoOrcamento('João Ação', c, c.preco, 1000, c.desc);}")
+        ok("R48 · mensagem com acentos e emoji intactos", "João Ação" in _msg and "\U0001F697" in _msg, _msg.split(chr(10))[0])
+        await r48.close()
+
         await b.close()
 
     print("\n" + "="*70)
