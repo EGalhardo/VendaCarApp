@@ -717,7 +717,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "-4,753.90 Kz"
+  "d": "16,809.08 Kz"
  },
  {
   "r": "PASS",
@@ -727,12 +727,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,586,900.91 Kz"
+  "d": "9,588,141.32 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.13 Kz"
+  "d": "9,749,998.70 Kz"
  },
  {
   "r": "PASS",
@@ -748,10 +748,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   266752,
-   2892907,
-   4881976,
-   6363079
+   318546,
+   2891395,
+   4881019,
+   6362244
   ]
  },
  {
@@ -772,14 +772,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "417,649.81 Kz"
+  "d": "415,874.16 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "417,649.81 Kz",
-   "4,063,258.71 Kz"
+   "415,874.16 Kz",
+   "4,061,727.16 Kz"
   ]
  },
  {
@@ -820,7 +820,7 @@
  {
   "r": "PASS",
   "n": "Animação · cabeça do Perfil move-se para os dois lados",
-  "d": 3.19
+  "d": 3.18
  },
  {
   "r": "PASS",
@@ -847,7 +847,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.3466
+   3.05617
   ]
  },
  {
@@ -1643,7 +1643,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '3,571,842.19 Kz', 'temKz': True, 'contando': 8}, {'fn': 3, 'vt': '6,480,214.70 Kz', 'temKz': True, 'contando': 8}, {'fn': 4, 'vt': '8,832,428.68 Kz', 'temKz': True, 'contando': 8}]"
+  "d": "[{'fn': 1, 'vt': '3,587,410.60 Kz', 'temKz': True, 'contando': 8}, {'fn': 3, 'vt': '6,493,311.09 Kz', 'temKz': True, 'contando': 8}, {'fn': 4, 'vt': '8,842,890.51 Kz', 'temKz': True, 'contando': 8}]"
  },
  {
   "r": "PASS",
@@ -1653,7 +1653,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '3,504,824.44 Kz'}"
+  "d": "{'fn': '1', 'vt': '3,499,764.29 Kz'}"
  },
  {
   "r": "PASS",
@@ -1759,5 +1759,40 @@
   "r": "PASS",
   "n": "R44 · sem erros de consola",
   "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R49 · JavaScript 100% ASCII (imune a ficheiro corrompido no download)",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R49 · charset declarado em duas formas",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R49 · um só id heroImg (sem duplicacao)",
+  "d": "1"
+ },
+ {
+  "r": "PASS",
+  "n": "R49 · mensagem() reutiliza textoOrcamento() (sem texto duplicado)",
+  "d": "1"
+ },
+ {
+  "r": "PASS",
+  "n": "R49 · arranque concluído e sem aviso de falha",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R49 · acentos e emoji intactos no texto enviado",
+  "d": "Olá João Ação, tudo bem? 😃"
+ },
+ {
+  "r": "PASS",
+  "n": "R49 · galeria do detalhe continua a funcionar",
+  "d": ""
  }
 ]

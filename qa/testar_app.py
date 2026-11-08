@@ -1670,6 +1670,34 @@ async def main():
         ok("R44 · sem erros de consola", len(r44e)==0, str(r44e[:2]))
         await r44.close()
 
+        # ============ R49 · ROBUSTEZ (ASCII no JS, aviso de arranque, sem duplicacao) ============
+        import re as _re
+        _h = open("/home/user/index.html", encoding="utf-8").read()
+        _js = "\n".join(_re.findall(r"<script>(.*?)</script>", _h, _re.S))
+        ok("R49 · JavaScript 100% ASCII (imune a ficheiro corrompido no download)",
+           all(ord(c) < 128 for c in _js), str(sorted({c for c in _js if ord(c) > 127})[:5]))
+        ok("R49 · charset declarado em duas formas",
+           'charset="UTF-8"' in _h and 'http-equiv="Content-Type"' in _h, "")
+        ok("R49 · um só id heroImg (sem duplicacao)",
+           _h.count('id="heroImg"') == 1, str(_h.count('id="heroImg"')))
+        ok("R49 · mensagem() reutiliza textoOrcamento() (sem texto duplicado)",
+           _h.count("Conforme falamos") == 1, str(_h.count("Conforme falamos")))
+
+        r49 = await b.new_page(viewport={"width":1280,"height":860})
+        _e49 = []; r49.on("pageerror", lambda e: _e49.append(str(e)))
+        await r49.goto(URL); await r49.wait_for_timeout(900)
+        ok("R49 · arranque concluído e sem aviso de falha",
+           await r49.evaluate("()=>window.__arranqueOK===true")
+           and await r49.evaluate("()=>getComputedStyle(document.getElementById('falhaArranque')).display==='none'"),
+           str(_e49[:2]))
+        _m49 = await r49.evaluate("()=>{atual=CARROS[0];abrirOrcamento();document.getElementById('mNome').value='João Ação';return mensagem();}")
+        ok("R49 · acentos e emoji intactos no texto enviado",
+           "João Ação" in _m49 and "\U0001F697" in _m49 and _m49.count("Simulação sem juros") == 1,
+           _m49.split(chr(10))[0])
+        ok("R49 · galeria do detalhe continua a funcionar",
+           await r49.evaluate("()=>{atual=CARROS[0];abrirDetalhe();const i=document.querySelector('.hero img');return !!i && i.naturalWidth>0;}"), "")
+        await r49.close()
+
         await b.close()
 
     print("\n" + "="*70)
