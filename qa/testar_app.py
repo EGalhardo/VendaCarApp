@@ -1674,7 +1674,9 @@ async def main():
         import re as _re
         _h = open("/home/user/index.html", encoding="utf-8").read()
         _js = "\n".join(_re.findall(r"<script>(.*?)</script>", _h, _re.S))
-        ok("R49 · JavaScript 100% ASCII (imune a ficheiro corrompido no download)",
+        ok("R51 · ficheiro inteiro em ASCII puro (imune a corrupção de codificação)",
+           all(ord(c) < 128 for c in _h), str(sorted({c for c in _h if ord(c) > 127})[:5]))
+        ok("R51 · JavaScript 100% ASCII",
            all(ord(c) < 128 for c in _js), str(sorted({c for c in _js if ord(c) > 127})[:5]))
         ok("R49 · charset declarado em duas formas",
            'charset="UTF-8"' in _h and 'http-equiv="Content-Type"' in _h, "")

@@ -717,7 +717,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "7,310.67 Kz"
+  "d": "-10,606.97 Kz"
  },
  {
   "r": "PASS",
@@ -727,12 +727,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,587,521.90 Kz"
+  "d": "9,590,461.90 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.43 Kz"
+  "d": "9,749,999.43 Kz"
  },
  {
   "r": "PASS",
@@ -748,9 +748,9 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   320152,
-   2892655,
-   4881785,
+   320794,
+   2892907,
+   4881976,
    6363079
   ]
  },
@@ -772,14 +772,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "415,874.16 Kz"
+  "d": "417,294.70 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "415,874.16 Kz",
-   "4,061,982.44 Kz"
+   "417,294.70 Kz",
+   "4,062,748.23 Kz"
   ]
  },
  {
@@ -820,7 +820,7 @@
  {
   "r": "PASS",
   "n": "Animação · cabeça do Perfil move-se para os dois lados",
-  "d": 3.17
+  "d": 3.18
  },
  {
   "r": "PASS",
@@ -847,7 +847,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.05615
+   3.34671
   ]
  },
  {
@@ -1643,7 +1643,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '3,611,193.01 Kz', 'temKz': True, 'contando': 8}, {'fn': 3, 'vt': '6,512,742.92 Kz', 'temKz': True, 'contando': 8}, {'fn': 4, 'vt': '8,858,112.64 Kz', 'temKz': True, 'contando': 8}]"
+  "d": "[{'fn': 1, 'vt': '3,560,843.99 Kz', 'temKz': True, 'contando': 8}, {'fn': 3, 'vt': '6,471,226.27 Kz', 'temKz': True, 'contando': 8}, {'fn': 4, 'vt': '8,825,247.66 Kz', 'temKz': True, 'contando': 8}]"
  },
  {
   "r": "PASS",
@@ -1653,7 +1653,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '3,493,321.89 Kz'}"
+  "d": "{'fn': '1', 'vt': '3,494,242.39 Kz'}"
  },
  {
   "r": "PASS",
@@ -1762,7 +1762,12 @@
  },
  {
   "r": "PASS",
-  "n": "R49 · JavaScript 100% ASCII (imune a ficheiro corrompido no download)",
+  "n": "R51 · ficheiro inteiro em ASCII puro (imune a corrupção de codificação)",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R51 · JavaScript 100% ASCII",
   "d": "[]"
  },
  {
