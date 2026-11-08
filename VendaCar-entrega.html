@@ -3350,13 +3350,13 @@ function exportarPDF(){
     'th{text-align:left;font-size:10.5px;letter-spacing:.4px;text-transform:uppercase;color:#6b7b74;' +
     'border-bottom:1px solid #d8dedb;padding:7px 8px}' +
     'td{border-bottom:1px solid #eef1ef;padding:7px 8px}.n{text-align:right;white-space:nowrap}.b{font-weight:700}' +
-    'tfoot td{border:0;padding-top:14px;font-size:10.5px;color:#6b7b74}</style></head><body>' +
+    'tfoot td{border:0;padding-top:14px;font-size:10.5px;color:#6b7b74}<\/style><\/head><body>' +
     '<h1>Or\u00E7amentos \u2014 VendaCar</h1><p class="sub">' + (linhaLoja ? linhaLoja + ' \u00B7 ' : '') +
     'emitido em ' + esc(new Date().toLocaleString('pt-PT')) + ' \u00B7 IVA 14% apresentado \u00E0 parte</p>' +
     '<table><thead><tr><th>Carro</th><th>Cliente</th><th>Telefone</th><th>Data</th><th>Estado</th>' +
     '<th class="n">Valor</th><th class="n">IVA 14%</th><th class="n">Total c/ IVA</th></tr></thead><tbody>' +
     linhas + '</tbody><tfoot><tr><td colspan="8">Simula\u00E7\u00E3o sem juros \u2014 sujeita a aprova\u00E7\u00E3o de financiamento. ' +
-    'Valores em Kwanzas (Kz).</td></tr></tfoot></table></body></html>';
+    'Valores em Kwanzas (Kz).</td></tr></tfoot></table><\/body><\/html>';
 
   const w = window.open('', '_blank');
   if (!w){ toast('O navegador bloqueou a janela \u2014 permita popups para exportar PDF'); return; }
@@ -3752,8 +3752,8 @@ document.getElementById('btnVerModelo').addEventListener('click', async () => {
   w.document.write('<!DOCTYPE html><html lang="pt"><head><meta charset="utf-8"><title>Modelo de mensagem</title>' +
     '<style>body{font-family:Arial,sans-serif;margin:26px;color:#1e2724}h1{font-size:16px}' +
     'pre{white-space:pre-wrap;font-family:inherit;font-size:13px;line-height:1.55;background:#f6f9f7;' +
-    'border:1px solid #d8dedb;border-radius:10px;padding:16px}</style></head><body>' +
-    '<h1>Modelo de mensagem \u2014 o que o cliente recebe</h1><pre>' + esc(texto) + '</pre></body></html>');
+    'border:1px solid #d8dedb;border-radius:10px;padding:16px}<\/style><\/head><body>' +
+    '<h1>Modelo de mensagem \u2014 o que o cliente recebe</h1><pre>' + esc(texto) + '</pre><\/body><\/html>');
   w.document.close();
 });
 

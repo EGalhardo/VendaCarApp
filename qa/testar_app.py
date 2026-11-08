@@ -1676,6 +1676,9 @@ async def main():
         _js = "\n".join(_re.findall(r"<script>(.*?)</script>", _h, _re.S))
         ok("R51 · ficheiro inteiro em ASCII puro (imune a corrupção de codificação)",
            all(ord(c) < 128 for c in _h), str(sorted({c for c in _h if ord(c) > 127})[:5]))
+        # R53: nenhuma tag de fecho crua dentro do JS (o browser fecharia o <script> a meio)
+        _cru = _re.findall(r"</(?:body|html|style|head|script)", _js)
+        ok("R53 · sem tags de fecho cruas dentro do JavaScript", len(_cru) == 0, str(_cru[:3]))
         # browsers antigos (Safari 11, WebViews) rejeitam 'catch {' sem variável — ES2019
         ok("R51 · sem 'catch {' sem variável (compatível com Safari 11 / WebViews)",
            len(_re.findall(r"catch\s*\{", _js)) == 0, str(len(_re.findall(r"catch\s*\{", _js))))
