@@ -717,7 +717,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "-4,388.16 Kz"
+  "d": "-4,753.90 Kz"
  },
  {
   "r": "PASS",
@@ -727,12 +727,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,587,020.45 Kz"
+  "d": "9,586,900.91 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.19 Kz"
+  "d": "9,749,998.13 Kz"
  },
  {
   "r": "PASS",
@@ -748,10 +748,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   319510,
-   2892151,
-   4881402,
-   6362523
+   266752,
+   2892907,
+   4881976,
+   6363079
   ]
  },
  {
@@ -772,14 +772,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "416,939.57 Kz"
+  "d": "417,649.81 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "416,939.57 Kz",
-   "4,062,492.97 Kz"
+   "417,649.81 Kz",
+   "4,063,258.71 Kz"
   ]
  },
  {
@@ -820,7 +820,7 @@
  {
   "r": "PASS",
   "n": "Animação · cabeça do Perfil move-se para os dois lados",
-  "d": 3.18
+  "d": 3.19
  },
  {
   "r": "PASS",
@@ -847,7 +847,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34726
+   3.3466
   ]
  },
  {
@@ -1643,7 +1643,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '3,553,507.83 Kz', 'temKz': True, 'contando': 8}, {'fn': 3, 'vt': '6,465,605.18 Kz', 'temKz': True, 'contando': 8}, {'fn': 4, 'vt': '8,820,756.56 Kz', 'temKz': True, 'contando': 8}]"
+  "d": "[{'fn': 1, 'vt': '3,571,842.19 Kz', 'temKz': True, 'contando': 8}, {'fn': 3, 'vt': '6,480,214.70 Kz', 'temKz': True, 'contando': 8}, {'fn': 4, 'vt': '8,832,428.68 Kz', 'temKz': True, 'contando': 8}]"
  },
  {
   "r": "PASS",
@@ -1653,7 +1653,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '3,561,302.39 Kz'}"
+  "d": "{'fn': '1', 'vt': '3,504,824.44 Kz'}"
  },
  {
   "r": "PASS",
@@ -1759,30 +1759,5 @@
   "r": "PASS",
   "n": "R44 · sem erros de consola",
   "d": "[]"
- },
- {
-  "r": "PASS",
-  "n": "R48 · JavaScript 100% ASCII (imune a codificação corrompida)",
-  "d": "[]"
- },
- {
-  "r": "PASS",
-  "n": "R48 · charset declarado duas vezes (meta + http-equiv)",
-  "d": ""
- },
- {
-  "r": "PASS",
-  "n": "R48 · arranque concluído sem mostrar o aviso de falha",
-  "d": "[]"
- },
- {
-  "r": "PASS",
-  "n": "R48 · acentos e emoji continuam correctos com escapes",
-  "d": ""
- },
- {
-  "r": "PASS",
-  "n": "R48 · mensagem com acentos e emoji intactos",
-  "d": "Olá João Ação, tudo bem? 😃"
  }
 ]
