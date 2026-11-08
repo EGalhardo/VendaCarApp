@@ -1195,6 +1195,41 @@
 </style>
 </head>
 <body>
+<!-- rede de segurança: se o JavaScript não arrancar, diz porquê em vez de ficar inerte -->
+<div id="falhaArranque" style="display:none;position:fixed;inset:0;z-index:9999;background:#0f1a17;color:#eaf1fb;
+     font-family:Arial,Helvetica,sans-serif;padding:26px 22px;overflow:auto">
+  <h1 style="font-size:18px;margin:0 0 6px">A aplicação não arrancou</h1>
+  <p style="font-size:13px;color:#b3c6e0;margin:0 0 16px;max-width:560px">
+    O menu e o estoque aparecem, mas nada reage ao clique porque o JavaScript não chegou a correr.
+    Copia a mensagem abaixo (ou envia uma captura) para conseguirmos corrigir.</p>
+  <pre id="falhaDetalhe" style="white-space:pre-wrap;font-size:12px;line-height:1.5;background:#071528;
+       border:1px solid #17375e;border-radius:10px;padding:14px;color:#e7c276"></pre>
+  <p style="font-size:12px;color:#93a7c4;margin:14px 0 0">Versão do ficheiro: R47 · <span id="falhaHora"></span></p>
+</div>
+<script>
+window.__arranqueOK = false;
+window.__falhaArranque = function(msg){
+  if (window.__arranqueOK) return;
+  var cx = document.getElementById('falhaArranque');
+  var det = document.getElementById('falhaDetalhe');
+  if (!cx || !det) return;
+  det.textContent += (det.textContent ? '\n' : '') + msg;
+  document.getElementById('falhaHora').textContent = new Date().toLocaleString('pt-PT');
+  cx.style.display = 'block';
+};
+window.addEventListener('error', function(e){
+  window.__falhaArranque('Erro: ' + (e.message || 'desconhecido') +
+    (e.filename ? '\nEm: ' + String(e.filename).split('/').pop() + ' linha ' + e.lineno : ''));
+});
+window.addEventListener('unhandledrejection', function(e){
+  window.__falhaArranque('Promessa rejeitada: ' + ((e.reason && e.reason.message) || e.reason));
+});
+setTimeout(function(){
+  if (!window.__arranqueOK) window.__falhaArranque(
+    'O script principal não terminou o arranque.\n' +
+    'Se abriste este ficheiro por dentro de outra página (pre-visualizacao), guarda-o e abre-o directamente no navegador.');
+}, 2500);
+</script>
 <div class="app">
 
   <!-- ================= MARCA / APPBAR ================= -->
@@ -3913,6 +3948,9 @@ function alternarTema(){
   const b = document.getElementById('btnTema');
   if (b) b.addEventListener('click', alternarTema);
 })();
+
+/* o arranque chegou ao fim: a rede de segurança deixa de mostrar o aviso */
+window.__arranqueOK = true;
 
 </script>
 </body>
