@@ -1,0 +1,1763 @@
+[
+ {
+  "r": "PASS",
+  "n": "Aritmética · Corolla 9,75M / entrada 2M",
+  "d": "saldo 7,750,000 | 12x 645,000 (esperado 645,000)"
+ },
+ {
+  "r": "PASS",
+  "n": "Aritmética · Entrada sugerida 10%",
+  "d": "saldo 8,775,000 | 12x 731,000 (esperado 731,000)"
+ },
+ {
+  "r": "PASS",
+  "n": "Aritmética · Entrada = preço (100%)",
+  "d": "saldo 0 | 12x 0 (esperado 0)"
+ },
+ {
+  "r": "PASS",
+  "n": "Aritmética · Entrada 1 Kz",
+  "d": "saldo 9,749,999 | 12x 812,000 (esperado 812,000)"
+ },
+ {
+  "r": "PASS",
+  "n": "Aritmética · Hilux 28,5M / 6M",
+  "d": "saldo 22,500,000 | 12x 1,875,000 (esperado 1,875,000)"
+ },
+ {
+  "r": "PASS",
+  "n": "Aritmética · Tucson 12,9M / 12,9M",
+  "d": "saldo 0 | 12x 0 (esperado 0)"
+ },
+ {
+  "r": "PASS",
+  "n": "À vista com desconto (9.750.000 − 450.000)",
+  "d": "9,300,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Entrada acima do preço é limitada",
+  "d": "saldo = 0 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Saldo 0 → parcelas 0 (sem erro)",
+  "d": "['0 Kz', '0 Kz']"
+ },
+ {
+  "r": "PASS",
+  "n": "WhatsApp abre com +244 e texto",
+  "d": "https://wa.me/244923111999"
+ },
+ {
+  "r": "PASS",
+  "n": "Mensagem contém carro, entrada e parcelas",
+  "d": "🚗 Toyota Corolla 2018 …"
+ },
+ {
+  "r": "PASS",
+  "n": "Cliente criado aparece na lista",
+  "d": "6 clientes (4 seed + 1 novo)"
+ },
+ {
+  "r": "PASS",
+  "n": "Detalhe mostra orçamentos do cliente",
+  "d": "1 orçamentos"
+ },
+ {
+  "r": "PASS",
+  "n": "Reenvio abre popup com dados do cliente",
+  "d": "nome/telefone preenchidos"
+ },
+ {
+  "r": "PASS",
+  "n": "Novo modelo não grava sem dados",
+  "d": "modal mantém-se aberto"
+ },
+ {
+  "r": "PASS",
+  "n": "Novo modelo mostra o motivo (aviso visível)",
+  "d": "aviso escondido"
+ },
+ {
+  "r": "PASS",
+  "n": "Marca normalizada/capitalizada",
+  "d": "Mitsubishi Motors L200 2022"
+ },
+ {
+  "r": "PASS",
+  "n": "Bloqueia modelo com preço 0",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Desconto >= preço é recusado com aviso",
+  "d": "O desconto não pode ser igual ou maior que o preço."
+ },
+ {
+  "r": "PASS",
+  "n": "Desconto > preço não gera valor negativo",
+  "d": "à vista = 4,100,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Limite de 6 imagens respeitado",
+  "d": "6 miniaturas (enviei 7)"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop usa barra lateral",
+  "d": "{'side': 'flex', 'nav': 'none'}"
+ },
+ {
+  "r": "PASS",
+  "n": "Sem erros de consola (desktop)",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile usa navbar",
+  "d": "{'side': 'none', 'nav': 'flex'}"
+ },
+ {
+  "r": "PASS",
+  "n": "Sem scroll horizontal em mobile (390px)",
+  "d": "overflow = 0px"
+ },
+ {
+  "r": "PASS",
+  "n": "Orçamentos sem overflow em mobile",
+  "d": "overflow = 0px"
+ },
+ {
+  "r": "PASS",
+  "n": "Sem erros de consola (mobile)",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Tablet 820px sem overflow",
+  "d": "overflow = 0px"
+ },
+ {
+  "r": "PASS",
+  "n": "Arranque online",
+  "d": "Ativo — dados guardados no dispositivo"
+ },
+ {
+  "r": "PASS",
+  "n": "Offline detetado pela app",
+  "d": "Sem ligação · tudo funcional"
+ },
+ {
+  "r": "PASS",
+  "n": "Orçamento criado offline entra na fila",
+  "d": "1"
+ },
+ {
+  "r": "PASS",
+  "n": "Estado do orçamento passa a Pendente",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Fila persistida no dispositivo",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "App recarrega offline com dados",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Fila mantém-se após recarregar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Ao voltar a rede pede para enviar a fila",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "'Agora não' preserva a fila",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Sem erros no modo offline",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · popup Dados da Loja tem carregador de foto",
+  "d": "{'existe': True, 'visivel': True, 'redondo': '50%', 'iniciais': 'AS', 'input': True, 'aceita': 'image/*', 'removerEscondido': True, 'dentro': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · foto por omissão mostra as iniciais da loja",
+  "d": "{'existe': True, 'visivel': True, 'redondo': '50%', 'iniciais': 'AS', 'input': True, 'aceita': 'image/*', 'removerEscondido': True, 'dentro': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · carregador aceita apenas imagens",
+  "d": "{'existe': True, 'visivel': True, 'redondo': '50%', 'iniciais': 'AS', 'input': True, 'aceita': 'image/*', 'removerEscondido': True, 'dentro': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · botão Remover começa escondido",
+  "d": "{'existe': True, 'visivel': True, 'redondo': '50%', 'iniciais': 'AS', 'input': True, 'aceita': 'image/*', 'removerEscondido': True, 'dentro': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · escolher imagem mostra a pré-visualização",
+  "d": "{'previa': True, 'tmp': True, 'dados': 'data:image/jpeg;base64', 'lado': 256, 'removerVisivel': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · imagem é recortada em quadrado 256px",
+  "d": "{'previa': True, 'tmp': True, 'dados': 'data:image/jpeg;base64', 'lado': 256, 'removerVisivel': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · botão Remover aparece com foto escolhida",
+  "d": "{'previa': True, 'tmp': True, 'dados': 'data:image/jpeg;base64', 'lado': 256, 'removerVisivel': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · foto é guardada e memorizada",
+  "d": "{'guardada': 'data:image/jpeg;base64', 'noPerfil': True, 'appbar': True, 'texto': ''}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · appbar mostra a foto de perfil",
+  "d": "{'guardada': 'data:image/jpeg;base64', 'noPerfil': True, 'appbar': True, 'texto': ''}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · foto persiste depois de recarregar",
+  "d": "{'guardada': True, 'appbar': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · Remover volta às iniciais",
+  "d": "{'semPrevia': True, 'iniciais': 'AS'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · remover a foto limpa a appbar",
+  "d": "{'foto': '', 'appbar': 'none'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · carregador visível também no modo escuro",
+  "d": "{'fundo': 'rgb(4, 43, 37)', 'visivel': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R34 · foto de perfil sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R38 · todo o cumprimento em bold",
+  "d": "{'texto': 'Oi ABC Seminovos', 'pesoOi': '700', 'pesoNome': '700', 'pesoBloco': '400', 'corOi': 'rgb(58, 68, 65)', 'corNome': 'rgb(58, 68, 65)', 'umSoTexto': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R38 · texto 'Oi <nome>' numa só linha",
+  "d": "{'texto': 'Oi ABC Seminovos', 'pesoOi': '700', 'pesoNome': '700', 'pesoBloco': '400', 'corOi': 'rgb(58, 68, 65)', 'corNome': 'rgb(58, 68, 65)', 'umSoTexto': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R38 · aceita nome curto de empresa (ex.: 123)",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R38 · bold mantém-se no modo escuro",
+  "d": "{'p': '700', 'c': 'rgb(207, 224, 245)'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R38 · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R37 · barra lateral sem o container da logomarca",
+  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'nav', 'espacoAbaixoNav': 571, 'semCaixa': True, 'navsVisiveis': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R37 · sem 'Plano Pro' no rodapé",
+  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'nav', 'espacoAbaixoNav': 571, 'semCaixa': True, 'navsVisiveis': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R37 · barra lateral termina na navegação",
+  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'nav', 'espacoAbaixoNav': 571, 'semCaixa': True, 'navsVisiveis': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R37 · área inferior livre (sem caixas nem molduras)",
+  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'nav', 'espacoAbaixoNav': 571, 'semCaixa': True, 'navsVisiveis': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R37 · modo escuro também sem a logomarca no rodapé",
+  "d": "{'semLogo': True, 'fundo': 'rgb(4, 13, 31)', 'espaco': 571, 'semCaixa': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R37 · modo escuro mantém a área inferior livre",
+  "d": "{'semLogo': True, 'fundo': 'rgb(4, 13, 31)', 'espaco': 571, 'semCaixa': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R37 · barra lateral sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R32 · escuro · nome da página ativa a verde",
+  "d": "{'ativoTexto': 'rgb(52, 217, 122)', 'ativoIcone': 'rgb(52, 217, 122)', 'inativoTexto': 'rgb(179, 198, 224)', 'ativoVerde': True, 'inativoNao': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R32 · escuro · o verde acompanha a página aberta",
+  "d": "{'nome': 'Clientes5', 'verde': True, 'so1': 1}"
+ },
+ {
+  "r": "PASS",
+  "n": "R32 · escuro memorizado mantém o ativo a verde",
+  "d": "{'tema': 'escuro', 'verde': True, 'cor': 'rgb(52, 217, 122)'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R32 · ativo a verde sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R32 · mobile escuro · ícone e nome ativos a verde",
+  "d": "{'nome': 'Modelos', 'texto': True, 'icone': True, 'inativo': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R32 · mobile escuro · verde segue a página (Perfil)",
+  "d": "{'nome': 'Perfil', 'verde': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R32 · mobile escuro sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R32 · modo claro mantém o verde do item ativo",
+  "d": "{'cor': 'rgb(63, 158, 70)', 'verde': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R31 · logótipo mostra todos os elementos (carro + nome + 3 ticks)",
+  "d": "{'ratio': 3.042, 'natRatio': 3.042, 'completa': True, 'altura': 38, 'etiqueta': 'VendaCar'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R31 · logótipo completo não é esticado",
+  "d": "{'ratio': 3.042, 'natRatio': 3.042, 'completa': True, 'altura': 38, 'etiqueta': 'VendaCar'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R31 · modo escuro · fundo azul-marinho em todos os painéis",
+  "d": "{'.brand': 'rgb(4, 13, 31)', '.bar': 'rgb(4, 13, 31)', '.side': 'rgb(4, 13, 31)', '.content': 'rgb(4, 13, 31)', '.car': 'rgb(4, 13, 31)', '.tbl-wrap': 'rgb(4, 13, 31)'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R31 · modo escuro · mesmo tom da referência (#040d1f)",
+  "d": "{'.brand': 'rgb(4, 13, 31)', '.bar': 'rgb(4, 13, 31)', '.side': 'rgb(4, 13, 31)', '.content': 'rgb(4, 13, 31)', '.car': 'rgb(4, 13, 31)', '.tbl-wrap': 'rgb(4, 13, 31)'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R31 · modo escuro · bordas azuis visíveis",
+  "d": "['rgb(23, 55, 94)', 'rgb(23, 55, 94)', 'rgb(23, 55, 94)']"
+ },
+ {
+  "r": "PASS",
+  "n": "R31 · modo escuro · logótipo troca para a variante clara",
+  "d": "block"
+ },
+ {
+  "r": "PASS",
+  "n": "R31 · variante escura mantém os 3 ticks e a proporção",
+  "d": "{'visivel': True, 'ratio': 3.04, 'nat': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R31 · logótipo/paleta sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · botão Criar mostra apenas o símbolo +",
+  "d": "{'n': 1, 'texto': '', 'temSvg': True, 'altura': 40, 'largura': 40, 'etiqueta': 'Criar novo modelo de carro', 'direita': 1410, 'contentDireita': 1440}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · botão + quadrado (40×40) na linha dos filtros",
+  "d": "{'n': 1, 'texto': '', 'temSvg': True, 'altura': 40, 'largura': 40, 'etiqueta': 'Criar novo modelo de carro', 'direita': 1410, 'contentDireita': 1440}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · botão + tem etiqueta acessível",
+  "d": "Criar novo modelo de carro"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · botão + alinhado ao canto direito",
+  "d": "{'n': 1, 'texto': '', 'temSvg': True, 'altura': 40, 'largura': 40, 'etiqueta': 'Criar novo modelo de carro', 'direita': 1410, 'contentDireita': 1440}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · botão + abre o popup Novo Modelo",
+  "d": "True"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · criação sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · mobile · Criar também é só +",
+  "d": "{'texto': '', 'altura': 34, 'largura': 34, 'direita': 375, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · mobile · botão + com altura de toque",
+  "d": "{'texto': '', 'altura': 34, 'largura': 34, 'direita': 375, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · mobile · sem overflow com o novo botão",
+  "d": "{'texto': '', 'altura': 34, 'largura': 34, 'direita': 375, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · mobile · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · botão de tema presente na appbar",
+  "d": "{'existe': True, 'antesDoSino': True, 'lua': 'block', 'sol': 'none', 'tema': 'claro', 'titulo': 'Modo escuro', 'pressed': 'false'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · botão de tema à esquerda da foto de perfil",
+  "d": "{'existe': True, 'antesDoSino': True, 'lua': 'block', 'sol': 'none', 'tema': 'claro', 'titulo': 'Modo escuro', 'pressed': 'false'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · tema começa claro (ícone de lua)",
+  "d": "{'existe': True, 'antesDoSino': True, 'lua': 'block', 'sol': 'none', 'tema': 'claro', 'titulo': 'Modo escuro', 'pressed': 'false'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · botão de tema com tooltip e aria-pressed",
+  "d": "{'existe': True, 'antesDoSino': True, 'lua': 'block', 'sol': 'none', 'tema': 'claro', 'titulo': 'Modo escuro', 'pressed': 'false'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · clique ativa o modo escuro",
+  "d": "{'tema': 'escuro', 'lua': 'none', 'sol': 'block', 'appbar': 'rgb(4, 13, 31)', 'cartao': 'rgb(4, 13, 31)', 'textoTitulo': 'rgb(255, 255, 255)', 'meta': '#040d1f', 'titulo': 'Modo claro', 'pressed': 'true'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · ícone muda para sol no modo escuro",
+  "d": "{'tema': 'escuro', 'lua': 'none', 'sol': 'block', 'appbar': 'rgb(4, 13, 31)', 'cartao': 'rgb(4, 13, 31)', 'textoTitulo': 'rgb(255, 255, 255)', 'meta': '#040d1f', 'titulo': 'Modo claro', 'pressed': 'true'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · appbar e cartões ficam escuros",
+  "d": "{'tema': 'escuro', 'lua': 'none', 'sol': 'block', 'appbar': 'rgb(4, 13, 31)', 'cartao': 'rgb(4, 13, 31)', 'textoTitulo': 'rgb(255, 255, 255)', 'meta': '#040d1f', 'titulo': 'Modo claro', 'pressed': 'true'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · texto do título legível no escuro",
+  "d": "{'tema': 'escuro', 'lua': 'none', 'sol': 'block', 'appbar': 'rgb(4, 13, 31)', 'cartao': 'rgb(4, 13, 31)', 'textoTitulo': 'rgb(255, 255, 255)', 'meta': '#040d1f', 'titulo': 'Modo claro', 'pressed': 'true'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · barra do sistema acompanha o tema",
+  "d": "#040d1f"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · estado do botão atualizado",
+  "d": "{'tema': 'escuro', 'lua': 'none', 'sol': 'block', 'appbar': 'rgb(4, 13, 31)', 'cartao': 'rgb(4, 13, 31)', 'textoTitulo': 'rgb(255, 255, 255)', 'meta': '#040d1f', 'titulo': 'Modo claro', 'pressed': 'true'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · contraste mínimo 3:1 no modo escuro",
+  "d": "[['.page-head h2', 19.4], ['.car .nm', 19.4], ['.tbl td', 14.49], ['.nav', 10.49]]"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · tema escuro é memorizado após recarregar",
+  "d": "{'tema': 'escuro', 'fundo': 'rgb(4, 13, 31)'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · volta ao modo claro e memoriza a escolha",
+  "d": "{'tema': 'claro', 'guardado': 'claro', 'fundo': 'rgb(255, 255, 255)'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · alternância de tema sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · mobile · botão de tema entre o título e a foto de perfil",
+  "d": "{'alt': 34, 'larg': 34, 'entrePillESino': True, 'tituloAinda': True, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · mobile · botão de tema com 34px",
+  "d": "{'alt': 34, 'larg': 34, 'entrePillESino': True, 'tituloAinda': True, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · mobile · appbar continua sem overflow",
+  "d": "{'alt': 34, 'larg': 34, 'entrePillESino': True, 'tituloAinda': True, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · mobile · modo escuro aplica-se à navbar",
+  "d": "{'tema': 'escuro', 'fundo': 'rgb(4, 13, 31)'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R30 · mobile · tema sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · logótipo presente na appbar",
+  "d": "{'existe': True, 'carregou': True, 'altura': 38, 'largura': 116, 'proporcao': '3.04', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · logótipo carregado (sem imagem partida)",
+  "d": "{'existe': True, 'carregou': True, 'altura': 38, 'largura': 116, 'proporcao': '3.04', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · logótipo com altura harmoniosa (32–40px)",
+  "d": "{'existe': True, 'carregou': True, 'altura': 38, 'largura': 116, 'proporcao': '3.04', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · logótipo na proporção original (~3:1, com os 3 ticks)",
+  "d": "{'existe': True, 'carregou': True, 'altura': 38, 'largura': 116, 'proporcao': '3.04', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · nome 'Modelo' e ícone antigo removidos da marca",
+  "d": "{'existe': True, 'carregou': True, 'altura': 38, 'largura': 116, 'proporcao': '3.04', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · título do documento menciona VendaCar",
+  "d": "VendaCar — Orçamento de Carros por WhatsApp"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · logótipo compacto no telemóvel (≤28px)",
+  "d": "{'altura': 24, 'largura': 73, 'semSobreposicao': True, 'tituloInteiro': True, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · título não sobrepõe o logótipo no telemóvel",
+  "d": "{'altura': 24, 'largura': 73, 'semSobreposicao': True, 'tituloInteiro': True, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · título completo antes das ações da appbar",
+  "d": "{'altura': 24, 'largura': 73, 'semSobreposicao': True, 'tituloInteiro': True, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · appbar do telemóvel sem overflow horizontal",
+  "d": "{'altura': 24, 'largura': 73, 'semSobreposicao': True, 'tituloInteiro': True, 'semOverflow': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · página interior: voltar encostado à esquerda",
+  "d": "{'voltar': 10, 'semLogo': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R29 · sem erros de consola com o novo logótipo",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · appbar única (sem barra extra)",
+  "d": "{'appbar': 58, 'topoConteudo': 58, 'barraExtra': 0, 'pillDentro': True, 'sinoDentro': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · mobile · ações da appbar dentro da barra",
+  "d": "{'appbar': 58, 'topoConteudo': 58, 'barraExtra': 0, 'pillDentro': True, 'sinoDentro': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · mobile · foto de perfil no lugar das notificações",
+  "d": "{'appbar': 58, 'topoConteudo': 58, 'barraExtra': 0, 'pillDentro': True, 'sinoDentro': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · voltar não tapa o logótipo",
+  "d": "{'voltar': True, 'logoEscondido': True, 'sobreposto': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · sem erros na appbar única",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · botão 'Enviar novamente' com altura de toque",
+  "d": "{'n': 2, 'alturas': [50, 50], 'larguras': [327, 327], 'fs': '14.5px'}"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · botão ocupa a largura do cartão",
+  "d": "[327, 327]"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · botão continua a abrir o popup de envio",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · sem erros no detalhe do cliente",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Popup · secção de vídeos presente",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Popup · vídeo entra na lista",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Popup · miniatura de vídeo desenhada",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Popup · limite de 2 vídeos",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Popup · remover vídeo",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Ficha · vídeo na mesma lista das imagens",
+  "d": "3 miniaturas"
+ },
+ {
+  "r": "PASS",
+  "n": "Ficha · clique no vídeo abre o player",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Ficha · voltar à foto fecha o player",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Ficha · modelo sem vídeo mostra só fotos",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Vídeos · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · cartão 'estoque' abre a página respetiva",
+  "d": "pg-modelos"
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · cartão 'orcs' abre a página respetiva",
+  "d": "pg-listaorc"
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · cartão 'clientes' abre a página respetiva",
+  "d": "pg-clientes"
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · valores dos Modelos começam perto de 0",
+  "d": "24,476.36 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · a contagem sobe sem recuar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
+  "d": "9,588,782.89 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · termina no valor certo em ~8 s",
+  "d": "9,749,998.94 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · valor final exato",
+  "d": "9,750,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · página Orçamento também conta",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · valores do Orçamento a subir",
+  "d": [
+   320794,
+   2892907,
+   4882168,
+   6363218
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · Orçamento termina exato",
+  "d": "9,750,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · valor estabilizado antes do scroll",
+  "d": "9,750,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · ao sair de vista fica marcado",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · ao voltar recomeça do 0",
+  "d": "418,360.01 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · e volta a subir",
+  "d": [
+   "418,360.01 Kz",
+   "4,063,513.95 Kz"
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · tabela de Orçamentos conta",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · tabela de Clientes conta",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · Detalhe do Carro conta",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Contador · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · ícone ativo está animado",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · ícone 'salta' ao tocar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · Perfil animado quando ativo",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · cabeça do Perfil move-se para os dois lados",
+  "d": 3.19
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · 'Modelos' animado quando ativo",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · folha de Orçamentos tem 3 linhas de texto",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · as linhas são escritas (escreveLinha)",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · linhas escrevem-se em sequência (atraso crescente)",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · o traço da linha cresce (dashoffset diminui)",
+  "d": [
+   0,
+   3.34629
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · boneco da frente espreita (espreitaA)",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · boneco de trás tem a sua própria animação (espreitaB)",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · quando o da frente se esconde, o de trás aparece",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · fora da página Clientes mostra a cabeça do 1.º boneco",
+  "d": 0
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · fora da página Clientes o 2.º boneco fica sem cabeça",
+  "d": 9.8
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · respeita 'reduzir movimento'",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Animação · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Migração · browser com dados antigos passa a mostrar preços novos",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Migração · carro do utilizador não é alterado",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Migração · orçamento do utilizador não é alterado",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Migração · orçamento de demonstração acompanha o catálogo",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Migração · versão de dados gravada",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R41 · migração acrescenta o negócio de demonstração em Vendas",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Migração · não volta a correr (respeita edições seguintes)",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Migração · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Card · botão eliminar em todos os modelos",
+  "d": "4 de 4"
+ },
+ {
+  "r": "PASS",
+  "n": "Card · botão no canto superior direito",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Eliminar · abre popup de confirmação",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Eliminar · popup identifica o carro",
+  "d": "Honda CR-V 2018"
+ },
+ {
+  "r": "PASS",
+  "n": "Eliminar · cancelar mantém o modelo",
+  "d": 4
+ },
+ {
+  "r": "PASS",
+  "n": "Card · clique normal continua a abrir o Detalhe",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Eliminar · confirmar remove o modelo",
+  "d": 3
+ },
+ {
+  "r": "PASS",
+  "n": "Eliminar · modelo sai da grelha",
+  "d": "Honda CR-V 2018"
+ },
+ {
+  "r": "PASS",
+  "n": "Eliminar · remoção guardada no dispositivo",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Eliminar · popup fecha depois de apagar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Eliminar · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Preços · catálogo todo ≥ 3.000.000 Kz",
+  "d": [
+   9750000,
+   13500000,
+   28500000,
+   12900000
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "Preços · orçamentos alinhados com o catálogo",
+  "d": [
+   9750000,
+   13500000,
+   28500000,
+   12900000,
+   9750000,
+   12900000
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "Preços · catálogo com valores de mercado de Luanda",
+  "d": "9750000,13500000,28500000,12900000"
+ },
+ {
+  "r": "PASS",
+  "n": "Preços · orçamentos de demonstração seguem o catálogo",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Preços · orçamento do utilizador nunca é reescrito",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Preços · referência de câmbio visível no Perfil",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Preços · IVA sobre 9.750.000 = 1.365.000",
+  "d": "1,365,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Preços · total com IVA 9.750.000 = 11.115.000",
+  "d": "11,115,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · linha no Detalhe do Carro (9,75M → 1.365.000)",
+  "d": "1,365,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · etiquetado como imposto no Detalhe",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · mostrado à parte no Orçamento",
+  "d": "1,365,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · total com IVA = 85.500",
+  "d": "11,115,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · preço do carro não é inflacionado",
+  "d": "9,750,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · parcelas calculadas sobre o preço sem IVA",
+  "d": "645,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · discriminado na mensagem do WhatsApp",
+  "d": "💰 Valor: 9,750,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · presente no orçamento guardado",
+  "d": [
+   "1,365,000 Kz",
+   "11,115,000 Kz"
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · visível no cartão do carro no topo do Orçamento",
+  "d": [
+   "1,365,000 Kz",
+   "11,115,000 Kz"
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · resumo dentro do popup de envio",
+  "d": [
+   "1,365,000 Kz",
+   "11,115,000 Kz"
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · coluna na lista de Orçamentos",
+  "d": "50,000 Kz | 1,365,000 Kz | 11,115,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · linha de topo no detalhe do orçamento",
+  "d": [
+   "1,365,000 Kz",
+   "11,115,000 Kz"
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · 14% aplicado também a 28.500.000 (Hilux)",
+  "d": "3,990,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "IVA · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · Dados da Loja começa vazio",
+  "d": "— não preenchido —"
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · Número do WhatsApp começa vazio",
+  "d": "— não preenchido —"
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · editar abre o popup dos dados",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · máscara 9XX XXX XXX",
+  "d": "923 456 789"
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · dados guardados aparecem na linha",
+  "d": "ABC Seminovos · Luanda, Angola"
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · número mostrado com +244",
+  "d": "+244 923 456 789"
+ },
+ {
+  "r": "PASS",
+  "n": "Perfil · dados persistem no dispositivo",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Popup novo modelo · campos Dados da Loja e WhatsApp existem",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Popup novo modelo · herda o que está no Perfil",
+  "d": [
+   "ABC Seminovos · Luanda, Angola",
+   "923 456 789"
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "Criar modelo · Perfil fica atualizado",
+  "d": [
+   "Auto Kadumbo · Talatona",
+   "+244 934 111 222"
+  ]
+ },
+ {
+  "r": "PASS",
+  "n": "Orçamento enviado · contém Dados da Loja",
+  "d": "Conforme falamos aqui na loja Auto Kadumbo · Talatona, segue o orçamento:"
+ },
+ {
+  "r": "PASS",
+  "n": "Orçamento enviado · contém WhatsApp da loja",
+  "d": "Auto Kadumbo · Talatona · WhatsApp: +244 934 111 222"
+ },
+ {
+  "r": "PASS",
+  "n": "Loja vazia · mensagem sem assinatura",
+  "d": "Conforme falamos, segue o orçamento:"
+ },
+ {
+  "r": "PASS",
+  "n": "Dados da Loja · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · campo de procura removido",
+  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi ABC Seminovos'}"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · nome da página fora da appbar",
+  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi ABC Seminovos'}"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · modo Online fora da appbar",
+  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi ABC Seminovos'}"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · foto de perfil alinhada à direita (sem notificações)",
+  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi ABC Seminovos'}"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · appbar sem erros",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · área de conteúdo branca",
+  "d": "rgb(255, 255, 255)"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · moldura cinzenta no conteúdo",
+  "d": "{'fundo': 'rgb(255, 255, 255)', 'bordaTopo': 'rgb(216, 222, 219)', 'bordaEsq': 'rgb(61, 71, 68)', 'cartao': 'rgb(216, 222, 219)'}"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · cartões com borda cinzenta",
+  "d": "rgb(216, 222, 219)"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · moldura completa (1px, cantos fechados)",
+  "d": "{'cTopo': 'rgb(216, 222, 219)', 'cDir': 'rgb(216, 222, 219)', 'cFundo': 'rgb(216, 222, 219)', 'sDir': 'rgb(216, 222, 219)', 'sFundo': 'rgb(216, 222, 219)', 'bFundo': 'rgb(216, 222, 219)', 'bEsq': '0px'}"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · moldura alinhada com appbar e barra lateral",
+  "d": "{'conteudoTopo': 64, 'appbarFundo': 64, 'conteudoEsq': 250, 'lateralDir': 250, 'fim': 860, 'fundoConteudo': 860}"
+ },
+ {
+  "r": "PASS",
+  "n": "Desktop · moldura fecha no fundo do ecrã",
+  "d": "{'conteudoTopo': 64, 'appbarFundo': 64, 'conteudoEsq': 250, 'lateralDir': 250, 'fim': 860, 'fundoConteudo': 860}"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · botões com altura harmoniosa",
+  "d": "{'h1': 48, 'h2': 46, 'w1': 334, 'w2': 334, 'ordem': True, 'fim': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · botões com a mesma largura",
+  "d": "{'h1': 48, 'h2': 46, 'w1': 334, 'w2': 334, 'ordem': True, 'fim': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · Guardar acima de Cancelar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · rodapé dentro do ecrã",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Clicar no orçamento abre a página de detalhe",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Abre o orçamento correto",
+  "d": "Ana Silva"
+ },
+ {
+  "r": "PASS",
+  "n": "Campos vêm preenchidos com os valores guardados",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Resumo recalcula ao editar a entrada",
+  "d": "9,500,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "Guardar alterações persiste",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Lista de orçamentos mostra o valor editado",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Clientes refletem a edição",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Bloqueia guardar sem nome",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Bloqueia telefone incompleto",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Entrada maior que o preço é limitada",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Botão reenviar abre o popup com os dados",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Apagar remove o orçamento",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "Sem erros de consola na página de orçamento",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · orçamento abre sem overflow",
+  "d": "overflow = 0px"
+ },
+ {
+  "r": "PASS",
+  "n": "Mobile · edição utilizável",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · desktop · ícone de notificações removido",
+  "d": "{'sino': False, 'semTextoNotif': True, 'bordas': '0px', 'fundoBtn': 'rgba(0, 0, 0, 0)', 'fotoAcimaDoNome': True, 'nomeAbaixo': True, 'centrado': True, 'oiTexto': 'Oi ABC Seminovos'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · ícones da appbar sem bordas",
+  "d": "{'sino': False, 'semTextoNotif': True, 'bordas': '0px', 'fundoBtn': 'rgba(0, 0, 0, 0)', 'fotoAcimaDoNome': True, 'nomeAbaixo': True, 'centrado': True, 'oiTexto': 'Oi ABC Seminovos'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · nome da loja debaixo da foto de perfil",
+  "d": "{'sino': False, 'semTextoNotif': True, 'bordas': '0px', 'fundoBtn': 'rgba(0, 0, 0, 0)', 'fotoAcimaDoNome': True, 'nomeAbaixo': True, 'centrado': True, 'oiTexto': 'Oi ABC Seminovos'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R38 · cumprimento 'Oi <nome da loja>' sem vírgula",
+  "d": "Oi ABC Seminovos"
+ },
+ {
+  "r": "PASS",
+  "n": "R38 · o nome segue os Dados da Loja",
+  "d": "Oi Seminovos Kianda"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · clicar na foto abre o Perfil",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · sem erros de consola (desktop)",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · mobile · foto de perfil no lugar das notificações",
+  "d": "{'visivel': True, 'lugarDoSino': True, 'dentroDaBarra': True, 'depoisDoTema': True, 'fotoAcima': True, 'bordas': '0px|rgba(0, 0, 0, 0)', 'overflow': 0, 'oi': 'Oi ABC Seminovos'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · mobile · nome debaixo da foto",
+  "d": "{'visivel': True, 'lugarDoSino': True, 'dentroDaBarra': True, 'depoisDoTema': True, 'fotoAcima': True, 'bordas': '0px|rgba(0, 0, 0, 0)', 'overflow': 0, 'oi': 'Oi ABC Seminovos'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · mobile · ícones sem bordas",
+  "d": "0px|rgba(0, 0, 0, 0)"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · mobile · appbar mantém-se dentro do ecrã",
+  "d": "0"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · mobile · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R35 · foto de perfil escolhida aparece na appbar",
+  "d": "{'fundo': True, 'texto': ''}"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · cápsula 'Online' removida da appbar",
+  "d": "{'pill': False, 'online': False, 'grupoExiste': True, 'grupoADireita': '979.688px', 'temaAntesDoSep': True, 'sepAntesDoPerfil': True, 'margemDireita': 24, 'espacoMeio': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · ações agrupadas e encostadas à direita",
+  "d": "{'pill': False, 'online': False, 'grupoExiste': True, 'grupoADireita': '979.688px', 'temaAntesDoSep': True, 'sepAntesDoPerfil': True, 'margemDireita': 24, 'espacoMeio': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · ordem: tema · divisor · perfil",
+  "d": "{'pill': False, 'online': False, 'grupoExiste': True, 'grupoADireita': '979.688px', 'temaAntesDoSep': True, 'sepAntesDoPerfil': True, 'margemDireita': 24, 'espacoMeio': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · margem direita harmoniosa",
+  "d": "24"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · desktop sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · mobile · sem 'Online' na appbar",
+  "d": "{'semPill': True, 'tituloInteiro': True, 'espacoTitulo': 6, 'whoDentro': True, 'sepVisivel': True, 'overflow': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · mobile · título e ações com folga",
+  "d": "{'semPill': True, 'tituloInteiro': True, 'espacoTitulo': 6, 'whoDentro': True, 'sepVisivel': True, 'overflow': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · mobile · perfil dentro da barra",
+  "d": "{'semPill': True, 'tituloInteiro': True, 'espacoTitulo': 6, 'whoDentro': True, 'sepVisivel': True, 'overflow': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · mobile · sem overflow",
+  "d": "0"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · mobile · título longo continua legível",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · mobile · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · estado offline continua visível no Perfil",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R36 · Perfil mostra o estado da ligação",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · página Vendas registada no app",
+  "d": "{'pagina': True, 'titulo': 'Vendas', 'menu': ['modelos', 'listaorc', 'vendas', 'clientes', 'perfil'], 'ordem': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · Vendas no menu entre Orçamentos e Clientes",
+  "d": "['modelos', 'listaorc', 'vendas', 'clientes', 'perfil']"
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · quatro etapas do funil",
+  "d": "['Contactos captados', 'Orçamentos enviados', 'Em negociação', 'Vendas concluídas']"
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · números do funil vêm dos dados reais",
+  "d": "[5, 6, 1, 0]"
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · orçamento em negociação aparece na página",
+  "d": "{'neg': 2, 'cartoes': 2, 'menu': 2}"
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · contador do menu acompanha",
+  "d": "{'neg': 2, 'cartoes': 2, 'menu': 2}"
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · 'Marcar como vendido' muda o estado",
+  "d": "{'vend': 1, 'estado': 'Venda concluída', 'guardado': 'Venda concluída', 'stVendas': '1', 'toast': 'Orçamento de Ana Silva marcado como “Venda concluída”'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · estado persistido no dispositivo",
+  "d": "{'vend': 1, 'estado': 'Venda concluída', 'guardado': 'Venda concluída', 'stVendas': '1', 'toast': 'Orçamento de Ana Silva marcado como “Venda concluída”'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · cartão do Perfil conta as vendas",
+  "d": "{'vend': 1, 'estado': 'Venda concluída', 'guardado': 'Venda concluída', 'stVendas': '1', 'toast': 'Orçamento de Ana Silva marcado como “Venda concluída”'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · confirmação por toast",
+  "d": "Orçamento de Ana Silva marcado como “Venda concluída”"
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · tabela de Orçamentos mostra a mesma etiqueta",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · página do Cliente mostra a mesma etiqueta",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · Vendas sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · telemóvel · Vendas no menu inferior (5 áreas)",
+  "d": "{'itens': 5, 'existe': True, 'largura': 78, 'dentro': True, 'overflow': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · telemóvel · menu sem overflow",
+  "d": "{'itens': 5, 'existe': True, 'largura': 78, 'dentro': True, 'overflow': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · telemóvel · funil em lista empilhada",
+  "d": "{'empilhado': True, 'semScroll': 0, 'titulo': 'Vendas'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · telemóvel · título 'Vendas' na appbar",
+  "d": "{'empilhado': True, 'semScroll': 0, 'titulo': 'Vendas'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · telemóvel · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · modo escuro aplica-se ao funil",
+  "d": "{'fundo': 'rgb(4, 13, 31)', 'borda': 'rgb(23, 55, 94)', 'etapaFundo': 'rgb(7, 21, 40)', 'num': 'rgb(255, 255, 255)', 'ativoVerde': 'rgb(52, 217, 122)'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R39 · menu ativo a verde no escuro",
+  "d": "rgb(52, 217, 122)"
+ },
+ {
+  "r": "PASS",
+  "n": "R41 · negócio de demonstração existe em negociação",
+  "d": "{'existe': True, 'estado': 'Em negociação', 'nome': 'Paulo Neto', 'precoIgualCatalogo': True, 'notas': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R41 · negócio com preço atual do catálogo",
+  "d": "{'existe': True, 'estado': 'Em negociação', 'nome': 'Paulo Neto', 'precoIgualCatalogo': True, 'notas': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R41 · aparece na lista 'Negócios em curso'",
+  "d": "{'cartoes': 1, 'encontrado': True, 'temBotao': True, 'valor': True, 'funilNeg': 1}"
+ },
+ {
+  "r": "PASS",
+  "n": "R41 · cartão com botão 'Marcar como vendido'",
+  "d": "{'cartoes': 1, 'encontrado': True, 'temBotao': True, 'valor': True, 'funilNeg': 1}"
+ },
+ {
+  "r": "PASS",
+  "n": "R42 · cada item tem 2 botões (pendente + vendido)",
+  "d": "{'n': 2, 'textos': 'Marcar pendente / Marcar como vendido', 'temVend': True, 'temPend': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R42 · 'Marcar pendente' põe o negócio pendente",
+  "d": "{'estado': 'Pendente', 'pill': 'Pendente', 'neg': 0, 'cartoes': 1, 'pressed': 'true'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R42 · segundo clique no pendente volta a 'Em negociação'",
+  "d": "Em negociação"
+ },
+ {
+  "r": "PASS",
+  "n": "R41 · marcar como vendido funciona neste negócio",
+  "d": "{'estado': 'Venda concluída', 'vendas': 1, 'fechado': True, 'botoesFechado': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R42 · negócio fechado deixa de mostrar os dois botões",
+  "d": "{'estado': 'Venda concluída', 'vendas': 1, 'fechado': True, 'botoesFechado': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R41 · ícone Vendas animado quando ativo",
+  "d": "{'nome': 'funilEtapa', 'dur': '2.2s', 'iter': 'infinite'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R41 · ícone Vendas parado quando inativo",
+  "d": "{'nome': 'none', 'opac': '1'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R41 · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R43 · contagem de 8 s configurada",
+  "d": "{'dur': 8000, 'inteiros': ['1', '1', '1', '1'], 'total': ''}"
+ },
+ {
+  "r": "PASS",
+  "n": "R43 · números do funil contam como inteiros",
+  "d": "{'dur': 8000, 'inteiros': ['1', '1', '1', '1'], 'total': ''}"
+ },
+ {
+  "r": "PASS",
+  "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
+  "d": "[{'fn': 1, 'vt': '3,521,374.27 Kz', 'temKz': True, 'contando': 8}, {'fn': 3, 'vt': '6,438,963.97 Kz', 'temKz': True, 'contando': 8}, {'fn': 4, 'vt': '8,849,460.15 Kz', 'temKz': True, 'contando': 8}]"
+ },
+ {
+  "r": "PASS",
+  "n": "R43 · valores finais exatos nos 8 s",
+  "d": "{'fn': ['5', '6', '1', '0'], 'vtNeg': '14,706,000 Kz', 'vtFech': '0 Kz', 'vn': '14,706,000 Kz', 'vl': '14,706,000 Kz', 'contando': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R43 · ao voltar à página a contagem recomeça do 0",
+  "d": "{'fn': '1', 'vt': '3,545,250.80 Kz'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R43 · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R41 · animação também na navbar do telemóvel",
+  "d": "{'nome': 'funilEtapa', 'iter': 'infinite', 'itens': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R42 · dois botões também no telemóvel, dentro do ecrã",
+  "d": "{'n': 2, 'dentroDoEcra': True, 'ecra': 390}"
+ },
+ {
+  "r": "PASS",
+  "n": "R44 · Estado sem opções duplicadas",
+  "d": "{'op': ['Enviado', 'Em negociação', 'Pendente', 'Venda concluída', 'Cancelado'], 'unicos': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R44 · cada estado com a sua cor",
+  "d": "['', 'p', 'pd', 'v', 'c']"
+ },
+ {
+  "r": "PASS",
+  "n": "R44 · prestações redondas e soma exata",
+  "d": "{'base': 645000, 'ultima': 655000, 'soma': 7750000}"
+ },
+ {
+  "r": "PASS",
+  "n": "R44 · prestação aparece sem cêntimos no ecrã",
+  "d": "645,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "R44 · filtros da lista funcionam (em curso / fechados / todos)",
+  "d": "{'todos': 6, 'fechados': 1, 'txt': 'Ainda não há orçamentos fechados. Marque um como “Venda concluída”.', 'abertos': 6}"
+ },
+ {
+  "r": "PASS",
+  "n": "R44 · Exportar orçamentos em CSV descarrega",
+  "d": "['orcamentos-vendacar-2026-11-08.csv']"
+ },
+ {
+  "r": "PASS",
+  "n": "R44 · Exportar em PDF abre a folha de impressão",
+  "d": "1"
+ },
+ {
+  "r": "PASS",
+  "n": "R44 · PDF diz que o IVA vai à parte",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R44 · Exportar estoque em CSV descarrega",
+  "d": "['orcamentos-vendacar-2026-11-08.csv', 'estoque-vendacar-2026-11-08.csv']"
+ },
+ {
+  "r": "PASS",
+  "n": "R44 · Ver modelo de mensagem abre o texto",
+  "d": "2"
+ },
+ {
+  "r": "PASS",
+  "n": "R44 · envio sem nome mostra aviso dentro do popup",
+  "d": "Indique o nome do cliente."
+ },
+ {
+  "r": "PASS",
+  "n": "R44 · telefone curto mostra aviso específico",
+  "d": "Telefone incompleto — precisa dos 9 dígitos (ex.: 923 456 789)."
+ },
+ {
+  "r": "PASS",
+  "n": "R44 · mensagem avisa que a simulação é sem juros",
+  "d": "de 9,300,000 Kz 😱\n\nSimulação sem juros, sujeita a aprovação de financiamento.\n\nO que acha?"
+ },
+ {
+  "r": "PASS",
+  "n": "R44 · mensagem com prestações redondas",
+  "d": "Olá Teste Aviso, tudo bem? 😃\n\nConforme falamos, segue o orçamento:\n🚗 Toyota Corolla 2018\n💰 Valor: 9,750,000 Kz\n🧾 IVA 14%"
+ },
+ {
+  "r": "PASS",
+  "n": "R44 · orçamentos guardam o nome do modelo eliminado",
+  "d": "{'nomes': ['Toyota Corolla 2018', 'Toyota Corolla 2018'], 'total': 6}"
+ },
+ {
+  "r": "PASS",
+  "n": "R44 · lista mantém o modelo eliminado legível",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R44 · sem imagens partidas depois de eliminar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R44 · sem erros de consola",
+  "d": "[]"
+ }
+]

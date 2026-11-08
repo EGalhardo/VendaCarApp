@@ -864,7 +864,6 @@
 
   html[data-tema="escuro"] .brand{background:#040d1f}
   html[data-tema="escuro"] .bar{background:#040d1f}
-  html[data-tema="escuro"] .toast{background:#04101f}
   html[data-tema="escuro"] .ic-btn{background:transparent;color:#b3c6e0}
   html[data-tema="escuro"] .ic-btn:hover{background:#071528}
   html[data-tema="escuro"] .who{background:transparent}
@@ -883,10 +882,8 @@
   html[data-tema="escuro"] .btn.ghost{background:#040d1f;color:#c6d6ec;border:1px solid #17375e}
   html[data-tema="escuro"] .btn.ghost:hover{background:#071528}
   html[data-tema="escuro"] .chip{border:1px solid #17375e;background:#040d1f;color:#a3b8d4}
-  html[data-tema="escuro"] .chip:hover{border-color:#1d4a37}
   html[data-tema="escuro"] .car{background:#040d1f}
   html[data-tema="escuro"] .car .ph{background:#071a2e}
-  html[data-tema="escuro"] .car .del-car{color:#c6d6ec}
   html[data-tema="escuro"] .car .del-car:hover,html[data-tema="escuro"] .car .del-car:focus-visible{background:#2e1418;color:#f1897c;border-color:#4a2027}
   html[data-tema="escuro"] .conf-txt b{color:#ffffff}
   html[data-tema="escuro"] .conf-box{border:1px solid #2e1418;color:#c9b0ab}
@@ -909,7 +906,6 @@
   html[data-tema="escuro"] .tbl-wrap{background:#040d1f}
   html[data-tema="escuro"] .tbl th{background:#071528}
   html[data-tema="escuro"] .tbl td{color:#d2e0f2;border-bottom:1px solid #0a1c34}
-  html[data-tema="escuro"] .tbl tr:hover td{background:#071528}
   html[data-tema="escuro"] .b{color:#ffffff}
   html[data-tema="escuro"] .pill.d{background:#071a2e;color:#93a7c4}
   html[data-tema="escuro"] .pill.p{background:#0b2b52;color:#8fbcf7}
@@ -919,18 +915,14 @@
   html[data-tema="escuro"] .aviso{background:#2a1e04;border-color:#4a3608;color:#f0c15c}
   html[data-tema="escuro"] .inp.erro{border-color:#8a6100;background:#1c1503}
   html[data-tema="escuro"] .stat-card{background:#040d1f}
-  html[data-tema="escuro"] .modal{background:#040d1f}
   html[data-tema="escuro"] .modal .body{scrollbar-color:#24507f transparent}
-  html[data-tema="escuro"] .modal .body::-webkit-scrollbar-thumb{background:#17375e;border:2px solid #040d1f}
-  html[data-tema="escuro"] .modal .foot{border-top:1px solid #0a1c34;background:#040d1f}
+  html[data-tema="escuro"] .modal .body::-webkit-scrollbar-thumb{border:2px solid #040d1f}
   html[data-tema="escuro"] .modal .x{background:#040d1f;color:#93a7c4}
   html[data-tema="escuro"] .prefilled{background:#062A24;border-color:#24507f}
-  html[data-tema="escuro"] .upload{border:1.5px dashed #1d4a37;background:#071528}
-  html[data-tema="escuro"] .upload:hover,html[data-tema="escuro"] .upload.drag{background:#062A24}
+  html[data-tema="escuro"] .upload{border:1.5px dashed #1d4a37}
   html[data-tema="escuro"] .upload .ic{background:#042b25}
   html[data-tema="escuro"] .upload .t{color:#d2e0f2}
   html[data-tema="escuro"] .upload .s{color:#8ea3c0}
-  html[data-tema="escuro"] .up{border:1px solid #12305a;background:#071a2e}
   html[data-tema="escuro"] .up-count{color:#8ea3c0}
   html[data-tema="escuro"] .iva-mini{color:#e7c276}
   html[data-tema="escuro"] .iva-mini b{color:#e7c276}
@@ -945,7 +937,6 @@
   html[data-tema="escuro"] .tbl tr.editavel:hover{background:#071528}
   html[data-tema="escuro"] .edit-mini{background:#040d1f}
   html[data-tema="escuro"] .edit-mini:hover{border-color:#2e6da0;background:#062A24}
-  html[data-tema="escuro"] .upload-video .ic{background:#0b2b52}
   html[data-tema="escuro"] .upload-video:hover,html[data-tema="escuro"] .upload-video.drag{background:#0b2b52}
   html[data-tema="escuro"] .stat-card.link:hover{border-color:#24507f}
   html[data-tema="escuro"] .search-inline{background:#040d1f;color:#869cbb}
@@ -1310,7 +1301,7 @@
       </div>
       <div class="detail">
         <div class="panel">
-          <div class="hero"><img id="heroImg" alt=""></div>
+          <div class="hero"></div>
           <div class="gal" id="thumbs"></div>
         </div>
         <div class="panel">
@@ -3109,25 +3100,10 @@ document.getElementById('mTel').addEventListener('input', e => {
 function mensagem(){
   const nome = document.getElementById('mNome').value.trim() || 'cliente';
   const entrada = Math.min(num(document.getElementById('oEntrada').value), atual.preco);
-  const saldo = atual.preco - entrada;
-
-  return 'Olá ' + nome + ', tudo bem? 😃\n\n' +
-    'Conforme falamos' + (LOJA.dados.trim() ? ' aqui na loja ' + LOJA.dados.trim() : '') + ', segue o orçamento:\n' +
-    '🚗 ' + atual.nome + '\n' +
-    '💰 Valor: ' + fmt(atual.preco) + '\n' +
-    '🧾 IVA 14%: ' + fmt(ivaDe(atual.preco)) + '\n' +
-    '💵 Total com IVA: ' + fmt(totalComIva(atual.preco)) + '\n\n' +
-    'Podemos trabalhar com uma entrada de ' + fmt(entrada) + ' e o saldo em:\n' +
-    '- 12x de ' + textoPrestacao(saldo, 12) + ', ou\n' +
-    '- 24x de ' + textoPrestacao(saldo, 24) + ', ou\n' +
-    '- 36x de ' + textoPrestacao(saldo, 36) + ',\n' +
-    'Ou, ainda, se quiser pagar à vista, conseguimos chegar no incrível valor de ' +
-    fmt(valorAVista(atual.preco, atual.desc)) + ' 😱\n\n' +
-    'Simulação sem juros, sujeita a aprovação de financiamento.\n\n' +
-    'O que acha?' + (linhaLoja() ? '\n\n' + linhaLoja() : '');
+  return textoOrcamento(nome, atual, atual.preco, entrada, atual.desc);
 }
 
-/* ---- helpers de orçamento ---- *//* ---- helpers de orçamento ---- */
+/* ---- helpers de orçamento ---- */
 function textoOrcamento(nome, carro, preco, entrada, desc){
   const saldo = preco - entrada;
   return 'Olá ' + nome + ', tudo bem? 😃\n\n' +
@@ -3142,6 +3118,7 @@ function textoOrcamento(nome, carro, preco, entrada, desc){
     '- 36x de ' + textoPrestacao(saldo, 36) + ',\n' +
     'Ou, ainda, se quiser pagar à vista, conseguimos chegar no incrível valor de ' +
     fmt(valorAVista(preco, desc)) + ' 😱\n\n' +
+    'Simulação sem juros, sujeita a aprovação de financiamento.\n\n' +
     'O que acha?' + (linhaLoja() ? '\n\n' + linhaLoja() : '');
 }
 
