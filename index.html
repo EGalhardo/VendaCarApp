@@ -1219,8 +1219,19 @@ window.__falhaArranque = function(msg){
   cx.style.display = 'block';
 };
 window.addEventListener('error', function(e){
+  var extra = '';
+  try{
+    if (e && e.lineno){
+      /* o texto real da linha que o motor rejeitou: e aqui que se ve o byte estragado */
+      var d = (e.target && e.target.ownerDocument && e.target.ownerDocument.documentElement)
+              ? e.target.ownerDocument.documentElement.innerHTML : document.documentElement.innerHTML;
+      var l = d.split('\n')[e.lineno - 1];
+      if (l !== undefined) extra = '\nLinha ' + e.lineno + ': ' + l.slice(0, 220);
+    }
+  }catch(x){}
   window.__falhaArranque('Erro: ' + (e.message || 'desconhecido') +
-    (e.filename ? '\nEm: ' + String(e.filename).split('/').pop() + ' linha ' + e.lineno : ''));
+    (e.filename ? '\nEm: ' + String(e.filename).split('/').pop() + ' linha ' + e.lineno +
+                  ' coluna ' + (e.colno || '?') : '') + extra);
 });
 window.addEventListener('unhandledrejection', function(e){
   window.__falhaArranque('Promessa rejeitada: ' + ((e.reason && e.reason.message) || e.reason));

@@ -1676,6 +1676,9 @@ async def main():
         _js = "\n".join(_re.findall(r"<script>(.*?)</script>", _h, _re.S))
         ok("R51 · ficheiro inteiro em ASCII puro (imune a corrupção de codificação)",
            all(ord(c) < 128 for c in _h), str(sorted({c for c in _h if ord(c) > 127})[:5]))
+        # browsers antigos (Safari 11, WebViews) rejeitam 'catch {' sem variável — ES2019
+        ok("R51 · sem 'catch {' sem variável (compatível com Safari 11 / WebViews)",
+           len(_re.findall(r"catch\s*\{", _js)) == 0, str(len(_re.findall(r"catch\s*\{", _js))))
         ok("R51 · JavaScript 100% ASCII",
            all(ord(c) < 128 for c in _js), str(sorted({c for c in _js if ord(c) > 127})[:5]))
         ok("R49 · charset declarado em duas formas",

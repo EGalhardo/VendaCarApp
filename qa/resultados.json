@@ -717,7 +717,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "-10,606.97 Kz"
+  "d": "23,746.32 Kz"
  },
  {
   "r": "PASS",
@@ -727,12 +727,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,590,461.90 Kz"
+  "d": "9,588,806.62 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,999.43 Kz"
+  "d": "9,749,998.94 Kz"
  },
  {
   "r": "PASS",
@@ -750,8 +750,8 @@
   "d": [
    320794,
    2892907,
-   4881976,
-   6363079
+   4882168,
+   6363218
   ]
  },
  {
@@ -779,7 +779,7 @@
   "n": "Contador · e volta a subir",
   "d": [
    "417,294.70 Kz",
-   "4,062,748.23 Kz"
+   "4,063,258.71 Kz"
   ]
  },
  {
@@ -847,7 +847,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34671
+   3.34726
   ]
  },
  {
@@ -1643,7 +1643,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '3,560,843.99 Kz', 'temKz': True, 'contando': 8}, {'fn': 3, 'vt': '6,471,226.27 Kz', 'temKz': True, 'contando': 8}, {'fn': 4, 'vt': '8,825,247.66 Kz', 'temKz': True, 'contando': 8}]"
+  "d": "[{'fn': 1, 'vt': '3,552,131.94 Kz', 'temKz': True, 'contando': 8}, {'fn': 3, 'vt': '6,464,480.66 Kz', 'temKz': True, 'contando': 8}, {'fn': 4, 'vt': '8,819,558.55 Kz', 'temKz': True, 'contando': 8}]"
  },
  {
   "r": "PASS",
@@ -1653,7 +1653,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '3,494,242.39 Kz'}"
+  "d": "{'fn': '1', 'vt': '3,487,797.88 Kz'}"
  },
  {
   "r": "PASS",
@@ -1764,6 +1764,11 @@
   "r": "PASS",
   "n": "R51 · ficheiro inteiro em ASCII puro (imune a corrupção de codificação)",
   "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R51 · sem 'catch {' sem variável (compatível com Safari 11 / WebViews)",
+  "d": "0"
  },
  {
   "r": "PASS",
