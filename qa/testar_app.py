@@ -372,14 +372,14 @@ async def main():
                   semPlano: !document.body.innerText.includes('Plano Pro'),
                   ultimoFilho: ultimo.className,
                   espacoAbaixoNav: Math.round(s.bottom - ultimoNav.bottom),
-                  semCaixa: [...side.children].every(e=>getComputedStyle(e).borderTopWidth==='0px' ||
+                  semCaixa: [...side.children].every(e=>e.className==='side-fim' ||
                             e.className==='nav' || e.className==='nav on' || e.className==='lbl'),
                   navsVisiveis: navs.length};
         }""")
         ok("R37 · barra lateral sem o container da logomarca", L["semStore"] and L["semLogo"], str(L))
         ok("R37 · sem 'Plano Pro' no rodapé", L["semPlano"], str(L))
-        ok("R37 · barra lateral termina na navegação", L["ultimoFilho"]=="nav" and L["navsVisiveis"]==5, str(L))
-        ok("R37 · área inferior livre (sem caixas nem molduras)", L["semCaixa"] and L["espacoAbaixoNav"]>0, str(L))
+        ok("R54 · barra lateral termina no botão Encerrar", L["ultimoFilho"]=="side-fim" and L["navsVisiveis"]==6, str(L))
+        ok("R54 · Encerrar encostado ao fundo, com espaço antes dele", L["espacoAbaixoNav"]>0 and L["semStore"] and L["semLogo"], str(L))
         await sd.click("#btnTema"); await sd.wait_for_timeout(450)
         L2 = await sd.evaluate("""()=>{
           const side=document.querySelector('.side'), s=side.getBoundingClientRect();
@@ -388,12 +388,61 @@ async def main():
           return {semLogo: side.querySelectorAll('img').length===0,
                   fundo:getComputedStyle(side).backgroundColor,
                   espaco:Math.round(s.bottom-u.bottom),
-                  semCaixa: !document.querySelector('.side .store') && [...side.querySelectorAll('div')].every(d=>d.className==='lbl')};
+                  semCaixa: !document.querySelector('.side .store') && [...side.querySelectorAll('div')].every(d=>d.className==='lbl' || d.className==='side-fim')};
         }""")
         ok("R37 · modo escuro também sem a logomarca no rodapé", L2["semLogo"] and L2["fundo"]=="rgb(4, 13, 31)", str(L2))
-        ok("R37 · modo escuro mantém a área inferior livre", L2["semCaixa"], str(L2))
+        ok("R54 · modo escuro mantém o Encerrar no fundo", L2["semCaixa"] and L2["espaco"]>0, str(L2))
         ok("R37 · barra lateral sem erros de consola", len(sde)==0, str(sde[:2]))
         await sd.close()
+
+        # ============ R54 · BOTÃO ENCERRAR NO FUNDO DA BARRA LATERAL ============
+        en = await b.new_page(viewport={"width":1440,"height":900})
+        ene=[]; en.on("pageerror", lambda e: ene.append(str(e)))
+        await novo(en)
+        E1 = await en.evaluate("""()=>{
+          const bt=document.querySelector('.side [data-encerrar]');
+          const r=bt.getBoundingClientRect(), s=document.querySelector('.side').getBoundingClientRect();
+          const navs=[...document.querySelectorAll('.side .nav')].map(n=>n.getBoundingClientRect().bottom);
+          return {texto:bt.innerText.trim(), titulo:bt.getAttribute('title'),
+                  existe:!!bt, eUltimoNav: [...document.querySelectorAll('.side .nav')].pop()===bt,
+                  fundo: Math.round(s.bottom-r.bottom), altura:Math.round(r.height), largura:Math.round(r.width),
+                  abaixoDosOutros: r.top >= Math.max(...navs.slice(0,-1)),
+                  cor:getComputedStyle(bt).color,
+                  alturaNav:Math.round(document.querySelector('.side .nav[data-go=\"perfil\"]').getBoundingClientRect().height)};
+        }""")
+        ok("R54 · botão Encerrar existe no fundo da barra lateral", E1["existe"] and E1["texto"]=="Encerrar" and E1["titulo"]=="Encerrar", str(E1))
+        ok("R54 · é o último item, abaixo de Perfil, colado ao fundo", E1["eUltimoNav"] and E1["abaixoDosOutros"] and 0 <= E1["fundo"] <= 40, str(E1))
+        ok("R54 · mesma altura e largura dos restantes itens", E1["altura"]==E1["alturaNav"] and E1["largura"]>200, str(E1))
+        await en.click(".side [data-encerrar]"); await en.wait_for_timeout(500)
+        E2 = await en.evaluate("""()=>{
+          const m=document.getElementById('mEncerrar');
+          return {aberto:m.classList.contains('open'), titulo:document.getElementById('ttEncerrar').innerText,
+                  botao:document.getElementById('btnEncerrarOk').innerText.trim(),
+                  centrado: Math.abs((m.querySelector('.modal').getBoundingClientRect().left +
+                            m.querySelector('.modal').getBoundingClientRect().right)/2 - innerWidth/2) < 3};
+        }""")
+        ok("R54 · clicar abre confirmação centrada antes de encerrar", E2["aberto"] and E2["centrado"] and E2["botao"]=="Encerrar", str(E2))
+        await en.click("#mEncerrar .btn.ghost"); await en.wait_for_timeout(400)
+        ok("R54 · Cancelar não encerra nada", await en.evaluate("()=>!document.getElementById('mEncerrar').classList.contains('open') && !document.querySelector('.ecra-fim')"))
+        await en.click(".side [data-encerrar]"); await en.wait_for_timeout(300)
+        await en.click("#btnEncerrarOk"); await en.wait_for_timeout(700)
+        E3 = await en.evaluate("""()=>{
+          const f=document.querySelector('.ecra-fim');
+          return {ecra:!!f, texto:f?f.innerText.split(String.fromCharCode(10)).join(' | '):'', visivel:f?getComputedStyle(f).opacity:'0',
+                  guardado: !!localStorage.getItem('modelo_orcamento_carros_v1')};
+        }""")
+        ok("R54 · encerrar mostra o ecrã de encerramento", E3["ecra"] and E3["visivel"]=="1" and "Aplica" in E3["texto"], str(E3))
+        ok("R54 · dados ficam guardados ao encerrar", E3["guardado"], str(E3))
+        await en.click("#btnReabrir"); await en.wait_for_timeout(1500)
+        E4 = await en.evaluate("()=>({ok:window.__arranqueOK, n:document.querySelectorAll('#grid .car').length, fim:!!document.querySelector('.ecra-fim')})")
+        ok("R54 · Abrir novamente repõe a app", E4["ok"] and E4["n"]==4 and not E4["fim"], str(E4))
+        ok("R54 · sem erros de consola no fluxo Encerrar", len(ene)==0, str(ene[:2]))
+        await en.close()
+        em = await b.new_page(viewport={"width":390,"height":844})
+        await novo(em)
+        ok("R54 · Encerrar não aparece no telemóvel (barra lateral escondida)",
+           not await em.evaluate("()=>{const e=document.querySelector('[data-encerrar]');return !!e.offsetParent}"))
+        await em.close()
 
         # ============ R32 · MODO ESCURO · ATIVO A VERDE ============
         nv = await b.new_page(viewport={"width":1440,"height":900})

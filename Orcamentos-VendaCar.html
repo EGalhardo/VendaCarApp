@@ -127,6 +127,37 @@
     border-bottom:1px solid var(--gray-line);
     display:flex;flex-direction:column;gap:4px;overflow-y:auto;
   }
+  /* encerrar: separador + botao encostados ao fundo da barra lateral */
+  .side-fim{
+    margin-top:auto;padding-top:12px;position:relative;
+    position:sticky;bottom:0;background:#fff;
+  }
+  .side-fim::before{
+    content:"";position:absolute;top:0;left:10px;right:10px;height:1px;background:var(--gray-line);
+  }
+  .nav-sair{color:#78867f}
+  .nav-sair .ico{color:inherit}
+  .nav-sair:hover{background:#f6f4f3;color:#b4574a}
+  .nav-sair:hover .ico{color:#c4584a}
+  .nav-sair:active{transform:translateY(1px)}
+  /* botao de confirmacao do encerramento (mesma linguagem dos outros botoes) */
+  .btn-sair-conf{background:#4caf50}
+  .btn-sair-conf:hover{background:var(--green-dark)}
+  /* ecra mostrado depois de encerrar */
+  .ecra-fim{
+    position:fixed;inset:0;z-index:200;background:#fff;display:flex;align-items:center;justify-content:center;
+    padding:24px;opacity:0;transition:opacity .25s;
+  }
+  .ecra-fim.on{opacity:1}
+  .ecra-caixa{max-width:340px;text-align:center}
+  .ecra-ico{
+    width:56px;height:56px;border-radius:50%;background:#e8f5e9;margin:0 auto 16px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .ecra-fim h2{font-size:19px;margin:0 0 7px;color:var(--ink)}
+  .ecra-fim p{font-size:13px;color:var(--muted);line-height:1.5;margin:0 auto 20px;max-width:290px}
+  html[data-tema="escuro"] .ecra-fim{background:#040d1f}
+  html[data-tema="escuro"] .ecra-fim h2{color:#e6eef8}
   .side .lbl{font-size:10px;font-weight:800;letter-spacing:1.2px;color:#b6c2bc;margin:10px 10px 6px}
   .nav{
     display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:9px;border:0;
@@ -874,6 +905,10 @@
   html[data-tema="escuro"] .who:hover .av{box-shadow:0 0 0 3px rgba(22,194,90,.18)}
   html[data-tema="escuro"] .side{background:#040d1f}
   html[data-tema="escuro"] .side .lbl{color:#7c90ae}
+  html[data-tema="escuro"] .side-fim{background:#040d1f}
+  html[data-tema="escuro"] .side-fim::before{background:#17375e}
+  html[data-tema="escuro"] .nav-sair{color:#8095b2}
+  html[data-tema="escuro"] .nav-sair:hover{background:#0b1a30;color:#e0796b}
   html[data-tema="escuro"] .nav:hover{background:#071528}
   html[data-tema="escuro"] .nav .cnt{background:#071a2e;color:#93a7c4}
   html[data-tema="escuro"] .nav.on .cnt{background:#0a3b30}
@@ -1312,6 +1347,15 @@ setTimeout(function(){
         <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg></span>
       <span class="tx">Perfil</span>
     </button>
+
+    <!-- encerrar: fixo no fundo da barra lateral (so desktop) -->
+    <div class="side-fim">
+      <button class="nav nav-sair" data-encerrar title="Encerrar" aria-label="Encerrar">
+        <span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 17l5-5-5-5"/><path d="M20 12H9"/><path d="M12 3H6a2 2 0 00-2 2v14a2 2 0 002 2h6"/></svg></span>
+        <span class="tx">Encerrar</span>
+      </button>
+    </div>
 
   </aside>
 
@@ -1961,6 +2005,39 @@ setTimeout(function(){
 </div>
 
 <!-- ================= MODAL: ENVIAR OR&#199;AMENTO ================= -->
+<!-- ================= MODAL: ENCERRAR ================= -->
+<div class="ov" id="mEncerrar">
+  <div class="modal narrow" role="dialog" aria-modal="true" aria-labelledby="ttEncerrar">
+    <div class="head">
+      <div class="ic">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green-ink)" stroke-width="1.9"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 17l5-5-5-5"/><path d="M20 12H9"/><path d="M12 3H6a2 2 0 00-2 2v14a2 2 0 002 2h6"/>
+        </svg>
+      </div>
+      <div><h3 id="ttEncerrar">Encerrar a aplica&#231;&#227;o</h3><div class="sub">O trabalho fica tudo guardado</div></div>
+      <button class="x" data-close="mEncerrar" aria-label="Fechar">&#215;</button>
+    </div>
+    <div class="body">
+      <p class="conf-txt">Quer encerrar a aplica&#231;&#227;o agora?</p>
+      <div class="conf-box" style="background:#f7faf8;border-color:#e4ede8;color:#6d7b75">
+        <span>Os modelos e os or&#231;amentos ficam <b style="color:#3f9e46">guardados</b> neste dispositivo.</span>
+        <span>Da pr&#243;xima vez que abrir, encontra tudo como deixou.</span>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="btn ghost" data-close="mEncerrar">Cancelar</button>
+      <button class="btn btn-sair-conf" id="btnEncerrarOk">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 17l5-5-5-5"/><path d="M20 12H9"/><path d="M12 3H6a2 2 0 00-2 2v14a2 2 0 002 2h6"/>
+        </svg>
+        Encerrar
+      </button>
+    </div>
+  </div>
+</div>
+
 <div class="ov" id="mEnviar">
   <div class="modal narrow" role="dialog" aria-modal="true" aria-labelledby="ttEnviar">
     <div class="head">
@@ -2579,6 +2656,41 @@ document.addEventListener('click', e => {
   if (c) document.getElementById(c.dataset.close).classList.remove('open');
   const criar = e.target.closest('[data-criar]');
   if (criar) abrirNovoModelo();
+});
+
+/* ==========================================================
+   ENCERRAR  (botao no fundo da barra lateral)
+   ========================================================== */
+const __btnEncerrar = document.getElementById('btnEncerrarOk');
+
+document.addEventListener('click', e => {
+  if (e.target.closest('[data-encerrar]')) {
+    document.getElementById('mEncerrar').classList.add('open');
+    reiniciarScroll(document.getElementById('mEncerrar'));
+  }
+});
+
+__btnEncerrar.addEventListener('click', () => {
+  document.getElementById('mEncerrar').classList.remove('open');
+  try { guardar(); } catch (err) {}
+  /* limpa o ecra e devolve a aplicacao ao estado de arranque (sem apagar dados) */
+  try {
+    ir('modelos');
+    document.querySelector('.content').scrollTop = 0;
+    window.scrollTo(0, 0);
+    while (document.body.children.length > 3) document.body.lastElementChild.remove();
+  } catch (err) {}
+  const ov = document.createElement('div');
+  ov.className = 'ecra-fim';
+  ov.innerHTML = '<div class="ecra-caixa">' +
+    '<div class="ecra-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4caf50" ' +
+    'stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>' +
+    '<h2>Aplica&#231;&#227;o encerrada</h2>' +
+    '<p>Os dados ficaram guardados. Pode fechar este separador do navegador.</p>' +
+    '<button class="btn" id="btnReabrir">Abrir novamente</button></div>';
+  document.body.appendChild(ov);
+  requestAnimationFrame(() => ov.classList.add('on'));
+  document.getElementById('btnReabrir').addEventListener('click', () => location.reload());
 });
 
 document.getElementById('btnBack').addEventListener('click', () => {

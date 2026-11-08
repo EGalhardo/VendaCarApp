@@ -287,37 +287,87 @@
  {
   "r": "PASS",
   "n": "R37 · barra lateral sem o container da logomarca",
-  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'nav', 'espacoAbaixoNav': 571, 'semCaixa': True, 'navsVisiveis': 5}"
+  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'side-fim', 'espacoAbaixoNav': 19, 'semCaixa': True, 'navsVisiveis': 6}"
  },
  {
   "r": "PASS",
   "n": "R37 · sem 'Plano Pro' no rodapé",
-  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'nav', 'espacoAbaixoNav': 571, 'semCaixa': True, 'navsVisiveis': 5}"
+  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'side-fim', 'espacoAbaixoNav': 19, 'semCaixa': True, 'navsVisiveis': 6}"
  },
  {
   "r": "PASS",
-  "n": "R37 · barra lateral termina na navegação",
-  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'nav', 'espacoAbaixoNav': 571, 'semCaixa': True, 'navsVisiveis': 5}"
+  "n": "R54 · barra lateral termina no botão Encerrar",
+  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'side-fim', 'espacoAbaixoNav': 19, 'semCaixa': True, 'navsVisiveis': 6}"
  },
  {
   "r": "PASS",
-  "n": "R37 · área inferior livre (sem caixas nem molduras)",
-  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'nav', 'espacoAbaixoNav': 571, 'semCaixa': True, 'navsVisiveis': 5}"
+  "n": "R54 · Encerrar encostado ao fundo, com espaço antes dele",
+  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'side-fim', 'espacoAbaixoNav': 19, 'semCaixa': True, 'navsVisiveis': 6}"
  },
  {
   "r": "PASS",
   "n": "R37 · modo escuro também sem a logomarca no rodapé",
-  "d": "{'semLogo': True, 'fundo': 'rgb(4, 13, 31)', 'espaco': 571, 'semCaixa': True}"
+  "d": "{'semLogo': True, 'fundo': 'rgb(4, 13, 31)', 'espaco': 19, 'semCaixa': True}"
  },
  {
   "r": "PASS",
-  "n": "R37 · modo escuro mantém a área inferior livre",
-  "d": "{'semLogo': True, 'fundo': 'rgb(4, 13, 31)', 'espaco': 571, 'semCaixa': True}"
+  "n": "R54 · modo escuro mantém o Encerrar no fundo",
+  "d": "{'semLogo': True, 'fundo': 'rgb(4, 13, 31)', 'espaco': 19, 'semCaixa': True}"
  },
  {
   "r": "PASS",
   "n": "R37 · barra lateral sem erros de consola",
   "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R54 · botão Encerrar existe no fundo da barra lateral",
+  "d": "{'texto': 'Encerrar', 'titulo': 'Encerrar', 'existe': True, 'eUltimoNav': True, 'fundo': 19, 'altura': 40, 'largura': 221, 'abaixoDosOutros': True, 'cor': 'rgb(101, 116, 113)', 'alturaNav': 40}"
+ },
+ {
+  "r": "PASS",
+  "n": "R54 · é o último item, abaixo de Perfil, colado ao fundo",
+  "d": "{'texto': 'Encerrar', 'titulo': 'Encerrar', 'existe': True, 'eUltimoNav': True, 'fundo': 19, 'altura': 40, 'largura': 221, 'abaixoDosOutros': True, 'cor': 'rgb(101, 116, 113)', 'alturaNav': 40}"
+ },
+ {
+  "r": "PASS",
+  "n": "R54 · mesma altura e largura dos restantes itens",
+  "d": "{'texto': 'Encerrar', 'titulo': 'Encerrar', 'existe': True, 'eUltimoNav': True, 'fundo': 19, 'altura': 40, 'largura': 221, 'abaixoDosOutros': True, 'cor': 'rgb(101, 116, 113)', 'alturaNav': 40}"
+ },
+ {
+  "r": "PASS",
+  "n": "R54 · clicar abre confirmação centrada antes de encerrar",
+  "d": "{'aberto': True, 'titulo': 'Encerrar a aplicação', 'botao': 'Encerrar', 'centrado': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R54 · Cancelar não encerra nada",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R54 · encerrar mostra o ecrã de encerramento",
+  "d": "{'ecra': True, 'texto': 'Aplicação encerrada |  | Os dados ficaram guardados. Pode fechar este separador do navegador. |  | Abrir novamente', 'visivel': '1', 'guardado': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R54 · dados ficam guardados ao encerrar",
+  "d": "{'ecra': True, 'texto': 'Aplicação encerrada |  | Os dados ficaram guardados. Pode fechar este separador do navegador. |  | Abrir novamente', 'visivel': '1', 'guardado': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R54 · Abrir novamente repõe a app",
+  "d": "{'ok': True, 'n': 4, 'fim': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R54 · sem erros de consola no fluxo Encerrar",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R54 · Encerrar não aparece no telemóvel (barra lateral escondida)",
+  "d": ""
  },
  {
   "r": "PASS",
@@ -717,7 +767,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "25,936.34 Kz"
+  "d": "14,982.94 Kz"
  },
  {
   "r": "PASS",
@@ -727,12 +777,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,588,877.80 Kz"
+  "d": "9,588,236.48 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.97 Kz"
+  "d": "9,749,998.74 Kz"
  },
  {
   "r": "PASS",
@@ -748,10 +798,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   321115,
-   2893411,
-   4882359,
-   6363357
+   320794,
+   2893159,
+   4882168,
+   6363079
   ]
  },
  {
@@ -772,14 +822,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "413,387.87 Kz"
+  "d": "417,294.70 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "413,387.87 Kz",
-   "4,059,940 Kz"
+   "417,294.70 Kz",
+   "4,063,003.47 Kz"
   ]
  },
  {
@@ -820,7 +870,7 @@
  {
   "r": "PASS",
   "n": "Animação · cabeça do Perfil move-se para os dois lados",
-  "d": 3.19
+  "d": 3.18
  },
  {
   "r": "PASS",
@@ -847,7 +897,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34659
+   3.3477
   ]
  },
  {
@@ -1473,12 +1523,12 @@
  {
   "r": "PASS",
   "n": "R39 · página Vendas registada no app",
-  "d": "{'pagina': True, 'titulo': 'Vendas', 'menu': ['modelos', 'listaorc', 'vendas', 'clientes', 'perfil'], 'ordem': True}"
+  "d": "{'pagina': True, 'titulo': 'Vendas', 'menu': ['modelos', 'listaorc', 'vendas', 'clientes', 'perfil', None], 'ordem': True}"
  },
  {
   "r": "PASS",
   "n": "R39 · Vendas no menu entre Orçamentos e Clientes",
-  "d": "['modelos', 'listaorc', 'vendas', 'clientes', 'perfil']"
+  "d": "['modelos', 'listaorc', 'vendas', 'clientes', 'perfil', None]"
  },
  {
   "r": "PASS",
@@ -1643,7 +1693,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '3,534,235.09 Kz', 'temKz': True, 'contando': 8}, {'fn': 3, 'vt': '6,449,852.52 Kz', 'temKz': True, 'contando': 8}, {'fn': 4, 'vt': '8,857,814.42 Kz', 'temKz': True, 'contando': 8}]"
+  "d": "[{'fn': 1, 'vt': '3,571,842.19 Kz', 'temKz': True, 'contando': 8}, {'fn': 3, 'vt': '6,480,214.70 Kz', 'temKz': True, 'contando': 8}, {'fn': 4, 'vt': '8,832,428.68 Kz', 'temKz': True, 'contando': 8}]"
  },
  {
   "r": "PASS",
@@ -1653,7 +1703,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '3,529,643.07 Kz'}"
+  "d": "{'fn': '1', 'vt': '3,553,966.43 Kz'}"
  },
  {
   "r": "PASS",
