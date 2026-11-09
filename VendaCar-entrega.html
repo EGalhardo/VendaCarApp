@@ -330,18 +330,28 @@
   .nav .ico svg,.nav-item .ico svg{display:block}
   .nav .ico .head,.nav-item .ico .head{transform-origin:12px 7px}
 
-  /* Perfil  a "cabeca" vai de um lado para o outro */
+  /* Perfil  acena: inclina, a cabeca cresce e um anel sai dela */
+  .nav .ico svg .halo,.nav-item .ico svg .halo{opacity:0;transform-origin:12px 7px}
+  /* o anel do Perfil cresce para fora da caixa de 18 px */
+  .nav[data-go="perfil"] .ico svg,.nav-item[data-go="perfil"] .ico svg{overflow:visible}
+  @keyframes perfilAcena{
+    0%,100%{transform:rotate(0deg) translateY(0)}
+    28%    {transform:rotate(-5.5deg) translateY(-.4px)}
+    60%    {transform:rotate(2.4deg) translateY(.2px)}
+  }
   @keyframes perfilCabeca{
-    0%,100%{transform:translate(-4.6px,-.4px) rotate(-18deg)}
-    50%    {transform:translate(4.6px,-.4px)  rotate(18deg)}
+    0%,100%{transform:scale(1)}
+    28%    {transform:scale(1.22)}
+    60%    {transform:scale(.97)}
   }
-  @keyframes perfilCorpo{
-    0%,100%{transform:translateX(-2px)}
-    50%    {transform:translateX(2px)}
+  @keyframes perfilOmbros{
+    0%,100%{transform:translateY(0)}
+    30%    {transform:translateY(.6px)}
   }
-  @keyframes perfilPulso{
-    0%,100%{transform:translateY(0) scale(1)}
-    50%    {transform:translateY(-1px) scale(1.06)}
+  @keyframes perfilHalo{
+    0%        {transform:scale(.55);opacity:0}
+    14%       {opacity:.85}
+    62%,100%  {transform:scale(1.9);opacity:0}
   }
 
   /* Autom\u00F3vel  o carro anda: avana\u00E7a e assenta, e a estrada passa por baixo */
@@ -360,29 +370,30 @@
     100% {stroke-dashoffset:9;opacity:0}
   }
 
-  /* Clientes  os dois bonecos revezam-se a espreitar */
-  @keyframes espreitaA{
-    0%   {transform:translateY(9.8px)}
-    12%  {transform:translateY(-1.4px)}
-    24%  {transform:translateY(0)}
-    42%  {transform:translateY(-.8px)}
-    52%  {transform:translateY(9.8px)}
-    100% {transform:translateY(9.8px)}
+  /* Clientes  o par balanca e a 2a cabeca entra mesmo em cena */
+  @keyframes parAcena{
+    0%,100%{transform:rotate(0deg) scale(1)}
+    26%    {transform:rotate(-4.2deg) scale(1.05)}
+    60%    {transform:rotate(2.2deg) scale(1.02)}
   }
-  @keyframes espreitaB{
-    0%   {transform:translateY(9.8px)}
-    50%  {transform:translateY(9.8px)}
-    60%  {transform:translateY(-1.2px)}
-    70%  {transform:translateY(0)}
-    88%  {transform:translateY(-.7px)}
-    96%  {transform:translateY(9.8px)}
-    100% {transform:translateY(9.8px)}
+  @keyframes cabecaFrente{
+    0%,100%{transform:translate(0,0) scale(1)}
+    26%    {transform:translate(-.9px,1.8px) scale(.92)}
+    60%    {transform:translate(.3px,-.5px) scale(1.04)}
+  }
+  @keyframes cabecaTras{
+    0%  {transform:translate(3.2px,3.4px) scale(.5);opacity:0}
+    24% {transform:translate(.4px,-1.6px) scale(1.2);opacity:1}
+    52% {transform:translate(-1.1px,-.4px) scale(1.08);opacity:1}
+    78% {transform:translate(2.6px,2.6px) scale(.66);opacity:.35}
+    100%{transform:translate(3.2px,3.4px) scale(.5);opacity:0}
   }
 
   /* ativo: animacao continua e suave */
-  .nav.on[data-go="perfil"]   .ico svg, .nav-item.on[data-go="perfil"]   .ico svg{animation:perfilPulso 2.4s ease-in-out infinite}
-  .nav.on[data-go="perfil"]   .ico .head,.nav-item.on[data-go="perfil"] .ico .head{animation:perfilCabeca 2.4s ease-in-out infinite}
-  .nav.on[data-go="perfil"]   .ico svg > path, .nav-item.on[data-go="perfil"] .ico svg > path{animation:perfilCorpo 2.4s ease-in-out infinite}
+  .nav.on[data-go="perfil"]   .ico svg .todo, .nav-item.on[data-go="perfil"] .ico svg .todo{animation:perfilAcena 2.3s ease-in-out infinite}
+  .nav.on[data-go="perfil"]   .ico .head,.nav-item.on[data-go="perfil"] .ico .head{animation:perfilCabeca 2.3s ease-in-out infinite}
+  .nav.on[data-go="perfil"]   .ico .ombros,.nav-item.on[data-go="perfil"] .ico .ombros{animation:perfilOmbros 2.3s ease-in-out infinite}
+  .nav.on[data-go="perfil"]   .ico .halo,.nav-item.on[data-go="perfil"] .ico .halo{animation:perfilHalo 2.3s ease-out infinite}
 
   /* a estrada tracejada esta sempre la, discreta */
   .nav[data-go="modelos"] .ico svg .estrada,
@@ -423,17 +434,26 @@
   .nav.on[data-go="listaorc"] .ico .l2,.nav-item.on[data-go="listaorc"] .ico .l2{animation-delay:.28s}
   .nav.on[data-go="listaorc"] .ico .l3,.nav-item.on[data-go="listaorc"] .ico .l3{animation-delay:.56s}
 
-  /* cabecas: escondidas em baixo, revezam-se a espreitar */
-  /* fora da pagina Clientes: so o primeiro boneco mostra a cabeca */
-  .nav .ico .cabeca-frente,.nav-item .ico .cabeca-frente{transform:translateY(0)}
-  .nav .ico .cabeca-tras,.nav-item .ico .cabeca-tras{transform:translateY(9.8px)}
+  /* cabecas: fora da pagina Clientes fica so o primeiro boneco */
+  .nav .ico .par,.nav-item .ico .par{transform-origin:12px 20px}
+  .nav .ico .cabeca-frente,.nav-item .ico .cabeca-frente{transform-origin:9px 10.8px}
+  .nav .ico .cabeca-tras,.nav-item .ico .cabeca-tras{
+    transform-origin:17.4px 9.4px;transform:translate(3.2px,3.4px) scale(.5);opacity:0;
+  }
+  /* ao sair da pagina Clientes volta ja invisivel (sem frames a meio do ciclo) */
+  .nav:not(.on)[data-go="clientes"] .ico .cabeca-tras,
+  .nav-item:not(.on)[data-go="clientes"] .ico .cabeca-tras{animation:none!important;transition:none}
+  .nav.on[data-go="clientes"] .ico .par,
+  .nav-item.on[data-go="clientes"] .ico .par{
+    animation:parAcena 2.1s ease-in-out infinite;
+  }
   .nav.on[data-go="clientes"] .ico .cabeca-frente,
   .nav-item.on[data-go="clientes"] .ico .cabeca-frente{
-    animation:espreitaA 3.4s ease-in-out infinite;
+    animation:cabecaFrente 2.1s ease-in-out infinite;
   }
   .nav.on[data-go="clientes"] .ico .cabeca-tras,
   .nav-item.on[data-go="clientes"] .ico .cabeca-tras{
-    animation:espreitaB 3.4s ease-in-out infinite;
+    animation:cabecaTras 2.1s ease-in-out infinite;
   }
 
   /* toque / clique: da um "salto" rapido e fica animado enquanto esta ativo */
@@ -448,6 +468,12 @@
   @media (prefers-reduced-motion:reduce){
     .nav .ico,.nav-item .ico,.nav .ico svg,.nav-item .ico svg,
     .nav .ico .head,.nav-item .ico .head,
+    .nav .ico .todo,.nav-item .ico .todo,
+    .nav .ico .ombros,.nav-item .ico .ombros,
+    .nav .ico .halo,.nav-item .ico .halo,
+    .nav .ico .par,.nav-item .ico .par,
+    .nav .ico .cabeca-frente,.nav-item .ico .cabeca-frente,
+    .nav .ico .cabeca-tras,.nav-item .ico .cabeca-tras,
     .nav .ico svg path,.nav-item .ico svg path{animation:none!important}
   }
 
@@ -1374,18 +1400,21 @@ setTimeout(function(){
     <button class="nav" data-go="clientes">
       <span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
         
-        <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/>
-        <g>
+        <g class="par">
+          <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/>
           <circle class="cabeca-frente" cx="9" cy="7" r="3.8"/>
           <circle class="cabeca-tras" cx="17.4" cy="9.4" r="3.1"/>
-        </g>
-        <path d="M22 21v-2a4 4 0 00-2.8-3.8"/></svg></span>
+          <path d="M22 21v-2a4 4 0 00-2.8-3.8"/>
+        </g></svg></span>
       <span class="tx">Clientes</span><span class="cnt" data-cnt="clientes">4</span>
     </button>
     <button class="nav" data-go="perfil">
       <span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <g class="head"><circle cx="12" cy="7" r="4"/></g>
-        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg></span>
+        <circle class="halo" cx="12" cy="7" r="4"/>
+        <g class="todo">
+          <g class="head"><circle cx="12" cy="7" r="4"/></g>
+          <path class="ombros" d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+        </g></svg></span>
       <span class="tx">Perfil</span>
     </button>
 
@@ -1799,18 +1828,21 @@ setTimeout(function(){
     <button class="nav-item" data-go="clientes">
       <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
         
-        <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/>
-        <g>
+        <g class="par">
+          <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/>
           <circle class="cabeca-frente" cx="9" cy="7" r="3.8"/>
           <circle class="cabeca-tras" cx="17.4" cy="9.4" r="3.1"/>
-        </g>
-        <path d="M22 21v-2a4 4 0 00-2.8-3.8"/></svg></span>
+          <path d="M22 21v-2a4 4 0 00-2.8-3.8"/>
+        </g></svg></span>
       Clientes
     </button>
     <button class="nav-item" data-go="perfil">
       <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <g class="head"><circle cx="12" cy="7" r="4"/></g>
-        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg></span>
+        <circle class="halo" cx="12" cy="7" r="4"/>
+        <g class="todo">
+          <g class="head"><circle cx="12" cy="7" r="4"/></g>
+          <path class="ombros" d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+        </g></svg></span>
       Perfil
     </button>
   </nav>

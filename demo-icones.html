@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-PT" data-tema="claro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo &middot; animacao dos 5 icones do app</title>
+<style>
+  :root{
+    --verde:#1f9d4d; --verde-esc:#177a3b;
+    --ink:#12181f; --muted:#6b7784; --linha:#e3e7eb; --fundo:#f4f6f8; --card:#fff;
+  }
+  html[data-tema="escuro"]{
+    --verde:#35c46a; --verde-esc:#2aa757;
+    --ink:#eef2f6; --muted:#93a1ae; --linha:#22303c; --fundo:#0b1219; --card:#101a23;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:26px 22px 38px;background:var(--fundo);color:var(--ink);
+    font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  h1{font-size:16.5px;margin:0 0 4px}
+  p.top{margin:0 0 20px;color:var(--muted);font-size:12.5px}
+  .barra{display:flex;gap:10px;align-items:center;margin:0 0 20px;flex-wrap:wrap}
+  button{font:inherit;font-size:12.5px;padding:6px 13px;border-radius:9px;cursor:pointer;
+    border:1px solid var(--linha);background:var(--card);color:var(--ink)}
+  button[aria-pressed="true"]{background:var(--verde);border-color:var(--verde);color:#fff}
+  .grelha{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:13px;margin-bottom:22px}
+  .card{background:var(--card);border:1px solid var(--linha);border-radius:13px;padding:14px 14px 10px}
+  .card h2{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;font-weight:600}
+  .linha{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .linha:last-child{margin-bottom:4px}
+  .et{font-size:10.5px;color:var(--muted);width:46px;flex:0 0 46px;text-align:right;font-variant-numeric:tabular-nums}
+  .cx{display:inline-flex;align-items:center;justify-content:center;color:var(--ink);width:34px;height:34px;border-radius:9px}
+  .cx.activo{background:rgba(31,157,77,.10);color:var(--verde-esc)}
+  html[data-tema="escuro"] .cx.activo{background:rgba(53,196,106,.14);color:var(--verde)}
+  .big{width:52px;height:52px}
+
+  /* ====== exatamente o markup do app: cada traco herda currentColor ====== */
+  .ico svg{display:block;overflow:visible}
+
+  /* 1 &middot; AUTOMOVEL &mdash; ja existente no app (R60): carro a tremer + estrada a passar */
+  .ico .corpo{animation:carroAnda 2.6s ease-in-out infinite}
+  @keyframes carroAnda{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-.55px)}
+  }
+  .ico .estrada{animation:estradaPassa 1s linear infinite}
+  @keyframes estradaPassa{to{stroke-dashoffset:-8}}
+
+  /* 2 &middot; ORCAMENTOS &mdash; as 3 linhas escrevem-se em sequencia */
+  .ico .l1{stroke-dasharray:7.4 7.4;animation:escreve1 2.8s ease-in-out infinite}
+  .ico .l2{stroke-dasharray:7.4 7.4;animation:escreve2 2.8s ease-in-out infinite}
+  .ico .l3{stroke-dasharray:4.8 4.8;animation:escreve3 2.8s ease-in-out infinite}
+  @keyframes escreve1{0%,6%{stroke-dashoffset:7.4;opacity:.3}24%,86%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:7.4;opacity:.3}}
+  @keyframes escreve2{0%,22%{stroke-dashoffset:7.4;opacity:.3}40%,86%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:7.4;opacity:.3}}
+  @keyframes escreve3{0%,38%{stroke-dashoffset:4.8;opacity:.3}56%,86%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:4.8;opacity:.3}}
+
+  /* 3 &middot; VENDAS &mdash; "+" pulsa (R61) e um item cai no cesto */
+  .ico .mais{animation:carrinhoMais 2.1s ease-in-out infinite;transform-origin:12px 10px}
+  @keyframes carrinhoMais{
+    0%,100%{transform:scale(.86);opacity:.55}
+    45%{transform:scale(1.18);opacity:1}
+  }
+  .ico .item{fill:currentColor;stroke:none;opacity:0;animation:itemCai 2.1s cubic-bezier(.45,0,.55,1) infinite}
+  @keyframes itemCai{
+    0%{transform:translateY(-4.6px);opacity:0}
+    12%{opacity:1}
+    42%{transform:translateY(0);opacity:1}
+    50%,100%{transform:translateY(0);opacity:0}
+  }
+  .ico .cesto{animation:cestoPeso 2.1s ease-in-out infinite}
+  @keyframes cestoPeso{0%,42%{transform:translateY(0)}52%{transform:translateY(.6px)}68%,100%{transform:translateY(0)}}
+
+  /* 4 &middot; CLIENTES &mdash; o par balanca e a 2a cabeca entra em cena */
+  .ico .par{animation:parAcena 2.1s ease-in-out infinite;transform-origin:12px 20px}
+  .ico .cabeca-frente{animation:cabecaFrente 2.1s ease-in-out infinite;transform-origin:9px 10.8px}
+  .ico .cabeca-tras{animation:cabecaTras 2.1s ease-in-out infinite;transform-origin:17.4px 9.4px}
+  @keyframes parAcena{
+    0%,100%{transform:rotate(0deg) scale(1)}
+    26%{transform:rotate(-4.2deg) scale(1.05)}
+    60%{transform:rotate(2.2deg) scale(1.02)}
+  }
+  @keyframes cabecaFrente{
+    0%,100%{transform:translate(0,0) scale(1)}
+    26%{transform:translate(-.9px,1.8px) scale(.92)}
+    60%{transform:translate(.3px,-.5px) scale(1.04)}
+  }
+  @keyframes cabecaTras{
+    0%{transform:translate(3.2px,3.4px) scale(.5);opacity:0}
+    24%{transform:translate(.4px,-1.6px) scale(1.2);opacity:1}
+    52%{transform:translate(-1.1px,-.4px) scale(1.08);opacity:1}
+    78%{transform:translate(2.6px,2.6px) scale(.66);opacity:.35}
+    100%{transform:translate(3.2px,3.4px) scale(.5);opacity:0}
+  }
+
+  /* 5 &middot; PERFIL &mdash; inclina, a cabeca cresce e um anel sai dela */
+  .ico .todo{animation:perfilAcena 2.3s ease-in-out infinite;transform-origin:12px 21px}
+  .ico .head{animation:perfilCabeca 2.3s ease-in-out infinite;transform-origin:12px 7px}
+  .ico .ombros{animation:perfilOmbros 2.3s ease-in-out infinite}
+  .ico .halo{opacity:0;transform-origin:12px 7px;vector-effect:non-scaling-stroke;animation:perfilHalo 2.3s ease-out infinite}
+  @keyframes perfilAcena{
+    0%,100%{transform:rotate(0deg)}
+    30%{transform:rotate(-4.5deg)}
+    62%{transform:rotate(2.2deg)}
+  }
+  @keyframes perfilCabeca{
+    0%,100%{transform:scale(1)}
+    30%{transform:scale(1.16)}
+    62%{transform:scale(.98)}
+  }
+  @keyframes perfilOmbros{
+    0%,100%{transform:translateY(0)}
+    30%{transform:translateY(.6px)}
+  }
+  @keyframes perfilHalo{
+    0%{transform:scale(.5);opacity:0}
+    18%{opacity:.6}
+    70%,100%{transform:scale(1.85);opacity:0}
+  }
+
+  @media (prefers-reduced-motion:reduce){ .ico *{animation:none !important} }
+  .nota{font-size:11.5px;color:var(--muted);max-width:660px}
+</style>
+</head>
+<body>
+
+<h1>Os 5 icones do app &mdash; agora todos animados</h1>
+<p class="top">Mesmo markup (o SVG que ja esta no <code>index.html</code>), mais keyframes CSS. Nenhuma biblioteca, nenhum pedido de rede, nada a descarregar. V&ecirc; a 18 px (sidebar), 21 px (navbar) e 52 px (aumentado para se ver o movimento).</p>
+
+<div class="barra">
+  <button id="btTema" aria-pressed="false">Tema escuro</button>
+  <button id="btPausa" aria-pressed="false">Pausar</button>
+</div>
+
+<div class="grelha">
+
+  <!-- AUTOMOVEL -->
+  <div class="card"><h2>Automovel</h2>
+    <div class="linha"><span class="et">18 px</span><span class="cx activo"><span class="ico">
+      <svg width="18" height="18" viewBox="1.6 5.4 20.8 14.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g class="corpo"><path d="M3.2 15.6v-2.4c0-.8.5-1.4 1.2-1.6l2.3-.6 2.8-3.1c.4-.4 1-.7 1.6-.7h3.2c.6 0 1.2.3 1.6.8l2.1 2.6 2.6.7c.7.2 1.2.8 1.2 1.6v2.7"/><path d="M7.6 11.2h9.2"/><circle cx="7" cy="15.6" r="1.9"/><circle cx="17.4" cy="15.6" r="1.9"/></g><path class="estrada" d="M1.4 19.2h21.2" stroke-width="1.05" stroke-dasharray="1.1 2.9"/></svg>
+    </span></span></div>
+    <div class="linha"><span class="et">21 px</span><span class="cx"><span class="ico">
+      <svg width="21" height="21" viewBox="1.6 5.4 20.8 14.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g class="corpo"><path d="M3.2 15.6v-2.4c0-.8.5-1.4 1.2-1.6l2.3-.6 2.8-3.1c.4-.4 1-.7 1.6-.7h3.2c.6 0 1.2.3 1.6.8l2.1 2.6 2.6.7c.7.2 1.2.8 1.2 1.6v2.7"/><path d="M7.6 11.2h9.2"/><circle cx="7" cy="15.6" r="1.9"/><circle cx="17.4" cy="15.6" r="1.9"/></g><path class="estrada" d="M1.4 19.2h21.2" stroke-width="1.05" stroke-dasharray="1.1 2.9"/></svg>
+    </span></span></div>
+    <div class="linha"><span class="et">52 px</span><span class="cx big"><span class="ico">
+      <svg width="52" height="52" viewBox="1.6 5.4 20.8 14.9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g class="corpo"><path d="M3.2 15.6v-2.4c0-.8.5-1.4 1.2-1.6l2.3-.6 2.8-3.1c.4-.4 1-.7 1.6-.7h3.2c.6 0 1.2.3 1.6.8l2.1 2.6 2.6.7c.7.2 1.2.8 1.2 1.6v2.7"/><path d="M7.6 11.2h9.2"/><circle cx="7" cy="15.6" r="1.9"/><circle cx="17.4" cy="15.6" r="1.9"/></g><path class="estrada" d="M1.4 19.2h21.2" stroke-width="1.05" stroke-dasharray="1.1 2.9"/></svg>
+    </span></span></div>
+  </div>
+
+  <!-- ORCAMENTOS -->
+  <div class="card"><h2>Orcamentos</h2>
+    <div class="linha"><span class="et">18 px</span><span class="cx activo"><span class="ico">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h9l5 5v13H5zM14 3v5h5"/><path class="linha l1" d="M8.4 11.6h7.2"/><path class="linha l2" d="M8.4 14.2h7.2"/><path class="linha l3" d="M8.4 16.8h4.6"/></svg>
+    </span></span></div>
+    <div class="linha"><span class="et">21 px</span><span class="cx"><span class="ico">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h9l5 5v13H5zM14 3v5h5"/><path class="linha l1" d="M8.4 11.6h7.2"/><path class="linha l2" d="M8.4 14.2h7.2"/><path class="linha l3" d="M8.4 16.8h4.6"/></svg>
+    </span></span></div>
+    <div class="linha"><span class="et">52 px</span><span class="cx big"><span class="ico">
+      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h9l5 5v13H5zM14 3v5h5"/><path class="linha l1" d="M8.4 11.6h7.2"/><path class="linha l2" d="M8.4 14.2h7.2"/><path class="linha l3" d="M8.4 16.8h4.6"/></svg>
+    </span></span></div>
+  </div>
+
+  <!-- VENDAS -->
+  <div class="card"><h2>Vendas</h2>
+    <div class="linha"><span class="et">18 px</span><span class="cx activo"><span class="ico">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g class="cesto"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></g><circle class="item" cx="12" cy="9" r="1.35"/><path class="mais" d="M12 7v6M9 10h6"/></svg>
+    </span></span></div>
+    <div class="linha"><span class="et">21 px</span><span class="cx"><span class="ico">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g class="cesto"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></g><circle class="item" cx="12" cy="9" r="1.35"/><path class="mais" d="M12 7v6M9 10h6"/></svg>
+    </span></span></div>
+    <div class="linha"><span class="et">52 px</span><span class="cx big"><span class="ico">
+      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g class="cesto"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></g><circle class="item" cx="12" cy="9" r="1.35"/><path class="mais" d="M12 7v6M9 10h6"/></svg>
+    </span></span></div>
+  </div>
+
+  <!-- CLIENTES -->
+  <div class="card"><h2>Clientes</h2>
+    <div class="linha"><span class="et">18 px</span><span class="cx activo"><span class="ico">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><g class="par"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><g><circle class="cabeca-frente" cx="9" cy="7" r="3.8"/><circle class="cabeca-tras" cx="17.4" cy="9.4" r="3.1"/></g><path d="M22 21v-2a4 4 0 00-2.8-3.8"/></g></svg>
+    </span></span></div>
+    <div class="linha"><span class="et">21 px</span><span class="cx"><span class="ico">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><g class="par"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><g><circle class="cabeca-frente" cx="9" cy="7" r="3.8"/><circle class="cabeca-tras" cx="17.4" cy="9.4" r="3.1"/></g><path d="M22 21v-2a4 4 0 00-2.8-3.8"/></g></svg>
+    </span></span></div>
+    <div class="linha"><span class="et">52 px</span><span class="cx big"><span class="ico">
+      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><g class="par"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><g><circle class="cabeca-frente" cx="9" cy="7" r="3.8"/><circle class="cabeca-tras" cx="17.4" cy="9.4" r="3.1"/></g><path d="M22 21v-2a4 4 0 00-2.8-3.8"/></g></svg>
+    </span></span></div>
+  </div>
+
+  <!-- PERFIL -->
+  <div class="card"><h2>Perfil</h2>
+    <div class="linha"><span class="et">18 px</span><span class="cx activo"><span class="ico">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle class="halo" cx="12" cy="7" r="4"/><g class="todo"><path class="ombros" d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><g class="head"><circle cx="12" cy="7" r="4"/></g></g></svg>
+    </span></span></div>
+    <div class="linha"><span class="et">21 px</span><span class="cx"><span class="ico">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle class="halo" cx="12" cy="7" r="4"/><g class="todo"><path class="ombros" d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><g class="head"><circle cx="12" cy="7" r="4"/></g></g></svg>
+    </span></span></div>
+    <div class="linha"><span class="et">52 px</span><span class="cx big"><span class="ico">
+      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle class="halo" cx="12" cy="7" r="4"/><g class="todo"><path class="ombros" d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><g class="head"><circle cx="12" cy="7" r="4"/></g></g></svg>
+    </span></span></div>
+  </div>
+
+</div>
+
+<p class="nota">
+  Custo: ~2,4 KB de CSS para os 5 icones. Zero biblioteca, zero ficheiro extra, funciona offline e no tema claro e escuro
+  (tudo herda <code>currentColor</code>). Cada animacao respeita <code>prefers-reduced-motion</code>.
+</p>
+
+<script>
+  var raiz = document.documentElement;
+  document.getElementById('btTema').addEventListener('click', function(){
+    var escuro = raiz.getAttribute('data-tema') === 'escuro';
+    raiz.setAttribute('data-tema', escuro ? 'claro' : 'escuro');
+    this.setAttribute('aria-pressed', String(!escuro));
+    this.textContent = escuro ? 'Tema escuro' : 'Tema claro';
+  });
+  var pausado = false;
+  document.getElementById('btPausa').addEventListener('click', function(){
+    pausado = !pausado;
+    this.setAttribute('aria-pressed', String(pausado));
+    this.textContent = pausado ? 'Retomar' : 'Pausar';
+    document.querySelectorAll('.ico svg *').forEach(function(el){
+      el.style.animationPlayState = pausado ? 'paused' : 'running';
+    });
+  });
+</script>
+</body>
+</html>

@@ -1060,16 +1060,28 @@ async def main():
         ok("Animação · ícone 'salta' ao tocar",
            await an.evaluate("()=>document.querySelector('.nav-item[data-go=\"perfil\"]').className.includes('tap')"), "")
         await an.wait_for_timeout(700)
-        ok("Animação · Perfil animado quando ativo",
-           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"perfil\"] .ico .head')).animationName") == "perfilCabeca", "")
+        ok("R63 · Perfil animado quando ativo (acena + anel)",
+           await an.evaluate("()=>{const g=s=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"perfil\"] '+s)).animationName;"
+                             "return g('.todo')+'|'+g('.head')+'|'+g('.halo')+'|'+g('.ombros')}") == "perfilAcena|perfilCabeca|perfilHalo|perfilOmbros", "")
         mov = await an.evaluate("""async ()=>{
+            const mat = e => {const t=getComputedStyle(e).transform;
+              return t==='none' ? new DOMMatrix() : new DOMMatrix(t);};
             const h=document.querySelector('.nav-item.on[data-go="perfil"] .ico .head');
-            const xs=[];
-            for(let i=0;i<8;i++){ xs.push(+h.getBoundingClientRect().left.toFixed(2));
-              await new Promise(r=>setTimeout(r,140)); }
-            return {min:Math.min(...xs), max:Math.max(...xs)};
+            const t=document.querySelector('.nav-item.on[data-go="perfil"] .ico .todo');
+            const ho=document.querySelector('.nav-item.on[data-go="perfil"] .ico .halo');
+            const sx=[], rot=[], op=[];
+            for(let i=0;i<40;i++){
+              sx.push(Math.hypot(mat(h).a, mat(h).b));
+              rot.push(mat(t).b);
+              op.push(+(getComputedStyle(ho).opacity||0));
+              await new Promise(r=>setTimeout(r,60));
+            }
+            return {escala:Math.max(...sx)-Math.min(...sx), rot:Math.max(...rot)-Math.min(...rot),
+                    halo:Math.max(...op)};
         }""")
-        ok("Animação · cabeça do Perfil move-se para os dois lados", (mov["max"]-mov["min"]) > 1.5, round(mov["max"]-mov["min"],2))
+        ok("R63 · cabeça do Perfil cresce (escala >= 0.15)", mov["escala"] >= 0.15, round(mov["escala"],3))
+        ok("R63 · o Perfil inclina para os dois lados", mov["rot"] > 0.06, round(mov["rot"],3))
+        ok("R63 · o anel do Perfil fica visível (opac. >= 0.5)", mov["halo"] >= 0.5, round(mov["halo"],3))
         await an.click(".nav-item[data-go='modelos']"); await an.wait_for_timeout(600)
         ok("Animação · 'Automóvel' animado quando ativo",
            await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"modelos\"] .ico svg\')).animationName") == "carroAnda", "")
@@ -1101,33 +1113,52 @@ async def main():
 
         # Clientes: os bonecos revezam-se
         await an.click(".nav-item[data-go='clientes']"); await an.wait_for_timeout(500)
-        ok("Animação · boneco da frente espreita (espreitaA)",
-           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"clientes\"] .ico .cabeca-frente')).animationName") == "espreitaA", "")
-        ok("Animação · boneco de trás tem a sua própria animação (espreitaB)",
-           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"clientes\"] .ico .cabeca-tras')).animationName") == "espreitaB", "")
+        ok("R63 · boneco da frente cede lugar (cabecaFrente)",
+           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"clientes\"] .ico .cabeca-frente')).animationName") == "cabecaFrente", "")
+        ok("R63 · boneco de trás entra em cena (cabecaTras) e o par balança (parAcena)",
+           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"clientes\"] .ico .cabeca-tras')).animationName"
+                             "+'|'+getComputedStyle(document.querySelector('.nav-item.on[data-go=\"clientes\"] .ico .par')).animationName") == "cabecaTras|parAcena", "")
         rev = await an.evaluate("""async ()=>{
+            const mat = e => {const t=getComputedStyle(e).transform;
+              return t==='none' ? new DOMMatrix() : new DOMMatrix(t);};
             const f=document.querySelector('.nav-item.on[data-go="clientes"] .ico .cabeca-frente');
             const t=document.querySelector('.nav-item.on[data-go="clientes"] .ico .cabeca-tras');
-            const sy=()=>parseFloat(getComputedStyle(f).transform.split(',')[5]||0);
-            const sz=()=>parseFloat(getComputedStyle(t).transform.split(',')[5]||0);
-            let frenteEscondidaComTrasVisivel=false;
-            for(let i=0;i<20;i++){
-               const ey=sy()>3, vz=sz()<3;
-               if (ey && vz) frenteEscondidaComTrasVisivel=true;
-               await new Promise(r=>setTimeout(r,110));
+            let opTras=0, escFrente=1, trasEntra=false;
+            for(let i=0;i<26;i++){
+               const ot=+getComputedStyle(t).opacity;
+               const ef=Math.hypot(mat(f).a, mat(f).b);
+               opTras=Math.max(opTras,ot); escFrente=Math.min(escFrente,ef);
+               if (ot>0.9 && ef<0.97) trasEntra=true;
+               await new Promise(r=>setTimeout(r,100));
             }
-            return frenteEscondidaComTrasVisivel;}""")
-        ok("Animação · quando o da frente se esconde, o de trás aparece", rev, "")
+            return {opTras, escFrente, trasEntra};}""")
+        ok("R63 · a 2.ª cabeça chega a aparecer por completo", rev["opTras"] > 0.9, round(rev["opTras"],2))
+        ok("R63 · a cabeça da frente encolhe para lhe dar lugar", rev["escFrente"] < 0.95, round(rev["escFrente"],3))
+        ok("R63 · as duas cabeças revezam-se (entra uma, cede a outra)", rev["trasEntra"], str(rev))
         # ícone de Clientes fora da página: mostra a cabeça do primeiro boneco
-        await an.click(".nav-item[data-go='modelos']"); await an.wait_for_timeout(600)
         estado_inativo = await an.evaluate("""()=>{
-            const ty = sel => parseFloat(getComputedStyle(document.querySelector(sel)).transform.split(',')[5]||0);
-            return { frente: ty('.nav-item[data-go="clientes"] .cabeca-frente'),
-                     tras:   ty('.nav-item[data-go="clientes"] .cabeca-tras') };}""")
-        ok("Animação · fora da página Clientes mostra a cabeça do 1.º boneco",
-           abs(estado_inativo["frente"]) < 0.5, estado_inativo["frente"])
-        ok("Animação · fora da página Clientes o 2.º boneco fica sem cabeça",
-           estado_inativo["tras"] > 7, estado_inativo["tras"])
+            const mat = sel => {const t=getComputedStyle(document.querySelector(sel)).transform;
+              return t==='none' ? new DOMMatrix() : new DOMMatrix(t);};
+            const op = sel => parseFloat(getComputedStyle(document.querySelector(sel)).opacity);
+            const mf = mat('.nav-item[data-go="clientes"] .cabeca-frente');
+            const mt = mat('.nav-item[data-go="clientes"] .cabeca-tras');
+            return { escalaFrente: Math.hypot(mf.a, mf.b), desvioFrente: Math.abs(mf.e)+Math.abs(mf.f),
+                     escalaTras: Math.hypot(mt.a, mt.b), opTras: op('.nav-item[data-go="clientes"] .cabeca-tras') };}""")
+        # clicar em Automovel pelo meio do botao: o <svg> tem overflow visible (anel do Perfil)
+        # e pode apanhar o clique nos cantos
+        await an.evaluate("""()=>{const b=document.querySelector('.nav-item[data-go="modelos"]');
+            const r=b.getBoundingClientRect(); b.dispatchEvent(new MouseEvent('click',{bubbles:true,
+              clientX:r.x+r.width/2, clientY:r.y+r.height/2}));}""")
+        await an.wait_for_timeout(700)
+        fora = await an.evaluate("""()=>{
+            const mat = sel => {const t=getComputedStyle(document.querySelector(sel)).transform;
+              return t==='none' ? new DOMMatrix() : new DOMMatrix(t);};
+            const op = sel => parseFloat(getComputedStyle(document.querySelector(sel)).opacity);
+            const mt = mat('.nav-item[data-go="clientes"] .cabeca-tras');
+            return { escalaTras: Math.hypot(mt.a, mt.b), opTras: op('.nav-item[data-go="clientes"] .cabeca-tras'),
+                     anim: getComputedStyle(document.querySelector('.nav-item[data-go="clientes"] .cabeca-tras')).animationName };}""")
+        ok("R63 · fora da página Clientes o 2.º boneco fica invisível (sem 2.a cabeça)",
+           fora["opTras"] < 0.05 and fora["escalaTras"] < 0.75 and fora["anim"] == "none", fora)
 
         rd = await b.new_context(reduced_motion="reduce")
         rp = await rd.new_page(); await rp.goto(URL); await rp.wait_for_timeout(700)
