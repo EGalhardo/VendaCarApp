@@ -470,7 +470,7 @@
   .btn.ghost{background:#fff;color:#5d6b66;border:1px solid #e2e8e5}
   .btn.ghost:hover{background:#f6f8f7}
   .btn.big{height:46px;font-size:14.5px;width:100%}
-  /* botao "Criar" reduzido a "+"  quadrado, alinhado com o botao Exportar */
+  /* botao "Criar" reduzido a "+"  quadrado */
   .btn-mais{width:40px;height:40px;padding:0;border-radius:9px}
   .btn-criar-mobile{display:none}
 
@@ -1386,7 +1386,6 @@ setTimeout(function(){
       <div class="page-head">
         <div><h2>Modelos</h2><p id="subModelos">4 ve&#237;culos no estoque</p></div>
         <div class="right">
-          <button class="btn ghost" id="btnExportarModelos">Exportar</button>
           <button class="btn btn-criar-desktop btn-mais" data-criar aria-label="Criar novo modelo de carro" title="Novo modelo">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
           </button>
@@ -3866,21 +3865,6 @@ document.getElementById('odApagar').addEventListener('click', () => {
   orcAberto = null;
   ir('listaorc');
   toast('Or\u00E7amento apagado');
-});
-
-/* ---------- EXPORTAR MODELOS (CSV do estoque) ---------- */
-document.getElementById('btnExportarModelos').addEventListener('click', () => {
-  if (!CARROS.length){ toast('N\u00E3o h\u00E1 modelos para exportar'); return; }
-  const cab = ['Modelo','Tipo','Categoria','Preco','Desconto a vista','IVA 14%','Total com IVA'];
-  const linhas = [cab].concat(CARROS.map(c => [c.nome, c.tipo, c.cat, c.preco, c.desc,
-    ivaDe(c.preco), totalComIva(c.preco)]));
-  const txt = linhas.map(l => l.map(celulaCSV).join(';')).join('\r\n');
-  const url = URL.createObjectURL(new Blob(['\uFEFF' + txt], {type:'text/csv;charset=utf-8'}));
-  const a = document.createElement('a');
-  a.href = url; a.download = 'estoque-vendacar-' + dataCurta(Date.now()) + '.csv';
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1500);
-  toast('CSV do estoque exportado \u2014 ' + CARROS.length + ' modelos');
 });
 
 /* ---------- EXPORTAR (bot\u00F5es do Perfil) ---------- */

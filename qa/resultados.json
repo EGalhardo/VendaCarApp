@@ -767,7 +767,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "18,269.83 Kz"
+  "d": "58,747.24 Kz"
  },
  {
   "r": "PASS",
@@ -777,12 +777,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,588,450.44 Kz"
+  "d": "9,589,872.03 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.82 Kz"
+  "d": "9,749,999.28 Kz"
  },
  {
   "r": "PASS",
@@ -798,10 +798,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   320794,
-   2893159,
-   4882359,
-   6363218
+   320152,
+   2892403,
+   4881976,
+   6362940
   ]
  },
  {
@@ -822,14 +822,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "418,360.01 Kz"
+  "d": "414,453.47 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "418,360.01 Kz",
-   "4,063,769.17 Kz"
+   "414,453.47 Kz",
+   "4,060,961.28 Kz"
   ]
  },
  {
@@ -870,7 +870,7 @@
  {
   "r": "PASS",
   "n": "Animação · cabeça do Perfil move-se para os dois lados",
-  "d": 3.19
+  "d": 3.18
  },
  {
   "r": "PASS",
@@ -897,7 +897,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34781
+   3.05605
   ]
  },
  {
@@ -1693,7 +1693,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '23,793,374.57 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '43,968,410.63 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '59,863,960.45 Kz', 'temKz': True, 'contando': 13}]"
+  "d": "[{'fn': 1, 'vt': '23,967,434.71 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '44,109,978.42 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '59,977,026.79 Kz', 'temKz': True, 'contando': 13}]"
  },
  {
   "r": "PASS",
@@ -1703,7 +1703,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '23,703,131.31 Kz'}"
+  "d": "{'fn': '1', 'vt': '23,650,196.77 Kz'}"
  },
  {
   "r": "PASS",
@@ -1743,17 +1743,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 11:37 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 12:01 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 11:37 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 12:01 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 11:37 · enviado"
+  "d": "Hoje, 12:01 · enviado"
  },
  {
   "r": "PASS",
@@ -1847,8 +1847,13 @@
  },
  {
   "r": "PASS",
-  "n": "R44 · Exportar estoque em CSV descarrega",
-  "d": "['orcamentos-vendacar-2026-11-09.csv', 'estoque-vendacar-2026-11-09.csv']"
+  "n": "R57 · página Modelos sem botão Exportar",
+  "d": "{'botoes': ['[+]'], 'temExportar': False, 'textoExportar': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R57 · o estoque já não gera ficheiro CSV",
+  "d": "['orcamentos-vendacar-2026-11-09.csv']"
  },
  {
   "r": "PASS",

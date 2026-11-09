@@ -1782,8 +1782,13 @@ async def main():
             await janelas[0].close()
 
         await r44.evaluate("()=>ir('modelos')"); await r44.wait_for_timeout(400)
-        await r44.click("#btnExportarModelos"); await r44.wait_for_timeout(800)
-        ok("R44 · Exportar estoque em CSV descarrega", len(dl)==2 and "estoque" in dl[1], str(dl))
+        R57 = await r44.evaluate("""()=>{const cab=document.querySelector('#pg-modelos .page-head');
+            const bs=[...cab.querySelectorAll('button')].map(b=>b.innerText.trim()||'[+]');
+            return {botoes:bs, temExportar:!!document.getElementById('btnExportarModelos'),
+                    textoExportar:cab.innerText.includes('Exportar')};}""")
+        ok("R57 · página Modelos sem botão Exportar",
+           not R57["temExportar"] and not R57["textoExportar"] and R57["botoes"]==["[+]"], str(R57))
+        ok("R57 · o estoque já não gera ficheiro CSV", len(dl)==1, str(dl))
 
         await r44.evaluate("()=>ir('perfil')"); await r44.wait_for_timeout(300)
         await r44.click("#btnVerModelo"); await r44.wait_for_timeout(900)
