@@ -565,6 +565,31 @@ async def main():
         ok("R31 · logótipo/paleta sem erros de consola", len(lge)==0, str(lge[:2]))
         await lg2.close()
 
+        # ============ R62 · TITULO DA PAGINA NA APPBAR (desktop + tablet) ============
+        for larg,etiq in ((1440,"desktop"),(1000,"tablet")):
+            r62 = await b.new_page(viewport={"width":larg,"height":860})
+            r62e=[]; r62.on("pageerror", lambda e: r62e.append(str(e)))
+            await novo(r62)
+            for pag in ["modelos","listaorc","vendas","clientes","perfil"]:
+                await r62.evaluate(f"()=>ir('{pag}')"); await r62.wait_for_timeout(420)
+                T62 = await r62.evaluate("""()=>{
+                  const t=document.getElementById('barTitle'), s=document.getElementById('barSub');
+                  const bar=document.querySelector('.bar').getBoundingClientRect();
+                  const tr=t.getBoundingClientRect();
+                  const sec=document.querySelector('.content section:not(.hidden)');
+                  return {titulo:t.innerText, sub:s?s.innerText:'',
+                          dentro: tr.top>=bar.top-1 && tr.bottom<=bar.bottom+1 && tr.left>=bar.left,
+                          h2: [...sec.querySelectorAll('h2')].filter(e=>e.offsetParent).length,
+                          subNoConteudo: [...sec.querySelectorAll('.page-head .sub')].filter(e=>e.offsetParent).length};
+                }""")
+                ok(f"R62 · {etiq} · «{pag}» com título dentro da appbar",
+                   T62["dentro"] and len(T62["titulo"])>0, str(T62))
+                ok(f"R62 · {etiq} · subtítulo na appbar e fora do conteúdo",
+                   len(T62["sub"])>0 and T62["subNoConteudo"]==0, str(T62))
+                ok(f"R62 · {etiq} · nenhum título repetido no conteúdo", T62["h2"]==0, str(T62["h2"]))
+            ok(f"R62 · {etiq} · sem erros de consola", len(r62e)==0, str(r62e[:2]))
+            await r62.close()
+
         # ============ R61 · ICONE VENDAS = shopping-cart-plus (Lucide) ============
         r61 = await b.new_page(viewport={"width":1440,"height":900})
         r61e=[]; r61.on("pageerror", lambda e: r61e.append(str(e)))
@@ -646,7 +671,7 @@ async def main():
                     iconeCarro:nav.querySelectorAll('.ico svg circle').length===2,
                     temContador:nav.querySelector('.cnt').innerText.trim().length>0,
                     go:nav.dataset.go};
-          return {it, titulo:document.querySelector('#pg-modelos h2').innerText,
+          return {it, titulo:document.getElementById('barSub').innerText ? document.getElementById('barTitle').innerText : '',
                   appbar:document.getElementById('barTitle').innerText,
                   pagina:TITLES.modelos[0],
                   menu:[...document.querySelectorAll('.side .nav .tx')].map(e=>e.innerText.trim()),
@@ -760,7 +785,7 @@ async def main():
                   lua:getComputedStyle(b.querySelector('.ico-lua')).display,
                   sol:getComputedStyle(b.querySelector('.ico-sol')).display,
                   appbar:cs('.bar').backgroundColor, cartao:cs('.car').backgroundColor,
-                  textoTitulo:cs('.page-head h2').color,
+                  textoTitulo:cs('#barTitle').color,
                   meta:document.querySelector('meta[name=theme-color]').content,
                   titulo:b.title, pressed:b.getAttribute('aria-pressed')};
         }""")
@@ -773,7 +798,7 @@ async def main():
         Contraste = await tm.evaluate("""()=>{
           const lum=c=>{const [r,g,b]=c.match(/[0-9]+/g).map(Number).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);});
             return .2126*r+.7152*g+.0722*b;};
-          const pares=[['.page-head h2','.content'],['.car .nm','.car'],['.tbl td','.tbl-wrap'],['.nav','.side']];
+          const pares=[['#barTitle','.bar'],['.car .nm','.car'],['.tbl td','.tbl-wrap'],['.nav','.side']];
           return pares.map(([f,bg])=>{
             const a=lum(getComputedStyle(document.querySelector(f)).color);
             const c=lum(getComputedStyle(document.querySelector(bg)).backgroundColor);
@@ -1320,7 +1345,7 @@ async def main():
                   utilizador: vis('#whoBtn'), oi: (document.querySelector('.who .oi')||{}).textContent||''};
         }""")
         ok("Desktop · campo de procura removido", gd["busca"]=="inexistente", str(gd))
-        ok("Desktop · nome da página fora da appbar", gd["titulo"]=="oculto", str(gd))
+        ok("R62 · nome da página dentro da appbar (desktop)", gd["titulo"]=="visivel", str(gd))
         ok("Desktop · modo Online fora da appbar", gd["pill"] in ("oculto","inexistente"), str(gd))
         ok("Desktop · foto de perfil alinhada à direita (sem notificações)", gd["sinoAFrente"] and gd["utilizador"] in ("visivel","flex"), str(gd))
         ok("Desktop · appbar sem erros", len(dde)==0, str(dde[:2]))

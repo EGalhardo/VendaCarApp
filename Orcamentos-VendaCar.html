@@ -78,7 +78,16 @@
     display:none;width:34px;height:34px;border:0;background:none;color:var(--ink-3);
     cursor:pointer;padding:0;align-items:center;justify-content:center;flex:0 0 auto;
   }
-  .bar h1{display:none}                     /* desktop: titulo vive no cabecalho da pagina */
+  /* titulo da pagina dentro da appbar (desktop e tablet) */
+  .bar-tit{display:flex;flex-direction:column;justify-content:center;min-width:0;margin-left:2px}
+  .bar-tit h1{
+    font-size:15.5px;font-weight:700;letter-spacing:-.2px;color:var(--ink);
+    line-height:1.15;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .bar-tit p{
+    font-size:10.5px;color:var(--muted);line-height:1.15;margin:1px 0 0;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:52vw;
+  }
   /* aviso rapido (toast) */
   .toast{
     position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);
@@ -159,6 +168,12 @@
   html[data-tema="escuro"] .ecra-fim{background:#040d1f}
   html[data-tema="escuro"] .ecra-fim h2{color:#e6eef8}
   .side .lbl{font-size:10px;font-weight:800;letter-spacing:1.2px;color:#b6c2bc;margin:10px 10px 6px}
+  /* o Autom\u00F3vel \u00E9 a p\u00E1gina de trabalho: separa-se ligeiramente do resto do menu */
+  .nav-auto{margin-bottom:8px;position:relative}
+  .nav-auto::after{
+    content:"";position:absolute;left:10px;right:10px;bottom:-5px;height:1px;background:#eef2f0;
+  }
+  html[data-tema="escuro"] .nav-auto::after{background:#12253d}
   .nav{
     display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:9px;border:0;
     background:none;color:var(--ink-3);font-size:13.5px;font-weight:600;cursor:pointer;
@@ -451,9 +466,15 @@
   .content::-webkit-scrollbar-thumb{background:#dbe2de;border-radius:10px;border:3px solid #fff}
   .content::-webkit-scrollbar-thumb:hover{background:#cbd5d0}
 
-  .page-head{display:flex;align-items:flex-end;gap:16px;margin-bottom:18px;flex-wrap:wrap}
-  .page-head h2{font-size:22px;margin:0;letter-spacing:-.3px;color:var(--ink)}
-  .page-head p{margin:3px 0 0;font-size:12.5px;color:var(--muted)}
+  .page-head{display:flex;align-items:center;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+  .page-head .sub{font-size:12px;color:var(--muted);margin:0;line-height:1.3}
+  /* a partir do tablet o subt\u00EDtulo est\u00E1 na appbar: aqui s\u00F3 existe no telem\u00F3vel */
+  @media (min-width:901px){
+    .page-head .sub{display:none}
+    .page-head{justify-content:flex-end;min-height:0;margin-bottom:14px}
+    /* paginas sem acoes (Clientes, Perfil) nao precisam de cabecalho no desktop */
+    .page-head.vazio{display:none}
+  }
   .page-head .right{margin-left:auto;display:flex;gap:10px;align-items:center}
 
   .btn{
@@ -1105,8 +1126,9 @@
       display:flex;margin:0;width:30px;height:30px;
       background:#f2f5f4;border-radius:8px;color:var(--ink-2);
     }
-    .bar h1{display:block;font-size:14px;font-weight:700;flex:1;min-width:0;overflow:hidden;
-            text-overflow:ellipsis;white-space:nowrap;margin-left:4px}
+    .bar-tit{flex:1;min-width:0;margin-left:4px}
+    .bar-tit h1{font-size:14px;display:block}
+    .bar-tit p{display:none}          /* telemovel: so o nome da pagina */
     /* telemovel: a foto de perfil com o "Oi, ..." ocupa o lugar das notificacoes */
     .bar-acoes{margin-left:auto;gap:6px}
     .bar-sep{height:22px}
@@ -1300,7 +1322,10 @@ setTimeout(function(){
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M15 19l-7-7 7-7"/></svg>
     </button>
-    <h1 id="barTitle">Autom&#243;vel</h1>
+    <div class="bar-tit">
+      <h1 id="barTitle">Autom&#243;vel</h1>
+      <p id="barSub">Gest&#227;o de estoque de ve&#237;culos</p>
+    </div>
 
     <div class="bar-acoes">
       <button class="ic-btn tema-btn" id="btnTema" title="Modo escuro" aria-label="Alternar modo claro/escuro" aria-pressed="false">
@@ -1321,7 +1346,7 @@ setTimeout(function(){
   <!-- ================= BARRA LATERAL (desktop) ================= -->
   <aside class="side">
     <div class="lbl">MENU</div>
-    <button class="nav on" data-go="modelos">
+    <button class="nav nav-auto on" data-go="modelos">
       <span class="ico"><svg width="18" height="18" viewBox="1.6 5.4 20.8 14.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <path d="M3.2 15.6v-2.4c0-.8.5-1.4 1.2-1.6l2.3-.6 2.8-3.1c.4-.4 1-.7 1.6-.7h3.2c.6 0 1.2.3 1.6.8l2.1 2.6 2.6.7c.7.2 1.2.8 1.2 1.6v2.7"/>
         <path d="M7.6 11.2h9.2"/>
@@ -1381,7 +1406,7 @@ setTimeout(function(){
     <!-- ---------- MODELOS ---------- -->
     <section id="pg-modelos">
       <div class="page-head">
-        <div><h2>Autom&#243;vel</h2><p id="subModelos">4 ve&#237;culos no estoque</p></div>
+        <div><p class="sub" id="subModelos">4 ve&#237;culos no estoque</p></div>
         <div class="right">
           <button class="btn btn-criar-desktop btn-mais" data-criar aria-label="Criar novo modelo de carro" title="Novo modelo">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
@@ -1402,7 +1427,7 @@ setTimeout(function(){
     <!-- ---------- DETALHE ---------- -->
     <section id="pg-detalhe" class="hidden">
       <div class="page-head">
-        <div><h2>Detalhe do Carro</h2><p>Galeria e ficha t&#233;cnica do ve&#237;culo</p></div>
+        <div><p class="sub">Galeria e ficha t&#233;cnica</p></div>
         <div class="right"><button class="btn ghost" data-go="modelos">Voltar aos Autom&#243;veis</button></div>
       </div>
       <div class="detail">
@@ -1434,7 +1459,7 @@ setTimeout(function(){
     <!-- ---------- OR&#199;AMENTO ---------- -->
     <section id="pg-orcamento" class="hidden">
       <div class="page-head">
-        <div><h2>Or&#231;amento</h2><p>Simula&#231;&#227;o de entrada e financiamento</p></div>
+        <div><p class="sub">Simula&#231;&#227;o de entrada e financiamento</p></div>
         <div class="right"><button class="btn ghost" data-go="modelos">Voltar aos Autom&#243;veis</button></div>
       </div>
       <div class="quote">
@@ -1485,7 +1510,7 @@ setTimeout(function(){
     <!-- ---------- OR&#199;AMENTOS ---------- -->
     <section id="pg-listaorc" class="hidden">
       <div class="page-head">
-        <div><h2>Or&#231;amentos</h2><p>Hist&#243;rico de simula&#231;&#245;es enviadas</p></div>
+        <div><p class="sub">Hist&#243;rico de simula&#231;&#245;es</p></div>
       </div>
       <div class="filters" id="filtrosOrc">
         <button class="chip on" data-forc="Todos">Todos</button>
@@ -1507,7 +1532,7 @@ setTimeout(function(){
     <!-- ---------- DETALHE / EDI&#199;&#195;O DE UM OR&#199;AMENTO ---------- -->
     <section id="pg-orcdetalhe" class="hidden">
       <div class="page-head">
-        <div><h2>Or&#231;amento</h2><p id="odSub">Detalhe e edi&#231;&#227;o do or&#231;amento</p></div>
+        <div><p class="sub" id="odSub">Detalhe e edi&#231;&#227;o do or&#231;amento</p></div>
         <div class="right"><button class="btn ghost" data-go="listaorc">Voltar aos Or&#231;amentos</button></div>
       </div>
 
@@ -1601,7 +1626,7 @@ setTimeout(function(){
     <!-- ---------- CLIENTES ---------- -->
     <section id="pg-clientes" class="hidden">
       <div class="page-head">
-        <div><h2>Clientes</h2><p id="subClientes">Clientes que receberam or&#231;amentos</p></div>
+        <div><p class="sub" id="subClientes">Clientes que receberam or&#231;amentos</p></div>
       </div>
       <div class="search-inline">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1619,7 +1644,7 @@ setTimeout(function(){
     <!-- ---------- DETALHE DO CLIENTE ---------- -->
     <section id="pg-cliente" class="hidden">
       <div class="page-head">
-        <div><h2>Cliente</h2><p id="cSub">Or&#231;amentos enviados</p></div>
+        <div><p class="sub" id="cSub">Or&#231;amentos enviados a este cliente</p></div>
         <div class="right">
           <button class="btn ghost" data-go="clientes">Voltar aos Clientes</button>
         </div>
@@ -1645,7 +1670,7 @@ setTimeout(function(){
     <!-- ---------- VENDAS ---------- -->
     <section id="pg-vendas" class="hidden">
       <div class="page-head">
-        <div><h2>Vendas</h2><p>Funil comercial e neg&#243;cios em curso</p></div>
+        <div><p class="sub">Funil comercial e neg&#243;cios em curso</p></div>
         <div class="right"><button class="btn ghost" data-go="listaorc">Ver or&#231;amentos</button></div>
       </div>
 
@@ -1683,7 +1708,7 @@ setTimeout(function(){
     <!-- ---------- PERFIL ---------- -->
     <section id="pg-perfil" class="hidden">
       <div class="page-head">
-        <div><h2>Perfil</h2><p>Dados da loja e prefer&#234;ncias</p></div>
+        <div><p class="sub">Dados da loja e prefer&#234;ncias</p></div>
       </div>
       <div class="stat-grid">
         <div class="stat-card link" data-perfil="estoque" role="button" tabindex="0" title="Ver carros no estoque">
@@ -2525,10 +2550,28 @@ const TITLES = {
 };
 const PAGES = ['modelos','detalhe','orcamento','listaorc','orcdetalhe','clientes','cliente','vendas','perfil'];
 
+/* cabecalhos de p\u00E1gina sem bot\u00F5es ficam vazios no desktop (o t\u00EDtulo j\u00E1 est\u00E1 na appbar) */
+function marcarCabecalhosVazios(){
+  document.querySelectorAll('.page-head').forEach(ph => {
+    ph.classList.toggle('vazio', !ph.querySelector('.right button'));
+  });
+}
+
+/* a appbar mostra o subt\u00EDtulo da p\u00E1gina vis\u00EDvel (inclui contagens din\u00E2micas) */
+function sincronizarSub(){
+  const p = document.querySelector('.content section:not(.hidden) .page-head .sub');
+  const alvo = document.getElementById('barSub');
+  if (!alvo) return;
+  if (p && p.textContent.trim()) alvo.textContent = p.textContent.trim();
+}
+
 function ir(page){
   PAGES.forEach(p => document.getElementById('pg-' + p).classList.toggle('hidden', p !== page));
 
   document.getElementById('barTitle').textContent = TITLES[page][0];
+  const barSub = document.getElementById('barSub');
+  if (barSub) barSub.textContent = TITLES[page][1];
+  setTimeout(sincronizarSub, 0);
   const voltar = (page === 'detalhe' || page === 'orcamento' || page === 'cliente' || page === 'orcdetalhe');
   document.getElementById('btnBack').style.visibility = voltar ? 'visible' : 'hidden';
   document.querySelector('.brand').classList.toggle('com-voltar', voltar);
@@ -2759,6 +2802,7 @@ function renderGrid(){
   renderPerfilLoja();
   document.getElementById('subModelos').textContent =
     CARROS.length + (CARROS.length === 1 ? ' ve\u00EDculo no estoque' : ' ve\u00EDculos no estoque');
+  sincronizarSub();
 
   const grid = document.getElementById('grid');
 
@@ -3941,6 +3985,7 @@ function renderClientes(filtroTexto){
   const total = clientesAgrupados().length;
   document.getElementById('subClientes').textContent =
     total + (total === 1 ? ' cliente recebeu or\u00E7amento' : ' clientes receberam or\u00E7amentos');
+  sincronizarSub();
 
   if (!lista.length){
     tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#a2afa9;padding:30px">
@@ -4069,6 +4114,7 @@ renderFiltros();
 renderGrid();
 renderTabelaOrc();
 renderClientes();
+marcarCabecalhosVazios();
 ir('modelos');
 renderEstadoRede();
 /* ==========================================================

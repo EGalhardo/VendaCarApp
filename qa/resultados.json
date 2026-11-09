@@ -287,22 +287,22 @@
  {
   "r": "PASS",
   "n": "R37 · barra lateral sem o container da logomarca",
-  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'side-fim', 'espacoAbaixoNav': 19, 'semCaixa': True, 'navsVisiveis': 6}"
+  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'side-fim', 'espacoAbaixoNav': 19, 'semCaixa': False, 'navsVisiveis': 6}"
  },
  {
   "r": "PASS",
   "n": "R37 · sem 'Plano Pro' no rodapé",
-  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'side-fim', 'espacoAbaixoNav': 19, 'semCaixa': True, 'navsVisiveis': 6}"
+  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'side-fim', 'espacoAbaixoNav': 19, 'semCaixa': False, 'navsVisiveis': 6}"
  },
  {
   "r": "PASS",
   "n": "R54 · barra lateral termina no botão Encerrar",
-  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'side-fim', 'espacoAbaixoNav': 19, 'semCaixa': True, 'navsVisiveis': 6}"
+  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'side-fim', 'espacoAbaixoNav': 19, 'semCaixa': False, 'navsVisiveis': 6}"
  },
  {
   "r": "PASS",
   "n": "R54 · Encerrar encostado ao fundo, com espaço antes dele",
-  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'side-fim', 'espacoAbaixoNav': 19, 'semCaixa': True, 'navsVisiveis': 6}"
+  "d": "{'semStore': True, 'semLogo': True, 'semPlano': True, 'ultimoFilho': 'side-fim', 'espacoAbaixoNav': 19, 'semCaixa': False, 'navsVisiveis': 6}"
  },
  {
   "r": "PASS",
@@ -451,6 +451,166 @@
  },
  {
   "r": "PASS",
+  "n": "R62 · desktop · «modelos» com título dentro da appbar",
+  "d": "{'titulo': 'Automóvel', 'sub': '4 veículos no estoque', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · desktop · subtítulo na appbar e fora do conteúdo",
+  "d": "{'titulo': 'Automóvel', 'sub': '4 veículos no estoque', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · desktop · nenhum título repetido no conteúdo",
+  "d": "0"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · desktop · «listaorc» com título dentro da appbar",
+  "d": "{'titulo': 'Orçamentos', 'sub': 'Histórico de simulações', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · desktop · subtítulo na appbar e fora do conteúdo",
+  "d": "{'titulo': 'Orçamentos', 'sub': 'Histórico de simulações', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · desktop · nenhum título repetido no conteúdo",
+  "d": "0"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · desktop · «vendas» com título dentro da appbar",
+  "d": "{'titulo': 'Vendas', 'sub': 'Funil comercial e negócios em curso', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · desktop · subtítulo na appbar e fora do conteúdo",
+  "d": "{'titulo': 'Vendas', 'sub': 'Funil comercial e negócios em curso', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · desktop · nenhum título repetido no conteúdo",
+  "d": "0"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · desktop · «clientes» com título dentro da appbar",
+  "d": "{'titulo': 'Clientes', 'sub': '5 clientes receberam orçamentos', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · desktop · subtítulo na appbar e fora do conteúdo",
+  "d": "{'titulo': 'Clientes', 'sub': '5 clientes receberam orçamentos', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · desktop · nenhum título repetido no conteúdo",
+  "d": "0"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · desktop · «perfil» com título dentro da appbar",
+  "d": "{'titulo': 'Perfil', 'sub': 'Dados da loja e preferências', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · desktop · subtítulo na appbar e fora do conteúdo",
+  "d": "{'titulo': 'Perfil', 'sub': 'Dados da loja e preferências', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · desktop · nenhum título repetido no conteúdo",
+  "d": "0"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · desktop · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · tablet · «modelos» com título dentro da appbar",
+  "d": "{'titulo': 'Automóvel', 'sub': '4 veículos no estoque', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · tablet · subtítulo na appbar e fora do conteúdo",
+  "d": "{'titulo': 'Automóvel', 'sub': '4 veículos no estoque', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · tablet · nenhum título repetido no conteúdo",
+  "d": "0"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · tablet · «listaorc» com título dentro da appbar",
+  "d": "{'titulo': 'Orçamentos', 'sub': 'Histórico de simulações', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · tablet · subtítulo na appbar e fora do conteúdo",
+  "d": "{'titulo': 'Orçamentos', 'sub': 'Histórico de simulações', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · tablet · nenhum título repetido no conteúdo",
+  "d": "0"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · tablet · «vendas» com título dentro da appbar",
+  "d": "{'titulo': 'Vendas', 'sub': 'Funil comercial e negócios em curso', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · tablet · subtítulo na appbar e fora do conteúdo",
+  "d": "{'titulo': 'Vendas', 'sub': 'Funil comercial e negócios em curso', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · tablet · nenhum título repetido no conteúdo",
+  "d": "0"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · tablet · «clientes» com título dentro da appbar",
+  "d": "{'titulo': 'Clientes', 'sub': '5 clientes receberam orçamentos', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · tablet · subtítulo na appbar e fora do conteúdo",
+  "d": "{'titulo': 'Clientes', 'sub': '5 clientes receberam orçamentos', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · tablet · nenhum título repetido no conteúdo",
+  "d": "0"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · tablet · «perfil» com título dentro da appbar",
+  "d": "{'titulo': 'Perfil', 'sub': 'Dados da loja e preferências', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · tablet · subtítulo na appbar e fora do conteúdo",
+  "d": "{'titulo': 'Perfil', 'sub': 'Dados da loja e preferências', 'dentro': True, 'h2': 0, 'subNoConteudo': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · tablet · nenhum título repetido no conteúdo",
+  "d": "0"
+ },
+ {
+  "r": "PASS",
+  "n": "R62 · tablet · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
   "n": "R61 · barra lateral usa o carrinho com  (2 rodas + sinal)",
   "d": "{'circ': 2, 'paths': 2, 'mais': True, 'carrinho': True}"
  },
@@ -502,12 +662,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1.03, 'offsets': 12}"
+  "d": "{'dx': 1.03, 'offsets': 11}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1.03, 'offsets': 12}"
+  "d": "{'dx': 1.03, 'offsets': 11}"
  },
  {
   "r": "PASS",
@@ -682,7 +842,7 @@
  {
   "r": "PASS",
   "n": "R30 · contraste mínimo 3:1 no modo escuro",
-  "d": "[['.page-head h2', 19.4], ['.car .nm', 19.4], ['.tbl td', 14.49], ['.nav', 10.49]]"
+  "d": "[['#barTitle', 19.4], ['.car .nm', 19.4], ['.tbl td', 14.49], ['.nav', 10.49]]"
  },
  {
   "r": "PASS",
@@ -897,7 +1057,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "-2,925.29 Kz"
+  "d": "6,945.23 Kz"
  },
  {
   "r": "PASS",
@@ -907,12 +1067,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,586,972.64 Kz"
+  "d": "9,591,214.80 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.17 Kz"
+  "d": "9,749,999.59 Kz"
  },
  {
   "r": "PASS",
@@ -928,10 +1088,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   320794,
-   2892907,
-   4882359,
-   6363218
+   319510,
+   2892151,
+   4881402,
+   6362662
   ]
  },
  {
@@ -952,14 +1112,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "355,724.59 Kz"
+  "d": "415,874.16 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "355,724.59 Kz",
-   "4,061,471.88 Kz"
+   "415,874.16 Kz",
+   "4,061,982.44 Kz"
   ]
  },
  {
@@ -1037,7 +1197,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.05577
+   3.05696
   ]
  },
  {
@@ -1383,22 +1543,22 @@
  {
   "r": "PASS",
   "n": "Desktop · campo de procura removido",
-  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi ABC Seminovos'}"
+  "d": "{'busca': 'inexistente', 'titulo': 'visivel', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi ABC Seminovos'}"
  },
  {
   "r": "PASS",
-  "n": "Desktop · nome da página fora da appbar",
-  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi ABC Seminovos'}"
+  "n": "R62 · nome da página dentro da appbar (desktop)",
+  "d": "{'busca': 'inexistente', 'titulo': 'visivel', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi ABC Seminovos'}"
  },
  {
   "r": "PASS",
   "n": "Desktop · modo Online fora da appbar",
-  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi ABC Seminovos'}"
+  "d": "{'busca': 'inexistente', 'titulo': 'visivel', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi ABC Seminovos'}"
  },
  {
   "r": "PASS",
   "n": "Desktop · foto de perfil alinhada à direita (sem notificações)",
-  "d": "{'busca': 'inexistente', 'titulo': 'oculto', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi ABC Seminovos'}"
+  "d": "{'busca': 'inexistente', 'titulo': 'visivel', 'pill': 'inexistente', 'sinoAFrente': True, 'utilizador': 'visivel', 'oi': 'Oi ABC Seminovos'}"
  },
  {
   "r": "PASS",
@@ -1598,17 +1758,17 @@
  {
   "r": "PASS",
   "n": "R36 · cápsula 'Online' removida da appbar",
-  "d": "{'pill': False, 'online': False, 'grupoExiste': True, 'grupoADireita': '979.688px', 'temaAntesDoSep': True, 'sepAntesDoPerfil': True, 'margemDireita': 24, 'espacoMeio': True}"
+  "d": "{'pill': False, 'online': False, 'grupoExiste': True, 'grupoADireita': '863.531px', 'temaAntesDoSep': True, 'sepAntesDoPerfil': True, 'margemDireita': 24, 'espacoMeio': True}"
  },
  {
   "r": "PASS",
   "n": "R36 · ações agrupadas e encostadas à direita",
-  "d": "{'pill': False, 'online': False, 'grupoExiste': True, 'grupoADireita': '979.688px', 'temaAntesDoSep': True, 'sepAntesDoPerfil': True, 'margemDireita': 24, 'espacoMeio': True}"
+  "d": "{'pill': False, 'online': False, 'grupoExiste': True, 'grupoADireita': '863.531px', 'temaAntesDoSep': True, 'sepAntesDoPerfil': True, 'margemDireita': 24, 'espacoMeio': True}"
  },
  {
   "r": "PASS",
   "n": "R36 · ordem: tema · divisor · perfil",
-  "d": "{'pill': False, 'online': False, 'grupoExiste': True, 'grupoADireita': '979.688px', 'temaAntesDoSep': True, 'sepAntesDoPerfil': True, 'margemDireita': 24, 'espacoMeio': True}"
+  "d": "{'pill': False, 'online': False, 'grupoExiste': True, 'grupoADireita': '863.531px', 'temaAntesDoSep': True, 'sepAntesDoPerfil': True, 'margemDireita': 24, 'espacoMeio': True}"
  },
  {
   "r": "PASS",
@@ -1833,7 +1993,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '24,014,012.63 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '43,730,237.27 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '60,009,291.93 Kz', 'temKz': True, 'contando': 13}]"
+  "d": "[{'fn': 1, 'vt': '24,144,328.96 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '43,834,204.92 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '59,756,752.93 Kz', 'temKz': True, 'contando': 13}]"
  },
  {
   "r": "PASS",
@@ -1843,7 +2003,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '23,892,870.20 Kz'}"
+  "d": "{'fn': '1', 'vt': '24,048,157.61 Kz'}"
  },
  {
   "r": "PASS",
@@ -1883,17 +2043,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 13:33 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 14:04 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 13:33 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 14:04 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 13:33 · enviado"
+  "d": "Hoje, 14:04 · enviado"
  },
  {
   "r": "PASS",
