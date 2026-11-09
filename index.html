@@ -381,24 +381,17 @@
     animation:estradaPassa .9s linear infinite;
   }
 
-  /* Vendas  o funil "escorre": cada etapa pulsa em sequencia, como o negocio a descer */
-  @keyframes funilEtapa{
-    0%,100%{opacity:.42;transform:translateY(-1.1px)}
-    40%    {opacity:1;transform:translateY(0)}
-    70%    {opacity:1;transform:translateY(1.1px)}
+  /* Vendas  o "+" do carrinho pulsa, como um artigo a ser acrescentado */
+  @keyframes carrinhoMais{
+    0%,100%{transform:scale(.86);opacity:.55}
+    45%    {transform:scale(1.18);opacity:1}
   }
-  .nav[data-go="vendas"] .ico svg path,
-  .nav-item[data-go="vendas"] .ico svg path{
+  .nav[data-go="vendas"] .ico svg .mais,
+  .nav-item[data-go="vendas"] .ico svg .mais{
     transform-box:fill-box;transform-origin:center;
   }
-  .nav.on[data-go="vendas"] .ico svg path,
-  .nav-item.on[data-go="vendas"] .ico svg path{animation:funilEtapa 2.2s ease-in-out infinite}
-  .nav.on[data-go="vendas"] .ico svg path:nth-child(1),
-  .nav-item.on[data-go="vendas"] .ico svg path:nth-child(1){animation-delay:0s}
-  .nav.on[data-go="vendas"] .ico svg path:nth-child(2),
-  .nav-item.on[data-go="vendas"] .ico svg path:nth-child(2){animation-delay:.34s}
-  .nav.on[data-go="vendas"] .ico svg path:nth-child(3),
-  .nav-item.on[data-go="vendas"] .ico svg path:nth-child(3){animation-delay:.68s}
+  .nav.on[data-go="vendas"] .ico svg .mais,
+  .nav-item.on[data-go="vendas"] .ico svg .mais{animation:carrinhoMais 2.1s ease-in-out infinite}
   /* inativo: funil inteiro, parado */
   .nav:not(.on)[data-go="vendas"] .ico svg path,
   .nav-item:not(.on)[data-go="vendas"] .ico svg path{opacity:1}
@@ -1346,7 +1339,9 @@ setTimeout(function(){
     </button>
     <button class="nav" data-go="vendas">
       <span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 4h18l-6.6 7.6V19l-4.8 2v-9.4z"/></svg></span>
+        <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
+        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+        <path class="mais" d="M12 7v6M9 10h6"/></svg></span>
       <span class="tx">Vendas</span>
       <span class="cnt" data-cnt="vendas">0</span>
     </button>
@@ -1771,7 +1766,9 @@ setTimeout(function(){
     </button>
     <button class="nav-item" data-go="vendas">
       <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 4h18l-6.6 7.6V19l-4.8 2v-9.4z"/></svg></span>
+        <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
+        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+        <path class="mais" d="M12 7v6M9 10h6"/></svg></span>
       Vendas
     </button>
     <button class="nav-item" data-go="clientes">

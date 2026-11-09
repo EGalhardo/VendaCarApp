@@ -565,6 +565,40 @@ async def main():
         ok("R31 · logótipo/paleta sem erros de consola", len(lge)==0, str(lge[:2]))
         await lg2.close()
 
+        # ============ R61 · ICONE VENDAS = shopping-cart-plus (Lucide) ============
+        r61 = await b.new_page(viewport={"width":1440,"height":900})
+        r61e=[]; r61.on("pageerror", lambda e: r61e.append(str(e)))
+        await novo(r61)
+        await r61.evaluate("()=>ir('vendas')"); await r61.wait_for_timeout(700)
+        C61 = await r61.evaluate("""()=>{
+          const side=document.querySelector('.side .nav[data-go="vendas"] .ico svg');
+          const nav=document.querySelector('.navbar .nav-item[data-go="vendas"] .ico svg');
+          const info=s=>s?{circ:s.querySelectorAll('circle').length, paths:s.querySelectorAll('path').length,
+                           mais:!!s.querySelector('.mais'), carrinho:!!s.querySelector('path[stroke-dasharray]')||s.querySelectorAll('path').length===2}
+                          :null;
+          return {side:info(side), nav:info(nav),
+                  texto:document.querySelector('.side .nav[data-go="vendas"] .tx').innerText.trim(),
+                  contador:document.querySelector('.side .nav[data-go="vendas"] .cnt').innerText.trim(),
+                  anim:getComputedStyle(side.querySelector('.mais')).animationName,
+                  funilAntigo:!!document.querySelector('.side [data-go="vendas"] path[d^="M3 4h18"]')};
+        }""")
+        ok("R61 · barra lateral usa o carrinho com "+" (2 rodas + sinal)",
+           C61["side"]["circ"]==2 and C61["side"]["mais"], str(C61["side"]))
+        ok("R61 · mesma troca na navbar do telemóvel",
+           C61["nav"]["circ"]==2 and C61["nav"]["mais"], str(C61["nav"]))
+        ok("R61 · o funil antigo desapareceu do menu", not C61["funilAntigo"], str(C61["funilAntigo"]))
+        ok("R61 · nome e contador intactos", C61["texto"]=="Vendas" and C61["contador"]!="", str(C61))
+        ok("R61 · só o "+" anima (carrinhoMais)", C61["anim"]=="carrinhoMais", str(C61["anim"]))
+        Z61 = await r61.evaluate("""async ()=>{
+          const m=document.querySelector('.side .nav[data-go="vendas"] .ico svg .mais');
+          const v=[]; for(let i=0;i<10;i++){ v.push(getComputedStyle(m).transform);
+            await new Promise(r=>setTimeout(r,120)); }
+          return [...new Set(v)].length;
+        }""")
+        ok("R61 · o "+" pulsa mesmo (transform a variar)", Z61>=4, str(Z61))
+        ok("R61 · sem erros de consola", len(r61e)==0, str(r61e[:2]))
+        await r61.close()
+
         # ============ R60 · ANIMACAO DO AUTOMOVEL EM MOVIMENTO ============
         r60 = await b.new_page(viewport={"width":1440,"height":900})
         r60e=[]; r60.on("pageerror", lambda e: r60e.append(str(e)))
@@ -1675,11 +1709,11 @@ async def main():
 
         # animação do ícone (desktop e mobile)
         A1 = await r41.evaluate("""()=>{
-          const on=document.querySelector('.nav.on[data-go="vendas"] .ico svg path');
+          const on=document.querySelector('.nav.on[data-go="vendas"] .ico svg .mais');
           return {nome:on?getComputedStyle(on).animationName:'', dur:on?getComputedStyle(on).animationDuration:'',
                   iter:on?getComputedStyle(on).animationIterationCount:''};
         }""")
-        ok("R41 · ícone Vendas animado quando ativo", A1["nome"]=="funilEtapa" and A1["iter"]=="infinite", str(A1))
+        ok("R61 · ícone Vendas (carrinho) animado quando ativo", A1["nome"]=="carrinhoMais" and A1["iter"]=="infinite", str(A1))
         await r41.evaluate("()=>ir('modelos')"); await r41.wait_for_timeout(400)
         A2 = await r41.evaluate("""()=>{
           const off=document.querySelector('.nav[data-go="vendas"] .ico svg path');
@@ -1734,12 +1768,12 @@ async def main():
         await novo(r41m)
         await r41m.evaluate("()=>ir('vendas')"); await r41m.wait_for_timeout(700)
         A3 = await r41m.evaluate("""()=>{
-          const p=document.querySelector('.nav-item.on[data-go="vendas"] .ico svg path');
+          const p=document.querySelector('.nav-item.on[data-go="vendas"] .ico svg .mais');
           const cs=getComputedStyle(p);
           return {nome:cs.animationName, iter:cs.animationIterationCount,
                   itens:document.querySelectorAll('.nav-item').length};
         }""")
-        ok("R41 · animação também na navbar do telemóvel", A3["nome"]=="funilEtapa" and A3["iter"]=="infinite", str(A3))
+        ok("R61 · animação do carrinho também na navbar do telemóvel", A3["nome"]=="carrinhoMais" and A3["iter"]=="infinite", str(A3))
         M2 = await r41m.evaluate("""()=>{const bs=[...document.querySelectorAll('.vneg .est button')].slice(0,4);
           const r=bs.map(b=>{const q=b.getBoundingClientRect();return {w:q.width,h:q.height}});
           return {n:bs.length, dentroDoEcra: r.every(q=>q.w>0&&q.h>0&&q.h<=44), ecra:innerWidth};}""")
