@@ -546,21 +546,48 @@ async def main():
           const b1=cs('.content').borderTopColor, b2=cs('.car').borderTopColor, b3=cs('.side').borderRightColor;
           return {alvos, tudoAzul, iguais, bordas:[b1,b2,b3],
                   bordasAzuis:[b1,b2,b3].every(c=>{const [r,g,b]=rgb(c); return b>r+15;}),
-                  logoClaro:getComputedStyle(document.querySelector('.brand .logo-escuro')).display};
+                  logoClaro:document.querySelectorAll('.brand .logo').length===1
+                            ? getComputedStyle(document.querySelector('.brand .logo')).display : 'x'};
         }""")
         ok("R31 · modo escuro · fundo azul-marinho em todos os painéis", PAL["tudoAzul"], str(PAL["alvos"]))
         ok("R31 · modo escuro · mesmo tom da referência (#040d1f)", PAL["iguais"], str(PAL["alvos"]))
         ok("R31 · modo escuro · bordas azuis visíveis", PAL["bordasAzuis"], str(PAL["bordas"]))
-        ok("R31 · modo escuro · logótipo troca para a variante clara", PAL["logoClaro"]=="block", str(PAL["logoClaro"]))
+        ok("R58 · modo escuro · um único logótipo, sempre visível", PAL["logoClaro"]=="block", str(PAL["logoClaro"]))
         LOGOD = await lg2.evaluate("""()=>{
-          const img=document.querySelector('.brand .logo-escuro');
-          const r=img.getBoundingClientRect();
-          return {visivel:r.width>0, ratio:+(r.width/r.height).toFixed(2), nat:img.naturalWidth>0};
+          const imgs=[...document.querySelectorAll('.brand img')];
+          const img=imgs[0], r=img.getBoundingClientRect();
+          return {quantos:imgs.length, visivel:r.width>0, ratio:+(r.width/r.height).toFixed(2),
+                  nat:img.naturalWidth>0, mostra:getComputedStyle(img).display!=='none'};
         }""")
-        ok("R31 · variante escura mantém os 3 ticks e a proporção",
-           LOGOD["visivel"] and LOGOD["nat"] and LOGOD["ratio"]>2.9, str(LOGOD))
+        ok("R58 · um só logótipo no modo escuro, com a proporção certa",
+           LOGOD["quantos"]==1 and LOGOD["visivel"] and LOGOD["nat"] and LOGOD["mostra"]
+           and LOGOD["ratio"]>2.9, str(LOGOD))
         ok("R31 · logótipo/paleta sem erros de consola", len(lge)==0, str(lge[:2]))
         await lg2.close()
+
+        # ============ R58 · IMAGENS NO CÓDIGO (sem duplicados) ============
+        r58 = await b.new_page(viewport={"width":1440,"height":900})
+        r58e=[]; r58.on("pageerror", lambda e: r58e.append(str(e)))
+        await novo(r58)
+        IM = await r58.evaluate("""()=>{
+          const srcs=[...document.images].map(i=>i.getAttribute('src')||'').filter(s=>s.startsWith('data:image'));
+          const todas=[...document.querySelectorAll('img')].map(i=>i.getAttribute('src')||'');
+          /* o mesmo carro aparece em varios sitios: conta so as imagens distintas */
+          const reais=todas.filter(u=>u && u.startsWith('data:image'));
+          const unicas=[...new Set(reais)];
+          const logo=unicas.filter(u=>u.length>60000);
+          return {imgs:document.querySelectorAll('.brand img').length,
+                  dataUris:unicas.length, duplicadas:reais.length-unicas.length,
+                  fotosDeCarro:reais.filter(u=>u.startsWith('data:image/jpeg')).length / Math.max(1, unicas.filter(u=>u.startsWith('data:image/jpeg')).length),
+                  logotiposDistintos:logo.length,
+                  logoEscuro:!!document.querySelector('.logo-escuro')};
+        }""")
+        ok("R58 · um só logótipo no código (sem a variante escura sem uso)",
+           IM["imgs"]==1 and not IM["logoEscuro"], str(IM))
+        ok("R58 · um único logótipo embebido (fotos não se repetem no código)",
+           IM["logotiposDistintos"]==1 and IM["dataUris"]==5, str(IM))
+        ok("R58 · sem erros de consola", len(r58e)==0, str(r58e[:2]))
+        await r58.close()
 
         # ============ R30 · BOTÃO "CRIAR" SÓ COM "+" ============
         cr = await b.new_page(viewport={"width":1440,"height":900})
@@ -1229,7 +1256,6 @@ async def main():
         ok("Mobile · botões com a mesma largura", abs(g["w1"]-g["w2"])<=1, str(g))
         ok("Mobile · Guardar acima de Cancelar", g["ordem"], "")
         ok("Mobile · rodapé dentro do ecrã", g["fim"], "")
-        await mb.screenshot(path="/home/user/qa/mobile_popup.png")
         await mb.close()
 
         # ============ ORÇAMENTO: DETALHE E EDIÇÃO ============

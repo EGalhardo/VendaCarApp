@@ -436,17 +436,32 @@
  },
  {
   "r": "PASS",
-  "n": "R31 · modo escuro · logótipo troca para a variante clara",
+  "n": "R58 · modo escuro · um único logótipo, sempre visível",
   "d": "block"
  },
  {
   "r": "PASS",
-  "n": "R31 · variante escura mantém os 3 ticks e a proporção",
-  "d": "{'visivel': True, 'ratio': 3.04, 'nat': True}"
+  "n": "R58 · um só logótipo no modo escuro, com a proporção certa",
+  "d": "{'quantos': 1, 'visivel': True, 'ratio': 3.04, 'nat': True, 'mostra': True}"
  },
  {
   "r": "PASS",
   "n": "R31 · logótipo/paleta sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R58 · um só logótipo no código (sem a variante escura sem uso)",
+  "d": "{'imgs': 1, 'dataUris': 5, 'duplicadas': 6, 'fotosDeCarro': 2.5, 'logotiposDistintos': 1, 'logoEscuro': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R58 · um único logótipo embebido (fotos não se repetem no código)",
+  "d": "{'imgs': 1, 'dataUris': 5, 'duplicadas': 6, 'fotosDeCarro': 2.5, 'logotiposDistintos': 1, 'logoEscuro': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R58 · sem erros de consola",
   "d": "[]"
  },
  {
@@ -767,7 +782,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "58,747.24 Kz"
+  "d": "19,000.14 Kz"
  },
  {
   "r": "PASS",
@@ -777,12 +792,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,589,872.03 Kz"
+  "d": "9,588,497.96 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,999.28 Kz"
+  "d": "9,749,998.84 Kz"
  },
  {
   "r": "PASS",
@@ -798,10 +813,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   320152,
-   2892403,
-   4881976,
-   6362940
+   319189,
+   2891899,
+   4881210,
+   6362523
   ]
  },
  {
@@ -822,14 +837,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "414,453.47 Kz"
+  "d": "416,584.44 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "414,453.47 Kz",
-   "4,060,961.28 Kz"
+   "416,584.44 Kz",
+   "4,062,237.71 Kz"
   ]
  },
  {
@@ -897,7 +912,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.05605
+   3.34586
   ]
  },
  {
@@ -1693,7 +1708,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '23,967,434.71 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '44,109,978.42 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '59,977,026.79 Kz', 'temKz': True, 'contando': 13}]"
+  "d": "[{'fn': 1, 'vt': '24,193,933.81 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '43,872,209.57 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '59,787,114.26 Kz', 'temKz': True, 'contando': 13}]"
  },
  {
   "r": "PASS",
@@ -1703,7 +1718,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '23,650,196.77 Kz'}"
+  "d": "{'fn': '1', 'vt': '23,634,623.10 Kz'}"
  },
  {
   "r": "PASS",
@@ -1743,17 +1758,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 12:01 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 12:22 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 12:01 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 12:22 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 12:01 · enviado"
+  "d": "Hoje, 12:22 · enviado"
  },
  {
   "r": "PASS",
