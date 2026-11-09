@@ -767,7 +767,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "14,982.94 Kz"
+  "d": "18,269.83 Kz"
  },
  {
   "r": "PASS",
@@ -777,12 +777,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,588,236.48 Kz"
+  "d": "9,588,450.44 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.74 Kz"
+  "d": "9,749,998.82 Kz"
  },
  {
   "r": "PASS",
@@ -800,8 +800,8 @@
   "d": [
    320794,
    2893159,
-   4882168,
-   6363079
+   4882359,
+   6363218
   ]
  },
  {
@@ -822,14 +822,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "417,294.70 Kz"
+  "d": "418,360.01 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "417,294.70 Kz",
-   "4,063,003.47 Kz"
+   "418,360.01 Kz",
+   "4,063,769.17 Kz"
   ]
  },
  {
@@ -870,7 +870,7 @@
  {
   "r": "PASS",
   "n": "Animação · cabeça do Perfil move-se para os dois lados",
-  "d": 3.18
+  "d": 3.19
  },
  {
   "r": "PASS",
@@ -897,7 +897,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.3477
+   3.34781
   ]
  },
  {
@@ -1543,12 +1543,12 @@
  {
   "r": "PASS",
   "n": "R39 · orçamento em negociação aparece na página",
-  "d": "{'neg': 2, 'cartoes': 2, 'menu': 2}"
+  "d": "{'neg': 2, 'cartoes': 6, 'menu': 2}"
  },
  {
   "r": "PASS",
   "n": "R39 · contador do menu acompanha",
-  "d": "{'neg': 2, 'cartoes': 2, 'menu': 2}"
+  "d": "{'neg': 2, 'cartoes': 6, 'menu': 2}"
  },
  {
   "r": "PASS",
@@ -1633,22 +1633,22 @@
  {
   "r": "PASS",
   "n": "R41 · aparece na lista 'Negócios em curso'",
-  "d": "{'cartoes': 1, 'encontrado': True, 'temBotao': True, 'valor': True, 'funilNeg': 1}"
+  "d": "{'cartoes': 6, 'encontrado': True, 'temBotao': True, 'valor': True, 'funilNeg': 1}"
  },
  {
   "r": "PASS",
   "n": "R41 · cartão com botão 'Marcar como vendido'",
-  "d": "{'cartoes': 1, 'encontrado': True, 'temBotao': True, 'valor': True, 'funilNeg': 1}"
+  "d": "{'cartoes': 6, 'encontrado': True, 'temBotao': True, 'valor': True, 'funilNeg': 1}"
  },
  {
   "r": "PASS",
-  "n": "R42 · cada item tem 2 botões (pendente + vendido)",
-  "d": "{'n': 2, 'textos': 'Marcar pendente / Marcar como vendido', 'temVend': True, 'temPend': True}"
+  "n": "R56 · cada item aberto tem 4 ações (pendente + negociação + vendido + perdido)",
+  "d": "{'n': 4, 'textos': 'Marcar pendente / Em negociação / Vendido / Perdido', 'temVend': True, 'temPend': True, 'temNeg': True, 'temPerd': True}"
  },
  {
   "r": "PASS",
   "n": "R42 · 'Marcar pendente' põe o negócio pendente",
-  "d": "{'estado': 'Pendente', 'pill': 'Pendente', 'neg': 0, 'cartoes': 1, 'pressed': 'true'}"
+  "d": "{'estado': 'Pendente', 'pill': 'Pendente', 'neg': 0, 'cartoes': 6, 'pressed': 'true'}"
  },
  {
   "r": "PASS",
@@ -1658,12 +1658,12 @@
  {
   "r": "PASS",
   "n": "R41 · marcar como vendido funciona neste negócio",
-  "d": "{'estado': 'Venda concluída', 'vendas': 1, 'fechado': True, 'botoesFechado': 0}"
+  "d": "{'estado': 'Venda concluída', 'vendas': 1, 'fechado': True, 'botoesFechado': 0, 'reabrir': 1}"
  },
  {
   "r": "PASS",
-  "n": "R42 · negócio fechado deixa de mostrar os dois botões",
-  "d": "{'estado': 'Venda concluída', 'vendas': 1, 'fechado': True, 'botoesFechado': 0}"
+  "n": "R56 · negócio fechado só mostra 'Reabrir'",
+  "d": "{'estado': 'Venda concluída', 'vendas': 1, 'fechado': True, 'botoesFechado': 0, 'reabrir': 1}"
  },
  {
   "r": "PASS",
@@ -1693,17 +1693,17 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '3,571,842.19 Kz', 'temKz': True, 'contando': 8}, {'fn': 3, 'vt': '6,480,214.70 Kz', 'temKz': True, 'contando': 8}, {'fn': 4, 'vt': '8,832,428.68 Kz', 'temKz': True, 'contando': 8}]"
+  "d": "[{'fn': 1, 'vt': '23,793,374.57 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '43,968,410.63 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '59,863,960.45 Kz', 'temKz': True, 'contando': 13}]"
  },
  {
   "r": "PASS",
   "n": "R43 · valores finais exatos nos 8 s",
-  "d": "{'fn': ['5', '6', '1', '0'], 'vtNeg': '14,706,000 Kz', 'vtFech': '0 Kz', 'vn': '14,706,000 Kz', 'vl': '14,706,000 Kz', 'contando': 0}"
+  "d": "{'fn': ['5', '6', '1', '0'], 'vtNeg': '99,522,000 Kz', 'vtFech': '0 Kz', 'vn': '99,522,000 Kz', 'vl': '11,115,000 Kz', 'esperado': '99,522,000 Kz', 'vf': '11,115,000 Kz', 'contando': 0}"
  },
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '3,553,966.43 Kz'}"
+  "d": "{'fn': '1', 'vt': '23,703,131.31 Kz'}"
  },
  {
   "r": "PASS",
@@ -1717,13 +1717,98 @@
  },
  {
   "r": "PASS",
-  "n": "R42 · dois botões também no telemóvel, dentro do ecrã",
-  "d": "{'n': 2, 'dentroDoEcra': True, 'ecra': 390}"
+  "n": "R56 · quatro ações também no telemóvel, dentro do ecrã",
+  "d": "{'n': 4, 'dentroDoEcra': True, 'ecra': 390}"
+ },
+ {
+  "r": "PASS",
+  "n": "R56 · os cinco estados do negócio estão definidos",
+  "d": "['Pendente', 'Em negociação', 'Venda concluída', 'Perdido', 'Cancelado']"
+ },
+ {
+  "r": "PASS",
+  "n": "R56 · 'Enviado' deixou de ser um estado",
+  "d": "{'estados': ['Pendente', 'Em negociação', 'Venda concluída', 'Perdido', 'Cancelado'], 'iguais': True, 'fechados': ['Venda concluída', 'Perdido', 'Cancelado'], 'curso': ['Pendente', 'Em negociação'], 'enviadoDeixouDeExistir': True, 'todosTemSelo': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R56 · em curso = Pendente + Em negociação",
+  "d": "['Pendente', 'Em negociação']"
+ },
+ {
+  "r": "PASS",
+  "n": "R56 · fechados = Venda concluída + Perdido + Cancelado",
+  "d": "['Venda concluída', 'Perdido', 'Cancelado']"
+ },
+ {
+  "r": "PASS",
+  "n": "R56 · orçamento criado nasce Pendente",
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 11:37 · enviado'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R56 · aparece logo em Negócios em Curso, no topo",
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 11:37 · enviado'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R56 · o envio aparece como selo, não como estado",
+  "d": "Hoje, 11:37 · enviado"
+ },
+ {
+  "r": "PASS",
+  "n": "R56 · quatro ações por negócio aberto",
+  "d": "{'acoes': ['Pendente', 'Em negociação', 'Venda concluída', 'Perdido'], 'texto': ['Marcar pendente', 'Em negociação', 'Vendido', 'Perdido']}"
+ },
+ {
+  "r": "PASS",
+  "n": "R56 · marcar Em negociação",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R56 · Perdido fecha o negócio e dá para reabrir",
+  "d": "{'estado': 'Perdido', 'fechado': True, 'reabrir': True, 'enviados': 6}"
+ },
+ {
+  "r": "PASS",
+  "n": "R56 · Reabrir devolve o negócio a Pendente",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R56 · marcar Vendido",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R56 · orçamentos antigos 'Enviado' passam a Pendente + selo",
+  "d": "{'estado': 'Pendente', 'enviado': True, 'guardado': 'Pendente'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R56 · o seletor de estado tem os cinco, sem 'Enviado'",
+  "d": "['Pendente', 'Em negociação', 'Venda concluída', 'Perdido', 'Cancelado']"
+ },
+ {
+  "r": "PASS",
+  "n": "R56 · filtro Fechados mostra só estados fechados",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R56 · filtro Em curso mostra só Pendente e Em negociação",
+  "d": "['Pendente']"
+ },
+ {
+  "r": "PASS",
+  "n": "R56 · sem erros de consola no fluxo de estados",
+  "d": "[]"
  },
  {
   "r": "PASS",
   "n": "R44 · Estado sem opções duplicadas",
-  "d": "{'op': ['Enviado', 'Em negociação', 'Pendente', 'Venda concluída', 'Cancelado'], 'unicos': 5}"
+  "d": "{'op': ['Pendente', 'Em negociação', 'Venda concluída', 'Perdido', 'Cancelado'], 'unicos': 5}"
  },
  {
   "r": "PASS",
@@ -1748,7 +1833,7 @@
  {
   "r": "PASS",
   "n": "R44 · Exportar orçamentos em CSV descarrega",
-  "d": "['orcamentos-vendacar-2026-11-08.csv']"
+  "d": "['orcamentos-vendacar-2026-11-09.csv']"
  },
  {
   "r": "PASS",
@@ -1763,7 +1848,7 @@
  {
   "r": "PASS",
   "n": "R44 · Exportar estoque em CSV descarrega",
-  "d": "['orcamentos-vendacar-2026-11-08.csv', 'estoque-vendacar-2026-11-08.csv']"
+  "d": "['orcamentos-vendacar-2026-11-09.csv', 'estoque-vendacar-2026-11-09.csv']"
  },
  {
   "r": "PASS",

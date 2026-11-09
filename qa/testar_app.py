@@ -1441,7 +1441,7 @@ async def main():
           return {visivel:!s.classList.contains('hidden'),
                   etapas:[...s.querySelectorAll('.funil .l')].map(e=>e.textContent),
                   nums:n, contadoresDerivados: JSON.stringify(n)===JSON.stringify([clientesAgrupados().length,
-                    ORCAMENTOS.filter(o=>o.estado!=='Pendente'&&o.estado!=='Cancelado').length,
+                    ORCAMENTOS.filter(o=>o.estado!=='Perdido'&&o.estado!=='Cancelado').length,
                     ORCAMENTOS.filter(o=>o.estado==='Em negociação').length,
                     ORCAMENTOS.filter(o=>o.estado==='Venda concluída').length]),
                   semDemo: !s.innerText.includes('demonstração')};
@@ -1457,7 +1457,7 @@ async def main():
             menu:Number(document.querySelector('.side [data-cnt=\"vendas\"]').textContent)})""")
         ok("R39 · orçamento em negociação aparece na página", V3["neg"]>=1 and V3["cartoes"]>=1, str(V3))
         ok("R39 · contador do menu acompanha", V3["menu"]==V3["neg"], str(V3))
-        await rv.click("[data-etapa='Venda concluída']"); await rv.wait_for_timeout(900)
+        await rv.click("[data-orc='o2'] [data-etapa='Venda concluída']"); await rv.wait_for_timeout(900)
         V4 = await rv.evaluate("""()=>({vend:Number(document.getElementById('fnVendas').textContent),
             estado:ORCAMENTOS.find(o=>o.id==='o2').estado, guardado:(JSON.parse(localStorage.getItem('modelo_orcamentos_v1')).find(o=>o.id==='o2')||{}).estado,
             stVendas:document.getElementById('stVendas').textContent,
@@ -1542,25 +1542,28 @@ async def main():
         N2b = await r41.evaluate("""()=>{const c=document.querySelector('.vneg');
           const bs=[...c.querySelectorAll('.est button')].map(x=>({t:x.textContent.trim(),e:x.dataset.etapa}));
           return {n:bs.length, textos:bs.map(x=>x.t).join(' / '),
-                  temVend:bs.some(x=>x.e==='Venda concluída'), temPend:bs.some(x=>x.e==='Pendente')};}""")
-        ok("R42 · cada item tem 2 botões (pendente + vendido)", N2b["n"]==2 and N2b["temVend"] and N2b["temPend"], str(N2b))
-        await r41.click('.vneg .pend'); await r41.wait_for_timeout(700)
+                  temVend:bs.some(x=>x.e==='Venda concluída'), temPend:bs.some(x=>x.e==='Pendente'),
+                  temNeg:bs.some(x=>x.e==='Em negociação'), temPerd:bs.some(x=>x.e==='Perdido')};}""")
+        ok("R56 · cada item aberto tem 4 ações (pendente + negociação + vendido + perdido)",
+           N2b["n"]==4 and N2b["temVend"] and N2b["temPend"] and N2b["temNeg"] and N2b["temPerd"], str(N2b))
+        await r41.click("[data-orc='o6'] .pend"); await r41.wait_for_timeout(700)
         P1 = await r41.evaluate("""()=>({estado:ORCAMENTOS.find(o=>o.id==='o6').estado,
-            pill:(document.querySelector('.vneg .pill')||{}).textContent.trim(),
+            pill:(document.querySelector("[data-orc='o6'] .pill")||{}).textContent.trim(),
             neg:Number(document.getElementById('fnNegociacao').textContent),
             cartoes:[...document.querySelectorAll('.vneg:not(.fechado)')].length,
-            pressed:(document.querySelector('.vneg .pend')||{}).getAttribute?document.querySelector('.vneg .pend').getAttribute('aria-pressed'):''})""")
-        ok("R42 · 'Marcar pendente' põe o negócio pendente", P1["estado"]=="Pendente" and P1["pill"]=="Pendente" and P1["neg"]==0 and P1["cartoes"]==1, str(P1))
-        await r41.click('.vneg .pend'); await r41.wait_for_timeout(700)
+            pressed:document.querySelector("[data-orc='o6'] .pend").getAttribute('aria-pressed')})""")
+        ok("R42 · 'Marcar pendente' põe o negócio pendente", P1["estado"]=="Pendente" and P1["pill"]=="Pendente" and P1["neg"]==0 and P1["cartoes"]>=1, str(P1))
+        await r41.click("[data-orc='o6'] .pend"); await r41.wait_for_timeout(700)
         P2 = await r41.evaluate("()=>ORCAMENTOS.find(o=>o.id==='o6').estado")
         ok("R42 · segundo clique no pendente volta a 'Em negociação'", P2=="Em negociação", str(P2))
-        await r41.click(".vneg [data-etapa='Venda concluída']"); await r41.wait_for_timeout(800)
+        await r41.click("[data-orc='o6'] [data-etapa='Venda concluída']"); await r41.wait_for_timeout(800)
         N3 = await r41.evaluate("""()=>({estado:ORCAMENTOS.find(o=>o.id==='o6').estado,
             vendas:Number(document.getElementById('fnVendas').textContent),
             fechado: !!document.querySelector('.vneg.fechado'),
-            botoesFechado: document.querySelectorAll('.vneg.fechado .est button').length})""")
+            botoesFechado: document.querySelectorAll('.vneg.fechado [data-etapa]:not(.reabrir)').length,
+            reabrir: document.querySelectorAll('.vneg.fechado .reabrir').length})""")
         ok("R41 · marcar como vendido funciona neste negócio", N3["estado"]=="Venda concluída" and N3["vendas"]>=1 and N3["fechado"], str(N3))
-        ok("R42 · negócio fechado deixa de mostrar os dois botões", N3["botoesFechado"]==0, str(N3))
+        ok("R56 · negócio fechado só mostra 'Reabrir'", N3["botoesFechado"]==0 and N3["reabrir"]==1, str(N3))
 
         # animação do ícone (desktop e mobile)
         A1 = await r41.evaluate("""()=>{
@@ -1605,10 +1608,12 @@ async def main():
             vtFech:document.getElementById('vtFech').textContent,
             vn:document.getElementById('vnTotal').textContent,
             vl:document.querySelector('.vneg .vl').textContent,
+            esperado: fmt(ORCAMENTOS.reduce((t,o)=>t+((o.estado==='Pendente'||o.estado==='Em negocia\u00e7\u00e3o')?totalComIva(o.preco):0),0)),
+            vf: fmt(totalComIva(ORCAMENTOS.find(o=>o.estado==='Pendente').preco)),
             contando:document.querySelectorAll('#pg-vendas .contando').length})""")
         ok("R43 · valores finais exatos nos 8 s",
-           C3["fn"]==["5","6","1","0"] and C3["vtNeg"]=="14,706,000 Kz" and C3["vn"]=="14,706,000 Kz"
-           and C3["vl"]=="14,706,000 Kz" and C3["vtFech"]=="0 Kz" and C3["contando"]==0, str(C3))
+           C3["fn"]==["5","6","1","0"] and C3["vtNeg"]==C3["esperado"] and C3["vn"]==C3["esperado"]
+           and C3["vl"]==C3["vf"] and C3["vtFech"]=="0 Kz" and C3["contando"]==0, str(C3))
         await r43.evaluate("()=>ir('modelos')"); await r43.wait_for_timeout(400)
         await r43.evaluate("()=>ir('vendas')"); await r43.wait_for_timeout(700)
         C4 = await r43.evaluate("()=>({fn:document.getElementById('fnEnviados').textContent, vt:document.getElementById('vtNeg').textContent})")
@@ -1627,11 +1632,112 @@ async def main():
                   itens:document.querySelectorAll('.nav-item').length};
         }""")
         ok("R41 · animação também na navbar do telemóvel", A3["nome"]=="funilEtapa" and A3["iter"]=="infinite", str(A3))
-        M2 = await r41m.evaluate("""()=>{const bs=[...document.querySelectorAll('.vneg .est button')];
+        M2 = await r41m.evaluate("""()=>{const bs=[...document.querySelectorAll('.vneg .est button')].slice(0,4);
           const r=bs.map(b=>{const q=b.getBoundingClientRect();return {w:q.width,h:q.height}});
           return {n:bs.length, dentroDoEcra: r.every(q=>q.w>0&&q.h>0&&q.h<=44), ecra:innerWidth};}""")
-        ok("R42 · dois botões também no telemóvel, dentro do ecrã", M2["n"]==2 and M2["dentroDoEcra"], str(M2))
+        ok("R56 · quatro ações também no telemóvel, dentro do ecrã", M2["n"]==4 and M2["dentroDoEcra"], str(M2))
         await r41m.close()
+
+        # ============ R56 · ESTADOS DO NEGOCIO (Pendente automatico) ============
+        r56 = await b.new_page(viewport={"width":1440,"height":900})
+        r56e=[]; r56.on("pageerror", lambda e: r56e.append(str(e)))
+        await novo(r56)
+        S1 = await r56.evaluate("""()=>{
+          const cinco=['Pendente','Em negociação','Venda concluída','Perdido','Cancelado'];
+          return {estados:CINCO_ESTADOS, iguais:JSON.stringify(CINCO_ESTADOS)===JSON.stringify(cinco),
+                  fechados:ORC_FECHADOS, curso:ORC_CURSO,
+                  enviadoDeixouDeExistir: !ORCAMENTOS.some(o=>o.estado==='Enviado'),
+                  todosTemSelo: ORCAMENTOS.every(o=>typeof o.enviado==='boolean')};
+        }""")
+        ok("R56 · os cinco estados do negócio estão definidos", S1["iguais"], str(S1["estados"]))
+        ok("R56 · 'Enviado' deixou de ser um estado", S1["enviadoDeixouDeExistir"] and S1["todosTemSelo"], str(S1))
+        ok("R56 · em curso = Pendente + Em negociação",
+           S1["curso"]==["Pendente","Em negociação"], str(S1["curso"]))
+        ok("R56 · fechados = Venda concluída + Perdido + Cancelado",
+           S1["fechados"]==["Venda concluída","Perdido","Cancelado"], str(S1["fechados"]))
+
+        # criar orçamento: nasce Pendente e aparece de imediato em Negócios em Curso
+        S2 = await r56.evaluate("""()=>{
+          ORCAMENTOS.unshift({id:'r56a', nome:'Cliente R56', tel:'923111222', carro:CARROS[0].id,
+            preco:9750000, entrada:1800000, desc:0, data:Date.now(), estado:'Pendente', enviado:true, reenvios:0});
+          guardarOrc(); ir('vendas');
+          const c=document.querySelector("[data-orc='r56a']");
+          return {estado:ORCAMENTOS[0].estado, naLista:!!c,
+                  etiqueta:c?c.querySelector('.pill').innerText.trim():'',
+                  emCurso:!!c && !c.classList.contains('fechado'),
+                  selo:c?c.querySelector('.nota').innerText.trim():''};
+        }""")
+        await r56.wait_for_timeout(1600)
+        S2b = await r56.evaluate("""()=>{
+          const c=document.querySelector("[data-orc='r56a']");
+          return {naLista:!!c, etiqueta:c?c.querySelector('.pill').innerText.trim():'',
+                  primeiro:document.querySelector('.vneg .nm').innerText,
+                  selo:c?c.querySelector('.nota').innerText.trim():''};
+        }""")
+        ok("R56 · orçamento criado nasce Pendente", S2["estado"]=="Pendente" and S2b["etiqueta"]=="Pendente", str(S2b))
+        ok("R56 · aparece logo em Negócios em Curso, no topo", S2b["naLista"] and S2b["primeiro"]=="Cliente R56", str(S2b))
+        ok("R56 · o envio aparece como selo, não como estado", "enviado" in S2b["selo"] and "Pendente" not in S2b["selo"], str(S2b["selo"]))
+
+        # as quatro ações e as transições
+        S3 = await r56.evaluate("""()=>{
+          const acoes=[...document.querySelectorAll("[data-orc='r56a'] .acao button")].map(b=>b.dataset.etapa);
+          return {acoes, texto:[...document.querySelectorAll("[data-orc='r56a'] .acao button")].map(b=>b.innerText.trim())};
+        }""")
+        ok("R56 · quatro ações por negócio aberto",
+           S3["acoes"]==["Pendente","Em negociação","Venda concluída","Perdido"], str(S3))
+        await r56.click("[data-orc='r56a'] [data-etapa='Em negociação']"); await r56.wait_for_timeout(600)
+        ok("R56 · marcar Em negociação", await r56.evaluate("()=>ORCAMENTOS[0].estado")=="Em negociação")
+        await r56.click("[data-orc='r56a'] [data-etapa='Perdido']"); await r56.wait_for_timeout(700)
+        S4 = await r56.evaluate("""()=>{
+          const c=document.querySelector("[data-orc='r56a']");
+          return {estado:ORCAMENTOS[0].estado, fechado:!!c && c.classList.contains('fechado'),
+                  reabrir:!!(c&&c.querySelector('.reabrir')),
+                  enviados:Number(document.getElementById('fnEnviados').textContent)};
+        }""")
+        ok("R56 · Perdido fecha o negócio e dá para reabrir",
+           S4["estado"]=="Perdido" and S4["fechado"] and S4["reabrir"], str(S4))
+        await r56.click("[data-orc='r56a'] .reabrir"); await r56.wait_for_timeout(600)
+        ok("R56 · Reabrir devolve o negócio a Pendente",
+           await r56.evaluate("()=>ORCAMENTOS[0].estado")=="Pendente")
+        await r56.click("[data-orc='r56a'] [data-etapa='Venda concluída']"); await r56.wait_for_timeout(700)
+        ok("R56 · marcar Vendido", await r56.evaluate("()=>ORCAMENTOS[0].estado")=="Venda concluída")
+
+        # migração de dados antigos
+        await r56.evaluate("""()=>{localStorage.setItem('modelo_orcamentos_v1', JSON.stringify([
+            {id:'velho', nome:'Antigo', tel:'923999888', carro:CARROS[0].id, preco:9750000,
+             entrada:2000000, desc:0, data:Date.now(), estado:'Enviado'}]));}""")
+        await r56.reload(); await r56.wait_for_timeout(1500)
+        S5 = await r56.evaluate("""()=>{const o=ORCAMENTOS.find(x=>x.id==='velho');
+            return {estado:o.estado, enviado:o.enviado,
+                    guardado:JSON.parse(localStorage.getItem('modelo_orcamentos_v1')).find(x=>x.id==='velho').estado};}""")
+        ok("R56 · orçamentos antigos 'Enviado' passam a Pendente + selo",
+           S5["estado"]=="Pendente" and S5["enviado"] is True and S5["guardado"]=="Pendente", str(S5))
+
+        # lista de orçamentos e detalhe
+        S6 = await r56.evaluate("""()=>{
+          ir('listaorc');
+          const ops=[...document.querySelectorAll('#odEstadoInp option')].map(o=>o.text);
+          return {ops, filtros:[...document.querySelectorAll('#filtrosOrc .chip')].map(c=>c.innerText.trim())};
+        }""")
+        ok("R56 · o seletor de estado tem os cinco, sem 'Enviado'",
+           S6["ops"]==["Pendente","Em negociação","Venda concluída","Perdido","Cancelado"], str(S6["ops"]))
+        S7 = await r56.evaluate("""()=>{
+          const f=[];
+          document.querySelectorAll('#filtrosOrc .chip').forEach(c=>{
+            if(c.innerText.trim()==='Fechados') c.click();
+          });
+          f.push(...[...document.querySelectorAll('#tblOrc .pill')].map(e=>e.innerText));
+          document.querySelectorAll('#filtrosOrc .chip').forEach(c=>{
+            if(c.innerText.trim()==='Em curso') c.click();
+          });
+          return {fechados:f, curso:[...document.querySelectorAll('#tblOrc .pill')].map(e=>e.innerText)};
+        }""")
+        ok("R56 · filtro Fechados mostra só estados fechados",
+           all(x in ["Venda concluída","Perdido","Cancelado"] for x in S7["fechados"]), str(S7["fechados"]))
+        ok("R56 · filtro Em curso mostra só Pendente e Em negociação",
+           all(x in ["Pendente","Em negociação"] for x in S7["curso"]) and len(S7["curso"])>0, str(S7["curso"]))
+        ok("R56 · sem erros de consola no fluxo de estados", len(r56e)==0, str(r56e[:2]))
+        await r56.close()
 
         # ============ R44 · CORREÇÕES DA AUDITORIA (filtros, exportar, avisos, prestações) ============
         r44 = await b.new_page(viewport={"width":1440,"height":900})

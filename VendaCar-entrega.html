@@ -223,6 +223,17 @@
   .vneg .pend{border-color:#f0dcb4;background:#fdf6e6;color:#8a6100}
   .vneg .pend:hover{background:#fbeecb}
   .vneg .pend[aria-pressed="true"]{border-color:#e0c27f;background:#f8e7bd}
+  /* Em negocia\u00e7\u00e3o tem o seu proprio tom para se distinguir do Vendido */
+  .vneg .prox.negoc{border-color:#cfe0f5;background:#eef4fc;color:#2c5c9e}
+  .vneg .prox.negoc:hover{background:#e2ecf9}
+  .vneg .prox.negoc[aria-pressed="true"]{border-color:#a9c6e8;background:#dfeaf8}
+  .vneg .perd{border:1px solid #efe0e3;background:#fbf4f5;color:#9c5568;font-family:inherit;
+              font-size:11.5px;font-weight:800;border-radius:8px;padding:6px 10px;cursor:pointer;white-space:nowrap}
+  .vneg .perd:hover{background:#f7e8ea}
+  .vneg .perd:active{transform:translateY(1px)}
+  .vneg .reabrir{border:1px solid #e2e8e5;background:#fff;color:#6d7b75;font-family:inherit;
+                 font-size:11.5px;font-weight:800;border-radius:8px;padding:6px 10px;cursor:pointer}
+  .vneg .reabrir:hover{background:#f4f7f5}
   .vneg.fechado{border-color:#d3ecd6;background:#fbfefc}
   .vneg.fechado .vl{color:#2e7d32}
   .vneg .nota{margin-top:9px;font-size:11px;color:var(--muted-2);display:flex;align-items:center;gap:6px}
@@ -255,6 +266,13 @@
   html[data-tema="escuro"] .vneg .pend{background:#2a1e04;border-color:#4a3608;color:#f0c15c}
   html[data-tema="escuro"] .vneg .pend:hover{background:#34260a}
   html[data-tema="escuro"] .vneg .pend[aria-pressed="true"]{background:#3a2a0c;border-color:#5c440c}
+  html[data-tema="escuro"] .vneg .prox.negoc{background:#0d1e33;border-color:#1b3a5e;color:#7fb2ea}
+  html[data-tema="escuro"] .vneg .prox.negoc:hover{background:#12273f}
+  html[data-tema="escuro"] .vneg .prox.negoc[aria-pressed="true"]{background:#16304c;border-color:#2b5580}
+  html[data-tema="escuro"] .vneg .perd{background:#25151b;border-color:#432630;color:#e08c9c}
+  html[data-tema="escuro"] .vneg .perd:hover{background:#2e1a21}
+  html[data-tema="escuro"] .vneg .reabrir{background:#071426;border-color:#17375e;color:#9fb2cb}
+  html[data-tema="escuro"] .vneg .reabrir:hover{background:#0b1c33}
   html[data-tema="escuro"] .vneg.fechado{background:#042b25;border-color:#0a3b30}
   html[data-tema="escuro"] .vneg.fechado .vl{color:#63dc92}
 
@@ -578,6 +596,7 @@
   .pill.v{background:#e7f7ec;color:#1f7a3d}
   .pill.pd{background:#fdf1dc;color:#9a6a0b}
   .pill.c{background:#f1f3f2;color:#8b9a94;text-decoration:line-through}
+  .pill.pe{background:#f6eef0;color:#9c5568}
   /* aviso dentro dos popups (validacao) */
   .aviso{display:none;align-items:center;gap:6px;margin:-4px 0 10px;padding:8px 10px;border:1px solid #f0d0a0;
          background:#fdf6e6;color:#8a6100;border-radius:9px;font-size:11.5px;font-weight:700;line-height:1.35}
@@ -1543,8 +1562,8 @@ setTimeout(function(){
             <div class="fg">
               <p class="lbl">Estado</p>
               <select class="inp" id="odEstadoInp">
-                <option>Enviado</option><option>Em negocia&#231;&#227;o</option><option>Pendente</option>
-                <option>Venda conclu&#237;da</option><option>Cancelado</option>
+                <option>Pendente</option><option>Em negocia&#231;&#227;o</option><option>Venda conclu&#237;da</option>
+                <option>Perdido</option><option>Cancelado</option>
               </select>
             </div>
           </div>
@@ -1658,7 +1677,7 @@ setTimeout(function(){
       <div class="vendas-head">
         <h3>Neg&#243;cios em curso</h3>
         <div class="vendas-tot">
-          <span>Em negocia&#231;&#227;o <b id="vtNeg">0 Kz</b></span>
+          <span>Valor dos neg&#243;cios em curso <b id="vtNeg">0 Kz</b></span>
           <span>Vendas fechadas <b id="vtFech">0 Kz</b></span>
         </div>
       </div>
@@ -2093,14 +2112,14 @@ function SEED_ORCAMENTOS(){
   const agora = Date.now();
   const dia = 86400000;
   return [
-    { id:'o1', nome:'Renato',      tel:'923456789', carro:'corolla', preco:9750000,  entrada:2000000, desc:450000, data: agora - 0.02*dia, estado:'Enviado'  },
-    { id:'o2', nome:'Ana Silva',   tel:'912887340', carro:'crv',     preco:13500000, entrada:2700000, desc:650000, data: agora - 1.1*dia,  estado:'Enviado'  },
-    { id:'o3', nome:'Jo\u00E3o Mendes', tel:'934120556', carro:'hilux',   preco:28500000, entrada:6000000, desc:1300000, data: agora - 3.2*dia,  estado:'Enviado'  },
-    { id:'o4', nome:'Maria Costa', tel:'921445010', carro:'tucson',  preco:12900000, entrada:2600000, desc:600000, data: agora - 8.4*dia,  estado:'Enviado'  },
-    { id:'o5', nome:'Maria Costa', tel:'921445010', carro:'corolla', preco:9750000,  entrada:2000000, desc:450000, data: agora - 12.6*dia, estado:'Enviado'  },
+    { id:'o1', nome:'Renato',      tel:'923456789', carro:'corolla', preco:9750000,  entrada:2000000, desc:450000, data: agora - 0.02*dia, estado:'Pendente', enviado:true },
+    { id:'o2', nome:'Ana Silva',   tel:'912887340', carro:'crv',     preco:13500000, entrada:2700000, desc:650000, data: agora - 1.1*dia,  estado:'Pendente', enviado:true },
+    { id:'o3', nome:'Jo\u00E3o Mendes', tel:'934120556', carro:'hilux',   preco:28500000, entrada:6000000, desc:1300000, data: agora - 3.2*dia,  estado:'Pendente', enviado:true },
+    { id:'o4', nome:'Maria Costa', tel:'921445010', carro:'tucson',  preco:12900000, entrada:2600000, desc:600000, data: agora - 8.4*dia,  estado:'Pendente', enviado:true },
+    { id:'o5', nome:'Maria Costa', tel:'921445010', carro:'corolla', preco:9750000,  entrada:2000000, desc:450000, data: agora - 12.6*dia, estado:'Pendente', enviado:true },
     /* neg\u00F3cio j\u00E1 em negocia\u00E7\u00E3o: aparece na p\u00E1gina Vendas (pagamento a presta\u00E7\u00F5es) */
     { id:'o6', nome:'Paulo Neto',  tel:'924118733', carro:'tucson',  preco:12900000, entrada:2600000, desc:600000,
-      data: agora - 2.4*dia, estado:'Em negocia\u00E7\u00E3o',
+      data: agora - 2.4*dia, estado:'Em negocia\u00E7\u00E3o', enviado:true,
       notas:'Cliente quer 24 presta\u00E7\u00F5es e pediu avalia\u00E7\u00E3o do carro antigo \u00E0 retoma.' }
   ];
 }
@@ -2312,6 +2331,7 @@ function carregar(){
     if (!Array.isArray(ORCAMENTOS)) ORCAMENTOS = SEED_ORCAMENTOS();
   }catch(e){ ORCAMENTOS = SEED_ORCAMENTOS(); }
 
+  migrarEstados();
   migrarPrecos();
   garantirExemploVendas(versaoAnterior);
   carregarLoja();
@@ -2369,6 +2389,18 @@ function garantirExemploVendas(versaoAnterior){
   ORCAMENTOS.push(exemplo);
   guardarOrc();
   try{ localStorage.setItem(VERSAO_KEY, String(VERSAO_DADOS)); }catch(e){}
+}
+
+/* R56: o estado \u00ABEnviado\u00BB deixou de existir \u2014 o envio passou a ser um selo.
+   Or\u00E7amentos antigos ficam Pendentes e guardam a marca de que foram enviados. */
+function migrarEstados(){
+  let mudou = false;
+  ORCAMENTOS.forEach(o => {
+    if (o.estado === 'Enviado'){ o.estado = 'Pendente'; o.enviado = true; mudou = true; }
+    if (typeof o.enviado !== 'boolean'){ o.enviado = o.estado !== 'Pendente'; mudou = true; }
+    if (!o.estado) { o.estado = 'Pendente'; mudou = true; }
+  });
+  if (mudou) guardarOrc();
 }
 
 function migrarPrecos(){
@@ -2540,9 +2572,16 @@ function tocarIcone(el){
    ========================================================== */
 
 /* cor da etiqueta de estado: \u00E2mbar para o que espera resposta, verde para o resto */
+/* cores do estado usadas fora das classes CSS (cart\u00E3o do cliente) */
+const COR_ESTADO = {'Pendente':'#9a6a0b','Em negocia\u00E7\u00E3o':'#2c5c9e','Venda conclu\u00EDda':'#1f7a3d',
+                    'Perdido':'#9c5568','Cancelado':'#8b9a94'};
+const COR_ESTADO_BG = {'Pendente':'#fdf1dc','Em negocia\u00E7\u00E3o':'#e8f0fb','Venda conclu\u00EDda':'#e7f7ec',
+                       'Perdido':'#f6eef0','Cancelado':'#f1f3f2'};
+
 function classeEstado(e){
   if (e === 'Venda conclu\u00EDda') return ' v';
   if (e === 'Pendente')        return ' pd';
+  if (e === 'Perdido')         return ' pe';
   if (e === 'Cancelado')       return ' c';
   if (e === 'Em negocia\u00E7\u00E3o')   return ' p';
   return '';
@@ -2552,7 +2591,7 @@ function classeEstado(e){
 function dadosFunil(){
   const total = ORCAMENTOS.length;
   const contactos = clientesAgrupados().length;
-  const enviados = ORCAMENTOS.filter(o => o.estado !== 'Cancelado').length;
+  const enviados = ORCAMENTOS.filter(o => o.estado !== 'Cancelado' && o.estado !== 'Perdido').length;
   const negoc = ORCAMENTOS.filter(o => o.estado === 'Em negocia\u00E7\u00E3o').length;
   const vendas = ORCAMENTOS.filter(o => o.estado === 'Venda conclu\u00EDda').length;
   return { total, contactos, enviados, negoc, vendas };
@@ -2565,8 +2604,8 @@ function renderVendas(){
   if (!lista) return;
   const f = dadosFunil();
   const soma = arr => arr.reduce((t,o) => t + totalComIva(o.preco), 0);
-  const emCurso = ORCAMENTOS.filter(o => o.estado === 'Em negocia\u00E7\u00E3o' || o.estado === 'Pendente');
-  const fechadas = ORCAMENTOS.filter(o => o.estado === 'Venda conclu\u00EDda');
+  const emCurso = ORCAMENTOS.filter(o => ORC_CURSO.includes(o.estado));
+  const fechadas = ORCAMENTOS.filter(o => ORC_FECHADOS.includes(o.estado));
 
   /* cart\u00F5es do funil \u2014 os n\u00FAmeros contam de 0 at\u00E9 ao valor (8 s) */
   const negTotal = soma(emCurso);
@@ -2606,19 +2645,21 @@ function renderVendas(){
   const cartao = (o, fechado) => {
     const c = CARROS.find(x => x.id === o.carro) || CARROS[0];
     const valor = totalComIva(o.preco);
-    return `<article class="vneg${fechado ? ' fechado' : ''}">
+    return `<article class="vneg${fechado ? ' fechado' : ''}" data-orc="${o.id}">
       <div class="topo">${o.carro ? '<img src="' + c.img + '" alt="">' : ''}
         <div><div class="nm">${o.nome}</div><div class="cr">${nomeDoCarro(o)} \u00B7 ${fmtTel(o.tel)}</div></div>
         <div class="vl" data-valor="${valor}">${fmt(valor)}</div>
       </div>
       <div class="est"><span class="pill${classeEstado(o.estado)}">${o.estado}</span>
-        ${fechado ? '' : `<span class="acao">
+        ${fechado ? `<span class="acao"><button class="reabrir" data-etapa="Pendente" data-id="${o.id}">Reabrir</button></span>` : `<span class="acao">
           <button class="pend" data-etapa="Pendente" data-id="${o.id}" aria-pressed="${o.estado === 'Pendente'}">Marcar pendente</button>
-          <button class="prox" data-etapa="Venda conclu\u00EDda" data-id="${o.id}">Marcar como vendido</button>
+          <button class="prox negoc" data-etapa="Em negocia\u00E7\u00E3o" data-id="${o.id}" aria-pressed="${o.estado === 'Em negocia\u00E7\u00E3o'}">Em negocia&#231;&#227;o</button>
+          <button class="prox" data-etapa="Venda conclu\u00EDda" data-id="${o.id}">Vendido</button>
+          <button class="perd" data-etapa="Perdido" data-id="${o.id}">Perdido</button>
         </span>`}
       </div>
       <div class="nota"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg>
-        ${o.estado} \u00B7 ${fmtData(o.data)}${o.reenvios ? ' \u00B7 reenviado ' + o.reenvios + '\u00D7' : ''}</div>
+        ${fmtData(o.data)} \u00B7 ${o.enviado ? 'enviado' : 'por enviar'}${o.reenvios ? ' \u00B7 reenviado ' + o.reenvios + '\u00D7' : ''}</div>
     </article>`;
   };
 
@@ -2638,7 +2679,8 @@ document.addEventListener('click', e => {
   if (!o) return;
   /* o mesmo bot\u00E3o desliga o pendente (volta a \u201CEm negocia\u00E7\u00E3o\u201D) */
   const alvo = b.dataset.etapa;
-  o.estado = (alvo === 'Pendente' && o.estado === 'Pendente') ? 'Em negocia\u00E7\u00E3o' : alvo;
+  o.estado = (alvo === o.estado && alvo === 'Pendente') ? 'Em negocia\u00E7\u00E3o'
+           : (alvo === o.estado && alvo === 'Em negocia\u00E7\u00E3o') ? 'Pendente' : alvo;
   guardarOrc();
   renderVendas();
   renderTabelaOrc();
@@ -3512,7 +3554,7 @@ document.getElementById('btnZap').addEventListener('click', () => {
     orc.nome = nome;                 // permite corrigir o nome no reenvio
     orc.tel  = digitos;
     orc.data = Date.now();
-    orc.estado = temRede() ? 'Enviado' : 'Pendente';
+    orc.enviado = temRede();
     orc.reenvios = (orc.reenvios || 0) + 1;
     orcIdRegistado = orc.id;
 
@@ -3537,7 +3579,8 @@ document.getElementById('btnZap').addEventListener('click', () => {
       entrada: entrada,
       desc: desc,
       data: Date.now(),
-      estado: temRede() ? 'Enviado' : 'Pendente',
+      estado: 'Pendente',
+      enviado: temRede(),
       reenvios: 0
     });
 
@@ -3597,7 +3640,10 @@ function fmtTel(digitos){
 /* ---------- OR\u00C7AMENTOS (tabela) ---------- */
 /* filtro da lista: todos \u00B7 ainda em curso \u00B7 j\u00E1 fechados */
 let filtroOrc = 'Todos';
-const ORC_FECHADOS = ['Venda conclu\u00EDda', 'Cancelado'];
+const ORC_FECHADOS = ['Venda conclu\u00EDda', 'Perdido', 'Cancelado'];
+const ORC_CURSO    = ['Pendente', 'Em negocia\u00E7\u00E3o'];
+/* os cinco estados de um neg\u00F3cio (ordem do ciclo de vida) */
+const CINCO_ESTADOS = ['Pendente', 'Em negocia\u00E7\u00E3o', 'Venda conclu\u00EDda', 'Perdido', 'Cancelado'];
 const orcVisivel = o => filtroOrc === 'Todos' ? true
   : filtroOrc === 'Fechados' ? ORC_FECHADOS.includes(o.estado)
   : !ORC_FECHADOS.includes(o.estado);
@@ -3698,7 +3744,7 @@ function abrirOrcDetalhe(id){
 
 function orcLinhaData(orc){
   document.getElementById('odData').textContent =
-    (orc.estado === 'Pendente' ? 'Criado' : 'Enviado') + ' em ' + fmtData(orc.data) +
+    (orc.enviado ? 'Enviado' : 'Criado') + ' em ' + fmtData(orc.data) +
     (orc.reenvios ? ' \u00B7 reenviado ' + orc.reenvios + '\u00D7' : '');
   const pill = document.getElementById('odEstado');
   pill.textContent = orc.estado;
@@ -3958,11 +4004,11 @@ function abrirCliente(nome, tel, semNavegar){
         <div class="orc-info">
           <div class="n">${nomeDoCarro(o)}</div>
           <div class="m">${o.carro ? c.tipo : 'Modelo j\u00E1 n\u00E3o est\u00E1 no estoque'}</div>
-          <div class="d">${o.estado === 'Pendente' ? 'Criado' : 'Enviado'} em ${fmtData(o.data)}${o.reenvios ? ' \u00B7 reenviado ' + o.reenvios + '\u00D7' : ''}</div>
+          <div class="d">${o.enviado ? 'Enviado' : 'Criado'} em ${fmtData(o.data)}${o.reenvios ? ' \u00B7 reenviado ' + o.reenvios + '\u00D7' : ''}</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
-          <span class="badge-sent"${o.estado === 'Pendente' ? ' style="background:#fdf1dc;color:#9a6a0b"' : ''}>
-            <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="${o.estado === 'Pendente' ? 'M12 7v6l4 2M12 3a9 9 0 100 18 9 9 0 000-18z' : 'M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z'}" fill="${o.estado === 'Pendente' ? 'none' : 'currentColor'}" stroke="${o.estado === 'Pendente' ? 'currentColor' : 'none'}" stroke-width="2"/></svg>
+          <span class="badge-sent" style="background:${COR_ESTADO_BG[o.estado] || '#f4f7f5'};color:${COR_ESTADO[o.estado] || '#77847f'}">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
             ${o.estado}
           </span>
           <div class="orc-val">${fmt(o.preco)}</div>
