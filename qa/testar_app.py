@@ -565,6 +565,43 @@ async def main():
         ok("R31 · logótipo/paleta sem erros de consola", len(lge)==0, str(lge[:2]))
         await lg2.close()
 
+        # ============ R60 · ANIMACAO DO AUTOMOVEL EM MOVIMENTO ============
+        r60 = await b.new_page(viewport={"width":1440,"height":900})
+        r60e=[]; r60.on("pageerror", lambda e: r60e.append(str(e)))
+        await novo(r60)
+        A60 = await r60.evaluate("""()=>{
+          const svg=document.querySelector('.side .nav[data-go="modelos"] .ico svg');
+          const est=svg.querySelector('.estrada');
+          return {anim:getComputedStyle(svg).animationName, dur:getComputedStyle(svg).animationDuration,
+                  estrada:!!est, opacidade:est?+getComputedStyle(est).opacity:1,
+                  rodas:svg.querySelectorAll('circle').length,
+                  viewBox:svg.getAttribute('viewBox')};
+        }""")
+        ok("R60 · com a página aberta o carro põe-se a andar",
+           A60["anim"]=="carroAnda" and A60["dur"]=="1.8s", str(A60))
+        ok("R60 · estrada discreta por baixo (opacidade < .5)", A60["estrada"] and A60["opacidade"]<0.5, str(A60))
+        ok("R60 · desenho do carro inteiro no viewBox (sem corte)", A60["viewBox"]=="1.6 5.4 20.8 14.9", str(A60["viewBox"]))
+        MOV = await r60.evaluate("""async ()=>{
+          const svg=document.querySelector('.side .nav[data-go="modelos"] .ico svg');
+          const est=svg.querySelector('.estrada');
+          const xs=[], ds=[];
+          for(let i=0;i<12;i++){
+            xs.push(+svg.getBoundingClientRect().x.toFixed(2));
+            ds.push(getComputedStyle(est).strokeDashoffset);
+            await new Promise(r=>setTimeout(r,90));
+          }
+          return {dx:+(Math.max(...xs)-Math.min(...xs)).toFixed(2), offsets:[...new Set(ds)].length};
+        }""")
+        ok("R60 · o carro desloca-se de facto (≈1 px, ida e volta)", MOV["dx"]>=0.6, str(MOV))
+        ok("R60 · a estrada tracejada está em movimento", MOV["offsets"]>=4, str(MOV))
+        # noutra pagina o carro fica parado
+        await r60.evaluate("()=>ir('clientes')"); await r60.wait_for_timeout(500)
+        P60 = await r60.evaluate("""()=>{const svg=document.querySelector('.side .nav[data-go="modelos"] .ico svg');
+            return getComputedStyle(svg).animationName;}""")
+        ok("R60 · fora da página o carro não anda", P60=="none", P60)
+        ok("R60 · sem erros de consola", len(r60e)==0, str(r60e[:2]))
+        await r60.close()
+
         # ============ R59 · "MODELOS" PASSA A "AUTOMÓVEL" ============
         r59 = await b.new_page(viewport={"width":1440,"height":900})
         r59e=[]; r59.on("pageerror", lambda e: r59e.append(str(e)))
@@ -959,7 +996,7 @@ async def main():
         ae=[]; an.on("pageerror", lambda e: ae.append(str(e)))
         await novo(an)
         ok("Animação · ícone ativo está animado",
-           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"modelos\"] .ico svg')).animationName") == "modelosBloco", "")
+           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"modelos\"] .ico svg\')).animationName") == "carroAnda", "")
         await an.click(".nav-item[data-go='perfil']"); await an.wait_for_timeout(120)
         ok("Animação · ícone 'salta' ao tocar",
            await an.evaluate("()=>document.querySelector('.nav-item[data-go=\"perfil\"]').className.includes('tap')"), "")
@@ -976,13 +1013,17 @@ async def main():
         ok("Animação · cabeça do Perfil move-se para os dois lados", (mov["max"]-mov["min"]) > 1.5, round(mov["max"]-mov["min"],2))
         await an.click(".nav-item[data-go='modelos']"); await an.wait_for_timeout(600)
         ok("Animação · 'Automóvel' animado quando ativo",
-           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"modelos\"] .ico svg')).animationName") == "modelosBloco", "")
+           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"modelos\"] .ico svg\')).animationName") == "carroAnda", "")
 
-        rodas = await an.evaluate("""()=>{const c=document.querySelector('.nav-item.on[data-go="modelos"] .ico svg circle');
-            return {n:document.querySelectorAll('.nav-item[data-go="modelos"] .ico svg circle').length,
-                    anim:c?getComputedStyle(c).animationName:''};}""")
-        ok("R59 · ícone Automóvel é um carro com duas rodas a rodar",
-           rodas["n"]==2 and rodas["anim"]=="rodaAnda", str(rodas))
+        rodas = await an.evaluate("""()=>{const svg=document.querySelector('.nav-item.on[data-go="modelos"] .ico svg');
+            const est=svg.querySelector('.estrada');
+            return {rodas:svg.querySelectorAll('circle').length,
+                    anim:getComputedStyle(svg).animationName,
+                    estrada:!!est, estradaAnim:est?getComputedStyle(est).animationName:''};}""")
+        ok("R60 · ícone Automóvel tem duas rodas e estrada",
+           rodas["rodas"]==2 and rodas["estrada"], str(rodas))
+        ok("R60 · o carro anda (carroAnda) e a estrada passa (estradaPassa)",
+           rodas["anim"]=="carroAnda" and rodas["estradaAnim"]=="estradaPassa", str(rodas))
 
         # Orçamentos: linha a linha, de cima para baixo
         await an.click(".nav-item[data-go='listaorc']"); await an.wait_for_timeout(500)

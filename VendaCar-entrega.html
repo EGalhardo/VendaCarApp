@@ -329,11 +329,12 @@
     50%    {transform:translateY(-1px) scale(1.06)}
   }
 
-  /* Autom\u00F3vel  o carro desloca-se ligeiramente para a frente e assenta */
-  @keyframes modelosBloco{
-    0%,100%{transform:translateX(0)}
-    45%    {transform:translateX(1.3px)}
+  /* Autom\u00F3vel  o carro anda: avana\u00E7a e assenta, e a estrada passa por baixo */
+  @keyframes carroAnda{
+    0%,100%{transform:translate(-.7px,.35px)}
+    50%    {transform:translate(.7px,-.35px)}
   }
+  @keyframes estradaPassa{ to{stroke-dashoffset:-8} }
   /* Orcamentos  a folha vai sendo escrita de cima para baixo */
   @keyframes escreveLinha{
     0%   {stroke-dashoffset:9;opacity:0}
@@ -368,19 +369,16 @@
   .nav.on[data-go="perfil"]   .ico .head,.nav-item.on[data-go="perfil"] .ico .head{animation:perfilCabeca 2.4s ease-in-out infinite}
   .nav.on[data-go="perfil"]   .ico svg > path, .nav-item.on[data-go="perfil"] .ico svg > path{animation:perfilCorpo 2.4s ease-in-out infinite}
 
-  .nav[data-go="modelos"] .ico svg path, .nav-item[data-go="modelos"] .ico svg path{
-    transform-box:fill-box;transform-origin:center;
-  }
+  /* a estrada tracejada esta sempre la, discreta */
+  .nav[data-go="modelos"] .ico svg .estrada,
+  .nav-item[data-go="modelos"] .ico svg .estrada{opacity:.42}
+  /* so com a pagina aberta e que o carro se poem a andar */
   .nav.on[data-go="modelos"]  .ico svg, .nav-item.on[data-go="modelos"]  .ico svg{
-    animation:modelosBloco 2.6s ease-in-out infinite;
+    animation:carroAnda 1.8s ease-in-out infinite;
   }
-  /* as rodas rodam devagar, como o carro a andar */
-  .nav.on[data-go="modelos"]  .ico svg circle, .nav-item.on[data-go="modelos"]  .ico svg circle{
-    transform-box:fill-box; transform-origin:center;
-    animation:rodaAnda 2.6s linear infinite;
-  }
-  @keyframes rodaAnda{
-    0%,100%{transform:translateX(-.7px)} 50%{transform:translateX(.7px)}
+  .nav.on[data-go="modelos"]  .ico svg .estrada,
+  .nav-item.on[data-go="modelos"]  .ico svg .estrada{
+    animation:estradaPassa .9s linear infinite;
   }
 
   /* Vendas  o funil "escorre": cada etapa pulsa em sequencia, como o negocio a descer */
@@ -1331,9 +1329,11 @@ setTimeout(function(){
   <aside class="side">
     <div class="lbl">MENU</div>
     <button class="nav on" data-go="modelos">
-      <span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
-        <circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span>
+      <span class="ico"><svg width="18" height="18" viewBox="1.6 5.4 20.8 14.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3.2 15.6v-2.4c0-.8.5-1.4 1.2-1.6l2.3-.6 2.8-3.1c.4-.4 1-.7 1.6-.7h3.2c.6 0 1.2.3 1.6.8l2.1 2.6 2.6.7c.7.2 1.2.8 1.2 1.6v2.7"/>
+        <path d="M7.6 11.2h9.2"/>
+        <circle cx="7" cy="15.6" r="1.9"/><circle cx="17.4" cy="15.6" r="1.9"/>
+        <path class="estrada" d="M1.4 19.2h21.2" stroke-width="1.05" stroke-dasharray="1.1 2.9"/></svg></span>
       <span class="tx">Autom&#243;vel</span><span class="cnt" data-cnt="carros">4</span>
     </button>
     <button class="nav" data-go="listaorc">
@@ -1754,9 +1754,11 @@ setTimeout(function(){
   <!-- ================= NAVBAR (mobile) ================= -->
   <nav class="navbar">
     <button class="nav-item on" data-go="modelos">
-      <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
-        <circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span>
+      <span class="ico"><svg width="21" height="21" viewBox="1.6 5.4 20.8 14.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3.2 15.6v-2.4c0-.8.5-1.4 1.2-1.6l2.3-.6 2.8-3.1c.4-.4 1-.7 1.6-.7h3.2c.6 0 1.2.3 1.6.8l2.1 2.6 2.6.7c.7.2 1.2.8 1.2 1.6v2.7"/>
+        <path d="M7.6 11.2h9.2"/>
+        <circle cx="7" cy="15.6" r="1.9"/><circle cx="17.4" cy="15.6" r="1.9"/>
+        <path class="estrada" d="M1.4 19.2h21.2" stroke-width="1.05" stroke-dasharray="1.1 2.9"/></svg></span>
       Autom&#243;vel
     </button>
     <button class="nav-item" data-go="listaorc">
