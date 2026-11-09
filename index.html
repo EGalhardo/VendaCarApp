@@ -329,10 +329,10 @@
     50%    {transform:translateY(-1px) scale(1.06)}
   }
 
-  /* Modelos  os quatro blocos "respiram" em sequencia */
+  /* Autom\u00F3vel  o carro desloca-se ligeiramente para a frente e assenta */
   @keyframes modelosBloco{
-    0%,100%{transform:scale(1);opacity:1}
-    50%    {transform:scale(1.18);opacity:.65}
+    0%,100%{transform:translateX(0)}
+    45%    {transform:translateX(1.3px)}
   }
   /* Orcamentos  a folha vai sendo escrita de cima para baixo */
   @keyframes escreveLinha{
@@ -371,13 +371,17 @@
   .nav[data-go="modelos"] .ico svg path, .nav-item[data-go="modelos"] .ico svg path{
     transform-box:fill-box;transform-origin:center;
   }
-  .nav.on[data-go="modelos"]  .ico svg path, .nav-item.on[data-go="modelos"]  .ico svg path{
-    animation:modelosBloco 1.8s ease-in-out infinite;
+  .nav.on[data-go="modelos"]  .ico svg, .nav-item.on[data-go="modelos"]  .ico svg{
+    animation:modelosBloco 2.6s ease-in-out infinite;
   }
-  .nav.on[data-go="modelos"]  .ico svg path:nth-child(1){animation-delay:0s}
-  .nav.on[data-go="modelos"]  .ico svg path:nth-child(2){animation-delay:.18s}
-  .nav.on[data-go="modelos"]  .ico svg path:nth-child(3){animation-delay:.36s}
-  .nav.on[data-go="modelos"]  .ico svg path:nth-child(4){animation-delay:.54s}
+  /* as rodas rodam devagar, como o carro a andar */
+  .nav.on[data-go="modelos"]  .ico svg circle, .nav-item.on[data-go="modelos"]  .ico svg circle{
+    transform-box:fill-box; transform-origin:center;
+    animation:rodaAnda 2.6s linear infinite;
+  }
+  @keyframes rodaAnda{
+    0%,100%{transform:translateX(-.7px)} 50%{transform:translateX(.7px)}
+  }
 
   /* Vendas  o funil "escorre": cada etapa pulsa em sequencia, como o negocio a descer */
   @keyframes funilEtapa{
@@ -1305,7 +1309,7 @@ setTimeout(function(){
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M15 19l-7-7 7-7"/></svg>
     </button>
-    <h1 id="barTitle">Modelos</h1>
+    <h1 id="barTitle">Autom&#243;vel</h1>
 
     <div class="bar-acoes">
       <button class="ic-btn tema-btn" id="btnTema" title="Modo escuro" aria-label="Alternar modo claro/escuro" aria-pressed="false">
@@ -1327,9 +1331,10 @@ setTimeout(function(){
   <aside class="side">
     <div class="lbl">MENU</div>
     <button class="nav on" data-go="modelos">
-      <span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg></span>
-      <span class="tx">Modelos</span><span class="cnt" data-cnt="carros">4</span>
+      <span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
+        <circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span>
+      <span class="tx">Autom&#243;vel</span><span class="cnt" data-cnt="carros">4</span>
     </button>
     <button class="nav" data-go="listaorc">
       <span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -1381,7 +1386,7 @@ setTimeout(function(){
     <!-- ---------- MODELOS ---------- -->
     <section id="pg-modelos">
       <div class="page-head">
-        <div><h2>Modelos</h2><p id="subModelos">4 ve&#237;culos no estoque</p></div>
+        <div><h2>Autom&#243;vel</h2><p id="subModelos">4 ve&#237;culos no estoque</p></div>
         <div class="right">
           <button class="btn btn-criar-desktop btn-mais" data-criar aria-label="Criar novo modelo de carro" title="Novo modelo">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
@@ -1403,7 +1408,7 @@ setTimeout(function(){
     <section id="pg-detalhe" class="hidden">
       <div class="page-head">
         <div><h2>Detalhe do Carro</h2><p>Galeria e ficha t&#233;cnica do ve&#237;culo</p></div>
-        <div class="right"><button class="btn ghost" data-go="modelos">Voltar aos Modelos</button></div>
+        <div class="right"><button class="btn ghost" data-go="modelos">Voltar aos Autom&#243;veis</button></div>
       </div>
       <div class="detail">
         <div class="panel">
@@ -1435,7 +1440,7 @@ setTimeout(function(){
     <section id="pg-orcamento" class="hidden">
       <div class="page-head">
         <div><h2>Or&#231;amento</h2><p>Simula&#231;&#227;o de entrada e financiamento</p></div>
-        <div class="right"><button class="btn ghost" data-go="modelos">Voltar aos Modelos</button></div>
+        <div class="right"><button class="btn ghost" data-go="modelos">Voltar aos Autom&#243;veis</button></div>
       </div>
       <div class="quote">
         <div class="panel">
@@ -1749,9 +1754,10 @@ setTimeout(function(){
   <!-- ================= NAVBAR (mobile) ================= -->
   <nav class="navbar">
     <button class="nav-item on" data-go="modelos">
-      <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg></span>
-      Modelos
+      <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
+        <circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span>
+      Autom&#243;vel
     </button>
     <button class="nav-item" data-go="listaorc">
       <span class="ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -1911,7 +1917,7 @@ setTimeout(function(){
     <div class="body">
       <p class="conf-txt">Tem a certeza de que quer eliminar <b id="apNome">&#8212;</b> do estoque?</p>
       <div class="conf-box">
-        <span>O carro sai da lista de Modelos.</span>
+        <span>O carro sai da lista de Autom&#243;veis.</span>
         <span>Os or&#231;amentos j&#225; criados <b>mant&#234;m-se</b> no hist&#243;rico.</span>
       </div>
     </div>
@@ -2508,7 +2514,7 @@ function guardarOrc(){
    NAVEGA\u00C7\u00C3O
    ========================================================== */
 const TITLES = {
-  modelos:['Modelos','Gest\u00E3o de estoque de ve\u00EDculos'],
+  modelos:['Autom\u00F3vel','Gest\u00E3o de estoque de ve\u00EDculos'],
   detalhe:['Detalhe do Carro','Galeria e ficha t\u00E9cnica'],
   orcamento:['Or\u00E7amento','Simula\u00E7\u00E3o de entrada e financiamento'],
   listaorc:['Or\u00E7amentos','Hist\u00F3rico de simula\u00E7\u00F5es'],

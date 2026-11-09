@@ -565,6 +565,41 @@ async def main():
         ok("R31 · logótipo/paleta sem erros de consola", len(lge)==0, str(lge[:2]))
         await lg2.close()
 
+        # ============ R59 · "MODELOS" PASSA A "AUTOMÓVEL" ============
+        r59 = await b.new_page(viewport={"width":1440,"height":900})
+        r59e=[]; r59.on("pageerror", lambda e: r59e.append(str(e)))
+        await novo(r59)
+        N59 = await r59.evaluate("""()=>{
+          const nav=document.querySelector('.side .nav[data-go="modelos"]');
+          const it={txt:nav.querySelector('.tx').innerText.trim(),
+                    iconeCarro:nav.querySelectorAll('.ico svg circle').length===2,
+                    temContador:nav.querySelector('.cnt').innerText.trim().length>0,
+                    go:nav.dataset.go};
+          return {it, titulo:document.querySelector('#pg-modelos h2').innerText,
+                  appbar:document.getElementById('barTitle').innerText,
+                  pagina:TITLES.modelos[0],
+                  menu:[...document.querySelectorAll('.side .nav .tx')].map(e=>e.innerText.trim()),
+                  sobraTexto:document.getElementById('pg-modelos').innerText.includes('Modelos'),
+                  voltar:[...document.querySelectorAll('[data-go="modelos"].btn')].map(b=>b.innerText.trim())};
+        }""")
+        ok("R59 · barra lateral diz «Automóvel»", N59["it"]["txt"]=="Automóvel", str(N59["it"]))
+        ok("R59 · novo ícone é um carro (2 rodas)", N59["it"]["iconeCarro"], str(N59["it"]))
+        ok("R59 · contador mantém-se no item", N59["it"]["temContador"], str(N59["it"]))
+        ok("R59 · título da página, appbar e TITLES dizem «Automóvel»",
+           N59["titulo"]=="Automóvel" and N59["appbar"]=="Automóvel" and N59["pagina"]=="Automóvel", str(N59))
+        ok("R59 · menu completo na ordem certa",
+           N59["menu"]==["Automóvel","Orçamentos","Vendas","Clientes","Perfil","Encerrar"], str(N59["menu"]))
+        ok("R59 · nenhum «Modelos» esquecido na página", not N59["sobraTexto"], str(N59["sobraTexto"]))
+        ok("R59 · botões «Voltar aos Automóveis»",
+           len(N59["voltar"])>0 and all(v=="Voltar aos Automóveis" for v in N59["voltar"]), str(N59["voltar"]))
+        M59 = await r59.evaluate("""()=>{const it=document.querySelector('.navbar .nav-item[data-go="modelos"]');
+            return {texto:it.innerText.trim(), icone:it.querySelectorAll('svg circle').length===2,
+                    cabe:it.scrollWidth<=it.clientWidth+2};}""")
+        ok("R59 · no telemóvel também «Automóvel», com o carro e sem corte",
+           M59["texto"]=="Automóvel" and M59["icone"] and M59["cabe"], str(M59))
+        ok("R59 · sem erros de consola", len(r59e)==0, str(r59e[:2]))
+        await r59.close()
+
         # ============ R58 · IMAGENS NO CÓDIGO (sem duplicados) ============
         r58 = await b.new_page(viewport={"width":1440,"height":900})
         r58e=[]; r58.on("pageerror", lambda e: r58e.append(str(e)))
@@ -924,7 +959,7 @@ async def main():
         ae=[]; an.on("pageerror", lambda e: ae.append(str(e)))
         await novo(an)
         ok("Animação · ícone ativo está animado",
-           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"modelos\"] .ico svg path')).animationName") == "modelosBloco", "")
+           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"modelos\"] .ico svg')).animationName") == "modelosBloco", "")
         await an.click(".nav-item[data-go='perfil']"); await an.wait_for_timeout(120)
         ok("Animação · ícone 'salta' ao tocar",
            await an.evaluate("()=>document.querySelector('.nav-item[data-go=\"perfil\"]').className.includes('tap')"), "")
@@ -940,8 +975,14 @@ async def main():
         }""")
         ok("Animação · cabeça do Perfil move-se para os dois lados", (mov["max"]-mov["min"]) > 1.5, round(mov["max"]-mov["min"],2))
         await an.click(".nav-item[data-go='modelos']"); await an.wait_for_timeout(600)
-        ok("Animação · 'Modelos' animado quando ativo",
-           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"modelos\"] .ico svg path')).animationName") == "modelosBloco", "")
+        ok("Animação · 'Automóvel' animado quando ativo",
+           await an.evaluate("()=>getComputedStyle(document.querySelector('.nav-item.on[data-go=\"modelos\"] .ico svg')).animationName") == "modelosBloco", "")
+
+        rodas = await an.evaluate("""()=>{const c=document.querySelector('.nav-item.on[data-go="modelos"] .ico svg circle');
+            return {n:document.querySelectorAll('.nav-item[data-go="modelos"] .ico svg circle').length,
+                    anim:c?getComputedStyle(c).animationName:''};}""")
+        ok("R59 · ícone Automóvel é um carro com duas rodas a rodar",
+           rodas["n"]==2 and rodas["anim"]=="rodaAnda", str(rodas))
 
         # Orçamentos: linha a linha, de cima para baixo
         await an.click(".nav-item[data-go='listaorc']"); await an.wait_for_timeout(500)
