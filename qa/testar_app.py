@@ -80,7 +80,10 @@ async def main():
         await pg.click("#btnCriarOrc"); await pg.wait_for_timeout(250)
         await pg.click("#btnSalvar"); await pg.wait_for_timeout(300)
         v = await pg.evaluate("()=>document.getElementById('oVista').textContent")
-        ok("À vista com desconto (9.750.000 − 450.000)", "9,300,000" in v, v)
+        ok("R64 · orçamento abre sem desconto — à vista = preço (9.750.000)", "9,750,000" in v, v)
+        await pg.type("#oDesc","450000"); await pg.wait_for_timeout(8600)
+        vd = await pg.evaluate("()=>document.getElementById('oVista').textContent")
+        ok("R64 · desconto escrito no orçamento (9.750.000 − 450.000)", "9,300,000" in vd, vd)
 
         # ---------- 3. ENTRADA ACIMA DO PREÇO ----------
         await pg.fill("#oEntrada","99999999999"); await pg.wait_for_timeout(200)
@@ -100,6 +103,7 @@ async def main():
         u = await pg.evaluate("window.__u")
         ok("WhatsApp abre com +244 e texto", u.startswith("https://wa.me/244923111999?text="), u.split('?')[0])
         txt = up.unquote(u.split('text=')[1])
+        ok("R64 · mensagem contém o valor à vista negociado", "9,300,000" in txt, txt.split("\n")[-4])
         ok("Mensagem contém carro, entrada e parcelas",
            "Corolla" in txt and "2,000,000 Kz" in txt and "12x" in txt and "9,300,000" in txt,
            txt.split("\n")[3] + " …")
@@ -134,7 +138,7 @@ async def main():
         # marca input: capitalização
         await pg.fill("#fMarca","  mitsubishi   motors "); await pg.fill("#fModelo","L200")
         await pg.select_option("#fAno","2022"); await pg.select_option("#fTipo","Novo")
-        await pg.type("#fPreco","30000000"); await pg.type("#fDesc","20000")
+        await pg.type("#fPreco","30000000")
         await pg.click("#btnGuardarModelo"); await pg.wait_for_timeout(500)
         nome = await pg.inner_text("#dNome")
         ok("Marca normalizada/capitalizada", nome.startswith("Mitsubishi Motors L200"), nome)
@@ -149,25 +153,69 @@ async def main():
         ok("Bloqueia modelo com preço 0",
            await pg.evaluate("()=>document.getElementById('mNovoModelo').classList.contains('open')"), "")
         await pg.wait_for_timeout(1300)
-
-        # desconto maior que o preço é recusado (R44)
+        # R64: o catalogo nao tem desconto --- escreve preco valido e grava
         await pg.fill("#fPreco",""); await pg.type("#fPreco","5000000")
-        await pg.fill("#fDesc","");  await pg.type("#fDesc","80000000")
-        await pg.click("#btnGuardarModelo"); await pg.wait_for_timeout(400)
-        ok("Desconto >= preço é recusado com aviso",
-           await pg.evaluate("()=>document.getElementById('mNovoModelo').classList.contains('open')")
-           and await pg.evaluate("()=>document.getElementById('avisoModelo').classList.contains('on')"),
-           await pg.inner_text("#avisoModelo"))
-
-        # com desconto válido, o valor à vista nunca fica negativo
-        await pg.fill("#fDesc",""); await pg.type("#fDesc","900000")
         await pg.click("#btnGuardarModelo"); await pg.wait_for_timeout(600)
-        await pg.click("#btnCriarOrc"); await pg.wait_for_timeout(300)
-        await pg.click("#btnSalvar"); await pg.wait_for_timeout(350)
-        vista = await pg.inner_text("#oVista")
-        ok("Desconto > preço não gera valor negativo", not "-" in vista, f"à vista = {vista}")
+        guardado = await pg.evaluate("()=>({desc:CARROS[CARROS.length-1].desc, preco:CARROS[CARROS.length-1].preco})")
+        ok("R64 · carro registado sem desconto no catalogo", guardado["desc"] == 0 and guardado["preco"] == 5000000, guardado)
 
-        # ---------- 9. UPLOAD ----------
+        # R64: o valor a vista nasce a 0 no orcamento e nunca fica negativo
+        await pg.click("#btnCriarOrc"); await pg.wait_for_timeout(300)
+        ok("R64 · popup de criar orcamento ja nao pede desconto",
+           await pg.evaluate("()=>!document.getElementById('mDesc')"), "")
+        await pg.click("#btnSalvar"); await pg.wait_for_timeout(400)
+        vista0 = await pg.evaluate("()=>document.getElementById('oVista').textContent")
+        ok("R64 · orcamento comeca sem desconto (à vista = preço)",
+           await pg.evaluate("()=>!document.getElementById('oDesc').value") and "5,000,000" in vista0, vista0)
+
+        # R64: baixar o desconto atualiza TUDO no mesmo instante
+        await pg.type("#oDesc","900000"); await pg.wait_for_timeout(8600)
+        r64 = await pg.evaluate("""()=>({
+            campo: document.getElementById('oDesc').value,
+            vista: document.getElementById('oVista').textContent,
+            recursivo: document.getElementById('oVistaCalc').textContent,
+            linhaDesc: document.getElementById('oDescTxt').textContent,
+            miniDesc: document.getElementById('oDescMini').textContent,
+            saldo: document.getElementById('oSaldo').textContent,
+            descontoGuardado: DESCONTO_ORC})""")
+        ok("R64 · desconto escrito no campo do orcamento", "900,000" in r64["campo"], r64["campo"])
+        ok("R64 · à vista passa a preço − desconto", "4,100,000" in r64["vista"], r64["vista"])
+        cartao64 = await pg.evaluate("()=>document.getElementById('oPreco').textContent")
+        ok("R64 · o preço em destaque no cartão acompanha (à vista)", "4,100,000" in cartao64, cartao64)
+        ok("R64 · o resumo direito acompanha (à vista + desconto aplicado)",
+           "4,100,000" in r64["recursivo"] and "900,000" in r64["miniDesc"], r64)
+        ok("R64 · a linha do desconto aparece no resumo", "900,000" in r64["linhaDesc"], r64["linhaDesc"])
+        ok("R64 · o valor negociado fica guardado para o envio", r64["descontoGuardado"] == 900000, r64["descontoGuardado"])
+
+        # R64: mudar outra vez (o cliente pede mais) volta a atualizar tudo
+        await pg.fill("#oDesc",""); await pg.type("#oDesc","1500000"); await pg.wait_for_timeout(8600)
+        r64b = await pg.evaluate("""()=>({vista: document.getElementById('oVista').textContent,
+            desc: DESCONTO_ORC})""")
+        ok("R64 · segundo desconto recalcula outra vez", "3,500,000" in r64b["vista"] and r64b["desc"] == 1500000, r64b)
+
+        # R64: o texto enviado por WhatsApp usa o desconto negociado
+        await pg.click("#btnEnviar"); await pg.wait_for_timeout(300)
+        await pg.fill("#mNome","Cliente Teste"); await pg.fill("#mTel","923456789")
+        msg = await pg.evaluate("()=>mensagem()")
+        ok("R64 · mensagem do WhatsApp usa o valor à vista negociado", "3,500,000" in msg, msg[-120:])
+        await pg.evaluate("()=>{document.getElementById('mEnviar').classList.remove('open');ir('modelos')}")
+        await pg.wait_for_timeout(300)
+
+        # R64: o desconto alterado no detalhe do orcamento grava-se sozinho
+        await pg.evaluate("ir('listaorc')"); await pg.wait_for_timeout(300)
+        await pg.evaluate("()=>abrirOrcDetalhe('o2')"); await pg.wait_for_timeout(400)
+        await pg.fill("#odDescInp",""); await pg.type("#odDescInp","1000000"); await pg.wait_for_timeout(8600)
+        alvo64 = await pg.evaluate("""()=>{const o=ORCAMENTOS.find(x=>x.id==='o2');
+            return o.preco - 1000000;}""")
+        lido64 = await pg.evaluate("""()=>{const t=document.getElementById('odRVista').textContent;
+            return Number(t.replace(/[^0-9.]/g,''))}""")
+        ok("R64 · detalhe do orçamento recalcula o à vista",
+           abs(lido64 - alvo64) < 1, f"{lido64} vs {alvo64}")
+        await pg.reload(); await pg.wait_for_timeout(700)
+        ok("R64 · desconto do detalhe fica gravado sem clicar em Guardar",
+           await pg.evaluate("()=>ORCAMENTOS.find(o=>o.id==='o2').desc") == 1000000, "")
+        await pg.evaluate("ir('modelos')"); await pg.wait_for_timeout(300)
+
         await pg.evaluate("ir('modelos')"); await pg.wait_for_timeout(200)
         await pg.locator("[data-criar]:visible").click(); await pg.wait_for_timeout(300)
         # fotos de teste geradas na hora (o projeto já não guarda ficheiros extra)
@@ -1195,7 +1243,7 @@ async def main():
         ok("Migração · orçamento de demonstração acompanha o catálogo",
            await mp.evaluate("()=>ORCAMENTOS.find(o=>o.id==='o1').preco") == 9750000, "")
         ok("Migração · versão de dados gravada",
-           await mp.evaluate("()=>localStorage.getItem('modelo_versao_dados')") == "4", "")
+           await mp.evaluate("()=>localStorage.getItem('modelo_versao_dados')") == "5", "")
         ok("R41 · migração acrescenta o negócio de demonstração em Vendas",
            await mp.evaluate("()=>ORCAMENTOS.some(o=>o.id==='o6' && o.estado==='Em negociação')"), "")
         await mp.evaluate("()=>{CARROS.find(c=>c.id==='corolla').preco=8800000; guardar();}")

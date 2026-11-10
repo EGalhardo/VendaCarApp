@@ -31,7 +31,12 @@
  },
  {
   "r": "PASS",
-  "n": "À vista com desconto (9.750.000 − 450.000)",
+  "n": "R64 · orçamento abre sem desconto — à vista = preço (9.750.000)",
+  "d": "9,750,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "R64 · desconto escrito no orçamento (9.750.000 − 450.000)",
   "d": "9,300,000 Kz"
  },
  {
@@ -48,6 +53,11 @@
   "r": "PASS",
   "n": "WhatsApp abre com +244 e texto",
   "d": "https://wa.me/244923111999"
+ },
+ {
+  "r": "PASS",
+  "n": "R64 · mensagem contém o valor à vista negociado",
+  "d": ""
  },
  {
   "r": "PASS",
@@ -91,13 +101,82 @@
  },
  {
   "r": "PASS",
-  "n": "Desconto >= preço é recusado com aviso",
-  "d": "O desconto não pode ser igual ou maior que o preço."
+  "n": "R64 · carro registado sem desconto no catalogo",
+  "d": {
+   "desc": 0,
+   "preco": 5000000
+  }
  },
  {
   "r": "PASS",
-  "n": "Desconto > preço não gera valor negativo",
-  "d": "à vista = 4,100,000 Kz"
+  "n": "R64 · popup de criar orcamento ja nao pede desconto",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R64 · orcamento comeca sem desconto (à vista = preço)",
+  "d": "5,000,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "R64 · desconto escrito no campo do orcamento",
+  "d": "900,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "R64 · à vista passa a preço − desconto",
+  "d": "4,100,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "R64 · o preço em destaque no cartão acompanha (à vista)",
+  "d": "4,100,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "R64 · o resumo direito acompanha (à vista + desconto aplicado)",
+  "d": {
+   "campo": "900,000 Kz",
+   "vista": "4,100,000 Kz",
+   "recursivo": "4,100,000 Kz",
+   "linhaDesc": "900,000 Kz",
+   "miniDesc": "900,000 Kz",
+   "saldo": "4,500,000 Kz",
+   "descontoGuardado": 900000
+  }
+ },
+ {
+  "r": "PASS",
+  "n": "R64 · a linha do desconto aparece no resumo",
+  "d": "900,000 Kz"
+ },
+ {
+  "r": "PASS",
+  "n": "R64 · o valor negociado fica guardado para o envio",
+  "d": 900000
+ },
+ {
+  "r": "PASS",
+  "n": "R64 · segundo desconto recalcula outra vez",
+  "d": {
+   "vista": "3,500,000 Kz",
+   "desc": 1500000
+  }
+ },
+ {
+  "r": "PASS",
+  "n": "R64 · mensagem do WhatsApp usa o valor à vista negociado",
+  "d": "imos chegar no incrível valor de 3,500,000 Kz 😱\n\nSimulação sem juros, sujeita a aprovação de financiamento.\n\nO que acha?"
+ },
+ {
+  "r": "PASS",
+  "n": "R64 · detalhe do orçamento recalcula o à vista",
+  "d": "12500000 vs 12500000"
+ },
+ {
+  "r": "PASS",
+  "n": "R64 · desconto do detalhe fica gravado sem clicar em Guardar",
+  "d": ""
  },
  {
   "r": "PASS",
@@ -662,12 +741,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1.08, 'offsets': 11}"
+  "d": "{'dx': 1.04, 'offsets': 12}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1.08, 'offsets': 11}"
+  "d": "{'dx': 1.04, 'offsets': 12}"
  },
  {
   "r": "PASS",
@@ -1057,7 +1136,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "24,111.35 Kz"
+  "d": "-8,411.79 Kz"
  },
  {
   "r": "PASS",
@@ -1067,12 +1146,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,588,592.98 Kz"
+  "d": "9,586,685.58 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.87 Kz"
+  "d": "9,749,998.01 Kz"
  },
  {
   "r": "PASS",
@@ -1088,10 +1167,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   320152,
-   2892403,
-   4881785,
-   6362801
+   316620,
+   2889630,
+   4879679,
+   6361409
   ]
  },
  {
@@ -1112,14 +1191,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "415,874.16 Kz"
+  "d": "416,584.44 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "415,874.16 Kz",
-   "4,061,727.16 Kz"
+   "416,584.44 Kz",
+   "4,062,237.71 Kz"
   ]
  },
  {
@@ -1160,7 +1239,7 @@
  {
   "r": "PASS",
   "n": "R63 · cabeça do Perfil cresce (escala >= 0.15)",
-  "d": 0.249
+  "d": 0.25
  },
  {
   "r": "PASS",
@@ -1170,7 +1249,7 @@
  {
   "r": "PASS",
   "n": "R63 · o anel do Perfil fica visível (opac. >= 0.5)",
-  "d": 0.85
+  "d": 0.843
  },
  {
   "r": "PASS",
@@ -1207,7 +1286,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.05601
+   3.34722
   ]
  },
  {
@@ -2012,7 +2091,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '24,085,394.93 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '43,788,576.50 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '60,055,642.33 Kz', 'temKz': True, 'contando': 13}]"
+  "d": "[{'fn': 1, 'vt': '24,172,234.37 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '43,854,476.22 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '59,772,947.56 Kz', 'temKz': True, 'contando': 13}]"
  },
  {
   "r": "PASS",
@@ -2022,7 +2101,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '23,948,798.18 Kz'}"
+  "d": "{'fn': '1', 'vt': '23,581,656.68 Kz'}"
  },
  {
   "r": "PASS",
@@ -2062,17 +2141,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 15:59 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 19:47 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 15:59 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 19:47 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 15:59 · enviado"
+  "d": "Hoje, 19:47 · enviado"
  },
  {
   "r": "PASS",
@@ -2152,7 +2231,7 @@
  {
   "r": "PASS",
   "n": "R44 · Exportar orçamentos em CSV descarrega",
-  "d": "['orcamentos-vendacar-2026-11-09.csv']"
+  "d": "['orcamentos-vendacar-2026-11-10.csv']"
  },
  {
   "r": "PASS",
@@ -2172,7 +2251,7 @@
  {
   "r": "PASS",
   "n": "R57 · o estoque já não gera ficheiro CSV",
-  "d": "['orcamentos-vendacar-2026-11-09.csv']"
+  "d": "['orcamentos-vendacar-2026-11-10.csv']"
  },
  {
   "r": "PASS",
@@ -2192,7 +2271,7 @@
  {
   "r": "PASS",
   "n": "R44 · mensagem avisa que a simulação é sem juros",
-  "d": "de 9,300,000 Kz 😱\n\nSimulação sem juros, sujeita a aprovação de financiamento.\n\nO que acha?"
+  "d": "de 9,750,000 Kz 😱\n\nSimulação sem juros, sujeita a aprovação de financiamento.\n\nO que acha?"
  },
  {
   "r": "PASS",
