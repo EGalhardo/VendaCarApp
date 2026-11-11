@@ -756,12 +756,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1.08, 'offsets': 11}"
+  "d": "{'dx': 1.03, 'offsets': 10}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1.08, 'offsets': 11}"
+  "d": "{'dx': 1.03, 'offsets': 10}"
  },
  {
   "r": "PASS",
@@ -1151,7 +1151,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "23,381.29 Kz"
+  "d": "20,095.55 Kz"
  },
  {
   "r": "PASS",
@@ -1161,12 +1161,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,588,735.43 Kz"
+  "d": "9,588,402.91 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.92 Kz"
+  "d": "9,749,998.80 Kz"
  },
  {
   "r": "PASS",
@@ -1182,10 +1182,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   320794,
-   2892907,
-   4882168,
-   6363079
+   319510,
+   2891899,
+   4881402,
+   6362523
   ]
  },
  {
@@ -1206,14 +1206,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "416,584.44 Kz"
+  "d": "356,437.93 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "416,584.44 Kz",
-   "4,062,492.97 Kz"
+   "356,437.93 Kz",
+   "4,018,988.52 Kz"
   ]
  },
  {
@@ -1264,7 +1264,7 @@
  {
   "r": "PASS",
   "n": "R63 · o anel do Perfil fica visível (opac. >= 0.5)",
-  "d": 0.835
+  "d": 0.85
  },
  {
   "r": "PASS",
@@ -1301,7 +1301,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34731
+   3.34621
   ]
  },
  {
@@ -1945,13 +1945,43 @@
  },
  {
   "r": "PASS",
+  "n": "R68 · dropdown de estados em Vendas tem os cinco estados",
+  "d": "['Todos', 'Pendente', 'Em negociação', 'Venda concluída', 'Perdido', 'Cancelado']"
+ },
+ {
+  "r": "PASS",
+  "n": "R68 · filtrar por estado mostra só esse estado",
+  "d": "{'cartoes': 1, 'pills': ['Em negociação'], 'contagem': 'a mostrar 1 de 6'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R68 · a contagem diz quantos de quantos",
+  "d": "a mostrar 1 de 6"
+ },
+ {
+  "r": "PASS",
+  "n": "R68 · estado sem negócios mostra mensagem própria",
+  "d": "Nenhum negócio com o estado “Cancelado”. Escolha “Todos” par"
+ },
+ {
+  "r": "PASS",
+  "n": "R68 · voltar a “Todos” repõe a lista completa",
+  "d": "6"
+ },
+ {
+  "r": "PASS",
+  "n": "R68 · negócio vendido sai da lista filtrada por Pendente",
+  "d": "5 -> 4"
+ },
+ {
+  "r": "PASS",
   "n": "R39 · quatro etapas do funil",
   "d": "['Contactos captados', 'Orçamentos enviados', 'Em negociação', 'Vendas concluídas']"
  },
  {
   "r": "PASS",
   "n": "R39 · números do funil vêm dos dados reais",
-  "d": "[5, 6, 1, 0]"
+  "d": "[5, 6, 1, 1]"
  },
  {
   "r": "PASS",
@@ -1966,17 +1996,17 @@
  {
   "r": "PASS",
   "n": "R39 · 'Marcar como vendido' muda o estado",
-  "d": "{'vend': 1, 'estado': 'Venda concluída', 'guardado': 'Venda concluída', 'stVendas': '1', 'toast': 'Orçamento de Ana Silva marcado como “Venda concluída”'}"
+  "d": "{'vend': 2, 'estado': 'Venda concluída', 'guardado': 'Venda concluída', 'stVendas': '2', 'toast': 'Orçamento de Ana Silva marcado como “Venda concluída”'}"
  },
  {
   "r": "PASS",
   "n": "R39 · estado persistido no dispositivo",
-  "d": "{'vend': 1, 'estado': 'Venda concluída', 'guardado': 'Venda concluída', 'stVendas': '1', 'toast': 'Orçamento de Ana Silva marcado como “Venda concluída”'}"
+  "d": "{'vend': 2, 'estado': 'Venda concluída', 'guardado': 'Venda concluída', 'stVendas': '2', 'toast': 'Orçamento de Ana Silva marcado como “Venda concluída”'}"
  },
  {
   "r": "PASS",
   "n": "R39 · cartão do Perfil conta as vendas",
-  "d": "{'vend': 1, 'estado': 'Venda concluída', 'guardado': 'Venda concluída', 'stVendas': '1', 'toast': 'Orçamento de Ana Silva marcado como “Venda concluída”'}"
+  "d": "{'vend': 2, 'estado': 'Venda concluída', 'guardado': 'Venda concluída', 'stVendas': '2', 'toast': 'Orçamento de Ana Silva marcado como “Venda concluída”'}"
  },
  {
   "r": "PASS",
@@ -2106,7 +2136,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '23,818,256.65 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '43,991,178.84 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '59,882,146.34 Kz', 'temKz': True, 'contando': 13}]"
+  "d": "[{'fn': 1, 'vt': '23,793,374.57 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '43,968,410.63 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '59,863,960.45 Kz', 'temKz': True, 'contando': 13}]"
  },
  {
   "r": "PASS",
@@ -2116,7 +2146,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '23,728,033.16 Kz'}"
+  "d": "{'fn': '1', 'vt': '23,628,393.04 Kz'}"
  },
  {
   "r": "PASS",
@@ -2156,17 +2186,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 12:39 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 13:11 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 12:39 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 13:11 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 12:39 · enviado"
+  "d": "Hoje, 13:11 · enviado"
  },
  {
   "r": "PASS",

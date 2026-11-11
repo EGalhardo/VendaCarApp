@@ -218,6 +218,16 @@
   .vendas-tot span{font-size:11px;color:var(--muted-2);background:#f7faf8;border:1px solid var(--line);border-radius:20px;padding:4px 10px}
   .vendas-tot b{color:var(--ink-2);font-weight:800}
   .vendas-lista{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  /* R68: seletor de estado do grupo "Neg\u00F3cios em curso" */
+  .vendas-filtro{display:flex;align-items:center;gap:7px;margin-left:2px}
+  .vendas-filtro label{font-size:11.5px;font-weight:700;color:var(--muted-2);letter-spacing:.3px}
+  select.inp.mini{
+    width:auto;height:34px;padding:0 30px 0 11px;font-size:12.5px;font-weight:700;
+    color:var(--ink-2);border-radius:20px;background-position:right 11px center;
+  }
+  select.inp.mini:focus{border-color:var(--green)}
+  html[data-tema="escuro"] select.inp.mini{background-color:#071528;border-color:#17375e;color:#dce7f6}
+  .vendas-contagem{font-size:11.5px;color:var(--muted-2);font-weight:600}
   .vneg{border:1px solid var(--gray-line);border-radius:12px;padding:13px 14px;background:#fff}
   .vneg .topo{display:flex;align-items:center;gap:11px}
   .vneg .topo>div{min-width:0}
@@ -312,6 +322,13 @@
     .vendas-lista{grid-template-columns:1fr}
     .vneg .topo{flex-wrap:wrap;row-gap:6px}
     .vneg .vl{font-size:12.5px;margin-left:0;width:100%;text-align:right}
+    .vendas-filtro{margin-left:auto}
+    select.inp.mini{height:32px;font-size:12px}
+    .vendas-contagem{font-size:11px}
+    /* R68: os quatro botoes de estado passam a caber no cartao */
+    .vneg .est{align-items:flex-start}
+    .vneg .acao{margin-left:0;width:100%;flex-wrap:wrap;gap:6px}
+    .vneg .acao button{flex:1 1 auto;text-align:center}
   }
 
   /* ---------- navbar (mobile) ---------- */
@@ -1737,6 +1754,18 @@ setTimeout(function(){
 
       <div class="vendas-head">
         <h3>Neg&#243;cios em curso</h3>
+        <div class="vendas-filtro">
+          <label for="filtroEstadoVendas">Estado</label>
+          <select class="inp mini" id="filtroEstadoVendas">
+            <option value="Todos">Todos</option>
+            <option value="Pendente">Pendente</option>
+            <option value="Em negocia&#231;&#227;o">Em negocia&#231;&#227;o</option>
+            <option value="Venda conclu&#237;da">Venda conclu&#237;da</option>
+            <option value="Perdido">Perdido</option>
+            <option value="Cancelado">Cancelado</option>
+          </select>
+          <span class="vendas-contagem" id="vendasContagem"></span>
+        </div>
         <div class="vendas-tot">
           <span>Valor dos neg&#243;cios em curso <b id="vtNeg">0 Kz</b></span>
           <span>Vendas fechadas <b id="vtFech">0 Kz</b></span>
@@ -2724,6 +2753,8 @@ function dadosFunil(){
 
 function pct(a, b){ return b > 0 ? Math.round((a / b) * 100) : 0; }
 
+let filtroEstadoVendas = 'Todos';   /* R68: filtro do grupo "Neg\u00F3cios em curso" */
+
 function renderVendas(){
   const lista = document.getElementById('vendasLista');
   if (!lista) return;
@@ -2731,6 +2762,19 @@ function renderVendas(){
   const soma = arr => arr.reduce((t,o) => t + totalComIva(o.preco), 0);
   const emCurso = ORCAMENTOS.filter(o => ORC_CURSO.includes(o.estado));
   const fechadas = ORCAMENTOS.filter(o => ORC_FECHADOS.includes(o.estado));
+
+  /* R68: o seletor mostra os cinco estados e filtra a lista (os totais do topo
+     continuam a somar todos os neg\u00F3cios --- s\u00E3o o retrato da loja) */
+  const emCursoVis = filtroEstadoVendas === 'Todos'
+    ? emCurso : emCurso.filter(o => o.estado === filtroEstadoVendas);
+  const fechadasVis = filtroEstadoVendas === 'Todos'
+    ? fechadas : fechadas.filter(o => o.estado === filtroEstadoVendas);
+  const contagem = document.getElementById('vendasContagem');
+  if (contagem){
+    const totalVis = emCursoVis.length + fechadasVis.length;
+    contagem.textContent = filtroEstadoVendas === 'Todos'
+      ? '' : 'a mostrar ' + totalVis + ' de ' + (emCurso.length + fechadas.length);
+  }
 
   /* cart\u00F5es do funil \u2014 os n\u00FAmeros contam de 0 at\u00E9 ao valor (8 s) */
   const negTotal = soma(emCurso);
@@ -2788,12 +2832,25 @@ function renderVendas(){
     </article>`;
   };
 
-  lista.innerHTML = (emCurso.map(o => cartao(o,false)).join('') + fechadas.map(o => cartao(o,true)).join(''))
-    || `<p style="color:var(--muted-2);padding:16px 2px">Ainda n\u00E3o h\u00E1 neg\u00F3cios em curso. Marque um or\u00E7amento como \u201CEm negocia\u00E7\u00E3o\u201D
-         na p\u00E1gina de edi\u00E7\u00E3o do or\u00E7amento para o acompanhar aqui.</p>`;
+  lista.innerHTML = (emCursoVis.map(o => cartao(o,false)).join('') + fechadasVis.map(o => cartao(o,true)).join(''))
+    || `<p style="color:var(--muted-2);padding:16px 2px">` +
+       (filtroEstadoVendas === 'Todos'
+         ? 'Ainda n\u00E3o h\u00E1 neg\u00F3cios em curso. Marque um or\u00E7amento como \u201CEm negocia\u00E7\u00E3o\u201D na p\u00E1gina de edi\u00E7\u00E3o do or\u00E7amento para o acompanhar aqui.'
+         : 'Nenhum neg\u00F3cio com o estado \u201C' + filtroEstadoVendas + '\u201D. Escolha \u201CTodos\u201D para ver a lista completa.') +
+       `</p>`;
 
   /* valores dos cart\u00F5es contam de 0 at\u00E9 ao valor, como nas outras p\u00E1ginas */
   contarTabela('#vendasLista');
+}
+
+/* R68: escolher um estado no seletor filtra a lista de negocios */
+const seletorEstadoVendas = document.getElementById('filtroEstadoVendas');
+if (seletorEstadoVendas){
+  seletorEstadoVendas.addEventListener('change', () => {
+    filtroEstadoVendas = seletorEstadoVendas.value;
+    renderVendas();
+    if (typeof contarTabela === 'function') contarTabela('#vendasLista');
+  });
 }
 
 /* marcar como vendido / pendente a partir da lista de vendas */

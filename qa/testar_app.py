@@ -1690,6 +1690,33 @@ async def main():
         }""")
         ok("R39 · página Vendas registada no app", V1["pagina"] and V1["titulo"]=="Vendas", str(V1))
         ok("R39 · Vendas no menu entre Orçamentos e Clientes", V1["ordem"], str(V1["menu"]))
+        # R68: seletor de estados no grupo "Negócios em curso"
+        await rv.evaluate("()=>ir('vendas')"); await rv.wait_for_timeout(600)
+        ops68 = await rv.evaluate("()=>[...document.querySelectorAll('#filtroEstadoVendas option')].map(o=>o.textContent)")
+        ok("R68 · dropdown de estados em Vendas tem os cinco estados",
+           ops68 == ['Todos','Pendente','Em negociação','Venda concluída','Perdido','Cancelado'], str(ops68))
+        await rv.select_option('#filtroEstadoVendas','Em negociação'); await rv.wait_for_timeout(600)
+        R68a = await rv.evaluate("""()=>({cartoes:document.querySelectorAll('#vendasLista .vneg').length,
+            pills:[...document.querySelectorAll('#vendasLista .vneg .pill')].map(e=>e.textContent),
+            contagem:document.getElementById('vendasContagem').textContent})""")
+        ok("R68 · filtrar por estado mostra só esse estado",
+           R68a["cartoes"] >= 1 and all(x == 'Em negociação' for x in R68a["pills"]), str(R68a))
+        ok("R68 · a contagem diz quantos de quantos", 'de' in R68a["contagem"], R68a["contagem"])
+        await rv.select_option('#filtroEstadoVendas','Cancelado'); await rv.wait_for_timeout(500)
+        v68 = await rv.evaluate("()=>{const p=document.querySelector('#vendasLista p');return p?p.textContent:'';}")
+        ok("R68 · estado sem negócios mostra mensagem própria",
+           'Cancelado' in v68 and 'Todos' in v68, v68[:60])
+        await rv.select_option('#filtroEstadoVendas','Todos'); await rv.wait_for_timeout(500)
+        todos68 = await rv.evaluate("()=>document.querySelectorAll('#vendasLista .vneg').length")
+        ok("R68 · voltar a “Todos” repõe a lista completa", todos68 >= R68a["cartoes"], str(todos68))
+        # marcar um negócio como vendido com o filtro activo: sai da lista em curso
+        await rv.select_option('#filtroEstadoVendas','Pendente'); await rv.wait_for_timeout(500)
+        antes68 = await rv.evaluate("()=>document.querySelectorAll('#vendasLista .vneg').length")
+        await rv.evaluate("""()=>{const b=document.querySelector('#vendasLista [data-etapa=\"Venda conclu\u00edda\"]'); if(b) b.click();}""")
+        await rv.wait_for_timeout(600)
+        depois68 = await rv.evaluate("()=>document.querySelectorAll('#vendasLista .vneg').length")
+        ok("R68 · negócio vendido sai da lista filtrada por Pendente", depois68 == antes68 - 1, f'{antes68} -> {depois68}')
+        await rv.select_option('#filtroEstadoVendas','Todos'); await rv.wait_for_timeout(400)
         await rv.evaluate("()=>ir('vendas')"); await rv.wait_for_timeout(700)
         V2 = await rv.evaluate("""()=>{
           const s=document.getElementById('pg-vendas');
