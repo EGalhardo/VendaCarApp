@@ -505,13 +505,13 @@
  },
  {
   "r": "PASS",
-  "n": "R31 · logótipo mostra todos os elementos (carro + nome + 3 ticks)",
-  "d": "{'ratio': 3.042, 'natRatio': 3.042, 'completa': True, 'altura': 38, 'etiqueta': 'VendaCar'}"
+  "n": "R31 · logótipo mostra todos os elementos (carro + nome + 3 círculos)",
+  "d": "{'ratio': 2.295, 'natRatio': 2.295, 'completa': True, 'altura': 34, 'etiqueta': 'VendaCar'}"
  },
  {
   "r": "PASS",
-  "n": "R31 · logótipo completo não é esticado",
-  "d": "{'ratio': 3.042, 'natRatio': 3.042, 'completa': True, 'altura': 38, 'etiqueta': 'VendaCar'}"
+  "n": "R31 · logótipo completo não é esticado (altura 34 na marca nova de 2,3:1)",
+  "d": "{'ratio': 2.295, 'natRatio': 2.295, 'completa': True, 'altura': 34, 'etiqueta': 'VendaCar'}"
  },
  {
   "r": "PASS",
@@ -536,7 +536,7 @@
  {
   "r": "PASS",
   "n": "R58 · um só logótipo no modo escuro, com a proporção certa",
-  "d": "{'quantos': 1, 'visivel': True, 'ratio': 3.04, 'nat': True, 'mostra': True}"
+  "d": "{'quantos': 1, 'visivel': True, 'ratio': 2.3, 'nat': True, 'mostra': True}"
  },
  {
   "r": "PASS",
@@ -756,12 +756,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1.04, 'offsets': 12}"
+  "d": "{'dx': 1.04, 'offsets': 10}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1.04, 'offsets': 12}"
+  "d": "{'dx': 1.04, 'offsets': 10}"
  },
  {
   "r": "PASS",
@@ -816,6 +816,31 @@
  {
   "r": "PASS",
   "n": "R59 · sem erros de consola",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R77 · a marca nova carrega na appbar e no ecrã de carregamento",
+  "d": "{'appbarVisivel': True, 'ratioAppbar': 2.3, 'carregamentoVisivel': True, 'ratioCarregamento': 2.3, 'cabeNaMarca': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R77 · é a imagem enviada (proporção da marca ~2,3:1)",
+  "d": "{'appbarVisivel': True, 'ratioAppbar': 2.3, 'carregamentoVisivel': True, 'ratioCarregamento': 2.3, 'cabeNaMarca': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R77 · a marca do carregamento tem transparência (sem cartão branco)",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R77 · marca legível no modo escuro",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R77 · sem erros de consola",
   "d": "[]"
  },
  {
@@ -1066,7 +1091,7 @@
  {
   "r": "PASS",
   "n": "R71 · barra dura cerca de 6 segundos",
-  "d": "6060 ms"
+  "d": "6061 ms"
  },
  {
   "r": "PASS",
@@ -1081,12 +1106,12 @@
  {
   "r": "PASS",
   "n": "R58 · um só logótipo no código (sem a variante escura sem uso)",
-  "d": "{'imgs': 1, 'dataUris': 6, 'duplicadas': 6, 'fotosDeCarro': 2.5, 'logotiposDistintos': 2, 'logoEscuro': False}"
+  "d": "{'imgs': 1, 'dataUris': 5, 'duplicadas': 7, 'fotosDeCarro': 2.5, 'logotiposDistintos': 1, 'mesmaMarca': True, 'logoEscuro': False}"
  },
  {
   "r": "PASS",
-  "n": "R58/R71 · logotipos: appbar + ecra de carregamento, sem fotos repetidas",
-  "d": "{'imgs': 1, 'dataUris': 6, 'duplicadas': 6, 'fotosDeCarro': 2.5, 'logotiposDistintos': 2, 'logoEscuro': False}"
+  "n": "R58/R71 · appbar e ecrã de carregamento usam a marca nova, sem fotos repetidas",
+  "d": "{'imgs': 1, 'dataUris': 5, 'duplicadas': 7, 'fotosDeCarro': 2.5, 'logotiposDistintos': 1, 'mesmaMarca': True, 'logoEscuro': False}"
  },
  {
   "r": "PASS",
@@ -1241,27 +1266,27 @@
  {
   "r": "PASS",
   "n": "R29 · logótipo presente na appbar",
-  "d": "{'existe': True, 'carregou': True, 'altura': 38, 'largura': 116, 'proporcao': '3.04', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
+  "d": "{'existe': True, 'carregou': True, 'altura': 34, 'largura': 78, 'proporcao': '2.30', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
  },
  {
   "r": "PASS",
   "n": "R29 · logótipo carregado (sem imagem partida)",
-  "d": "{'existe': True, 'carregou': True, 'altura': 38, 'largura': 116, 'proporcao': '3.04', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
+  "d": "{'existe': True, 'carregou': True, 'altura': 34, 'largura': 78, 'proporcao': '2.30', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
  },
  {
   "r": "PASS",
   "n": "R29 · logótipo com altura harmoniosa (32–40px)",
-  "d": "{'existe': True, 'carregou': True, 'altura': 38, 'largura': 116, 'proporcao': '3.04', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
+  "d": "{'existe': True, 'carregou': True, 'altura': 34, 'largura': 78, 'proporcao': '2.30', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
  },
  {
   "r": "PASS",
-  "n": "R29 · logótipo na proporção original (~3:1, com os 3 ticks)",
-  "d": "{'existe': True, 'carregou': True, 'altura': 38, 'largura': 116, 'proporcao': '3.04', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
+  "n": "R29 · logótipo na proporção original (~2,3:1, com os 3 círculos)",
+  "d": "{'existe': True, 'carregou': True, 'altura': 34, 'largura': 78, 'proporcao': '2.30', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
  },
  {
   "r": "PASS",
   "n": "R29 · nome 'Modelo' e ícone antigo removidos da marca",
-  "d": "{'existe': True, 'carregou': True, 'altura': 38, 'largura': 116, 'proporcao': '3.04', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
+  "d": "{'existe': True, 'carregou': True, 'altura': 34, 'largura': 78, 'proporcao': '2.30', 'semTexto': True, 'dentro': True, 'titulo': 'VendaCar — Orçamento de Carros por WhatsApp'}"
  },
  {
   "r": "PASS",
@@ -1271,22 +1296,22 @@
  {
   "r": "PASS",
   "n": "R29 · logótipo compacto no telemóvel (≤28px)",
-  "d": "{'altura': 24, 'largura': 73, 'semSobreposicao': True, 'tituloInteiro': True, 'semOverflow': True}"
+  "d": "{'altura': 28, 'largura': 64, 'semSobreposicao': True, 'tituloInteiro': True, 'semOverflow': True}"
  },
  {
   "r": "PASS",
   "n": "R29 · título não sobrepõe o logótipo no telemóvel",
-  "d": "{'altura': 24, 'largura': 73, 'semSobreposicao': True, 'tituloInteiro': True, 'semOverflow': True}"
+  "d": "{'altura': 28, 'largura': 64, 'semSobreposicao': True, 'tituloInteiro': True, 'semOverflow': True}"
  },
  {
   "r": "PASS",
   "n": "R29 · título completo antes das ações da appbar",
-  "d": "{'altura': 24, 'largura': 73, 'semSobreposicao': True, 'tituloInteiro': True, 'semOverflow': True}"
+  "d": "{'altura': 28, 'largura': 64, 'semSobreposicao': True, 'tituloInteiro': True, 'semOverflow': True}"
  },
  {
   "r": "PASS",
   "n": "R29 · appbar do telemóvel sem overflow horizontal",
-  "d": "{'altura': 24, 'largura': 73, 'semSobreposicao': True, 'tituloInteiro': True, 'semOverflow': True}"
+  "d": "{'altura': 28, 'largura': 64, 'semSobreposicao': True, 'tituloInteiro': True, 'semOverflow': True}"
  },
  {
   "r": "PASS",
@@ -1411,7 +1436,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "13,521.87 Kz"
+  "d": "4,752.35 Kz"
  },
  {
   "r": "PASS",
@@ -1421,12 +1446,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,589,138.59 Kz"
+  "d": "9,588,569.22 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,999.07 Kz"
+  "d": "9,749,998.86 Kz"
  },
  {
   "r": "PASS",
@@ -1442,10 +1467,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   320152,
-   2892655,
-   4881785,
-   6362940
+   319831,
+   2892403,
+   4881593,
+   6362801
   ]
  },
  {
@@ -1466,14 +1491,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "417,294.70 Kz"
+  "d": "356,437.93 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "417,294.70 Kz",
-   "4,063,003.47 Kz"
+   "356,437.93 Kz",
+   "4,018,988.52 Kz"
   ]
  },
  {
@@ -1514,7 +1539,7 @@
  {
   "r": "PASS",
   "n": "R63 · cabeça do Perfil cresce (escala >= 0.15)",
-  "d": 0.249
+  "d": 0.25
  },
  {
   "r": "PASS",
@@ -1524,7 +1549,7 @@
  {
   "r": "PASS",
   "n": "R63 · o anel do Perfil fica visível (opac. >= 0.5)",
-  "d": 0.85
+  "d": 0.843
  },
  {
   "r": "PASS",
@@ -1561,7 +1586,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.05465
+   3.34683
   ]
  },
  {
@@ -1587,7 +1612,7 @@
  {
   "r": "PASS",
   "n": "R63 · as duas cabeças revezam-se (entra uma, cede a outra)",
-  "d": "{'opTras': 1, 'escFrente': 0.920636, 'trasEntra': True}"
+  "d": "{'opTras': 1, 'escFrente': 0.920635, 'trasEntra': True}"
  },
  {
   "r": "PASS",
@@ -2426,7 +2451,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '22,280,996.47 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,737,366.92 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,879,804.56 Kz', 'temKz': True, 'contando': 9}]"
+  "d": "[{'fn': 1, 'vt': '22,495,126.08 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,485,391.10 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,678,154.35 Kz', 'temKz': True, 'contando': 9}]"
  },
  {
   "r": "PASS",
@@ -2436,7 +2461,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '22,463,661.28 Kz'}"
+  "d": "{'fn': '1', 'vt': '22,702,578.95 Kz'}"
  },
  {
   "r": "PASS",
@@ -2476,17 +2501,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 19:51 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 20:22 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 19:51 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 20:22 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 19:51 · enviado"
+  "d": "Hoje, 20:22 · enviado"
  },
  {
   "r": "PASS",

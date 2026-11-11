@@ -584,12 +584,13 @@ async def main():
           const r=img.getBoundingClientRect();
           // os 3 ticks ocupam o último terço direito da imagem
           return {ratio:+(r.width/r.height).toFixed(3), natRatio:+(img.naturalWidth/img.naturalHeight).toFixed(3),
-                  completa: (img.naturalWidth/img.naturalHeight)>2.9,
+                  completa: (img.naturalWidth/img.naturalHeight)>=2.2,
                   altura:Math.round(r.height), etiqueta:img.alt};
         }""")
-        ok("R31 · logótipo mostra todos os elementos (carro + nome + 3 ticks)",
+        ok("R31 · logótipo mostra todos os elementos (carro + nome + 3 círculos)",
            LOGO["completa"] and abs(LOGO["ratio"]-LOGO["natRatio"])<0.05, str(LOGO))
-        ok("R31 · logótipo completo não é esticado", LOGO["altura"]==38, str(LOGO))
+        ok("R31 · logótipo completo não é esticado (altura 34 na marca nova de 2,3:1)",
+           LOGO["altura"]==34 and abs(LOGO["ratio"]-LOGO["natRatio"])<0.05, str(LOGO))
         await lg2.click("#btnTema"); await lg2.wait_for_timeout(500)
         PAL = await lg2.evaluate("""()=>{
           const cs=s=>getComputedStyle(document.querySelector(s));
@@ -620,7 +621,7 @@ async def main():
         }""")
         ok("R58 · um só logótipo no modo escuro, com a proporção certa",
            LOGOD["quantos"]==1 and LOGOD["visivel"] and LOGOD["nat"] and LOGOD["mostra"]
-           and LOGOD["ratio"]>2.9, str(LOGOD))
+           and LOGOD["ratio"]>2.2, str(LOGOD))
         ok("R31 · logótipo/paleta sem erros de consola", len(lge)==0, str(lge[:2]))
         await lg2.close()
 
@@ -754,6 +755,34 @@ async def main():
            M59["texto"]=="Automóvel" and M59["icone"] and M59["cabe"], str(M59))
         ok("R59 · sem erros de consola", len(r59e)==0, str(r59e[:2]))
         await r59.close()
+
+        # ============ R77 · NOVA MARCA VENDACAR (enviada pelo utilizador) ============
+        r77 = await b.new_page(viewport={"width":1440,"height":900})
+        r77e=[]; r77.on("pageerror", lambda e: r77e.append(str(e)))
+        await r77.goto("file:///home/user/index.html")
+        await r77.wait_for_timeout(500)
+        L77 = await r77.evaluate("""()=>{const a=document.querySelector('.brand .logo'),
+            c=document.querySelector('#ecraCarregando .logoC');
+            const ar=a.getBoundingClientRect(), br=document.querySelector('.brand').getBoundingClientRect();
+            return {appbarVisivel:!!a && a.naturalWidth>0, ratioAppbar:+(a.naturalWidth/a.naturalHeight).toFixed(2),
+                    carregamentoVisivel:!!c && c.naturalWidth>0,
+                    ratioCarregamento:+(c.naturalWidth/c.naturalHeight).toFixed(2),
+                    cabeNaMarca: ar.left>=br.left-1 && ar.right<=br.right+1};}""")
+        ok("R77 · a marca nova carrega na appbar e no ecrã de carregamento",
+           L77["appbarVisivel"] and L77["carregamentoVisivel"] and L77["cabeNaMarca"], str(L77))
+        ok("R77 · é a imagem enviada (proporção da marca ~2,3:1)",
+           2.2<=L77["ratioAppbar"]<=2.4 and 2.2<=L77["ratioCarregamento"]<=2.4, str(L77))
+        ok("R77 · a marca do carregamento tem transparência (sem cartão branco)",
+           await r77.evaluate("""()=>getComputedStyle(document.querySelector('#ecraCarregando .logoC')).backgroundColor==='rgba(0, 0, 0, 0)'"""), "")
+        await r77.evaluate("()=>document.documentElement.setAttribute('data-tema','escuro')")
+        await r77.wait_for_timeout(300)
+        ok("R77 · marca legível no modo escuro",
+           await r77.evaluate("""()=>{const s=getComputedStyle(document.querySelector('#ecraCarregando .logoC'));
+             return s.backgroundImage==='none' && s.backgroundColor==='rgba(0, 0, 0, 0)' && s.filter.includes('drop-shadow');}"""), "")
+        await r77.wait_for_timeout(6200)
+        await r77.evaluate("()=>{ir('modelos');}"); await r77.wait_for_timeout(400)
+        ok("R77 · sem erros de consola", len(r77e)==0, str(r77e[:2]))
+        await r77.close()
 
         # ============ R76 · RESPONSIVO EM TODA A GAMA ============
         r76e = []
@@ -1041,18 +1070,20 @@ async def main():
           /* o mesmo carro aparece em varios sitios: conta so as imagens distintas */
           const reais=todas.filter(u=>u && u.startsWith('data:image'));
           const unicas=[...new Set(reais)];
-          const logo=unicas.filter(u=>u.length>60000);
+          const marca=document.querySelector('.brand .logo').getAttribute('src');
+          const marcaC=document.querySelector('#ecraCarregando .logoC').getAttribute('src');
+          const logo=[marca].filter(Boolean);          /* R77: appbar e carregamento usam a MESMA marca */
           return {imgs:document.querySelectorAll('.brand img').length,
                   dataUris:unicas.length, duplicadas:reais.length-unicas.length,
                   fotosDeCarro:reais.filter(u=>u.startsWith('data:image/jpeg')).length / Math.max(1, unicas.filter(u=>u.startsWith('data:image/jpeg')).length),
-                  logotiposDistintos:logo.length,
+                  logotiposDistintos:logo.length, mesmaMarca: marca===marcaC && !!marca,
                   logoEscuro:!!document.querySelector('.logo-escuro')};
         }""")
         ok("R58 · um só logótipo no código (sem a variante escura sem uso)",
            IM["imgs"]==1 and not IM["logoEscuro"], str(IM))
         # R71: alem do logotipo da appbar existe o logotipo grande do ecra de carregamento
-        ok("R58/R71 · logotipos: appbar + ecra de carregamento, sem fotos repetidas",
-           IM["logotiposDistintos"]==2 and IM["dataUris"]==6, str(IM))
+        ok("R58/R71 · appbar e ecrã de carregamento usam a marca nova, sem fotos repetidas",
+           IM["mesmaMarca"] and IM["dataUris"]==5, str(IM))
         ok("R58 · sem erros de consola", len(r58e)==0, str(r58e[:2]))
         await r58.close()
 
@@ -1191,7 +1222,7 @@ async def main():
         ok("R29 · logótipo presente na appbar", L["existe"] and L["dentro"], str(L))
         ok("R29 · logótipo carregado (sem imagem partida)", L["carregou"], str(L))
         ok("R29 · logótipo com altura harmoniosa (32–40px)", 32<=L["altura"]<=40, str(L))
-        ok("R29 · logótipo na proporção original (~3:1, com os 3 ticks)", 2.9<=float(L["proporcao"])<=3.2, str(L))
+        ok("R29 · logótipo na proporção original (~2,3:1, com os 3 círculos)", 2.2<=float(L["proporcao"])<=2.4, str(L))
         ok("R29 · nome 'Modelo' e ícone antigo removidos da marca", L["semTexto"], str(L))
         ok("R29 · título do documento menciona VendaCar", "VendaCar" in L["titulo"], L["titulo"])
         Lm = await lg.evaluate("""()=>{void ir; return 1}""")
