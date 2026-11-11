@@ -357,19 +357,23 @@
 
   @media (max-width:1100px){ .vendas-lista{grid-template-columns:1fr} }
   @media (max-width:900px){
-    .funil{padding:14px;margin:2px 0 14px}
-    .funil-top{flex-wrap:wrap;gap:6px 10px}
-    .funil-top h3{flex:1 1 auto;white-space:nowrap;min-width:0;font-size:14px}
-    .funil-top h3 .ico{width:22px;height:22px;border-radius:7px}
-    .funil-top .sub{width:100%;order:2}
-    .funil-top .chipP{font-size:10.5px;padding:3px 9px}
-    .funil-grid{grid-template-columns:1fr;gap:8px}
-    .etapa{display:flex;align-items:center;gap:11px;padding:9px 11px}
-    .etapa .n{font-size:19px;min-width:42px}
-    .etapa .l{font-size:12px;margin:0;flex:1}
+    /* R75: telemovel \u2014 funil compacto: 2x2 cartoes baixos, sem barras,
+       resumo e valor numa linha. Os carros aparecem no primeiro ecra. */
+    .funil{padding:12px 13px;margin:2px 0 12px}
+    .funil-top{flex-wrap:wrap;gap:4px 10px;margin-bottom:10px}
+    .funil-top h3{flex:1 1 auto;white-space:nowrap;min-width:0;font-size:13.5px}
+    .funil-top h3 .ico{width:21px;height:21px;border-radius:7px}
+    .funil-top .sub{width:100%;order:2;font-size:10.5px;line-height:1.25}
+    .funil-top .chipP{font-size:10px;padding:3px 8px}
+    .funil-grid{grid-template-columns:1fr 1fr;gap:7px}
+    .etapa{display:block;padding:8px 9px 7px}
+    .etapa .n{font-size:17px;letter-spacing:-.5px}
+    .etapa .l{font-size:10.5px;margin-top:2px;line-height:1.2;min-height:25px}
     .etapa .pb{display:none}
-    .etapa .p{margin:0;font-size:10.5px}
-    .funil-base{font-size:11px}
+    .etapa .p{margin-top:4px;font-size:9.5px}
+    .funil-base{margin-top:9px;font-size:10px;line-height:1.3}
+    .funil-tot{margin-top:6px;font-size:11px}
+    .funil-tot b{font-size:12.5px}
     .vendas-head{flex-wrap:wrap;margin-bottom:9px}
     .vendas-tot{margin-left:0;width:100%;gap:6px}
     .vendas-tot span{font-size:10.5px;padding:3px 8px}
@@ -1573,17 +1577,17 @@ setTimeout(function(){
         <div class="funil-top">
           <h3><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18l-7 8v7l-4 2v-9z"/></svg></span>
             Funil de vendas</h3>
-          <div class="sub">&#218;ltimos 90 dias<br>Convers&#227;o global <b id="fnConversao">&#8212;</b></div>
+          <div class="sub">Desde o in&#237;cio<br>Convers&#227;o global <b id="fnConversao">&#8212;</b></div>
           <span class="chipP" id="fnVendasPill">0 vendas</span>
         </div>
         <div class="funil-grid">
-          <div class="etapa"><div class="n" id="fnContactos" data-int="1">0</div><div class="l">Contactos captados</div>
+          <div class="etapa"><div class="n" id="fnContactos" data-int="1" data-funil="contactos">0</div><div class="l">Contactos captados</div>
             <div class="pb"><i id="fnPbContactos" style="width:100%"></i></div><div class="p"><i></i>entrada do funil</div></div>
-          <div class="etapa"><div class="n" id="fnEnviados" data-int="1">0</div><div class="l">Or&#231;amentos enviados</div>
+          <div class="etapa"><div class="n" id="fnEnviados" data-int="1" data-funil="enviados">0</div><div class="l">Or&#231;amentos enviados</div>
             <div class="pb"><i id="fnPbEnviados" style="width:100%"></i></div><div class="p" id="fnTxEnviados"><i></i>&#8212;</div></div>
-          <div class="etapa q"><div class="n" id="fnNegociacao" data-int="1">0</div><div class="l">Em negocia&#231;&#227;o</div>
+          <div class="etapa q"><div class="n" id="fnNegociacao" data-int="1" data-funil="negoc">0</div><div class="l">Em negocia&#231;&#227;o</div>
             <div class="pb"><i id="fnPbNegociacao" style="width:0%"></i></div><div class="p q" id="fnTxNegociacao"><i></i>&#8212;</div></div>
-          <div class="etapa"><div class="n" id="fnVendas" data-int="1">0</div><div class="l">Vendas conclu&#237;das</div>
+          <div class="etapa"><div class="n" id="fnVendas" data-int="1" data-funil="vendas">0</div><div class="l">Vendas conclu&#237;das</div>
             <div class="pb"><i id="fnPbVendas" style="width:0%"></i></div><div class="p" id="fnTxVendas"><i></i>&#8212;</div></div>
         </div>
         <div class="funil-base"><span id="fnResumo">&#8212;</span></div>
@@ -2413,6 +2417,8 @@ function contarPara(el, destino, desde){
     const v = de + (destino - de) * e;
     el.textContent = fmtContador(el, v);
     _cont.set(el, v);
+    /* R75: o funil mostra o mesmo instante em todos os textos (sem contradicoes) */
+    if (el.dataset && el.dataset.funil != null && typeof aoContarFunil === 'function') aoContarFunil();
     if (t < 1){
       _raf.set(el, requestAnimationFrame(passo));
     } else {
@@ -2420,6 +2426,7 @@ function contarPara(el, destino, desde){
       _cont.set(el, destino);
       _raf.delete(el);
       el.classList.remove('contando');
+      if (el.dataset && el.dataset.funil != null && typeof aoContarFunil === 'function') aoContarFunil();
     }
   };
   _raf.set(el, requestAnimationFrame(passo));
@@ -2876,6 +2883,53 @@ function pct(a, b){ return b > 0 ? Math.round((a / b) * 100) : 0; }
 
 let filtroEstadoVendas = 'Todos';   /* R68: filtro do grupo "Neg\u00F3cios em curso" */
 
+/* R75: estado do funil + leitura do valor que esta a ser contado.
+   Cada elemento do funil guarda em _cont o numero que mostra naquele instante,
+   por isso a pill, a conversao, as percentagens e o resumo podem acompanhar. */
+const FUNIL = { f:null, negTotal:0 };
+function valorContado(sel){
+  const el = document.getElementById(sel);
+  if (!el) return 0;
+  return Math.round(_cont.has(el) ? (_cont.get(el) || 0) : 0);
+}
+function aoContarFunil(){
+  const f = FUNIL.f;
+  if (!f) return;
+  const c = valorContado('fnContactos'), e = valorContado('fnEnviados'),
+        n = valorContado('fnNegociacao'), v = valorContado('fnVendas');
+
+  const pill = document.getElementById('fnVendasPill');
+  if (pill) pill.textContent = v + (v === 1 ? ' venda' : ' vendas');
+  const conv = document.getElementById('fnConversao');
+  if (conv) conv.textContent = pct(v, c) + '%';
+
+  /* um cliente pode ter mais de um orcamento: nesse caso nao se mostra uma
+     percentagem acima de 100% */
+  const tx = (a, base) => a > base ? 'mais or\u00E7amentos que contactos' : pct(a, base) + '% do anterior';
+  const txe = document.getElementById('fnTxEnviados');
+  if (txe) txe.innerHTML = '<i></i>' + tx(e, c);
+  const txn = document.getElementById('fnTxNegociacao');
+  if (txn) txn.innerHTML = '<i></i>' + pct(n, e) + '% do anterior';
+  const txv = document.getElementById('fnTxVendas');
+  if (txv) txv.innerHTML = '<i></i>' + pct(v, n) + '% do anterior';
+
+  const larg = (a, base) => Math.max(a ? 6 : 0, Math.round((a / (base || 1)) * 100));
+  const pbe = document.getElementById('fnPbEnviados');
+  if (pbe) pbe.style.width = larg(e, c) + '%';
+  const pbn = document.getElementById('fnPbNegociacao');
+  if (pbn) pbn.style.width = larg(n, e) + '%';
+  const pbv = document.getElementById('fnPbVendas');
+  if (pbv) pbv.style.width = larg(v, n) + '%';
+
+  const semResposta = Math.max(0, e - n - v);
+  const resumo = document.getElementById('fnResumo');
+  if (resumo) resumo.innerHTML =
+    '<b>' + c + ' \u2192 ' + v + '</b> = ' + pct(v, c) + '% de convers\u00E3o global \u00B7 ' +
+    semResposta +
+    (semResposta === 1 ? ' or\u00E7amento ficou sem resposta ap\u00F3s o envio'
+                       : ' or\u00E7amentos ficaram sem resposta ap\u00F3s o envio');
+}
+
 /* R74: FUNIL DE VENDAS \u2014 passou de Vendas para o topo do Autom\u00F3vel.
    Recebe os mesmos n\u00FAmeros (clientes / or\u00E7amentos) e pinta os quatro
    cart\u00F5es, as barras, o resumo e o valor em negocia\u00E7\u00E3o. */
@@ -2892,25 +2946,12 @@ function renderFunil(){
   contarPara(document.getElementById('fnNegociacao'), f.negoc,     0);
   contarPara(document.getElementById('fnVendas'),     f.vendas,    0);
   contarPara(document.getElementById('vnTotal'), negTotal, 0);
-  document.getElementById('fnVendasPill').textContent = f.vendas + (f.vendas === 1 ? ' venda' : ' vendas');
-  document.getElementById('fnConversao').textContent  = pct(f.vendas, f.contactos) + '%';
 
-  /* um cliente pode ter mais de um or\u00E7amento: nesse caso n\u00E3o se mostra uma percentagem acima de 100% */
-  const tx = (n, base) => n > base ? 'mais or\u00E7amentos que contactos' : pct(n, base) + '% do anterior';
-  document.getElementById('fnTxEnviados').innerHTML   = '<i></i>' + tx(f.enviados, f.contactos);
-  document.getElementById('fnTxNegociacao').innerHTML = '<i></i>' + pct(f.negoc, f.enviados) + '% do anterior';
-  document.getElementById('fnTxVendas').innerHTML     = '<i></i>' + pct(f.vendas, f.negoc) + '% do anterior';
-
-  const larg = (n, base) => Math.max(n ? 6 : 0, Math.round((n / (base || 1)) * 100));
-  document.getElementById('fnPbEnviados').style.width   = larg(f.enviados, f.contactos) + '%';
-  document.getElementById('fnPbNegociacao').style.width = larg(f.negoc, f.enviados) + '%';
-  document.getElementById('fnPbVendas').style.width     = larg(f.vendas, f.negoc) + '%';
-
-  const semResposta = Math.max(0, f.enviados - f.negoc - f.vendas);
-  document.getElementById('fnResumo').innerHTML =
-    '<b>' + f.contactos + ' \u2192 ' + f.vendas + '</b> = ' + pct(f.vendas, f.contactos) +
-    '% de convers\u00E3o global \u00B7 ' + semResposta +
-    (semResposta === 1 ? ' or\u00E7amento ficou sem resposta ap\u00F3s o envio' : ' or\u00E7amentos ficaram sem resposta ap\u00F3s o envio');
+  /* R75: pill, conversao, percentagens, barras e resumo escrevem-se a partir do
+     valor que esta a ser contado em cada instante \u2014 nunca contradizem os cartoes */
+  FUNIL.f = f;
+  FUNIL.negTotal = negTotal;
+  aoContarFunil();
 }
 
 function renderVendas(){

@@ -755,6 +755,46 @@ async def main():
         ok("R59 · sem erros de consola", len(r59e)==0, str(r59e[:2]))
         await r59.close()
 
+        # ============ R75 · FUNIL COERENTE E COMPACTO NO TELEMÓVEL ============
+        r75 = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        r75e=[]; r75.on("pageerror", lambda e: r75e.append(str(e)))
+        await r75.goto(URL_ANIM); await r75.wait_for_timeout(300)
+        await r75.evaluate("localStorage.clear()"); await r75.reload(); await r75.wait_for_selector("#pg-modelos:not(.hidden)")
+        await r75.wait_for_timeout(700)
+        K1 = await r75.evaluate("""()=>{const f=document.querySelector('.funilWrap')||document.querySelector('.funil');
+            const g=document.getElementById('grid').getBoundingClientRect();
+            const et=[...document.querySelectorAll('.etapa')].map(e=>Math.round(e.getBoundingClientRect().width));
+            return {altura:Math.round(document.querySelector('.funil').getBoundingClientRect().height),
+                    grelhaNoEcra: g.top<innerHeight-60,
+                    duasColunas: et.length==4 && et[0]===et[1],
+                    semBarras: getComputedStyle(document.querySelector('.etapa .pb')).display==='none',
+                    rotulo:document.querySelector('.funil-top .sub').textContent};}""")
+        ok("R75 · funil compacto no telemóvel (2x2, sem barras)",
+           K1["duasColunas"] and K1["semBarras"] and K1["altura"]<=350, str(K1))
+        ok("R75 · primeiros carros visíveis no primeiro ecrã", K1["grelhaNoEcra"], str(K1))
+        ok("R75 · rótulo sem prometer '90 dias'", "90 dias" not in K1["rotulo"], K1["rotulo"])
+        meio = []
+        for _ in range(4):
+            await r75.wait_for_timeout(500)
+            meio.append(await r75.evaluate("""()=>({fn:Number(document.getElementById('fnEnviados').textContent),
+                resumo:document.getElementById('fnResumo').textContent,
+                primeiro:Number(document.getElementById('fnContactos').textContent),
+                seta:document.getElementById('fnResumo').innerHTML.includes(String.fromCharCode(8594))})"""))
+        coerente = all(m["resumo"].startswith(str(m["primeiro"]) + " ") for m in meio)
+        ok("R75 · resumo acompanha o valor contado (sem contradições nos 8 s)",
+           coerente and all(m["seta"] for m in meio), str(meio))
+        await r75.wait_for_timeout(8000)
+        F75 = await r75.evaluate("""()=>({fn:Number(document.getElementById('fnEnviados').textContent),
+            resumo:document.getElementById('fnResumo').textContent,
+            conv:document.getElementById('fnConversao').textContent,
+            pill:document.getElementById('fnVendasPill').textContent,
+            real:dadosFunil()})""")
+        ok("R75 · valores finais continuam exatos",
+           F75["fn"]==F75["real"]["enviados"] and F75["conv"]==str(round(F75["real"]["vendas"]/F75["real"]["contactos"]*100))+"%"
+           and F75["resumo"].startswith(str(F75["real"]["contactos"]) + " "), str(F75))
+        ok("R75 · sem erros de consola", len(r75e)==0, str(r75e[:2]))
+        await r75.close()
+
         # ============ R74 · FUNIL DE VENDAS NO TOPO DO AUTOMÓVEL ============
         r74 = await b.new_page(viewport={"width":1440,"height":900})
         r74e=[]; r74.on("pageerror", lambda e: r74e.append(str(e)))
@@ -822,10 +862,11 @@ async def main():
             const sec=document.querySelector('#pg-modelos .sec-head');
             return {topo: f.getBoundingClientRect().bottom<=filtros.top,
                     empilhado: et[1].getBoundingClientRect().top>=et[0].getBoundingClientRect().bottom-1,
+                    duasColunas: Math.abs(et[0].getBoundingClientRect().top-et[1].getBoundingClientRect().top)<2,
                     semTituloExtra: getComputedStyle(sec).display==='none',
                     overflow: document.documentElement.scrollWidth-390};}""")
-        ok("R74 · telemóvel · funil no topo e em lista empilhada",
-           M74["topo"] and M74["empilhado"], str(M74))
+        ok("R74 · telemóvel · funil no topo, em 2x2 compacto",
+           M74["topo"] and M74["duasColunas"] and not M74["empilhado"], str(M74))
         ok("R74 · telemóvel · sem overflow horizontal", M74["overflow"]<=0, str(M74["overflow"]))
         ok("R74 · telemóvel · sem erros de consola", len(r74me)==0, str(r74me[:2]))
         await r74m.close()
@@ -1981,10 +2022,11 @@ async def main():
           const s=document.getElementById('pg-modelos');
           const etapas=[...s.querySelectorAll('.etapa')];
           const prim=etapas[0].getBoundingClientRect(), seg=etapas[1].getBoundingClientRect();
-          return {empilhado: seg.top>=prim.bottom-1, semScroll: document.documentElement.scrollWidth-390,
+          return {compacto: Math.abs(prim.top-seg.top)<2 && prim.width===seg.width,
+                  semScroll: document.documentElement.scrollWidth-390,
                   titulo: document.getElementById('barTitle').textContent};
         }""")
-        ok("R39 · telemóvel · funil em lista empilhada", M2["empilhado"], str(M2))
+        ok("R39 · telemóvel · funil em 2x2 (R75 compactou)", M2["compacto"], str(M2))
         ok("R74 · telemóvel · funil vive no Automóvel", M2["titulo"]=="Automóvel", str(M2))
         ok("R39 · telemóvel · sem erros de consola", len(rvme)==0, str(rvme[:2]))
         await rvm.close()

@@ -1,14 +1,14 @@
 [
  {
   "nome": "Carga inicial (ate o ecra de Automoveis)",
-  "valor": "97 ms",
+  "valor": "107 ms",
   "alvo": "< 1500 ms",
   "ok": true,
   "nota": ""
  },
  {
   "nome": "First Contentful Paint",
-  "valor": "48 ms",
+  "valor": "76 ms",
   "alvo": "< 800 ms",
   "ok": true,
   "nota": ""
@@ -22,7 +22,7 @@
  },
  {
   "nome": "Tamanho do ficheiro unico",
-  "valor": "503 KB",
+  "valor": "505 KB",
   "alvo": "sem limite",
   "ok": null,
   "nota": "html + css + js + imagens embutidas (base64)"
@@ -67,7 +67,7 @@
   "valor": "max 32 ms",
   "alvo": "< 120 ms",
   "ok": true,
-  "nota": "{\"modelos\": 24.6, \"listaorc\": 31.3, \"vendas\": 31.6, \"clientes\": 31.9, \"perfil\": 31.7}"
+  "nota": "{\"modelos\": 31.5, \"listaorc\": 30.9, \"vendas\": 32, \"clientes\": 31.1, \"perfil\": 31.4}"
  },
  {
   "nome": "Recalculo por tecla no desconto",
@@ -162,9 +162,9 @@
  },
  {
   "nome": "Marcar venda concluida atualiza o funil",
-  "valor": "{\"vendas\": \"1 venda\", \"fechadas\": 1, \"emCurso\": 6}",
+  "valor": "{\"vendas\": \"0 vendas\", \"fechadas\": 1, \"emCurso\": 6}",
   "alvo": "pill = fechadas",
-  "ok": true,
+  "ok": false,
   "nota": ""
  },
  {
