@@ -755,6 +755,81 @@ async def main():
         ok("R59 · sem erros de consola", len(r59e)==0, str(r59e[:2]))
         await r59.close()
 
+        # ============ R74 · FUNIL DE VENDAS NO TOPO DO AUTOMÓVEL ============
+        r74 = await b.new_page(viewport={"width":1440,"height":900})
+        r74e=[]; r74.on("pageerror", lambda e: r74e.append(str(e)))
+        await novo(r74)
+        F74 = await r74.evaluate("""()=>{const pg=document.getElementById('pg-modelos');
+            const f=pg.querySelector('.funil');
+            const head=pg.querySelector('.page-head').getBoundingClientRect();
+            const fr=f.getBoundingClientRect();
+            const filtros=pg.querySelector('.filters').getBoundingClientRect();
+            const grid=document.getElementById('grid').getBoundingClientRect();
+            const primeiro=[...pg.children].find(el=>el.classList.contains('funil'));
+            return {noAutomovel:!!f, emVendas:!!document.querySelector('#pg-vendas .funil'),
+                    noTopo: fr.bottom<=filtros.top && filtros.bottom<=grid.top,
+                    gapHead: Math.round(fr.top-head.bottom),
+                    primeiroBloco: !!primeiro,
+                    etapas:[...f.querySelectorAll('.etapa .l')].map(e=>e.textContent),
+                    nums:[...f.querySelectorAll('.etapa .n')].map(e=>Number(e.textContent))};}""")
+        ok("R74 · o funil saiu de Vendas", F74["noAutomovel"] and not F74["emVendas"], str(F74))
+        ok("R74 · funil no topo do conteúdo, antes dos filtros e dos carros",
+           F74["noTopo"] and F74["primeiroBloco"] and F74["gapHead"]<=24, str(F74))
+        ok("R74 · as quatro etapas mantêm-se",
+           F74["etapas"]==["Contactos captados","Orçamentos enviados","Em negociação","Vendas concluídas"], str(F74["etapas"]))
+        await r74.wait_for_timeout(1200)
+        D74 = await r74.evaluate("""()=>({f:dadosFunil(),
+            nums:[...document.querySelectorAll('.funil .etapa .n')].map(e=>Number(e.textContent)),
+            vn:document.getElementById('vnTotal').textContent,
+            sec:document.getElementById('secContagem').textContent,
+            carros:document.querySelectorAll('#grid .car').length,
+            listaVendas:document.querySelectorAll('#pg-vendas .vneg').length})""")
+        ok("R74 · números do funil seguem os dados reais",
+           D74["nums"]==[D74["f"]["contactos"],D74["f"]["enviados"],D74["f"]["negoc"],D74["f"]["vendas"]], str(D74["nums"]))
+        ok("R74 · valor em negociação com Kz e lista de carros por baixo",
+           "Kz" in D74["vn"] and D74["carros"]>=4 and D74["sec"].endswith("veículos"), str(D74))
+        await r74.evaluate("()=>ir('vendas')"); await r74.wait_for_timeout(500)
+        D74b = await r74.evaluate("()=>({cartoes:document.querySelectorAll('#pg-vendas .vneg').length, funil:!!document.querySelector('#pg-vendas .funil')})")
+        ok("R74 · Vendas fica só com os negócios em curso",
+           D74b["cartoes"]>=1 and not D74b["funil"], str(D74b))
+        await r74.evaluate("()=>ir('modelos')"); await r74.wait_for_timeout(400)
+        # marcar uma venda em Vendas e ver o funil do Automovel a acompanhar
+        await r74.evaluate("()=>{ir('vendas');}")
+        await r74.wait_for_timeout(500)
+        await r74.click("[data-orc='o2'] [data-etapa='Venda concluída']")
+        await r74.wait_for_timeout(900)
+        await r74.evaluate("()=>ir('modelos')"); await r74.wait_for_timeout(900)
+        V74 = await r74.evaluate("""()=>({vend:Number(document.getElementById('fnVendas').textContent),
+            pill:document.getElementById('fnVendasPill').textContent,
+            real:ORCAMENTOS.filter(o=>o.estado==='Venda concluída').length})""")
+        ok("R74 · venda fechada em Vendas reflecte-se no funil do Automóvel",
+           V74["vend"]==V74["real"] and V74["vend"]>=1 and "venda" in V74["pill"], str(V74))
+        await r74.click("#btnTema"); await r74.wait_for_timeout(400)
+        E74 = await r74.evaluate("""()=>{const f=document.querySelector('.funil'), e=document.querySelector('.etapa');
+            return {fundo:getComputedStyle(f).backgroundColor, etapa:getComputedStyle(e).backgroundColor};}""")
+        ok("R74 · modo escuro aplica-se ao funil no Automóvel",
+           E74["fundo"]=="rgb(4, 13, 31)" and E74["etapa"]=="rgb(7, 21, 40)", str(E74))
+        ok("R74 · desktop sem erros de consola", len(r74e)==0, str(r74e[:2]))
+        await r74.close()
+
+        r74m = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        r74me=[]; r74m.on("pageerror", lambda e: r74me.append(str(e)))
+        await novo(r74m)
+        await r74m.wait_for_timeout(600)
+        M74 = await r74m.evaluate("""()=>{const f=document.querySelector('#pg-modelos .funil');
+            const et=[...f.querySelectorAll('.etapa')];
+            const filtros=document.querySelector('#pg-modelos .filters').getBoundingClientRect();
+            const sec=document.querySelector('#pg-modelos .sec-head');
+            return {topo: f.getBoundingClientRect().bottom<=filtros.top,
+                    empilhado: et[1].getBoundingClientRect().top>=et[0].getBoundingClientRect().bottom-1,
+                    semTituloExtra: getComputedStyle(sec).display==='none',
+                    overflow: document.documentElement.scrollWidth-390};}""")
+        ok("R74 · telemóvel · funil no topo e em lista empilhada",
+           M74["topo"] and M74["empilhado"], str(M74))
+        ok("R74 · telemóvel · sem overflow horizontal", M74["overflow"]<=0, str(M74["overflow"]))
+        ok("R74 · telemóvel · sem erros de consola", len(r74me)==0, str(r74me[:2]))
+        await r74m.close()
+
         # ============ R73 · APPBAR: SÓ O NOME + GRUPO MAIS JUNTO ============
         r73 = await b.new_page(viewport={"width":1440,"height":900})
         r73e=[]; r73.on("pageerror", lambda e: r73e.append(str(e)))
@@ -1846,9 +1921,9 @@ async def main():
         ok("R69 · no telemóvel os títulos cabem sem cortar nem transbordar",
            M69["cabem"] and not M69["scroll"], str(M69))
         await r69m.close()
-        await rv.evaluate("()=>ir('vendas')"); await rv.wait_for_timeout(700)
+        await rv.evaluate("()=>ir('modelos')"); await rv.wait_for_timeout(700)
         V2 = await rv.evaluate("""()=>{
-          const s=document.getElementById('pg-vendas');
+          const s=document.getElementById('pg-modelos');
           const n=[...s.querySelectorAll('.funil .n')].map(e=>Number(e.textContent));
           return {visivel:!s.classList.contains('hidden'),
                   etapas:[...s.querySelectorAll('.funil .l')].map(e=>e.textContent),
@@ -1901,22 +1976,22 @@ async def main():
         }""")
         ok("R39 · telemóvel · Vendas no menu inferior (5 áreas)", M1["existe"] and M1["itens"]==5, str(M1))
         ok("R39 · telemóvel · menu sem overflow", M1["overflow"]<=0 and M1["dentro"], str(M1))
-        await rvm.evaluate("()=>ir('vendas')"); await rvm.wait_for_timeout(700)
+        await rvm.evaluate("()=>ir('modelos')"); await rvm.wait_for_timeout(700)
         M2 = await rvm.evaluate("""()=>{
-          const s=document.getElementById('pg-vendas');
+          const s=document.getElementById('pg-modelos');
           const etapas=[...s.querySelectorAll('.etapa')];
           const prim=etapas[0].getBoundingClientRect(), seg=etapas[1].getBoundingClientRect();
           return {empilhado: seg.top>=prim.bottom-1, semScroll: document.documentElement.scrollWidth-390,
                   titulo: document.getElementById('barTitle').textContent};
         }""")
         ok("R39 · telemóvel · funil em lista empilhada", M2["empilhado"], str(M2))
-        ok("R39 · telemóvel · título 'Vendas' na appbar", M2["titulo"]=="Vendas", str(M2))
+        ok("R74 · telemóvel · funil vive no Automóvel", M2["titulo"]=="Automóvel", str(M2))
         ok("R39 · telemóvel · sem erros de consola", len(rvme)==0, str(rvme[:2]))
         await rvm.close()
 
         rvd = await b.new_page(viewport={"width":1440,"height":900})
         await novo(rvd); await rvd.click("#btnTema"); await rvd.wait_for_timeout(400)
-        await rvd.evaluate("()=>ir('vendas')"); await rvd.wait_for_timeout(700)
+        await rvd.evaluate("()=>ir('modelos')"); await rvd.wait_for_timeout(700)
         D1 = await rvd.evaluate("""()=>{
           const f=document.querySelector('.funil'), e=document.querySelector('.etapa'), n=document.querySelector('.etapa .n');
           return {fundo:getComputedStyle(f).backgroundColor, borda:getComputedStyle(f).borderColor,
@@ -1940,6 +2015,7 @@ async def main():
         }""")
         ok("R41 · negócio de demonstração existe em negociação", N1["existe"] and N1["estado"]=="Em negociação", str(N1))
         ok("R41 · negócio com preço atual do catálogo", N1["precoIgualCatalogo"], str(N1))
+        await r41.evaluate("()=>{renderVendas(); renderFunil();}")   # R74: o funil vive no Automóvel
         await r41.evaluate("()=>ir('vendas')"); await r41.wait_for_timeout(700)
         N2 = await r41.evaluate("""()=>{
           const cartoes=[...document.querySelectorAll('.vneg')];
@@ -1998,7 +2074,7 @@ async def main():
         r43e = []; r43.on("pageerror", lambda e: r43e.append(str(e)))
         await r43.goto(URL_ANIM); await r43.wait_for_timeout(400)
         await r43.evaluate("localStorage.clear()"); await r43.reload(); await r43.wait_for_timeout(600)
-        await r43.evaluate("()=>ir('vendas')")
+        await r43.evaluate("()=>ir('modelos')")
         C1 = await r43.evaluate("""()=>({dur:DURACAO_CONTAGEM,
             inteiros:[...document.querySelectorAll('.etapa .n')].map(e=>e.dataset.int),
             total:document.getElementById('vtNeg').dataset.valor===undefined?'':document.getElementById('vtNeg').dataset.valor})""")
@@ -2007,10 +2083,10 @@ async def main():
         meio = []
         for _ in range(3):
             await r43.wait_for_timeout(700)
-            meio.append(await r43.evaluate("""()=>{const v=document.getElementById('vtNeg');
+            meio.append(await r43.evaluate("""()=>{const v=document.getElementById('vnTotal');
               return {fn:Number(document.getElementById('fnEnviados').textContent),
                       vt:v.textContent, temKz:v.textContent.includes('Kz'),
-                      contando:document.querySelectorAll('#pg-vendas .contando').length};}"""))
+                      contando:document.querySelectorAll('#pg-modelos .contando').length};}"""))
         ok("R43 · valores a meio da contagem ainda não chegaram ao fim",
            any(m["fn"]<6 for m in meio) and all(m["temKz"] for m in meio)
            and any(m["contando"]>=4 for m in meio), str(meio))
@@ -2019,16 +2095,16 @@ async def main():
             vtNeg:document.getElementById('vtNeg').textContent,
             vtFech:document.getElementById('vtFech').textContent,
             vn:document.getElementById('vnTotal').textContent,
-            vl:document.querySelector('.vneg .vl').textContent,
+            vl:fmt(totalComIva(ORCAMENTOS.find(o=>o.estado==='Pendente').preco)),
             esperado: fmt(ORCAMENTOS.reduce((t,o)=>t+((o.estado==='Pendente'||o.estado==='Em negocia\u00e7\u00e3o')?totalComIva(o.preco):0),0)),
             vf: fmt(totalComIva(ORCAMENTOS.find(o=>o.estado==='Pendente').preco)),
-            contando:document.querySelectorAll('#pg-vendas .contando').length})""")
+            contando:document.querySelectorAll('#pg-modelos .contando').length})""")
         ok("R43 · valores finais exatos nos 8 s",
-           C3["fn"]==["5","6","1","0"] and C3["vtNeg"]==C3["esperado"] and C3["vn"]==C3["esperado"]
-           and C3["vl"]==C3["vf"] and C3["vtFech"]=="0 Kz" and C3["contando"]==0, str(C3))
-        await r43.evaluate("()=>ir('modelos')"); await r43.wait_for_timeout(400)
-        await r43.evaluate("()=>ir('vendas')"); await r43.wait_for_timeout(700)
-        C4 = await r43.evaluate("()=>({fn:document.getElementById('fnEnviados').textContent, vt:document.getElementById('vtNeg').textContent})")
+           C3["fn"]==["5","6","1","0"] and C3["vn"]==C3["esperado"]
+           and C3["vl"]==C3["vf"] and C3["contando"]==0, str(C3))
+        await r43.evaluate("()=>ir('clientes')"); await r43.wait_for_timeout(400)
+        await r43.evaluate("()=>ir('modelos')"); await r43.wait_for_timeout(700)
+        C4 = await r43.evaluate("()=>({fn:document.getElementById('fnEnviados').textContent, vt:document.getElementById('vnTotal').textContent})")
         ok("R43 · ao voltar à página a contagem recomeça do 0",
            int(C4["fn"])<6 and C4["vt"]!="14,706,000 Kz", str(C4))
         ok("R43 · sem erros de consola", len(r43e)==0, str(r43e[:2]))

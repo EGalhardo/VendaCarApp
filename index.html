@@ -259,6 +259,13 @@
   .etapa:last-child{background:#eef8ef;border-color:#d3ecd6}
   .funil-base{display:flex;align-items:center;gap:8px;margin-top:13px;font-size:11.5px;color:var(--muted-2);flex-wrap:wrap}
   .funil-base b{color:var(--green-ink);font-weight:800}
+  /* R74: o funil subiu para o Automovel \u2014 a lista de carros ganha um titulo proprio */
+  .sec-head{display:flex;align-items:center;gap:10px;margin:0 0 12px}
+  .sec-head h3{font-size:14px;font-weight:800;color:#2b3532}
+  .sec-head .sub2{font-size:11.5px;color:var(--muted-2);font-weight:600}
+  html[data-tema="escuro"] .sec-head h3{color:#fff}
+  html[data-tema="escuro"] .sec-head .sub2{color:#93a7c4}
+  @media (max-width:900px){ .sec-head{display:none} }   /* no telemovel o subtitulo esta na appbar */
   .vendas-head{display:flex;align-items:center;gap:12px;margin-bottom:11px}
   .vendas-head h3{font-size:14px;font-weight:800;color:#2b3532}
   .vendas-tot{margin-left:auto;display:flex;gap:9px;flex-wrap:wrap}
@@ -1562,6 +1569,29 @@ setTimeout(function(){
         </div>
       </div>
 
+      <div class="funil">
+        <div class="funil-top">
+          <h3><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18l-7 8v7l-4 2v-9z"/></svg></span>
+            Funil de vendas</h3>
+          <div class="sub">&#218;ltimos 90 dias<br>Convers&#227;o global <b id="fnConversao">&#8212;</b></div>
+          <span class="chipP" id="fnVendasPill">0 vendas</span>
+        </div>
+        <div class="funil-grid">
+          <div class="etapa"><div class="n" id="fnContactos" data-int="1">0</div><div class="l">Contactos captados</div>
+            <div class="pb"><i id="fnPbContactos" style="width:100%"></i></div><div class="p"><i></i>entrada do funil</div></div>
+          <div class="etapa"><div class="n" id="fnEnviados" data-int="1">0</div><div class="l">Or&#231;amentos enviados</div>
+            <div class="pb"><i id="fnPbEnviados" style="width:100%"></i></div><div class="p" id="fnTxEnviados"><i></i>&#8212;</div></div>
+          <div class="etapa q"><div class="n" id="fnNegociacao" data-int="1">0</div><div class="l">Em negocia&#231;&#227;o</div>
+            <div class="pb"><i id="fnPbNegociacao" style="width:0%"></i></div><div class="p q" id="fnTxNegociacao"><i></i>&#8212;</div></div>
+          <div class="etapa"><div class="n" id="fnVendas" data-int="1">0</div><div class="l">Vendas conclu&#237;das</div>
+            <div class="pb"><i id="fnPbVendas" style="width:0%"></i></div><div class="p" id="fnTxVendas"><i></i>&#8212;</div></div>
+        </div>
+        <div class="funil-base"><span id="fnResumo">&#8212;</span></div>
+        <div class="funil-tot">Valor em negocia&#231;&#227;o <b id="vnTotal">0 Kz</b></div>
+      </div>
+
+      <div class="sec-head"><h3>Autom&#243;veis no estoque</h3><span class="sub2" id="secContagem"></span></div>
+
       <div class="filters">
         <div class="chips-inline" id="filtros"></div>
         <button class="btn btn-criar-mobile" data-criar aria-label="Criar novo modelo de carro" title="Novo modelo">
@@ -1840,27 +1870,6 @@ setTimeout(function(){
       <div class="page-head">
         <div><p class="sub">Funil comercial e neg&#243;cios em curso</p></div>
         <div class="right"><button class="btn ghost" data-go="listaorc">Ver or&#231;amentos</button></div>
-      </div>
-
-      <div class="funil">
-        <div class="funil-top">
-          <h3><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18l-7 8v7l-4 2v-9z"/></svg></span>
-            Funil de vendas</h3>
-          <div class="sub">&#218;ltimos 90 dias<br>Convers&#227;o global <b id="fnConversao">&#8212;</b></div>
-          <span class="chipP" id="fnVendasPill">0 vendas</span>
-        </div>
-        <div class="funil-grid">
-          <div class="etapa"><div class="n" id="fnContactos" data-int="1">0</div><div class="l">Contactos captados</div>
-            <div class="pb"><i id="fnPbContactos" style="width:100%"></i></div><div class="p"><i></i>entrada do funil</div></div>
-          <div class="etapa"><div class="n" id="fnEnviados" data-int="1">0</div><div class="l">Or&#231;amentos enviados</div>
-            <div class="pb"><i id="fnPbEnviados" style="width:100%"></i></div><div class="p" id="fnTxEnviados"><i></i>&#8212;</div></div>
-          <div class="etapa q"><div class="n" id="fnNegociacao" data-int="1">0</div><div class="l">Em negocia&#231;&#227;o</div>
-            <div class="pb"><i id="fnPbNegociacao" style="width:0%"></i></div><div class="p q" id="fnTxNegociacao"><i></i>&#8212;</div></div>
-          <div class="etapa"><div class="n" id="fnVendas" data-int="1">0</div><div class="l">Vendas conclu&#237;das</div>
-            <div class="pb"><i id="fnPbVendas" style="width:0%"></i></div><div class="p" id="fnTxVendas"><i></i>&#8212;</div></div>
-        </div>
-        <div class="funil-base"><span id="fnResumo">&#8212;</span></div>
-        <div class="funil-tot">Valor em negocia&#231;&#227;o <b id="vnTotal">0 Kz</b></div>
       </div>
 
       <div class="vendas-head">
@@ -2813,7 +2822,7 @@ function ir(page){
   /* valores da p\u00E1gina que fica vis\u00EDvel contam de 0 at\u00E9 ao valor (6 s) */
   if (['modelos','orcamento','orcdetalhe','detalhe','listaorc','clientes','vendas'].includes(page)){
     setTimeout(() => {
-      if (page === 'modelos') contagemCards();
+      if (page === 'modelos'){ contagemCards(); renderFunil(); }
       else if (page === 'listaorc') contarTabela('#tblOrc');
       else if (page === 'clientes') contarTabela('#tblClientes');
       else if (page === 'vendas') contarTabela('#vendasLista');
@@ -2867,29 +2876,17 @@ function pct(a, b){ return b > 0 ? Math.round((a / b) * 100) : 0; }
 
 let filtroEstadoVendas = 'Todos';   /* R68: filtro do grupo "Neg\u00F3cios em curso" */
 
-function renderVendas(){
-  const lista = document.getElementById('vendasLista');
-  if (!lista) return;
+/* R74: FUNIL DE VENDAS \u2014 passou de Vendas para o topo do Autom\u00F3vel.
+   Recebe os mesmos n\u00FAmeros (clientes / or\u00E7amentos) e pinta os quatro
+   cart\u00F5es, as barras, o resumo e o valor em negocia\u00E7\u00E3o. */
+function renderFunil(){
+  const caixa = document.querySelector('.funil');
+  if (!caixa) return;
   const f = dadosFunil();
-  const soma = arr => arr.reduce((t,o) => t + totalComIva(o.preco), 0);
   const emCurso = ORCAMENTOS.filter(o => ORC_CURSO.includes(o.estado));
-  const fechadas = ORCAMENTOS.filter(o => ORC_FECHADOS.includes(o.estado));
-
-  /* R68: o seletor mostra os cinco estados e filtra a lista (os totais do topo
-     continuam a somar todos os neg\u00F3cios --- s\u00E3o o retrato da loja) */
-  const emCursoVis = filtroEstadoVendas === 'Todos'
-    ? emCurso : emCurso.filter(o => o.estado === filtroEstadoVendas);
-  const fechadasVis = filtroEstadoVendas === 'Todos'
-    ? fechadas : fechadas.filter(o => o.estado === filtroEstadoVendas);
-  const contagem = document.getElementById('vendasContagem');
-  if (contagem){
-    const totalVis = emCursoVis.length + fechadasVis.length;
-    contagem.textContent = filtroEstadoVendas === 'Todos'
-      ? '' : 'a mostrar ' + totalVis + ' de ' + (emCurso.length + fechadas.length);
-  }
+  const negTotal = emCurso.reduce((t,o) => t + totalComIva(o.preco), 0);
 
   /* cart\u00F5es do funil \u2014 os n\u00FAmeros contam de 0 at\u00E9 ao valor (8 s) */
-  const negTotal = soma(emCurso);
   contarPara(document.getElementById('fnContactos'),  f.contactos, 0);
   contarPara(document.getElementById('fnEnviados'),   f.enviados,  0);
   contarPara(document.getElementById('fnNegociacao'), f.negoc,     0);
@@ -2914,6 +2911,31 @@ function renderVendas(){
     '<b>' + f.contactos + ' \u2192 ' + f.vendas + '</b> = ' + pct(f.vendas, f.contactos) +
     '% de convers\u00E3o global \u00B7 ' + semResposta +
     (semResposta === 1 ? ' or\u00E7amento ficou sem resposta ap\u00F3s o envio' : ' or\u00E7amentos ficaram sem resposta ap\u00F3s o envio');
+}
+
+function renderVendas(){
+  const lista = document.getElementById('vendasLista');
+  if (!lista) return;
+  const f = dadosFunil();
+  const soma = arr => arr.reduce((t,o) => t + totalComIva(o.preco), 0);
+  const emCurso = ORCAMENTOS.filter(o => ORC_CURSO.includes(o.estado));
+  const fechadas = ORCAMENTOS.filter(o => ORC_FECHADOS.includes(o.estado));
+  renderFunil();                      /* R74: o funil pertence a pagina Automovel */
+
+  /* R68: o seletor mostra os cinco estados e filtra a lista (os totais do topo
+     continuam a somar todos os neg\u00F3cios --- s\u00E3o o retrato da loja) */
+  const emCursoVis = filtroEstadoVendas === 'Todos'
+    ? emCurso : emCurso.filter(o => o.estado === filtroEstadoVendas);
+  const fechadasVis = filtroEstadoVendas === 'Todos'
+    ? fechadas : fechadas.filter(o => o.estado === filtroEstadoVendas);
+  const contagem = document.getElementById('vendasContagem');
+  if (contagem){
+    const totalVis = emCursoVis.length + fechadasVis.length;
+    contagem.textContent = filtroEstadoVendas === 'Todos'
+      ? '' : 'a mostrar ' + totalVis + ' de ' + (emCurso.length + fechadas.length);
+  }
+
+  const negTotal = soma(emCurso);
 
   /* totais \u2014 tamb\u00E9m contam de 0 at\u00E9 ao valor (8 s) */
   contarPara(document.getElementById('vtNeg'),  negTotal, 0);
@@ -3052,6 +3074,10 @@ function renderGrid(){
   renderPerfilLoja();
   document.getElementById('subModelos').textContent =
     CARROS.length + (CARROS.length === 1 ? ' ve\u00EDculo no estoque' : ' ve\u00EDculos no estoque');
+  const sec = document.getElementById('secContagem');
+  if (sec) sec.textContent = filtro === 'Todos'
+    ? (lista.length + (lista.length === 1 ? ' ve\u00EDculo' : ' ve\u00EDculos'))
+    : (lista.length + ' de ' + CARROS.length);
   sincronizarSub();
 
   const grid = document.getElementById('grid');
