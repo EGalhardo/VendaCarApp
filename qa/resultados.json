@@ -756,12 +756,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1.03, 'offsets': 11}"
+  "d": "{'dx': 1.08, 'offsets': 12}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1.03, 'offsets': 11}"
+  "d": "{'dx': 1.08, 'offsets': 12}"
  },
  {
   "r": "PASS",
@@ -1151,7 +1151,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "32,869.24 Kz"
+  "d": "14,982.94 Kz"
  },
  {
   "r": "PASS",
@@ -1161,12 +1161,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,589,233.35 Kz"
+  "d": "9,587,974.71 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,999.10 Kz"
+  "d": "9,749,998.64 Kz"
  },
  {
   "r": "PASS",
@@ -1182,10 +1182,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   319510,
-   2891899,
-   4881402,
-   6362662
+   318868,
+   2891647,
+   4881019,
+   6362383
   ]
  },
  {
@@ -1206,14 +1206,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "416,229.31 Kz"
+  "d": "415,163.83 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "416,229.31 Kz",
-   "4,062,237.71 Kz"
+   "415,163.83 Kz",
+   "4,061,216.58 Kz"
   ]
  },
  {
@@ -1301,7 +1301,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.0552
+   3.05589
   ]
  },
  {
@@ -1327,7 +1327,7 @@
  {
   "r": "PASS",
   "n": "R63 · as duas cabeças revezam-se (entra uma, cede a outra)",
-  "d": "{'opTras': 1, 'escFrente': 0.921112, 'trasEntra': True}"
+  "d": "{'opTras': 1, 'escFrente': 0.920636, 'trasEntra': True}"
  },
  {
   "r": "PASS",
@@ -2166,7 +2166,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '24,107,111.04 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '43,801,253.56 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '60,067,727.77 Kz', 'temKz': True, 'contando': 13}]"
+  "d": "[{'fn': 1, 'vt': '23,973,646.21 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '44,115,029.96 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '59,981,060.89 Kz', 'temKz': True, 'contando': 13}]"
  },
  {
   "r": "PASS",
@@ -2176,7 +2176,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '23,740,482.04 Kz'}"
+  "d": "{'fn': '1', 'vt': '23,709,357.28 Kz'}"
  },
  {
   "r": "PASS",
@@ -2216,17 +2216,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 15:15 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 15:33 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 15:15 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 15:33 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 15:15 · enviado"
+  "d": "Hoje, 15:33 · enviado"
  },
  {
   "r": "PASS",
@@ -2360,12 +2360,12 @@
  },
  {
   "r": "PASS",
-  "n": "R44 · orçamentos guardam o nome do modelo eliminado",
-  "d": "{'nomes': ['Toyota Corolla 2018', 'Toyota Corolla 2018'], 'total': 6}"
+  "n": "R70 · eliminar o automovel apaga os orcamentos dele",
+  "d": "{'orfaos': 0, 'doCorolla': 0, 'total': 4}"
  },
  {
   "r": "PASS",
-  "n": "R44 · lista mantém o modelo eliminado legível",
+  "n": "R70 · a lista de orcamentos ja nao mostra o carro eliminado",
   "d": ""
  },
  {

@@ -913,6 +913,12 @@
   .od-actions{display:flex;flex-direction:column;gap:9px;margin-top:16px}
   .od-actions .btn{width:100%;height:44px}
   .od-actions .btn.danger{background:#fff;color:#c0503c;border:1px solid #f2d9d2}
+  /* R70: botao apagar cliente na ficha do cliente */
+  #pg-cliente .page-head .right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .btn.danger.ghost-danger{background:#fff;color:#c0503c;border:1px solid #f2d9d2}
+  .btn.danger.ghost-danger:hover{background:#fdf4f1}
+  html[data-tema="escuro"] .btn.danger.ghost-danger{background:#040d1f;color:#f1897c;border-color:#4a2027}
+  html[data-tema="escuro"] .btn.danger.ghost-danger:hover{background:#2e1418}
   .od-actions .btn.danger:hover{background:#fdf4f1}
   .od-save{font-size:11.5px;color:#a2afa9;text-align:center;margin-top:8px;min-height:15px}
 
@@ -1729,6 +1735,12 @@ setTimeout(function(){
         <div><p class="sub" id="cSub">Or&#231;amentos enviados a este cliente</p></div>
         <div class="right">
           <button class="btn ghost" data-go="clientes">Voltar aos Clientes</button>
+          <button class="btn danger ghost-danger" id="btnApagarCliente">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>
+            Apagar cliente
+          </button>
         </div>
       </div>
 
@@ -2033,8 +2045,9 @@ setTimeout(function(){
     <div class="body">
       <p class="conf-txt">Tem a certeza de que quer eliminar <b id="apNome">&#8212;</b> do estoque?</p>
       <div class="conf-box">
-        <span>O carro sai da lista de Autom&#243;veis.</span>
-        <span>Os or&#231;amentos j&#225; criados <b>mant&#234;m-se</b> no hist&#243;rico.</span>
+        <span>O carro sai dos <b>Autom&#243;veis</b>.</span>
+        <span>Os <b>or&#231;amentos</b> desse carro s&#227;o apagados em Or&#231;amentos, Vendas e Clientes.</span>
+        <span>Os <b>clientes</b> que ficarem sem or&#231;amentos desaparecem da lista.</span>
       </div>
     </div>
     <div class="foot">
@@ -3320,6 +3333,123 @@ document.getElementById('btnGuardarModelo').addEventListener('click', () => {
 });
 
 /* ==========================================================
+   R70 \u2014 ELIMINAR E ATUALIZAR TUDO
+   Um item eliminado tem de desaparecer de TODOS os dados que
+   dependem dele: catalogo, orcamentos, fila de envios, telemovel,
+   Automoveis, Orcamentos, Vendas, Clientes, Perfil e a mensagem.
+   ========================================================== */
+
+/* volta a desenhar tudo o que depende dos dados, no ecra em que o utilizador esta */
+function atualizarTudo(){
+  try{ renderGrid(); }catch(e){}
+  try{ renderFiltrosOrc(); }catch(e){}
+  try{ renderTabelaOrc(); }catch(e){}
+  try{ renderClientes(); }catch(e){}
+  try{ renderVendas(); }catch(e){}
+  try{ renderPerfilLoja(); }catch(e){}
+  try{ renderEstadoRede(); }catch(e){}
+  sincronizarContadores();
+  /* o ecra aberto e redesenhado (ou fechado, se o que estava aberto desapareceu) */
+  const pg = paginaAtual();
+  if (pg === 'orcamento' && atual) calc();
+  if (pg === 'detalhe' && atual) abrirDetalhe();
+  if (pg === 'orcdetalhe'){
+    if (ORCAMENTOS.some(o => o.id === orcAberto)) abrirOrcDetalhe(orcAberto);
+    else { orcAberto = null; ir('listaorc'); toast('Este or\u00E7amento j\u00E1 n\u00E3o existe'); }
+  }
+  if (pg === 'cliente'){
+    if (clienteAtual && ORCAMENTOS.some(o => String(o.tel) === String(clienteAtual.tel)))
+      abrirCliente(clienteAtual.nome, clienteAtual.tel, true);
+    else { clienteAtual = null; ir('clientes'); toast('Este cliente j\u00E1 n\u00E3o tem or\u00E7amentos'); }
+  }
+  if (pg === 'modelos'){ renderFiltros(); renderGrid(); }
+}
+
+/* APAGAR UM ORCAMENTO: sai da lista, de Vendas, de Clientes, da fila de
+   envios e dos ecras abertos. Se for o ultimo do cliente, o cliente desaparece. */
+function apagarOrcamento(id){
+  const orc = ORCAMENTOS.find(o => o.id === id);
+  if (!orc) return false;
+  const tel = String(orc.tel);
+  const ultimoDoCliente = ORCAMENTOS.filter(o => String(o.tel) === tel).length === 1;
+
+  ORCAMENTOS = ORCAMENTOS.filter(o => o.id !== id);
+  guardarOrc();
+
+  /* mensagens ainda por enviar para este orcamento deixam de fazer sentido */
+  const antes = FILA_ENVIOS.length;
+  FILA_ENVIOS = FILA_ENVIOS.filter(f => f.orcId !== id);
+  if (FILA_ENVIOS.length !== antes) guardarFila();
+
+  if (enviarPendente === id) enviarPendente = null;
+  if (orcAberto === id)      orcAberto = null;
+
+  atualizarTudo();
+  toast(ultimoDoCliente
+    ? 'Or\u00E7amento apagado \u00B7 ' + orc.nome + ' saiu dos Clientes (n\u00E3o tem mais or\u00E7amentos)'
+    : 'Or\u00E7amento apagado em todos os ecras');
+  return true;
+}
+
+/* APAGAR UM AUTOMOVEL: sai do catalogo e os orcamentos desse carro sao apagados
+   tambem (com os clientes que ficarem sem orcamentos a desaparecer). */
+function apagarAutomovel(id){
+  const c = CARROS.find(x => x.id === id);
+  if (!c) return false;
+
+  const orcsDoCarro = ORCAMENTOS.filter(o => o.carro === id);
+  const telesAntes = new Set(ORCAMENTOS.map(o => String(o.tel)));
+
+  CARROS = CARROS.filter(x => x.id !== id);
+  guardar();
+
+  ORCAMENTOS = ORCAMENTOS.filter(o => o.carro !== id);
+  guardarOrc();
+
+  /* fila de envios desses orcamentos */
+  const idsFora = new Set(orcsDoCarro.map(o => o.id));
+  FILA_ENVIOS = FILA_ENVIOS.filter(f => !idsFora.has(f.orcId));
+  guardarFila();
+  if (idsFora.has(enviarPendente)) enviarPendente = null;
+  if (idsFora.has(orcAberto))      orcAberto = null;
+
+  /* clientes que ficaram sem nenhum orcamento */
+  const telesAgora = new Set(ORCAMENTOS.map(o => String(o.tel)));
+  const clientesFora = [...telesAntes].filter(t => !telesAgora.has(t)).length;
+
+  if (atual && atual.id === id) atual = CARROS[0] || null;
+
+  atualizarTudo();
+  toast('Autom\u00F3vel eliminado \u00B7 ' + orcsDoCarro.length +
+    (orcsDoCarro.length === 1 ? ' or\u00E7amento apagado' : ' or\u00E7amentos apagados') +
+    (clientesFora ? ' \u00B7 ' + clientesFora + (clientesFora === 1 ? ' cliente saiu' : ' clientes sa\u00EDram') + ' da lista' : ''));
+  return true;
+}
+
+/* APAGAR UM CLIENTE: todos os orcamentos desse telemovel desaparecem
+   (Automoveis nao muda; Vendas, Orcamentos e Perfil atualizam-se). */
+function apagarCliente(tel){
+  const alvo = String(tel);
+  const orcs = ORCAMENTOS.filter(o => String(o.tel) === alvo);
+  if (!orcs.length) return false;
+
+  ORCAMENTOS = ORCAMENTOS.filter(o => String(o.tel) !== alvo);
+  guardarOrc();
+
+  const idsFora = new Set(orcs.map(o => o.id));
+  FILA_ENVIOS = FILA_ENVIOS.filter(f => !idsFora.has(f.orcId));
+  guardarFila();
+  if (idsFora.has(enviarPendente)) enviarPendente = null;
+  if (idsFora.has(orcAberto))      orcAberto = null;
+  if (clienteAtual && String(clienteAtual.tel) === alvo) clienteAtual = null;
+
+  atualizarTudo();
+  toast('Cliente apagado \u00B7 ' + orcs.length +
+    (orcs.length === 1 ? ' or\u00E7amento apagado' : ' or\u00E7amentos apagados'));
+  return true;
+}
+
+/* ==========================================================
    ELIMINAR MODELO (com confirma\u00E7\u00E3o)
    ========================================================== */
 let apagarId = null;
@@ -3339,25 +3469,7 @@ document.getElementById('btnApagarModelo').addEventListener('click', () => {
   document.getElementById('mApagarModelo').classList.remove('open');
   if (!id) return;
 
-  const c = CARROS.find(x => x.id === id);
-  CARROS = CARROS.filter(x => x.id !== id);
-  guardar();
-
-  /* os or\u00E7amentos n\u00E3o podem ficar a apontar para outro carro nem mostrar a foto errada */
-  const orcsDoCarro = ORCAMENTOS.filter(o => o.carro === id).length;
-  ORCAMENTOS.forEach(o => {
-    if (o.carro === id){
-      o.carroNome = c ? c.nome : (o.carroNome || '');
-      o.carro = '';
-    }
-  });
-  if (orcsDoCarro){ guardarOrc(); renderTabelaOrc(); renderClientes(); }
-
-  /* se o carro em foco era este, escolhe outro */
-  if (atual && atual.id === id) atual = CARROS[0] || null;
-
-  renderFiltros(); renderGrid(); renderPerfilLoja();
-  toast((c ? 'Modelo eliminado: ' + c.nome : 'Modelo eliminado'));
+  apagarAutomovel(id);
 });
 
 /* ==========================================================
@@ -4112,13 +4224,10 @@ document.getElementById('odApagar').addEventListener('click', () => {
   if (!orc) return;
   if (!confirm('Apagar o or\u00E7amento de ' + orc.nome + '? Esta a\u00E7\u00E3o n\u00E3o pode ser desfeita.')) return;
 
-  ORCAMENTOS = ORCAMENTOS.filter(o => o.id !== orc.id);
-  guardarOrc();
-  renderTabelaOrc();
-  renderClientes();
-  orcAberto = null;
+  const ultimoDoCliente = ORCAMENTOS.filter(o => String(o.tel) === String(orc.tel)).length === 1;
+  apagarOrcamento(orc.id);
+  if (ultimoDoCliente) toast('Or\u00E7amento apagado \u00B7 ' + orc.nome + ' saiu dos Clientes');
   ir('listaorc');
-  toast('Or\u00E7amento apagado');
 });
 
 /* ---------- EXPORTAR (bot\u00F5es do Perfil) ---------- */
@@ -4276,6 +4385,18 @@ function abrirCliente(nome, tel, semNavegar){
 
   if (!semNavegar) ir('cliente');
 }
+
+/* R70: apagar um cliente apaga tambem os orcamentos dele */
+document.getElementById('btnApagarCliente').addEventListener('click', () => {
+  if (!clienteAtual) return;
+  const nome = clienteAtual.nome, tel = clienteAtual.tel;
+  const qtd = ORCAMENTOS.filter(o => String(o.tel) === String(tel)).length;
+  if (!confirm('Apagar ' + nome + '? ' + qtd + (qtd === 1 ? ' or\u00E7amento' : ' or\u00E7amentos') +
+               ' deste cliente tambem ' + (qtd === 1 ? 'ser\u00E1 apagado' : 'ser\u00E3o apagados') +
+               '. Esta a\u00E7\u00E3o n\u00E3o pode ser desfeita.')) return;
+  apagarCliente(tel);
+  ir('clientes');
+});
 
 /* clique nas tabelas de clientes / or\u00E7amentos */
 document.addEventListener('click', e => {

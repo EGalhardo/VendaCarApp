@@ -2144,10 +2144,14 @@ async def main():
         await r44.wait_for_timeout(300)
         await r44.click("[data-delcar]"); await r44.wait_for_timeout(400)
         await r44.click("#btnApagarModelo"); await r44.wait_for_timeout(600)
-        DEL = await r44.evaluate("()=>({nomes:ORCAMENTOS.filter(o=>o.carroNome).map(o=>o.carroNome), total:ORCAMENTOS.length})")
-        ok("R44 · orçamentos guardam o nome do modelo eliminado", len(DEL["nomes"])>0, str(DEL))
+        # R70: eliminar o automovel apaga tambem os orcamentos dele (cascata)
+        DEL = await r44.evaluate("""()=>({orfaos:ORCAMENTOS.filter(o=>o.carro && !CARROS.some(c=>c.id===o.carro)).length,
+            doCorolla:ORCAMENTOS.filter(o=>o.carro==='corolla').length,
+            total:ORCAMENTOS.length})""")
+        ok("R70 · eliminar o automovel apaga os orcamentos dele", DEL["doCorolla"] == 0 and DEL["orfaos"] == 0, str(DEL))
         await r44.evaluate("()=>ir('listaorc')"); await r44.wait_for_timeout(500)
-        ok("R44 · lista mantém o modelo eliminado legível", "Corolla" in await r44.inner_text("#tblOrc"), "")
+        ok("R70 · a lista de orcamentos ja nao mostra o carro eliminado",
+           "Corolla" not in await r44.inner_text("#tblOrc"), "")
         ok("R44 · sem imagens partidas depois de eliminar",
            await r44.evaluate("()=>[...document.images].filter(i=>i.offsetParent&&i.complete&&i.naturalWidth===0).length")==0, "")
         ok("R44 · sem erros de consola", len(r44e)==0, str(r44e[:2]))
