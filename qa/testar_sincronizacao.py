@@ -3,7 +3,7 @@
 import asyncio, sys
 from playwright.async_api import async_playwright
 
-BASE = 'http://localhost:8000/index.html'
+BASE = 'http://localhost:8000/index.html#semcarregamento'
 res = []
 
 def ok(nome, cond, extra=''):

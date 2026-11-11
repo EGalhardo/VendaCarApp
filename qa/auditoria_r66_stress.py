@@ -14,7 +14,7 @@ async def main():
         pg = await ctx.new_page()
         erros = []
         pg.on('pageerror', lambda e: erros.append(str(e)))
-        await pg.goto('http://localhost:8000/index.html')
+        await pg.goto('http://localhost:8000/index.html#semcarregamento')
         await pg.wait_for_selector('#pg-modelos:not(.hidden)')
         await pg.evaluate("localStorage.clear()")
         await pg.reload()
@@ -109,7 +109,7 @@ async def main():
 
         # ---- 6. DOIS SEPARADORES (telemovel + balcao) ----
         pg2 = await ctx.new_page()
-        await pg2.goto('http://localhost:8000/index.html')
+        await pg2.goto('http://localhost:8000/index.html#semcarregamento')
         await pg2.wait_for_selector('#pg-modelos:not(.hidden)')
         await pg2.wait_for_timeout(400)
         n1 = await pg.evaluate("()=>ORCAMENTOS.length")
@@ -124,7 +124,7 @@ async def main():
 
         # ---- 7. OFFLINE (ficheiro local, sem servidor) ----
         pg3 = await ctx.new_page()
-        await pg3.goto('file:///home/user/index.html')
+        await pg3.goto('file:///home/user/index.html#semcarregamento')
         await pg3.wait_for_timeout(600)
         offline = await pg3.evaluate("""()=>({ecra:!document.getElementById('pg-modelos').classList.contains('hidden'),
             carros:CARROS.length, imagens:document.querySelectorAll('#grid img').length})""")

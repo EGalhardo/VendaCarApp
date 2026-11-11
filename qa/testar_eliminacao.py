@@ -3,7 +3,7 @@
 import asyncio, sys
 from playwright.async_api import async_playwright
 
-URL = 'http://localhost:8000/index.html'
+URL = 'http://localhost:8000/index.html#semcarregamento'
 res = []
 
 def ok(nome, cond, extra=''):
@@ -11,6 +11,8 @@ def ok(nome, cond, extra=''):
     print(('OK   ' if cond else 'FALHA') + ' ' + nome + (' | ' + str(extra)[:110] if extra else ''))
 
 async def novo(pg):
+    # #hash nao recarrega: passa por about:blank para garantir um arranque limpo
+    await pg.goto('about:blank')
     await pg.goto(URL)
     await pg.wait_for_selector('#pg-modelos:not(.hidden)')
     await pg.evaluate("localStorage.clear()")

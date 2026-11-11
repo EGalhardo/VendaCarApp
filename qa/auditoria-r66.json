@@ -1,28 +1,28 @@
 [
  {
   "nome": "Carga inicial (ate o ecra de Automoveis)",
-  "valor": "84 ms",
+  "valor": "94 ms",
   "alvo": "< 1500 ms",
   "ok": true,
   "nota": ""
  },
  {
   "nome": "First Contentful Paint",
-  "valor": "76 ms",
+  "valor": "80 ms",
   "alvo": "< 800 ms",
   "ok": true,
   "nota": ""
  },
  {
   "nome": "DOMContentLoaded",
-  "valor": "50 ms",
+  "valor": "54 ms",
   "alvo": "< 1200 ms",
   "ok": true,
   "nota": ""
  },
  {
   "nome": "Tamanho do ficheiro unico",
-  "valor": "419 KB",
+  "valor": "500 KB",
   "alvo": "sem limite",
   "ok": null,
   "nota": "html + css + js + imagens embutidas (base64)"
@@ -67,11 +67,11 @@
   "valor": "max 32 ms",
   "alvo": "< 120 ms",
   "ok": true,
-  "nota": "{\"modelos\": 17.5, \"listaorc\": 31.8, \"vendas\": 30.1, \"clientes\": 29.1, \"perfil\": 31.5}"
+  "nota": "{\"modelos\": 19, \"listaorc\": 31.7, \"vendas\": 31.8, \"clientes\": 29.7, \"perfil\": 31.9}"
  },
  {
   "nome": "Recalculo por tecla no desconto",
-  "valor": "mediana 3 ms / pior 6 ms",
+  "valor": "mediana 3 ms / pior 8 ms",
   "alvo": "pior < 50 ms",
   "ok": true,
   "nota": "cartao, resumo, IVA, parcelas e mensagem no mesmo instante"

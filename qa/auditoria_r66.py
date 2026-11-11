@@ -5,7 +5,7 @@ consistencia dos numeros entre ecras e persistencia depois de recarregar."""
 import asyncio, json, time, statistics
 from playwright.async_api import async_playwright
 
-BASE = 'http://localhost:8000/index.html'
+BASE = 'http://localhost:8000/index.html#semcarregamento'
 REL = []
 
 def reg(nome, valor, alvo, ok=None, nota=''):

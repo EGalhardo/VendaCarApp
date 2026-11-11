@@ -4,7 +4,7 @@ import asyncio, json, urllib.parse as up
 from playwright.async_api import async_playwright
 
 URL = "file:///home/user/index.html#rapido"   # sem contagem: testes deterministas
-URL_ANIM = "file:///home/user/index.html"      # com contagem de 6 s
+URL_ANIM = "file:///home/user/index.html#semcarregamento"   # com contagem, sem ecra de carregamento
 R = []          # resultados
 def ok(nome, cond, detalhe=""):
     R.append((("PASS" if cond else "FALHA"), nome, detalhe))
@@ -754,6 +754,35 @@ async def main():
         ok("R59 · sem erros de consola", len(r59e)==0, str(r59e[:2]))
         await r59.close()
 
+        # ============ R71 · ECRÃ DE CARREGAMENTO (logotipo + barra de 6 s) ============
+        r71 = await b.new_page(viewport={"width":1440,"height":900})
+        r71e=[]; r71.on("pageerror", lambda e: r71e.append(str(e)))
+        import time as _t
+        _t0 = _t.perf_counter()
+        await r71.goto("file:///home/user/index.html")
+        await r71.wait_for_timeout(300)
+        C71 = await r71.evaluate("""()=>({existe:!!document.getElementById('ecraCarregando'),
+            visivel:getComputedStyle(document.getElementById('ecraCarregando')).display!=='none',
+            logo:!!document.querySelector('#ecraCarregando .logoC'),
+            logoTemImagem:(()=>{const i=document.querySelector('#ecraCarregando .logoC');
+                return i ? i.naturalWidth>0 : false;})(),
+            barra:!!document.getElementById('barraCarregando'),
+            pct:document.getElementById('pctCarregando').textContent})""")
+        ok("R71 · o ecrã de carregamento aparece ao iniciar", C71["existe"] and C71["visivel"], str(C71))
+        ok("R71 · mostra o logotipo ao centro", C71["logo"] and C71["logoTemImagem"], str(C71))
+        ok("R71 · tem barra de carregamento a encher", C71["barra"] and C71["pct"].endswith('%'), C71["pct"])
+        await r71.screenshot(path="/home/user/qa/r71-carregamento.png")
+        await r71.wait_for_function("()=>document.getElementById('ecraCarregando').classList.contains('fora')", timeout=9000)
+        _dur = (_t.perf_counter()-_t0)*1000
+        ok("R71 · barra dura cerca de 6 segundos", 5500 <= _dur <= 7500, f"{_dur:.0f} ms")
+        await r71.wait_for_timeout(800)
+        F71 = await r71.evaluate("""()=>({oculto:getComputedStyle(document.getElementById('ecraCarregando')).display,
+            pagina:paginaAtual(), automovel:!document.getElementById('pg-modelos').classList.contains('hidden')})""")
+        ok("R71 · depois do carregamento entra na página Automóvel",
+           F71["automovel"] and F71["pagina"]=='modelos' and F71["oculto"]=='none', str(F71))
+        ok("R71 · sem erros de consola no arranque com carregamento", len(r71e)==0, str(r71e[:2]))
+        await r71.close()
+
         # ============ R58 · IMAGENS NO CÓDIGO (sem duplicados) ============
         r58 = await b.new_page(viewport={"width":1440,"height":900})
         r58e=[]; r58.on("pageerror", lambda e: r58e.append(str(e)))
@@ -773,8 +802,9 @@ async def main():
         }""")
         ok("R58 · um só logótipo no código (sem a variante escura sem uso)",
            IM["imgs"]==1 and not IM["logoEscuro"], str(IM))
-        ok("R58 · um único logótipo embebido (fotos não se repetem no código)",
-           IM["logotiposDistintos"]==1 and IM["dataUris"]==5, str(IM))
+        # R71: alem do logotipo da appbar existe o logotipo grande do ecra de carregamento
+        ok("R58/R71 · logotipos: appbar + ecra de carregamento, sem fotos repetidas",
+           IM["logotiposDistintos"]==2 and IM["dataUris"]==6, str(IM))
         ok("R58 · sem erros de consola", len(r58e)==0, str(r58e[:2]))
         await r58.close()
 
