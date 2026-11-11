@@ -754,6 +754,38 @@ async def main():
         ok("R59 · sem erros de consola", len(r59e)==0, str(r59e[:2]))
         await r59.close()
 
+        # ============ R72 · INDICADOR DE LIGAÇÃO NA APPBAR (Globe / Globe Off) ============
+        r72 = await b.new_page(viewport={"width":1440,"height":900})
+        r72e=[]; r72.on("pageerror", lambda e: r72e.append(str(e)))
+        await novo(r72)
+        R72 = await r72.evaluate("""()=>{const el=document.getElementById('btnRede');
+            const g=el.querySelector('.ico-globe'), o=el.querySelector('.ico-globeoff');
+            const t=document.getElementById('btnTema').getBoundingClientRect();
+            const r=el.getBoundingClientRect();
+            return {existe:!!el, esquerda:r.right<=t.left, estado:el.dataset.rede,
+                    cor:getComputedStyle(el).color, titulo:el.title,
+                    globe:g&&g.tagName.toLowerCase(), off:o&&!!o.querySelector('path')};}""")
+        ok("R72 · ícone de ligação na appbar, à esquerda do tema",
+           R72["existe"] and R72["esquerda"], str(R72))
+        ok("R72 · com internet mostra Globe verde",
+           R72["estado"]=='on' and R72["cor"]=='rgb(47, 158, 68)' and 'Ligado' in R72["titulo"], str(R72))
+        ok("R72 · os dois ícones são SVG estilo Lucide (globe / globe-off)",
+           R72["globe"]=='svg' and R72["off"], str(R72))
+        await r72.context.set_offline(True)
+        await r72.evaluate("()=>window.dispatchEvent(new Event('offline'))")
+        await r72.wait_for_timeout(500)
+        O72 = await r72.evaluate("""()=>{const el=document.getElementById('btnRede');
+            return {estado:el.dataset.rede, cor:getComputedStyle(el).color, titulo:el.title};}""")
+        ok("R72 · sem internet mostra Globe Off vermelho",
+           O72["estado"]=='off' and O72["cor"]=='rgb(214, 69, 69)' and 'Sem liga' in O72["titulo"], str(O72))
+        await r72.context.set_offline(False)
+        await r72.evaluate("()=>window.dispatchEvent(new Event('online'))")
+        await r72.wait_for_timeout(600)
+        ok("R72 · ao voltar a rede o ícone fica verde outra vez",
+           await r72.evaluate("()=>document.getElementById('btnRede').dataset.rede")=='on', "")
+        ok("R72 · sem erros de consola", len(r72e)==0, str(r72e[:2]))
+        await r72.close()
+
         # ============ R71 · ECRÃ DE CARREGAMENTO (logotipo + barra de 6 s) ============
         r71 = await b.new_page(viewport={"width":1440,"height":900})
         r71e=[]; r71.on("pageerror", lambda e: r71e.append(str(e)))

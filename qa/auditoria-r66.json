@@ -8,7 +8,7 @@
  },
  {
   "nome": "First Contentful Paint",
-  "valor": "80 ms",
+  "valor": "72 ms",
   "alvo": "< 800 ms",
   "ok": true,
   "nota": ""
@@ -22,7 +22,7 @@
  },
  {
   "nome": "Tamanho do ficheiro unico",
-  "valor": "500 KB",
+  "valor": "502 KB",
   "alvo": "sem limite",
   "ok": null,
   "nota": "html + css + js + imagens embutidas (base64)"
@@ -64,14 +64,14 @@
  },
  {
   "nome": "Navegacao entre as 5 secoes",
-  "valor": "max 32 ms",
+  "valor": "max 34 ms",
   "alvo": "< 120 ms",
   "ok": true,
-  "nota": "{\"modelos\": 19, \"listaorc\": 31.7, \"vendas\": 31.8, \"clientes\": 29.7, \"perfil\": 31.9}"
+  "nota": "{\"modelos\": 20.8, \"listaorc\": 31.6, \"vendas\": 31.5, \"clientes\": 34.3, \"perfil\": 29.6}"
  },
  {
   "nome": "Recalculo por tecla no desconto",
-  "valor": "mediana 3 ms / pior 8 ms",
+  "valor": "mediana 3 ms / pior 5 ms",
   "alvo": "pior < 50 ms",
   "ok": true,
   "nota": "cartao, resumo, IVA, parcelas e mensagem no mesmo instante"

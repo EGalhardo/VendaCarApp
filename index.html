@@ -157,6 +157,17 @@
   /* grupo alinhado a direita: tema  divisor  perfil */
   .bar-acoes{margin-left:auto;display:flex;align-items:center;gap:12px;flex:0 0 auto}
   .bar-sep{width:1px;height:26px;background:var(--line);display:block;flex:0 0 auto}
+  /* R72: estado da ligacao a internet (Globe verde / Globe Off vermelho, estilo Lucide) */
+  .rede-btn{cursor:default}
+  .rede-btn .ico-rede{display:none}
+  .rede-btn[data-rede="on"]  .ico-globe{display:block}
+  .rede-btn[data-rede="off"] .ico-globeoff{display:block}
+  .rede-btn[data-rede="on"]{color:#2f9e44}
+  .rede-btn[data-rede="off"]{color:#d64545}
+  html[data-tema="escuro"] .rede-btn[data-rede="on"]{color:#34d97a}
+  html[data-tema="escuro"] .rede-btn[data-rede="off"]{color:#f2726b}
+  html[data-tema="escuro"] .rede-btn:hover{background:transparent}
+  .rede-btn:hover{background:transparent}
   .who .av{
     width:34px;height:34px;border-radius:50%;background:var(--green-soft);color:var(--green-ink);
     font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center;
@@ -1447,6 +1458,21 @@ setTimeout(function(){
     </div>
 
     <div class="bar-acoes">
+      <span class="ic-btn rede-btn" id="btnRede" data-rede="on" role="status" aria-live="polite"
+            title="Ligado &#224; internet" aria-label="Ligado &#224; internet">
+        <svg class="ico-rede ico-globe" width="18" height="18" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+          <path d="M2 12h20"/>
+        </svg>
+        <svg class="ico-rede ico-globeoff" width="18" height="18" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+          <path d="M2 12h20"/>
+          <path d="m4.9 19.1 14.2-14.2"/>
+        </svg>
+      </span>
       <button class="ic-btn tema-btn" id="btnTema" title="Modo escuro" aria-label="Alternar modo claro/escuro" aria-pressed="false">
         <svg class="ico-lua" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
           <path d="M20 14.6A8.5 8.5 0 019.4 4 8.5 8.5 0 1020 14.6z"/></svg>
@@ -3756,6 +3782,16 @@ function carregarFila(){
 
 /* estado da liga\u00E7\u00E3o (j\u00E1 n\u00E3o h\u00E1 c\u00E1psula na appbar) */
 function renderEstadoRede(){
+  /* R72: icone da ligacao na appbar (Globe verde / Globe Off vermelho) */
+  const icone = document.getElementById('btnRede');
+  if (icone){
+    const on = temRede();
+    icone.dataset.rede = on ? 'on' : 'off';
+    const titulo = on ? 'Ligado \u00E0 internet' : 'Sem liga\u00E7\u00E3o \u00E0 internet';
+    icone.title = titulo;
+    icone.setAttribute('aria-label', titulo);
+  }
+
   const linha = document.getElementById('linhaOffline');
   if (linha){
     linha.textContent = temRede()
