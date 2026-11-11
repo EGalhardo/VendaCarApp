@@ -184,7 +184,7 @@ async def main():
         await pg.evaluate(f"()=>abrirOrcDetalhe('{oid}')"); await pg.wait_for_timeout(300)
         await pg.select_option('#odEstadoInp','Venda concluída'); await pg.wait_for_timeout(200)
         await pg.click('#odGuardar'); await pg.wait_for_timeout(400)
-        await pg.evaluate("ir('vendas')"); await pg.wait_for_timeout(500)
+        await pg.evaluate("ir('modelos')"); await pg.wait_for_timeout(8500)   # R74/R75: o funil vive no Automovel
         funil = await pg.evaluate("""()=>({vendas:document.getElementById('fnVendasPill').textContent,
             fechadas:ORCAMENTOS.filter(o=>o.estado==='Venda concluída').length,
             emCurso:ORCAMENTOS.filter(o=>['Pendente','Em negociação'].includes(o.estado)).length})""")

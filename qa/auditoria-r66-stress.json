@@ -43,35 +43,35 @@
  },
  {
   "nome": "Tabela de Orcamentos com 506 linhas",
-  "valor": "196 ms",
+  "valor": "175 ms",
   "alvo": "< 400 ms",
   "ok": true,
   "nota": ""
  },
  {
   "nome": "Lista de Clientes com 500+ clientes",
-  "valor": "64 ms",
+  "valor": "62 ms",
   "alvo": "< 400 ms",
   "ok": true,
   "nota": ""
  },
  {
   "nome": "Grelha de Automoveis com 304 carros",
-  "valor": "95 ms",
+  "valor": "90 ms",
   "alvo": "< 400 ms",
   "ok": true,
   "nota": ""
  },
  {
   "nome": "Ecra de Vendas com 506 negocios",
-  "valor": "208 ms",
+  "valor": "207 ms",
   "alvo": "< 400 ms",
   "ok": true,
   "nota": ""
  },
  {
   "nome": "Pesquisar clientes com 500+ registos",
-  "valor": "46 ms",
+  "valor": "45 ms",
   "alvo": "< 200 ms",
   "ok": true,
   "nota": ""
