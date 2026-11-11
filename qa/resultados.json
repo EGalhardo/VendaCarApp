@@ -66,8 +66,18 @@
  },
  {
   "r": "PASS",
+  "n": "R67 · mensagem sem emojis nem caracteres estragados",
+  "d": "Olá Cliente Teste, tudo bem?\n\nConforme falamos, segue o orça"
+ },
+ {
+  "r": "PASS",
+  "n": "R67 · mensagem mantém os acentos do português",
+  "d": ""
+ },
+ {
+  "r": "PASS",
   "n": "Mensagem contém carro, entrada e parcelas",
-  "d": "🚗 Toyota Corolla 2018 …"
+  "d": "Toyota Corolla 2018 …"
  },
  {
   "r": "PASS",
@@ -171,7 +181,7 @@
  {
   "r": "PASS",
   "n": "R64 · mensagem do WhatsApp usa o valor à vista negociado",
-  "d": "imos chegar no incrível valor de 3,500,000 Kz 😱\n\nSimulação sem juros, sujeita a aprovação de financiamento.\n\nO que acha?"
+  "d": "guimos chegar no incrível valor de 3,500,000 Kz\n\nSimulação sem juros, sujeita a aprovação de financiamento.\n\nO que acha?"
  },
  {
   "r": "PASS",
@@ -746,12 +756,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1.04, 'offsets': 11}"
+  "d": "{'dx': 1.08, 'offsets': 11}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1.04, 'offsets': 11}"
+  "d": "{'dx': 1.08, 'offsets': 11}"
  },
  {
   "r": "PASS",
@@ -1141,7 +1151,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "-16,462.38 Kz"
+  "d": "23,381.29 Kz"
  },
  {
   "r": "PASS",
@@ -1151,12 +1161,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,590,060.95 Kz"
+  "d": "9,588,735.43 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,999.33 Kz"
+  "d": "9,749,998.92 Kz"
  },
  {
   "r": "PASS",
@@ -1172,10 +1182,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   320152,
-   2892403,
-   4881785,
-   6362940
+   320794,
+   2892907,
+   4882168,
+   6363079
   ]
  },
  {
@@ -1196,14 +1206,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "415,874.16 Kz"
+  "d": "416,584.44 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "415,874.16 Kz",
-   "4,061,727.16 Kz"
+   "416,584.44 Kz",
+   "4,062,492.97 Kz"
   ]
  },
  {
@@ -1249,12 +1259,12 @@
  {
   "r": "PASS",
   "n": "R63 · o Perfil inclina para os dois lados",
-  "d": 0.137
+  "d": 0.138
  },
  {
   "r": "PASS",
   "n": "R63 · o anel do Perfil fica visível (opac. >= 0.5)",
-  "d": 0.85
+  "d": 0.835
  },
  {
   "r": "PASS",
@@ -1291,7 +1301,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.05565
+   3.34731
   ]
  },
  {
@@ -1317,7 +1327,7 @@
  {
   "r": "PASS",
   "n": "R63 · as duas cabeças revezam-se (entra uma, cede a outra)",
-  "d": "{'opTras': 1, 'escFrente': 0.920635, 'trasEntra': True}"
+  "d": "{'opTras': 1, 'escFrente': 0.920636, 'trasEntra': True}"
  },
  {
   "r": "PASS",
@@ -1518,7 +1528,7 @@
  {
   "r": "PASS",
   "n": "IVA · discriminado na mensagem do WhatsApp",
-  "d": "💰 Valor: 9,750,000 Kz"
+  "d": ""
  },
  {
   "r": "PASS",
@@ -2096,7 +2106,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '24,069,880.87 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '43,770,825.39 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '60,043,554.42 Kz', 'temKz': True, 'contando': 13}]"
+  "d": "[{'fn': 1, 'vt': '23,818,256.65 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '43,991,178.84 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '59,882,146.34 Kz', 'temKz': True, 'contando': 13}]"
  },
  {
   "r": "PASS",
@@ -2106,7 +2116,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '23,849,351.59 Kz'}"
+  "d": "{'fn': '1', 'vt': '23,728,033.16 Kz'}"
  },
  {
   "r": "PASS",
@@ -2146,17 +2156,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 12:18 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 12:39 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 12:18 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 12:39 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 12:18 · enviado"
+  "d": "Hoje, 12:39 · enviado"
  },
  {
   "r": "PASS",
@@ -2281,12 +2291,12 @@
  {
   "r": "PASS",
   "n": "R44 · mensagem avisa que a simulação é sem juros",
-  "d": "de 9,750,000 Kz 😱\n\nSimulação sem juros, sujeita a aprovação de financiamento.\n\nO que acha?"
+  "d": "r de 9,750,000 Kz\n\nSimulação sem juros, sujeita a aprovação de financiamento.\n\nO que acha?"
  },
  {
   "r": "PASS",
   "n": "R44 · mensagem com prestações redondas",
-  "d": "Olá Teste Aviso, tudo bem? 😃\n\nConforme falamos, segue o orçamento:\n🚗 Toyota Corolla 2018\n💰 Valor: 9,750,000 Kz\n🧾 IVA 14%"
+  "d": "Olá Teste Aviso, tudo bem?\n\nConforme falamos, segue o orçamento:\nToyota Corolla 2018\n\nValor: 9,750,000 Kz\nIVA 14%: 1,365"
  },
  {
   "r": "PASS",
@@ -2350,8 +2360,8 @@
  },
  {
   "r": "PASS",
-  "n": "R49 · acentos e emoji intactos no texto enviado",
-  "d": "Olá João Ação, tudo bem? 😃"
+  "n": "R49 · acentos intactos e texto limpo no envio (R67 tirou os emojis)",
+  "d": "Olá João Ação, tudo bem?"
  },
  {
   "r": "PASS",

@@ -2556,7 +2556,12 @@ function renderAvatarLoja(){
   }
 }
 function guardarLoja(){
-  try{ localStorage.setItem(LOJA_KEY, JSON.stringify(LOJA)); }catch(e){/* quota */}
+  try{
+    const txt = JSON.stringify(LOJA);
+    if (localStorage.getItem(LOJA_KEY) !== txt){
+      localStorage.setItem(LOJA_KEY, txt); marcarAlteracao();
+    }
+  }catch(e){/* quota */}
 }
 /* WhatsApp da loja com indicativo +244 */
 function zapLoja(){
@@ -2583,11 +2588,31 @@ function renderPerfilLoja(){
   if (d) d.textContent = LOJA.dados.trim() || '\u2014 n\u00E3o preenchido \u2014';
   if (z) z.textContent = zapLoja() || '\u2014 n\u00E3o preenchido \u2014';
 }
+/* R67: cada escrita realmente nova deixa um selo; os outros separadores
+   comparam o selo e voltam a ler os dados (sem recarregar a pagina) */
+const SELO_KEY = 'modelo_alterado_em';
+let seloVisto = null;
+
+function marcarAlteracao(){
+  seloVisto = Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+  try{ localStorage.setItem(SELO_KEY, seloVisto); }catch(e){}
+}
+
 function guardar(){
-  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(CARROS)); }catch(e){/* quota */}
+  try{
+    const txt = JSON.stringify(CARROS);
+    if (localStorage.getItem(STORAGE_KEY) !== txt){
+      localStorage.setItem(STORAGE_KEY, txt); marcarAlteracao();
+    }
+  }catch(e){/* quota */}
 }
 function guardarOrc(){
-  try{ localStorage.setItem(ORC_KEY, JSON.stringify(ORCAMENTOS)); }catch(e){/* quota */}
+  try{
+    const txt = JSON.stringify(ORCAMENTOS);
+    if (localStorage.getItem(ORC_KEY) !== txt){
+      localStorage.setItem(ORC_KEY, txt); marcarAlteracao();
+    }
+  }catch(e){/* quota */}
 }
 
 /* ==========================================================
@@ -3440,18 +3465,18 @@ function mensagem(){
 /* ---- helpers de or\u00E7amento ---- *//* ---- helpers de or\u00E7amento ---- */
 function textoOrcamento(nome, carro, preco, entrada, desc){
   const saldo = preco - entrada;
-  return 'Ol\u00E1 ' + nome + ', tudo bem? \uD83D\uDE03\n\n' +
+  return 'Ol\u00E1 ' + nome + ', tudo bem?\n\n' +
     'Conforme falamos' + (LOJA.dados.trim() ? ' aqui na loja ' + LOJA.dados.trim() : '') + ', segue o or\u00E7amento:\n' +
-    '\uD83D\uDE97 ' + carro.nome + '\n' +
-    '\uD83D\uDCB0 Valor: ' + fmt(preco) + '\n' +
-    '\uD83E\uDDFE IVA 14%: ' + fmt(ivaDe(preco)) + '\n' +
-    '\uD83D\uDCB5 Total com IVA: ' + fmt(totalComIva(preco)) + '\n\n' +
+    carro.nome + '\n\n' +
+    'Valor: ' + fmt(preco) + '\n' +
+    'IVA 14%: ' + fmt(ivaDe(preco)) + '\n' +
+    'Total com IVA: ' + fmt(totalComIva(preco)) + '\n\n' +
     'Podemos trabalhar com uma entrada de ' + fmt(entrada) + ' e o saldo em:\n' +
     '- 12x de ' + textoPrestacao(saldo, 12) + ', ou\n' +
     '- 24x de ' + textoPrestacao(saldo, 24) + ', ou\n' +
     '- 36x de ' + textoPrestacao(saldo, 36) + ',\n' +
     'Ou, ainda, se quiser pagar \u00E0 vista, conseguimos chegar no incr\u00EDvel valor de ' +
-    fmt(valorAVista(preco, desc)) + ' \uD83D\uDE31\n\n' +
+    fmt(valorAVista(preco, desc)) + '\n\n' +
     'Simula\u00E7\u00E3o sem juros, sujeita a aprova\u00E7\u00E3o de financiamento.\n\n' +
     'O que acha?' + (linhaLoja() ? '\n\n' + linhaLoja() : '');
 }
@@ -4023,6 +4048,7 @@ document.getElementById('pg-perfil').addEventListener('click', e => {
 
 /* ---------- MODELO DE MENSAGEM (ver o texto que vai para o WhatsApp) ---------- */
 document.getElementById('btnVerModelo').addEventListener('click', async () => {
+  /* R67: mostra o orcamento mais recente (a lista comeca pelo mais novo) */
   const ex = ORCAMENTOS[0];
   const carro = ex ? (CARROS.find(c => c.id === ex.carro) || { nome: nomeDoCarro(ex), preco: ex.preco }) : CARROS[0];
   const texto = textoOrcamento(
@@ -4206,9 +4232,94 @@ window.addEventListener('offline', () => { renderEstadoRede(); });
 
 
 /* ==========================================================
+   SINCRONIZACAO ENTRE SEPARADORES (R67)
+   Telemovel no bolso + balcao aberto no computador, ou duas abas no mesmo
+   PC: quando outro separador grava, este atualiza-se sozinho sem recarregar.
+   Nada e\u0301 apagado nem duplicado --- apenas se volta a ler o que esta\u0301 guardado.
+   ========================================================== */
+let sincronizacoes = 0;         /* quantas vezes este separador ja se atualizou */
+
+function adotarDadosDeOutroSeparador(){
+  const selo = localStorage.getItem(SELO_KEY);
+  const carrosAntes = JSON.stringify(CARROS);
+  const orcsAntes   = JSON.stringify(ORCAMENTOS);
+  const lojaAntes   = JSON.stringify(LOJA);
+
+  try{
+    const rawC = localStorage.getItem(STORAGE_KEY);
+    const arr = rawC ? JSON.parse(rawC) : null;
+    if (Array.isArray(arr) && arr.length) CARROS = arr;
+  }catch(e){}
+  try{
+    const rawO = localStorage.getItem(ORC_KEY);
+    const arrO = rawO ? JSON.parse(rawO) : null;
+    if (Array.isArray(arrO)) ORCAMENTOS = arrO;
+  }catch(e){}
+  carregarLoja();
+  seloVisto = selo;
+
+  const mudouCarros = JSON.stringify(CARROS) !== carrosAntes;
+  const mudouOrcs   = JSON.stringify(ORCAMENTOS) !== orcsAntes;
+  const mudouLoja   = JSON.stringify(LOJA) !== lojaAntes;
+  if (!mudouCarros && !mudouOrcs && !mudouLoja) return;
+  sincronizacoes += 1;
+
+  /* o carro em foco pode ter mudado de preco ou desaparecido */
+  if (atual){
+    const aindaLa = CARROS.find(c => c.id === atual.id);
+    if (aindaLa) atual = aindaLa;
+    else atual = CARROS[0];
+  }
+  if (mudouCarros) renderGrid();
+  if (mudouCarros || mudouOrcs){ renderTabelaOrc(); renderClientes(); }
+
+  /* se o ecra aberto depende dos dados, volta a desenha-lo */
+  const pg = paginaAtual();
+  if (pg === 'vendas') renderVendas();
+  if (pg === 'detalhe') abrirDetalhe();
+  if (pg === 'orcamento') calc();
+  if (pg === 'listaorc') renderFiltrosOrc();
+  if (pg === 'orcdetalhe' && orcAberto) abrirOrcDetalhe(orcAberto);
+  if (pg === 'cliente' && clienteAtual) abrirCliente(clienteAtual.nome, clienteAtual.tel, true);
+  if (mudouLoja){ renderAvatarLoja(); renderPerfilLoja(); }
+
+  sincronizarContadores();
+}
+
+/* contagens das etiquetas (Automovel, Orcamentos, Vendas, Clientes) */
+function sincronizarContadores(){
+  document.querySelectorAll('[data-cnt="carros"]').forEach(el => el.textContent = CARROS.length);
+  document.querySelectorAll('[data-cnt="orcs"]').forEach(el => el.textContent = ORCAMENTOS.length);
+  try{ renderClientes(); }catch(e){}
+  const pg = paginaAtual();
+  if (pg === 'vendas') renderVendas();
+}
+
+/* ---- 1) o proprio browser avisa quando OUTRO separador grava ---- */
+window.addEventListener('storage', e => {
+  if (e.key === null || e.key === STORAGE_KEY || e.key === ORC_KEY ||
+      e.key === LOJA_KEY  || e.key === TEMA_KEY || e.key === FILA_KEY){
+    if (e.key === TEMA_KEY){ iniciarTemaDoDisco(); return; }
+    adotarDadosDeOutroSeparador();
+  }
+});
+
+/* ---- 2) rede de seguranca: ao voltar a esta aba, confirma se ficou para tras ---- */
+function recarregarSeEstiverDesatualizado(){
+  const selo = localStorage.getItem(SELO_KEY);
+  if (selo && selo !== seloVisto) adotarDadosDeOutroSeparador();
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') recarregarSeEstiverDesatualizado();
+});
+window.addEventListener('focus', recarregarSeEstiverDesatualizado);
+setInterval(recarregarSeEstiverDesatualizado, 4000);
+
+/* ==========================================================
    ARRANQUE
    ========================================================== */
 carregar();
+seloVisto = localStorage.getItem(SELO_KEY);   /* R67: marca o que ja esta neste separador */
 observarValores('#pg-' + paginaAtual());
 guardar();          // garante o cat\u00E1logo em cache local desde o primeiro arranque
 renderFiltros();
@@ -4252,6 +4363,13 @@ function alternarTema(){
   const b = document.getElementById('btnTema');
   if (b) b.addEventListener('click', alternarTema);
 })();
+
+/* R67: se outro separador trocar o tema, este acompanha */
+function iniciarTemaDoDisco(){
+  let guardado = null;
+  try{ guardado = localStorage.getItem(TEMA_KEY); }catch(e){}
+  aplicarTema(guardado === 'escuro' ? 'escuro' : 'claro', false);
+}
 
 /* o arranque chegou ao fim: a rede de seguranca deixa de mostrar o aviso */
 window.__arranqueOK = true;

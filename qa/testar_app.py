@@ -109,6 +109,11 @@ async def main():
         ok("WhatsApp abre com +244 e texto", u.startswith("https://wa.me/244923111999?text="), u.split('?')[0])
         txt = up.unquote(u.split('text=')[1])
         ok("R64 · mensagem contém o valor à vista negociado", "9,300,000" in txt, txt.split("\n")[-4])
+        # R67: a mensagem tem de chegar ao WhatsApp sem caracteres estragados (�)
+        ok("R67 \u00b7 mensagem sem emojis nem caracteres estragados",
+           "\ufffd" not in txt and all(ord(ch) < 0x2100 for ch in txt), txt[:60])
+        ok("R67 \u00b7 mensagem mantém os acentos do português", "or\u00e7amento" in txt and "Simula\u00e7\u00e3o" in txt, "")
+
         ok("Mensagem contém carro, entrada e parcelas",
            "Corolla" in txt and "2,000,000 Kz" in txt and "12x" in txt and "9,300,000" in txt,
            txt.split("\n")[3] + " …")
@@ -2117,8 +2122,9 @@ async def main():
            and await r49.evaluate("()=>getComputedStyle(document.getElementById('falhaArranque')).display==='none'"),
            str(_e49[:2]))
         _m49 = await r49.evaluate("()=>{atual=CARROS[0];abrirOrcamento();document.getElementById('mNome').value='João Ação';return mensagem();}")
-        ok("R49 · acentos e emoji intactos no texto enviado",
-           "João Ação" in _m49 and "\U0001F697" in _m49 and _m49.count("Simulação sem juros") == 1,
+        ok("R49 · acentos intactos e texto limpo no envio (R67 tirou os emojis)",
+           "Joao A\u00e7\u00e3o".replace("Joao","Jo\u00e3o") in _m49 and "\U0001F697" not in _m49
+           and _m49.count("Simula\u00e7\u00e3o sem juros") == 1,
            _m49.split(chr(10))[0])
         ok("R49 · galeria do detalhe continua a funcionar",
            await r49.evaluate("()=>{atual=CARROS[0];abrirDetalhe();const i=document.querySelector('.hero img');return !!i && i.naturalWidth>0;}"), "")

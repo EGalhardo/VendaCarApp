@@ -39,39 +39,39 @@
   "valor": "ok",
   "alvo": "todos",
   "ok": true,
-  "nota": "🚗 Toyota Corolla 2018"
+  "nota": "Toyota Corolla 2018"
  },
  {
   "nome": "Tabela de Orcamentos com 506 linhas",
-  "valor": "191 ms",
+  "valor": "186 ms",
   "alvo": "< 400 ms",
   "ok": true,
   "nota": ""
  },
  {
   "nome": "Lista de Clientes com 500+ clientes",
-  "valor": "59 ms",
+  "valor": "63 ms",
   "alvo": "< 400 ms",
   "ok": true,
   "nota": ""
  },
  {
   "nome": "Grelha de Automoveis com 304 carros",
-  "valor": "94 ms",
+  "valor": "109 ms",
   "alvo": "< 400 ms",
   "ok": true,
   "nota": ""
  },
  {
   "nome": "Ecra de Vendas com 506 negocios",
-  "valor": "202 ms",
+  "valor": "216 ms",
   "alvo": "< 400 ms",
   "ok": true,
   "nota": ""
  },
  {
   "nome": "Pesquisar clientes com 500+ registos",
-  "valor": "49 ms",
+  "valor": "45 ms",
   "alvo": "< 200 ms",
   "ok": true,
   "nota": ""
@@ -85,10 +85,10 @@
  },
  {
   "nome": "Dois separadores: o outro separador ve o orcamento novo",
-  "valor": "6 -> 6",
+  "valor": "6 -> 7",
   "alvo": "atualiza sozinho",
-  "ok": false,
-  "nota": "sem evento \"storage\": precisa de recarregar"
+  "ok": true,
+  "nota": ""
  },
  {
   "nome": "Funciona offline a partir do ficheiro (file://)",
