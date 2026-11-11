@@ -168,12 +168,8 @@
   html[data-tema="escuro"] .ecra-fim{background:#040d1f}
   html[data-tema="escuro"] .ecra-fim h2{color:#e6eef8}
   .side .lbl{font-size:10px;font-weight:800;letter-spacing:1.2px;color:#b6c2bc;margin:10px 10px 6px}
-  /* o Autom\u00F3vel \u00E9 a p\u00E1gina de trabalho: separa-se ligeiramente do resto do menu */
-  .nav-auto{margin-bottom:8px;position:relative}
-  .nav-auto::after{
-    content:"";position:absolute;left:10px;right:10px;bottom:-5px;height:1px;background:#eef2f0;
-  }
-  html[data-tema="escuro"] .nav-auto::after{background:#12253d}
+  /* R69: o separador que estava debaixo de "Autom\u00F3vel" foi retirado */
+  .nav-auto{margin-bottom:0;position:static}
   .nav{
     display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:9px;border:0;
     background:none;color:var(--ink-3);font-size:13.5px;font-weight:600;cursor:pointer;
@@ -640,6 +636,16 @@
     font-weight:800;padding:13px 16px;background:#fafcfb;border-bottom:1px solid var(--line-2);
     white-space:nowrap;
   }
+  /* R69: cabecalho verde (texto branco) nas tabelas de Orcamentos e de Clientes */
+  .tbl-wrap.tbl-verde .tbl th{
+    background:var(--green);color:#fff;border-bottom:1px solid var(--green-dark);
+    font-weight:800;letter-spacing:.75px;
+  }
+  html[data-tema="escuro"] .tbl-wrap.tbl-verde .tbl th{
+    background:#12a34e;color:#fff;border-bottom-color:#0d8a41;
+  }
+  .tbl-wrap.tbl-verde .tbl tr:hover td{background:#f6fbf7}
+  html[data-tema="escuro"] .tbl-wrap.tbl-verde .tbl tr:hover td{background:#07182c}
   .tbl td{padding:13px 16px;font-size:13px;color:#4e5b56;border-bottom:1px solid #f4f7f5}
   .tbl tr:last-child td{border:0}
   .tbl tr:hover td{background:#fbfdfc}
@@ -1248,6 +1254,22 @@
     /* tabelas  cartoes */
     .tbl-wrap{background:transparent;border:0;border-radius:0}
     .tbl thead{display:none}
+    /* R69: nas tabelas com cabecalho verde, a barra de titulos aparece no telemovel */
+    .tbl-wrap.tbl-verde .tbl thead{
+      display:table;width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0;
+      margin-bottom:9px;border-radius:10px;overflow:hidden;
+    }
+    .tbl-wrap.tbl-verde .tbl tr:first-child{display:table-row;background:transparent;border:0;padding:0;margin:0}
+    .tbl-wrap.tbl-verde .tbl thead th{
+      display:table-cell;padding:9px 3px;font-size:0;letter-spacing:.2px;border-radius:0;
+      white-space:nowrap;overflow:hidden;background:var(--green);color:#fff;
+    }
+    html[data-tema="escuro"] .tbl-wrap.tbl-verde .tbl thead th{background:#12a34e}
+    .tbl-wrap.tbl-verde .tbl thead th::after{
+      content:attr(data-ab);font-size:8.6px;font-weight:800;letter-spacing:.2px;
+    }
+    .tbl-wrap.tbl-verde .tbl thead th:first-child{border-radius:10px 0 0 10px}
+    .tbl-wrap.tbl-verde .tbl thead th:last-child{border-radius:0 10px 10px 0}
     .tbl,.tbl tbody,.tbl tr,.tbl td{display:block;width:100%}
     .tbl tr{
       background:#fff;border:1px solid var(--line-2);border-radius:12px;
@@ -1574,12 +1596,13 @@ setTimeout(function(){
         <button class="chip" data-forc="Abertos">Em curso</button>
         <button class="chip" data-forc="Fechados">Fechados</button>
       </div>
-      <div class="tbl-wrap">
+      <div class="tbl-wrap tbl-verde">
         <table class="tbl">
           <thead><tr>
-            <th>Carro</th><th>Cliente</th><th>Telefone</th><th>Data</th>
-            <th>Estado</th><th style="text-align:right">Valor</th>
-            <th style="text-align:right">IVA 14%</th><th style="text-align:right">Total c/ IVA</th>
+            <th data-ab="Carro">Carro</th><th data-ab="Cliente">Cliente</th>
+            <th data-ab="Tel.">Telefone</th><th data-ab="Data">Data</th>
+            <th data-ab="Estado">Estado</th><th data-ab="Valor" style="text-align:right">Valor</th>
+            <th data-ab="IVA" style="text-align:right">IVA 14%</th><th data-ab="Total" style="text-align:right">Total c/ IVA</th>
           </tr></thead>
           <tbody id="tblOrc"></tbody>
         </table>
@@ -1690,9 +1713,11 @@ setTimeout(function(){
           <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
         <input type="search" id="buscaCliente" placeholder="Pesquisar cliente ou telefone..." autocomplete="off">
       </div>
-      <div class="tbl-wrap">
+      <div class="tbl-wrap tbl-verde">
         <table class="tbl">
-          <thead><tr><th>Cliente</th><th>Telefone</th><th>Or&#231;amentos</th><th>Total</th><th>&#218;ltimo contacto</th></tr></thead>
+          <thead><tr><th data-ab="Cliente">Cliente</th><th data-ab="Telefone">Telefone</th>
+            <th data-ab="Or&#231;.">Or&#231;amentos</th><th data-ab="Total">Total</th>
+            <th data-ab="&#218;ltimo">&#218;ltimo contacto</th></tr></thead>
           <tbody id="tblClientes"></tbody>
         </table>
       </div>
@@ -3893,12 +3918,12 @@ function renderTabelaOrc(){
   tbody.innerHTML = lista.map(o => {
     const c = CARROS.find(x => x.id === o.carro) || CARROS[0];
     return `<tr class="cli" data-abrirorc="${o.id}">
-      <td><div class="cell-car">${o.carro ? '<img src="' + c.img + '" alt="">' : ''}<span class="b">${nomeDoCarro(o)}</span></div></td>
-      <td>${o.nome}</td><td>${fmtTel(o.tel)}</td><td>${fmtData(o.data)}</td>
-      <td><span class="pill${classeEstado(o.estado)}">${o.estado}</span></td>
-      <td style="text-align:right" class="b" data-valor="${o.preco}">${fmt(o.preco)}</td>
-      <td style="text-align:right" class="iva-col" data-valor="${ivaDe(o.preco)}">${fmt(ivaDe(o.preco))}</td>
-      <td style="text-align:right" class="b" data-valor="${totalComIva(o.preco)}">${fmt(totalComIva(o.preco))}</td>
+      <td data-c="Ve&#237;culo"><div class="cell-car">${o.carro ? '<img src="' + c.img + '" alt="">' : ''}<span class="b">${nomeDoCarro(o)}</span></div></td>
+      <td data-c="Cliente">${o.nome}</td><td data-c="Telefone">${fmtTel(o.tel)}</td><td data-c="Data">${fmtData(o.data)}</td>
+      <td data-c="Estado"><span class="pill${classeEstado(o.estado)}">${o.estado}</span></td>
+      <td data-c="Valor" style="text-align:right" class="b" data-valor="${o.preco}">${fmt(o.preco)}</td>
+      <td data-c="IVA 14%" style="text-align:right" class="iva-col" data-valor="${ivaDe(o.preco)}">${fmt(ivaDe(o.preco))}</td>
+      <td data-c="Total c/ IVA" style="text-align:right" class="b" data-valor="${totalComIva(o.preco)}">${fmt(totalComIva(o.preco))}</td>
     </tr>`;
   }).join('');
 

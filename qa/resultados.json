@@ -756,12 +756,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1.03, 'offsets': 10}"
+  "d": "{'dx': 1.03, 'offsets': 11}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1.03, 'offsets': 10}"
+  "d": "{'dx': 1.03, 'offsets': 11}"
  },
  {
   "r": "PASS",
@@ -1151,7 +1151,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "20,095.55 Kz"
+  "d": "32,869.24 Kz"
  },
  {
   "r": "PASS",
@@ -1161,12 +1161,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,588,402.91 Kz"
+  "d": "9,589,233.35 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.80 Kz"
+  "d": "9,749,999.10 Kz"
  },
  {
   "r": "PASS",
@@ -1185,7 +1185,7 @@
    319510,
    2891899,
    4881402,
-   6362523
+   6362662
   ]
  },
  {
@@ -1206,14 +1206,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "356,437.93 Kz"
+  "d": "416,229.31 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "356,437.93 Kz",
-   "4,018,988.52 Kz"
+   "416,229.31 Kz",
+   "4,062,237.71 Kz"
   ]
  },
  {
@@ -1264,7 +1264,7 @@
  {
   "r": "PASS",
   "n": "R63 · o anel do Perfil fica visível (opac. >= 0.5)",
-  "d": 0.85
+  "d": 0.835
  },
  {
   "r": "PASS",
@@ -1301,7 +1301,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34621
+   3.0552
   ]
  },
  {
@@ -1327,7 +1327,7 @@
  {
   "r": "PASS",
   "n": "R63 · as duas cabeças revezam-se (entra uma, cede a outra)",
-  "d": "{'opTras': 1, 'escFrente': 0.920636, 'trasEntra': True}"
+  "d": "{'opTras': 1, 'escFrente': 0.921112, 'trasEntra': True}"
  },
  {
   "r": "PASS",
@@ -1975,6 +1975,36 @@
  },
  {
   "r": "PASS",
+  "n": "R69 · cabeçalho de Orçamentos verde com texto branco",
+  "d": "rgb(76, 175, 80) | rgb(255, 255, 255)"
+ },
+ {
+  "r": "PASS",
+  "n": "R69 · cabeçalho de Clientes verde com texto branco",
+  "d": "rgb(76, 175, 80) | rgb(255, 255, 255)"
+ },
+ {
+  "r": "PASS",
+  "n": "R69 · as outras tabelas (ex.: Perfil) mantêm o cabeçalho claro",
+  "d": " | "
+ },
+ {
+  "r": "PASS",
+  "n": "R69 · separador debaixo de “Automóvel” removido",
+  "d": "none"
+ },
+ {
+  "r": "PASS",
+  "n": "R69 · no telemóvel a barra verde de títulos aparece",
+  "d": "{'barra': 'table', 'fundo': 'rgb(76, 175, 80)', 'cabem': True, 'scroll': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R69 · no telemóvel os títulos cabem sem cortar nem transbordar",
+  "d": "{'barra': 'table', 'fundo': 'rgb(76, 175, 80)', 'cabem': True, 'scroll': False}"
+ },
+ {
+  "r": "PASS",
   "n": "R39 · quatro etapas do funil",
   "d": "['Contactos captados', 'Orçamentos enviados', 'Em negociação', 'Vendas concluídas']"
  },
@@ -2136,7 +2166,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '23,793,374.57 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '43,968,410.63 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '59,863,960.45 Kz', 'temKz': True, 'contando': 13}]"
+  "d": "[{'fn': 1, 'vt': '24,107,111.04 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '43,801,253.56 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '60,067,727.77 Kz', 'temKz': True, 'contando': 13}]"
  },
  {
   "r": "PASS",
@@ -2146,7 +2176,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '23,628,393.04 Kz'}"
+  "d": "{'fn': '1', 'vt': '23,740,482.04 Kz'}"
  },
  {
   "r": "PASS",
@@ -2186,17 +2216,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 13:11 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 15:15 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 13:11 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 15:15 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 13:11 · enviado"
+  "d": "Hoje, 15:15 · enviado"
  },
  {
   "r": "PASS",

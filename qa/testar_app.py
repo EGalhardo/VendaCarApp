@@ -1717,6 +1717,39 @@ async def main():
         depois68 = await rv.evaluate("()=>document.querySelectorAll('#vendasLista .vneg').length")
         ok("R68 · negócio vendido sai da lista filtrada por Pendente", depois68 == antes68 - 1, f'{antes68} -> {depois68}')
         await rv.select_option('#filtroEstadoVendas','Todos'); await rv.wait_for_timeout(400)
+
+        # ---------- R69: cabecalhos verdes + separador sob "Automovel" fora ----------
+        R69 = await rv.evaluate("""()=>{
+            const cor = el => { const s=getComputedStyle(el); return s.backgroundColor+' | '+s.color; };
+            const orc = document.querySelector('#pg-listaorc .tbl th');
+            const cli = document.querySelector('#pg-clientes .tbl th');
+            const per = document.querySelector('#pg-perfil .tbl th') || document.createElement('th');
+            const nav = document.querySelector('.nav-auto');
+            return {orc:cor(orc), cli:cor(cli), per:cor(per),
+                    separador:getComputedStyle(nav,'::after').content};}""")
+        ok("R69 · cabeçalho de Orçamentos verde com texto branco",
+           R69["orc"] == 'rgb(76, 175, 80) | rgb(255, 255, 255)', R69["orc"])
+        ok("R69 · cabeçalho de Clientes verde com texto branco",
+           R69["cli"] == 'rgb(76, 175, 80) | rgb(255, 255, 255)', R69["cli"])
+        ok("R69 · as outras tabelas (ex.: Perfil) mantêm o cabeçalho claro",
+           '76, 175, 80' not in R69["per"], R69["per"])
+        ok("R69 · separador debaixo de \u201CAutomóvel\u201D removido",
+           R69["separador"] in ('none', 'normal', ''), R69["separador"])
+
+        r69m = await b.new_page(viewport={"width":390,"height":844})
+        await r69m.goto(URL); await r69m.wait_for_timeout(500)
+        await r69m.evaluate("localStorage.clear()"); await r69m.reload(); await r69m.wait_for_timeout(600)
+        await r69m.evaluate("ir('listaorc')"); await r69m.wait_for_timeout(500)
+        M69 = await r69m.evaluate("""()=>{const th=[...document.querySelectorAll('#pg-listaorc .tbl th')];
+            return {barra:getComputedStyle(document.querySelector('#pg-listaorc .tbl thead')).display,
+                    fundo:getComputedStyle(th[0]).backgroundColor,
+                    cabem: th.every(t => t.scrollWidth <= t.getBoundingClientRect().width + 1),
+                    scroll: document.documentElement.scrollWidth > document.documentElement.clientWidth + 2};}""")
+        ok("R69 · no telemóvel a barra verde de títulos aparece",
+           M69["barra"] != 'none' and M69["fundo"] == 'rgb(76, 175, 80)', str(M69))
+        ok("R69 · no telemóvel os títulos cabem sem cortar nem transbordar",
+           M69["cabem"] and not M69["scroll"], str(M69))
+        await r69m.close()
         await rv.evaluate("()=>ir('vendas')"); await rv.wait_for_timeout(700)
         V2 = await rv.evaluate("""()=>{
           const s=document.getElementById('pg-vendas');
