@@ -755,6 +755,29 @@ async def main():
         ok("R59 · sem erros de consola", len(r59e)==0, str(r59e[:2]))
         await r59.close()
 
+        # ============ R78 · MARCA DO CARREGAMENTO EM HARMONIA COM A BARRA ============
+        r78 = await b.new_page(viewport={"width":1440,"height":900})
+        await r78.goto("file:///home/user/index.html"); await r78.wait_for_timeout(600)
+        M78 = await r78.evaluate("""()=>{const i=document.querySelector('.logoC'), bar=document.querySelector('.barraC');
+            const ir=i.getBoundingClientRect(), br=bar.getBoundingClientRect();
+            return {largura:Math.round(ir.width), altura:Math.round(ir.height), barra:Math.round(br.width),
+                    proporcao:+(ir.width/br.width).toFixed(2), gap:Math.round(br.top-ir.bottom)};}""")
+        ok("R78 · marca do carregamento mais discreta (300 px, ~94% da barra)",
+           M78["largura"]==300 and 0.85<=M78["proporcao"]<=1.1 and M78["altura"]<=115, str(M78))
+        ok("R78 · marca e barra alinhadas como um só bloco", 20<=M78["gap"]<=32, str(M78["gap"]))
+        await r78.evaluate("()=>document.documentElement.setAttribute('data-tema','escuro')")
+        await r78.wait_for_timeout(300)
+        E78 = await r78.evaluate("""()=>{const i=document.querySelector('.logoC');
+            return {largura:Math.round(i.getBoundingClientRect().width), fundo:getComputedStyle(i).backgroundColor,
+                    raio:getComputedStyle(i).borderRadius};}""")
+        ok("R78 · no modo escuro o cartão branco acompanha o novo tamanho",
+           E78["largura"]==300 and E78["fundo"]=="rgb(255, 255, 255)" and E78["raio"]=="16px", str(E78))
+        m78 = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        await m78.goto("file:///home/user/index.html"); await m78.wait_for_timeout(600)
+        ok("R78 · no telemóvel a marca cabe com folga",
+           await m78.evaluate("()=>{const r=document.querySelector('.logoC').getBoundingClientRect();return r.width<=250 && r.width>180;}"), "")
+        await m78.close(); await r78.wait_for_timeout(6000); await r78.close()
+
         # ============ R76 · RESPONSIVO EM TODA A GAMA ============
         r76e = []
         GAMA = [(320,568,"telemovel muito estreito"),(375,667,"telemovel pequeno"),

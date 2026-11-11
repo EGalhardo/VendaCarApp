@@ -756,12 +756,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1.04, 'offsets': 11}"
+  "d": "{'dx': 1.04, 'offsets': 12}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1.04, 'offsets': 11}"
+  "d": "{'dx': 1.04, 'offsets': 12}"
  },
  {
   "r": "PASS",
@@ -817,6 +817,26 @@
   "r": "PASS",
   "n": "R59 · sem erros de consola",
   "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R78 · marca do carregamento mais discreta (300 px, ~94% da barra)",
+  "d": "{'largura': 300, 'altura': 99, 'barra': 320, 'proporcao': 0.94, 'gap': 26}"
+ },
+ {
+  "r": "PASS",
+  "n": "R78 · marca e barra alinhadas como um só bloco",
+  "d": "26"
+ },
+ {
+  "r": "PASS",
+  "n": "R78 · no modo escuro o cartão branco acompanha o novo tamanho",
+  "d": "{'largura': 300, 'fundo': 'rgb(255, 255, 255)', 'raio': '16px'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R78 · no telemóvel a marca cabe com folga",
+  "d": ""
  },
  {
   "r": "PASS",
@@ -1066,7 +1086,7 @@
  {
   "r": "PASS",
   "n": "R71 · barra dura cerca de 6 segundos",
-  "d": "6063 ms"
+  "d": "6060 ms"
  },
  {
   "r": "PASS",
@@ -1411,7 +1431,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "20,825.78 Kz"
+  "d": "5,117.85 Kz"
  },
  {
   "r": "PASS",
@@ -1421,12 +1441,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,589,351.76 Kz"
+  "d": "9,588,616.72 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,999.13 Kz"
+  "d": "9,749,998.89 Kz"
  },
  {
   "r": "PASS",
@@ -1442,10 +1462,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   320152,
-   2892403,
-   4881785,
-   6362940
+   262561,
+   2889378,
+   4879296,
+   6361131
   ]
  },
  {
@@ -1466,14 +1486,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "415,163.83 Kz"
+  "d": "416,939.57 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "415,163.83 Kz",
-   "4,061,471.88 Kz"
+   "416,939.57 Kz",
+   "4,062,748.23 Kz"
   ]
  },
  {
@@ -1561,7 +1581,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34705
+   3.05572
   ]
  },
  {
@@ -1587,7 +1607,7 @@
  {
   "r": "PASS",
   "n": "R63 · as duas cabeças revezam-se (entra uma, cede a outra)",
-  "d": "{'opTras': 1, 'escFrente': 0.920637, 'trasEntra': True}"
+  "d": "{'opTras': 1, 'escFrente': 0.920636, 'trasEntra': True}"
  },
  {
   "r": "PASS",
@@ -2426,7 +2446,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '22,504,563.85 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,493,115.68 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '59,025,482.73 Kz', 'temKz': True, 'contando': 9}]"
+  "d": "[{'fn': 1, 'vt': '22,425,892.22 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,426,146.12 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,974,227.38 Kz', 'temKz': True, 'contando': 9}]"
  },
  {
   "r": "PASS",
@@ -2436,7 +2456,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '22,551,741.13 Kz'}"
+  "d": "{'fn': '1', 'vt': '22,485,687.54 Kz'}"
  },
  {
   "r": "PASS",
@@ -2476,17 +2496,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 20:52 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 21:17 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 20:52 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 21:17 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 20:52 · enviado"
+  "d": "Hoje, 21:17 · enviado"
  },
  {
   "r": "PASS",

@@ -20,7 +20,8 @@
   }
   #ecraCarregando.fora{opacity:0;visibility:hidden;pointer-events:none}
   #ecraCarregando .logoC{
-    width:min(78vw, 420px);max-width:420px;height:auto;display:block;
+    /* R78: marca mais discreta, em harmonia com a barra de progresso (320 px) */
+    width:min(62vw, 300px);max-width:300px;height:auto;display:block;
     animation:logoEntra .7s cubic-bezier(.2,.8,.2,1) both;
   }
   @keyframes logoEntra{ from{opacity:0;transform:translateY(10px) scale(.97)} to{opacity:1;transform:none} }
@@ -41,7 +42,7 @@
   html[data-tema="escuro"] #ecraCarregando{background:#040d1f}
   /* o logotipo tem fundo branco: no modo escuro ganha um cartao branco assumido */
   html[data-tema="escuro"] #ecraCarregando .logoC{
-    background:#fff;padding:14px 16px;box-sizing:content-box;width:min(70vw, 380px);
+    background:#fff;padding:12px 14px;box-sizing:content-box;width:min(56vw, 272px);
     border-radius:16px;box-shadow:0 12px 34px rgba(0,0,0,.45);
   }
   html[data-tema="escuro"] #ecraCarregando .barraC{background:#0d2340}
