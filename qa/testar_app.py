@@ -402,11 +402,12 @@ async def main():
                   umSoTexto: oi.children.length===1 && b.textContent.trim()==='ABC Seminovos'};
         }""")
         ok("R38 · todo o cumprimento em bold", B8["pesoOi"] in ("700","bold") and B8["pesoNome"] in ("700","bold"), str(B8))
-        ok("R38 · texto 'Oi <nome>' numa só linha", B8["texto"]=="Oi ABC Seminovos" and B8["umSoTexto"], str(B8))
+        ok("R73 · na appbar só o nome da loja, sem 'Oi'",
+           B8["texto"]=="ABC Seminovos" and B8["umSoTexto"] and not B8["texto"].startswith("Oi"), str(B8))
         await r8.evaluate("()=>{LOJA.dados='123'; guardarLoja(); renderAvatarLoja();}")
         await r8.wait_for_timeout(250)
         ok("R38 · aceita nome curto de empresa (ex.: 123)",
-           await r8.evaluate("()=>document.querySelector('.who .oi').textContent.trim()")=="Oi 123", "")
+           await r8.evaluate("()=>document.querySelector('.who .oi').textContent.trim()")=="123", "")
         await r8.click("#btnTema"); await r8.wait_for_timeout(450)
         B9 = await r8.evaluate("()=>{const o=getComputedStyle(document.querySelector('.who .oi'));return {p:o.fontWeight,c:o.color};}")
         ok("R38 · bold mantém-se no modo escuro", B9["p"] in ("700","bold") and B9["c"]=="rgb(207, 224, 245)", str(B9))
@@ -753,6 +754,38 @@ async def main():
            M59["texto"]=="Automóvel" and M59["icone"] and M59["cabe"], str(M59))
         ok("R59 · sem erros de consola", len(r59e)==0, str(r59e[:2]))
         await r59.close()
+
+        # ============ R73 · APPBAR: SÓ O NOME + GRUPO MAIS JUNTO ============
+        r73 = await b.new_page(viewport={"width":1440,"height":900})
+        r73e=[]; r73.on("pageerror", lambda e: r73e.append(str(e)))
+        await novo(r73)
+        G73 = await r73.evaluate("""()=>{const who=document.getElementById('whoBtn'), sep=document.querySelector('.bar-sep');
+            const tema=document.getElementById('btnTema').getBoundingClientRect();
+            const r=who.getBoundingClientRect(), s=sep.getBoundingClientRect();
+            const oi=document.querySelector('.who .oi');
+            return {texto:oi.textContent.trim(), semOi:!oi.textContent.includes('Oi'),
+                    distTema:Math.round(r.left-tema.right), distSep:Math.round(r.left-s.right),
+                    gap:getComputedStyle(document.querySelector('.bar-acoes')).gap,
+                    cortado: oi.scrollWidth>oi.clientWidth};}""")
+        ok("R73 · nome debaixo da foto sem o 'Oi'", G73["semOi"] and G73["texto"]=="ABC Seminovos", str(G73))
+        ok("R73 · perfil próximo dos ícones (gap 10 px, separador 12 px)",
+           G73["gap"]=="10px" and 10<=G73["distSep"]<=14 and G73["distTema"]<=26, str(G73))
+        ok("R73 · o nome não fica cortado no desktop", not G73["cortado"], str(G73))
+        await r73.close()
+        r73m = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        r73me=[]; r73m.on("pageerror", lambda e: r73me.append(str(e)))
+        await novo(r73m)
+        M73 = await r73m.evaluate("""()=>{const who=document.getElementById('whoBtn').getBoundingClientRect();
+            const tema=document.getElementById('btnTema').getBoundingClientRect();
+            const oi=document.querySelector('.who .oi');
+            return {distTema:Math.round(who.left-tema.right), semOi:!oi.textContent.includes('Oi'),
+                    nome:oi.textContent.trim(), cortado: oi.scrollWidth>oi.clientWidth,
+                    overflow: document.documentElement.scrollWidth-390};}""")
+        ok("R73 · mobile · só o nome e perfil mais junto dos ícones",
+           M73["semOi"] and M73["nome"]=="ABC Seminovos" and M73["distTema"]<=18 and not M73["cortado"], str(M73))
+        ok("R73 · mobile · sem overflow horizontal", M73["overflow"]<=0, str(M73["overflow"]))
+        ok("R73 · sem erros de consola", len(r73e)==0 and len(r73me)==0, str((r73e+r73me)[:2]))
+        await r73m.close()
 
         # ============ R72 · INDICADOR DE LIGAÇÃO NA APPBAR (Globe / Globe Off) ============
         r72 = await b.new_page(viewport={"width":1440,"height":900})
@@ -1630,11 +1663,12 @@ async def main():
         ok("R35 · desktop · ícone de notificações removido", not A["sino"] and A["semTextoNotif"], str(A))
         ok("R35 · ícones da appbar sem bordas", A["bordas"]=="0px" and A["fundoBtn"]=="rgba(0, 0, 0, 0)", str(A))
         ok("R35 · nome da loja debaixo da foto de perfil", A["fotoAcimaDoNome"] and A["centrado"], str(A))
-        ok("R38 · cumprimento 'Oi <nome da loja>' sem vírgula", A["oiTexto"].startswith("Oi ") and "," not in A["oiTexto"], A["oiTexto"])
+        ok("R73 · appbar mostra apenas o nome da loja (sem 'Oi')",
+           A["oiTexto"]=="ABC Seminovos" and "Oi" not in A["oiTexto"] and "," not in A["oiTexto"], A["oiTexto"])
         await r5.evaluate("()=>{LOJA.dados='Seminovos Kianda'; guardarLoja(); renderAvatarLoja();}")
         await r5.wait_for_timeout(250)
         N = await r5.evaluate("()=>document.querySelector('.who .oi').textContent.trim()")
-        ok("R38 · o nome segue os Dados da Loja", N=="Oi Seminovos Kianda", N)
+        ok("R38 · o nome segue os Dados da Loja", N=="Seminovos Kianda", N)
         await r5.click("#whoBtn"); await r5.wait_for_timeout(600)
         ok("R35 · clicar na foto abre o Perfil",
            await r5.evaluate("()=>!document.getElementById('pg-perfil').classList.contains('hidden')"), "")

@@ -147,15 +147,15 @@
   html[data-tema="escuro"] .tema-btn .ico-lua{display:none}
   html[data-tema="escuro"] .tema-btn .ico-sol{display:block}
 
-  /* bloco do utilizador: foto de perfil com o cumprimento por baixo */
+  /* bloco do utilizador: foto de perfil com o nome da loja por baixo */
   .who{
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
     padding:0;border:0;background:transparent;font-family:inherit;cursor:pointer;
-    flex:0 0 auto;margin-left:6px;border-radius:10px;
+    flex:0 0 auto;margin-left:2px;border-radius:10px;
   }
   .bar .ic-btn{margin-left:0}
   /* grupo alinhado a direita: tema  divisor  perfil */
-  .bar-acoes{margin-left:auto;display:flex;align-items:center;gap:12px;flex:0 0 auto}
+  .bar-acoes{margin-left:auto;display:flex;align-items:center;gap:10px;flex:0 0 auto}
   .bar-sep{width:1px;height:26px;background:var(--line);display:block;flex:0 0 auto}
   /* R72: estado da ligacao a internet (Globe verde / Globe Off vermelho, estilo Lucide) */
   .rede-btn{cursor:default}
@@ -1236,9 +1236,9 @@
     .bar-tit h1{font-size:14px;display:block}
     .bar-tit p{display:none}          /* telemovel: so o nome da pagina */
     /* telemovel: a foto de perfil com o "Oi, ..." ocupa o lugar das notificacoes */
-    .bar-acoes{margin-left:auto;gap:6px}
+    .bar-acoes{margin-left:auto;gap:8px}
     .bar-sep{height:22px}
-    .who{margin-left:0;gap:2px}
+    .who{margin-left:-2px;gap:2px}
     .who .av{width:30px;height:30px;font-size:11px}
     .who .oi{font-size:9px;max-width:96px;line-height:1.1}
     .bar .ic-btn,.bar .ic-btn.tema-btn{width:34px;height:34px;margin-left:0}
@@ -1251,10 +1251,10 @@
       .bar{padding:0 6px;gap:3px}
       .bar h1{font-size:13px;margin-left:2px}
       .bar .ic-btn,.bar .ic-btn.tema-btn{width:30px;height:30px}
-      .bar-acoes{gap:4px}
+      .bar-acoes{gap:6px}
       .bar-sep{height:20px}
       .who .av{width:26px;height:26px;font-size:10px}
-      .who .oi{font-size:8.5px;max-width:64px}
+      .who .oi{font-size:8.5px;max-width:78px}
     }
 
     .side{display:none}
@@ -1483,7 +1483,7 @@ setTimeout(function(){
       <span class="bar-sep" aria-hidden="true"></span>
       <button class="who" id="whoBtn" data-go="perfil" title="Perfil" aria-label="Perfil">
         <span class="av">AS</span>
-        <span class="oi">Oi <b id="whoNome">ABC Seminovos</b></span>
+        <span class="oi"><b id="whoNome">ABC Seminovos</b></span>
       </button>
     </div>
   </div>
@@ -2677,7 +2677,7 @@ function renderAvatarLoja(){
   }
   if (ini) ini.textContent = iniciaisLoja();
   if (rem) rem.classList.toggle('hidden', !foto);
-  /* cumprimento na appbar: "Oi, <nome da loja>" */
+  /* nome da loja por baixo da foto de perfil */
   const nome = document.getElementById('whoNome');
   if (nome){
     const n = (LOJA.dados || '').trim() || 'ABC Seminovos';
