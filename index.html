@@ -2234,6 +2234,12 @@ function fmtContador(el, v){
 function contarPara(el, destino, desde){
   if (!el) return;
   destino = Number(destino) || 0;
+  if (el.dataset && el.dataset.semContagem != null){   /* R65: valor fixo, sem contagem */
+    _alvo.set(el, destino); _cont.set(el, destino);
+    el.textContent = fmtContador(el, destino);
+    el.classList.remove('contando');
+    return;
+  }
   let de = (desde != null) ? Number(desde) : (_cont.has(el) ? _cont.get(el) : 0);
   if (PARAR_CONTAGEM > 0) de = destino;   /* R64: rec\u00E1lculo imediato, sem contagem */
 
@@ -2944,7 +2950,14 @@ function abrirDetalhe(){
   mostrarMidia(0);
   document.getElementById('dNome').textContent = atual.nome;
   document.getElementById('dSub').textContent = atual.tipo;
-  document.getElementById('dPreco').textContent = fmt(atual.preco);
+  /* R65: o valor em destaque no detalhe e o preco do automovel (antes ficava em 0 Kz,
+     porque o observador de valores nao encontrava o alvo deste elemento) */
+  const elPrecoD = document.getElementById('dPreco');
+  elPrecoD.dataset.semContagem = '';
+  elPrecoD.dataset.valor = atual.preco;
+  elPrecoD.textContent = fmt(atual.preco);
+  _alvo.set(elPrecoD, atual.preco);
+  _cont.set(elPrecoD, atual.preco);
   /* R64: no catalogo nao ha desconto --- a linha nao aparece (evita texto redundante) */
   const elOff = document.getElementById('dOff');
   elOff.textContent = '';

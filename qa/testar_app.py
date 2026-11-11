@@ -79,6 +79,11 @@ async def main():
         await pg.evaluate("()=>{atual=CARROS.find(c=>c.id==='corolla'); abrirDetalhe();}"); await pg.wait_for_timeout(250)
         await pg.click("#btnCriarOrc"); await pg.wait_for_timeout(250)
         await pg.click("#btnSalvar"); await pg.wait_for_timeout(300)
+        # R65: o detalhe do carro mostra o preço do automóvel (não 0 Kz)
+        ok("R65 · detalhe mostra o valor do automóvel",
+           "9,750,000" in await pg.evaluate("()=>document.getElementById('dPreco').textContent"),
+           await pg.evaluate("()=>document.getElementById('dPreco').textContent"))
+
         v = await pg.evaluate("()=>document.getElementById('oVista').textContent")
         ok("R64 · orçamento abre sem desconto — à vista = preço (9.750.000)", "9,750,000" in v, v)
         await pg.type("#oDesc","450000"); await pg.wait_for_timeout(8600)

@@ -31,6 +31,11 @@
  },
  {
   "r": "PASS",
+  "n": "R65 · detalhe mostra o valor do automóvel",
+  "d": "9,750,000 Kz"
+ },
+ {
+  "r": "PASS",
   "n": "R64 · orçamento abre sem desconto — à vista = preço (9.750.000)",
   "d": "9,750,000 Kz"
  },
@@ -741,12 +746,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1.04, 'offsets': 12}"
+  "d": "{'dx': 1.04, 'offsets': 11}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1.04, 'offsets': 12}"
+  "d": "{'dx': 1.04, 'offsets': 11}"
  },
  {
   "r": "PASS",
@@ -1136,7 +1141,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "-8,411.79 Kz"
+  "d": "7,310.67 Kz"
  },
  {
   "r": "PASS",
@@ -1146,12 +1151,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,586,685.58 Kz"
+  "d": "9,587,068.25 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.01 Kz"
+  "d": "9,749,999.55 Kz"
  },
  {
   "r": "PASS",
@@ -1167,10 +1172,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   316620,
-   2889630,
-   4879679,
-   6361409
+   315657,
+   2889126,
+   4879296,
+   6361131
   ]
  },
  {
@@ -1191,14 +1196,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "416,584.44 Kz"
+  "d": "415,519 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "416,584.44 Kz",
-   "4,062,237.71 Kz"
+   "415,519 Kz",
+   "4,061,471.88 Kz"
   ]
  },
  {
@@ -1249,7 +1254,7 @@
  {
   "r": "PASS",
   "n": "R63 · o anel do Perfil fica visível (opac. >= 0.5)",
-  "d": 0.843
+  "d": 0.85
  },
  {
   "r": "PASS",
@@ -1286,7 +1291,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34722
+   3.3482
   ]
  },
  {
@@ -2091,7 +2096,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '24,172,234.37 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '43,854,476.22 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '59,772,947.56 Kz', 'temKz': True, 'contando': 13}]"
+  "d": "[{'fn': 1, 'vt': '24,110,213 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '43,806,323.85 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '60,071,755.70 Kz', 'temKz': True, 'contando': 13}]"
  },
  {
   "r": "PASS",
@@ -2101,7 +2106,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '23,581,656.68 Kz'}"
+  "d": "{'fn': '1', 'vt': '23,895,978.04 Kz'}"
  },
  {
   "r": "PASS",
@@ -2141,17 +2146,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 19:47 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 12:00 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 19:47 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 12:00 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 19:47 · enviado"
+  "d": "Hoje, 12:00 · enviado"
  },
  {
   "r": "PASS",
@@ -2231,7 +2236,7 @@
  {
   "r": "PASS",
   "n": "R44 · Exportar orçamentos em CSV descarrega",
-  "d": "['orcamentos-vendacar-2026-11-10.csv']"
+  "d": "['orcamentos-vendacar-2026-11-11.csv']"
  },
  {
   "r": "PASS",
@@ -2251,7 +2256,7 @@
  {
   "r": "PASS",
   "n": "R57 · o estoque já não gera ficheiro CSV",
-  "d": "['orcamentos-vendacar-2026-11-10.csv']"
+  "d": "['orcamentos-vendacar-2026-11-11.csv']"
  },
  {
   "r": "PASS",
