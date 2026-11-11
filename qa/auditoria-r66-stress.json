@@ -1,0 +1,107 @@
+[
+ {
+  "nome": "IVA 14% calculado a parte e somado ao total",
+  "valor": "1365000 / 11115000",
+  "alvo": "preco*0.14 e preco*1.14",
+  "ok": true,
+  "nota": "{\"preco\": 9750000, \"iva\": 1365000, \"tot\": 11115000, \"saldo\": 8775000, \"p12\": 731000, \"p24\": 365000, \"p36\": 243000, \"ivaEsperado\": 1365000, \"totEsperado\": 11115000, \"p12Esperado\": 731250, \"p36Esperado\": 243750}"
+ },
+ {
+  "nome": "Parcelas 12x/24x/36x somam o saldo a pagar",
+  "valor": "8772000 vs 8775000 (12x)",
+  "alvo": "soma = saldo (±2%)",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Desconto maior que o preco nao gera valor negativo",
+  "valor": "0 Kz",
+  "alvo": ">= 0 Kz",
+  "ok": true,
+  "nota": "desconto aplicado: 9,750,000 Kz"
+ },
+ {
+  "nome": "Entrada acima do preco e limitada",
+  "valor": "0 Kz",
+  "alvo": "0 Kz",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Link do WhatsApp com +244 e nome",
+  "valor": "https://wa.me/244923111222",
+  "alvo": "wa.me/244923111222",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Mensagem: carro, IVA, total e a vista",
+  "valor": "ok",
+  "alvo": "todos",
+  "ok": true,
+  "nota": "🚗 Toyota Corolla 2018"
+ },
+ {
+  "nome": "Tabela de Orcamentos com 506 linhas",
+  "valor": "191 ms",
+  "alvo": "< 400 ms",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Lista de Clientes com 500+ clientes",
+  "valor": "59 ms",
+  "alvo": "< 400 ms",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Grelha de Automoveis com 304 carros",
+  "valor": "94 ms",
+  "alvo": "< 400 ms",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Ecra de Vendas com 506 negocios",
+  "valor": "202 ms",
+  "alvo": "< 400 ms",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Pesquisar clientes com 500+ registos",
+  "valor": "49 ms",
+  "alvo": "< 200 ms",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Tamanho dos dados no dispositivo",
+  "valor": "93 KB",
+  "alvo": "< 5 MB (limite do browser)",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Dois separadores: o outro separador ve o orcamento novo",
+  "valor": "6 -> 6",
+  "alvo": "atualiza sozinho",
+  "ok": false,
+  "nota": "sem evento \"storage\": precisa de recarregar"
+ },
+ {
+  "nome": "Funciona offline a partir do ficheiro (file://)",
+  "valor": "{\"ecra\": true, \"carros\": 4, \"imagens\": 4}",
+  "alvo": "abre e mostra dados",
+  "ok": true,
+  "nota": "detalhe: 9,750,000 Kz"
+ },
+ {
+  "nome": "Erros de JavaScript nas sondagens",
+  "valor": "0",
+  "alvo": "0",
+  "ok": true,
+  "nota": ""
+ }
+]

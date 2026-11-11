@@ -3591,12 +3591,14 @@ const dataCurta = t => {
 };
 
 function linhasCSV(){
-  const cab = ['Carro','Cliente','Telefone','Data','Estado','Preco','IVA 14%','Total com IVA','Entrada','Saldo'];
+  /* R66: o vendedor precisa de ver o desconto negociado e o valor a vista no ficheiro exportado */
+  const cab = ['Carro','Cliente','Telefone','Data','Estado','Preco','Desconto a vista','A vista','IVA 14%','Total com IVA','Entrada','Saldo'];
   const corpo = ORCAMENTOS.map(o => {
     const c = CARROS.find(x => x.id === o.carro);
     const saldo = Math.max(o.preco - (o.entrada || 0), 0);
+    const desc = o.desc || 0;
     return [nomeDoCarro(o), o.nome, '+244 ' + o.tel, dataCurta(o.data), o.estado,
-            o.preco, ivaDe(o.preco), totalComIva(o.preco), o.entrada || 0, saldo];
+            o.preco, desc, valorAVista(o.preco, desc), ivaDe(o.preco), totalComIva(o.preco), o.entrada || 0, saldo];
   });
   return [cab].concat(corpo);
 }

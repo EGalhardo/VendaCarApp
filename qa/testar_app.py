@@ -2023,6 +2023,13 @@ async def main():
         await r44.evaluate("()=>ir('perfil')"); await r44.wait_for_timeout(400)
         await r44.click('[data-exportar="csv"]'); await r44.wait_for_timeout(800)
         ok("R44 · Exportar orçamentos em CSV descarrega", len(dl)==1 and dl[0].endswith(".csv"), str(dl))
+        # R66: o CSV tem de levar o desconto negociado e o valor à vista
+        csv66 = await r44.evaluate("""()=>{const c=linhasCSV();
+            return {cab:c[0], linha:c[1], descontoCol:c[0].indexOf('Desconto a vista'),
+                    vistaCol:c[0].indexOf('A vista')};}""")
+        ok("R66 · CSV exportado inclui desconto à vista e valor à vista",
+           csv66["descontoCol"] >= 0 and csv66["vistaCol"] > csv66["descontoCol"]
+           and len(csv66["linha"]) == len(csv66["cab"]), str(csv66))
         janelas = []
         r44.context.on("page", lambda np: janelas.append(np))
         await r44.click('[data-exportar="pdf"]'); await r44.wait_for_timeout(1200)

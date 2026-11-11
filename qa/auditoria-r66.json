@@ -1,0 +1,219 @@
+[
+ {
+  "nome": "Carga inicial (ate o ecra de Automoveis)",
+  "valor": "93 ms",
+  "alvo": "< 1500 ms",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "First Contentful Paint",
+  "valor": "80 ms",
+  "alvo": "< 800 ms",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "DOMContentLoaded",
+  "valor": "54 ms",
+  "alvo": "< 1200 ms",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Tamanho do ficheiro unico",
+  "valor": "404 KB",
+  "alvo": "sem limite",
+  "ok": null,
+  "nota": "html + css + js + imagens embutidas (base64)"
+ },
+ {
+  "nome": "Pedidos de rede necessarios",
+  "valor": "1",
+  "alvo": "1 (offline)",
+  "ok": true,
+  "nota": "zero CDNs, zero fontes externas"
+ },
+ {
+  "nome": "Recursos externos",
+  "valor": "0",
+  "alvo": "0",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Catalogo de demonstracao",
+  "valor": "4 automoveis",
+  "alvo": "> 0",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Orcamentos de demonstracao",
+  "valor": "6",
+  "alvo": "> 0",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Versao dos dados gravada",
+  "valor": "5",
+  "alvo": "= modelo atual",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Navegacao entre as 5 secoes",
+  "valor": "max 32 ms",
+  "alvo": "< 120 ms",
+  "ok": true,
+  "nota": "{\"modelos\": 29.7, \"listaorc\": 31.4, \"vendas\": 31.6, \"clientes\": 29.8, \"perfil\": 30.8}"
+ },
+ {
+  "nome": "Recalculo por tecla no desconto",
+  "valor": "mediana 3 ms / pior 7 ms",
+  "alvo": "pior < 50 ms",
+  "ok": true,
+  "nota": "cartao, resumo, IVA, parcelas e mensagem no mesmo instante"
+ },
+ {
+  "nome": "Orcamento: 5 numeros coerentes com preco - desconto",
+  "valor": "sim",
+  "alvo": "todos iguais",
+  "ok": true,
+  "nota": "{\"cartao\": 9250000, \"painel\": 9250000, \"resumo\": 500000, \"maVista\": 9250000, \"descMini\": 500000}"
+ },
+ {
+  "nome": "Mensagem de WhatsApp com o valor a vista negociado",
+  "valor": "9,250,000",
+  "alvo": "9,250,000",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Orcamento guardado ao enviar",
+  "valor": "Cliente Auditoria / desc 500000",
+  "alvo": "nome + desconto",
+  "ok": true,
+  "nota": "{\"nome\": \"Cliente Auditoria\", \"tel\": \"923000111\", \"preco\": 9750000, \"desc\": 500000, \"vista\": null, \"estado\": \"Pendente\", \"enviado\": true, \"total\": 7}"
+ },
+ {
+  "nome": "Aparece em Orcamentos",
+  "valor": "sim",
+  "alvo": "inclui o novo",
+  "ok": true,
+  "nota": "7 linhas na tabela"
+ },
+ {
+  "nome": "Aparece em Vendas (negocios em curso)",
+  "valor": "sim",
+  "alvo": "sim",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Aparece em Clientes",
+  "valor": "sim",
+  "alvo": "sim",
+  "ok": true,
+  "nota": "6 clientes"
+ },
+ {
+  "nome": "Sobrevive a um recarregamento (sem duplicar)",
+  "valor": "1 -> 1",
+  "alvo": "1 e igual",
+  "ok": true,
+  "nota": "{\"n\": 1, \"desc\": 500000, \"tel\": \"923000111\"}"
+ },
+ {
+  "nome": "Desconto negociado mantido apos recarregar",
+  "valor": 500000,
+  "alvo": "500000",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Desconto alterado no detalhe recalcula e grava",
+  "valor": "desc 900000",
+  "alvo": "900000 e ecra coerente",
+  "ok": true,
+  "nota": "{\"gravado\": 900000, \"ecra\": 8850000, \"esperado\": 8850000}"
+ },
+ {
+  "nome": "...e continua la depois de recarregar",
+  "valor": 900000,
+  "alvo": "900000",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Registar automovel (sem campo de desconto)",
+  "valor": "{\"nome\": \"Toyota Hilux Aud 2024\", \"preco\": 32000000, \"desc\": 0}",
+  "alvo": "preco 32.000.000 e desc 0",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Automovel novo cria orcamento com o preco certo",
+  "valor": "32,000,000 Kz",
+  "alvo": "32,000,000 Kz",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Marcar venda concluida atualiza o funil",
+  "valor": "{\"vendas\": \"1 venda\", \"fechadas\": 1, \"emCurso\": 6}",
+  "alvo": "pill = fechadas",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Eliminar orcamento (e nao voltar ao recarregar)",
+  "valor": "7 -> 6 -> 6",
+  "alvo": "desce e mantem-se",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Tema escolhido persiste",
+  "valor": "escuro -> escuro",
+  "alvo": "igual",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Memoria JS em uso",
+  "valor": "10 MB",
+  "alvo": "< 80 MB",
+  "ok": true,
+  "nota": "limite 1020 MB"
+ },
+ {
+  "nome": "Sem conteudo a sair do ecra (telemovel 390px)",
+  "valor": "sim",
+  "alvo": "nenhum",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Sem conteudo a sair do ecra (tablet 768px)",
+  "valor": "sim",
+  "alvo": "nenhum",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Sem conteudo a sair do ecra (portatil 1440px)",
+  "valor": "sim",
+  "alvo": "nenhum",
+  "ok": true,
+  "nota": ""
+ },
+ {
+  "nome": "Erros de JavaScript durante toda a sessao",
+  "valor": 0,
+  "alvo": "0",
+  "ok": true,
+  "nota": ""
+ }
+]

@@ -1141,7 +1141,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "7,310.67 Kz"
+  "d": "-16,462.38 Kz"
  },
  {
   "r": "PASS",
@@ -1151,12 +1151,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,587,068.25 Kz"
+  "d": "9,590,060.95 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,999.55 Kz"
+  "d": "9,749,999.33 Kz"
  },
  {
   "r": "PASS",
@@ -1172,10 +1172,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   315657,
-   2889126,
-   4879296,
-   6361131
+   320152,
+   2892403,
+   4881785,
+   6362940
   ]
  },
  {
@@ -1196,14 +1196,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "415,519 Kz"
+  "d": "415,874.16 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "415,519 Kz",
-   "4,061,471.88 Kz"
+   "415,874.16 Kz",
+   "4,061,727.16 Kz"
   ]
  },
  {
@@ -1291,7 +1291,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.3482
+   3.05565
   ]
  },
  {
@@ -1317,7 +1317,7 @@
  {
   "r": "PASS",
   "n": "R63 · as duas cabeças revezam-se (entra uma, cede a outra)",
-  "d": "{'opTras': 1, 'escFrente': 0.920636, 'trasEntra': True}"
+  "d": "{'opTras': 1, 'escFrente': 0.920635, 'trasEntra': True}"
  },
  {
   "r": "PASS",
@@ -2096,7 +2096,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '24,110,213 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '43,806,323.85 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '60,071,755.70 Kz', 'temKz': True, 'contando': 13}]"
+  "d": "[{'fn': 1, 'vt': '24,069,880.87 Kz', 'temKz': True, 'contando': 13}, {'fn': 3, 'vt': '43,770,825.39 Kz', 'temKz': True, 'contando': 13}, {'fn': 4, 'vt': '60,043,554.42 Kz', 'temKz': True, 'contando': 13}]"
  },
  {
   "r": "PASS",
@@ -2106,7 +2106,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '23,895,978.04 Kz'}"
+  "d": "{'fn': '1', 'vt': '23,849,351.59 Kz'}"
  },
  {
   "r": "PASS",
@@ -2146,17 +2146,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 12:00 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 12:18 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 12:00 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 12:18 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 12:00 · enviado"
+  "d": "Hoje, 12:18 · enviado"
  },
  {
   "r": "PASS",
@@ -2237,6 +2237,11 @@
   "r": "PASS",
   "n": "R44 · Exportar orçamentos em CSV descarrega",
   "d": "['orcamentos-vendacar-2026-11-11.csv']"
+ },
+ {
+  "r": "PASS",
+  "n": "R66 · CSV exportado inclui desconto à vista e valor à vista",
+  "d": "{'cab': ['Carro', 'Cliente', 'Telefone', 'Data', 'Estado', 'Preco', 'Desconto a vista', 'A vista', 'IVA 14%', 'Total com IVA', 'Entrada', 'Saldo'], 'linha': ['Toyota Corolla 2018', 'Renato', '+244 923456789', '2026-11-11', 'Pendente', 9750000, 450000, 9300000, 1365000, 11115000, 2000000, 7750000], 'descontoCol': 6, 'vistaCol': 7}"
  },
  {
   "r": "PASS",
