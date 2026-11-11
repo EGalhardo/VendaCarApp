@@ -756,12 +756,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1.04, 'offsets': 12}"
+  "d": "{'dx': 1.04, 'offsets': 11}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1.04, 'offsets': 12}"
+  "d": "{'dx': 1.04, 'offsets': 11}"
  },
  {
   "r": "PASS",
@@ -1066,7 +1066,7 @@
  {
   "r": "PASS",
   "n": "R71 · barra dura cerca de 6 segundos",
-  "d": "6060 ms"
+  "d": "6063 ms"
  },
  {
   "r": "PASS",
@@ -1411,7 +1411,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "13,521.87 Kz"
+  "d": "20,825.78 Kz"
  },
  {
   "r": "PASS",
@@ -1421,12 +1421,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,589,138.59 Kz"
+  "d": "9,589,351.76 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,999.07 Kz"
+  "d": "9,749,999.13 Kz"
  },
  {
   "r": "PASS",
@@ -1443,7 +1443,7 @@
   "n": "Contador · valores do Orçamento a subir",
   "d": [
    320152,
-   2892655,
+   2892403,
    4881785,
    6362940
   ]
@@ -1466,14 +1466,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "417,294.70 Kz"
+  "d": "415,163.83 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "417,294.70 Kz",
-   "4,063,003.47 Kz"
+   "415,163.83 Kz",
+   "4,061,471.88 Kz"
   ]
  },
  {
@@ -1514,7 +1514,7 @@
  {
   "r": "PASS",
   "n": "R63 · cabeça do Perfil cresce (escala >= 0.15)",
-  "d": 0.249
+  "d": 0.25
  },
  {
   "r": "PASS",
@@ -1524,7 +1524,7 @@
  {
   "r": "PASS",
   "n": "R63 · o anel do Perfil fica visível (opac. >= 0.5)",
-  "d": 0.85
+  "d": 0.843
  },
  {
   "r": "PASS",
@@ -1561,7 +1561,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.05465
+   3.34705
   ]
  },
  {
@@ -1587,7 +1587,7 @@
  {
   "r": "PASS",
   "n": "R63 · as duas cabeças revezam-se (entra uma, cede a outra)",
-  "d": "{'opTras': 1, 'escFrente': 0.920636, 'trasEntra': True}"
+  "d": "{'opTras': 1, 'escFrente': 0.920637, 'trasEntra': True}"
  },
  {
   "r": "PASS",
@@ -2426,7 +2426,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '22,280,996.47 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,737,366.92 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,879,804.56 Kz', 'temKz': True, 'contando': 9}]"
+  "d": "[{'fn': 1, 'vt': '22,504,563.85 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,493,115.68 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '59,025,482.73 Kz', 'temKz': True, 'contando': 9}]"
  },
  {
   "r": "PASS",
@@ -2436,7 +2436,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '22,463,661.28 Kz'}"
+  "d": "{'fn': '1', 'vt': '22,551,741.13 Kz'}"
  },
  {
   "r": "PASS",
@@ -2476,17 +2476,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 19:51 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 20:52 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 19:51 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 20:52 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 19:51 · enviado"
+  "d": "Hoje, 20:52 · enviado"
  },
  {
   "r": "PASS",
