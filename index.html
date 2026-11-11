@@ -557,6 +557,7 @@
      ========================================================== */
   .content{
     grid-area:content;overflow-y:auto;padding:25px 29px 39px;min-width:0;
+    --larga:1360px;                                /* R76: tecto de largura em ecras grandes */
     background:#fff;                              /* area central branca */
     border-top:1px solid var(--gray-line);        /* fecha o topo junto a appbar */
     border-right:1px solid var(--gray-line);
@@ -1393,6 +1394,102 @@
   html[data-tema="escuro"] .navbar .nav-item.on .ico svg{color:#34d97a}
   html[data-tema="escuro"] .navbar .nav-item.on{color:#34d97a}
   html[data-tema="escuro"] .side .nav.on .cnt{background:#0a3b30;color:#34d97a}
+
+  /* ==========================================================
+     R76 \u00b7 RESPONSIVO EM TODA A GAMA (telemovel pequeno -> 4K)
+     ========================================================== */
+  /* conteudo nunca fica esticado num monitor grande: centra-se e ganha
+     margens laterais em vez de linhas com 1900 px de comprimento */
+  @media (min-width:1700px){
+    .content > section{max-width:1360px;margin-left:auto;margin-right:auto}
+  }
+
+  /* tablet em retrato e telemoveis grandes: 3 colunas de cartoes */
+  @media (min-width:620px) and (max-width:900px){
+    .cars{grid-template-columns:repeat(3,1fr)}
+  }
+
+  /* telemovel estreito (ate 400 px) */
+  @media (max-width:400px){
+    .bar{padding:0 8px;gap:4px}
+    .brand{padding:0 6px 0 10px}
+    .bar-tit h1{font-size:13px}
+    .who .av{width:28px;height:28px;font-size:10.5px}
+    .who .oi{font-size:8.5px;max-width:84px}
+    .bar-sep{height:20px}
+    .content{padding:12px 12px 26px}
+    .funil{padding:11px 12px}
+    .funil-top h3{font-size:13px}
+    .etapa .l{font-size:10px}
+    .etapa .n{font-size:16px}
+    .funil-base{font-size:9.5px}
+  }
+
+  /* barra de titulos das tabelas: em ecras estreitos liberta-se a coluna
+     do IVA para os restantes rotulos caberem inteiros (o IVA continua no cartao) */
+  @media (max-width:410px){
+    .tbl-wrap.tbl-verde .tbl thead th:nth-child(7){display:none}
+    .tbl-wrap.tbl-verde .tbl thead th{padding:9px 2px}
+    .tbl-wrap.tbl-verde .tbl thead th::after{font-size:8.2px}
+  }
+
+  /* telemovel muito estreito (320 px) */
+  @media (max-width:340px){
+    .brand .logo{height:20px;max-width:70px}
+    .bar-tit h1{font-size:12px}
+    .who .oi{max-width:62px;font-size:8px}
+    .funil-grid{grid-template-columns:1fr}
+    .etapa .l{min-height:0}
+    .cars{grid-template-columns:1fr}
+    .content{padding:10px 10px 24px}
+    /* tabelas: a barra verde de titulos passa a mostrar so as colunas
+       que cabem (as restantes continuam no cartao) */
+    .tbl-wrap.tbl-verde .tbl thead th:nth-child(3),
+    .tbl-wrap.tbl-verde .tbl thead th:nth-child(4),
+    .tbl-wrap.tbl-verde .tbl thead th:nth-child(7){display:none}
+    .tbl-wrap.tbl-verde .tbl thead{display:block;overflow:hidden}
+    .tbl-wrap.tbl-verde .tbl tr:first-child{display:block}
+    .tbl-wrap.tbl-verde .tbl thead th{display:inline-block;width:auto;padding:8px 8px}
+  }
+
+  /* alvos de toque confortaveis (dedo em vez de rato) */
+  @media (pointer:coarse){
+    .vneg .est button{min-height:36px}
+    .edit-mini{min-height:34px;padding:6px 12px}
+    .chip{min-height:34px}
+    .ic-btn{min-width:32px;min-height:32px}
+    .nav-item{padding-top:2px}
+  }
+
+  /* telemovel deitado / ecras baixos: o funil compacta mais cedo para o
+     conteudo principal continuar visivel */
+  @media (max-width:900px) and (max-height:430px){
+    .funil-base{display:none}
+    .etapa .p{display:none}
+    .etapa .l{min-height:0}
+    .content{padding-top:10px}
+  }
+
+  /* tablet / ecra medio: o Perfil aproveita a largura em 3 colunas em vez de
+     deixar duas linhas de cartoes largos com ar vazio */
+  @media (min-width:760px) and (max-width:1180px){
+    .stat-grid{grid-template-columns:repeat(4,1fr);gap:12px}
+    .stat-card{padding:14px}
+    .stat-card .n{font-size:23px}
+  }
+
+  /* ecra em altura (monitor vertical / tablet deitado em pe) */
+  @media (min-width:901px) and (min-height:1100px){
+    .cars{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+  }
+
+  /* impressao e PDF: fundo branco, sem animacoes */
+  @media print{
+    .side,.navbar,.bar,.toast,.ov,.modal{display:none!important}
+    .content{overflow:visible;padding:0;border:0}
+    .app{display:block}
+    .funil,.car,.tbl tr{break-inside:avoid}
+  }
 
 </style>
 </head>

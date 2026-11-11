@@ -756,12 +756,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1.04, 'offsets': 11}"
+  "d": "{'dx': 1.04, 'offsets': 12}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1.04, 'offsets': 11}"
+  "d": "{'dx': 1.04, 'offsets': 12}"
  },
  {
   "r": "PASS",
@@ -820,13 +820,93 @@
  },
  {
   "r": "PASS",
+  "n": "R76 · 320 px (telemovel muito estreito) · sem transbordo em 5 páginas",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R76 · 320 px · navegação e grelha corretas",
+  "d": "{'cols': 1, 'largura': 299, 'centrado': True, 'side': 'none', 'navbar': 'flex'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R76 · 375 px (telemovel pequeno) · sem transbordo em 5 páginas",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R76 · 390 px (telemovel) · sem transbordo em 5 páginas",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R76 · 430 px (telemovel grande) · sem transbordo em 5 páginas",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R76 · 768 px (tablet retrato) · sem transbordo em 5 páginas",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R76 · 768 px · navegação e grelha corretas",
+  "d": "{'cols': 3, 'largura': 739, 'centrado': True, 'side': 'none', 'navbar': 'flex'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R76 · 1024 px (tablet deitado) · sem transbordo em 5 páginas",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R76 · 1024 px · navegação e grelha corretas",
+  "d": "{'cols': 3, 'largura': 889, 'centrado': True, 'side': 'flex', 'navbar': 'none'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R76 · 1440 px (portatil) · sem transbordo em 5 páginas",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R76 · 1920 px (monitor) · sem transbordo em 5 páginas",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R76 · 2560 px (ecra grande) · sem transbordo em 5 páginas",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R76 · 2560 px · navegação e grelha corretas",
+  "d": "{'cols': 4, 'largura': 1360, 'centrado': True, 'side': 'flex', 'navbar': 'none'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R76 · 2560 px · conteúdo com tecto de largura (sem esticar)",
+  "d": "1360"
+ },
+ {
+  "r": "PASS",
+  "n": "R76 · telemóvel · botões com altura de toque (≥34 px)",
+  "d": "{'altura': 36, 'toque': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R76 · sem erros de consola em toda a gama",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
   "n": "R75 · funil compacto no telemóvel (2x2, sem barras)",
-  "d": "{'altura': 328, 'grelhaNoEcra': True, 'duasColunas': True, 'semBarras': True, 'rotulo': 'Desde o inícioConversão global 0%'}"
+  "d": "{'altura': 310, 'grelhaNoEcra': True, 'duasColunas': True, 'semBarras': True, 'rotulo': 'Desde o inícioConversão global 0%'}"
  },
  {
   "r": "PASS",
   "n": "R75 · primeiros carros visíveis no primeiro ecrã",
-  "d": "{'altura': 328, 'grelhaNoEcra': True, 'duasColunas': True, 'semBarras': True, 'rotulo': 'Desde o inícioConversão global 0%'}"
+  "d": "{'altura': 310, 'grelhaNoEcra': True, 'duasColunas': True, 'semBarras': True, 'rotulo': 'Desde o inícioConversão global 0%'}"
  },
  {
   "r": "PASS",
@@ -986,7 +1066,7 @@
  {
   "r": "PASS",
   "n": "R71 · barra dura cerca de 6 segundos",
-  "d": "6055 ms"
+  "d": "6060 ms"
  },
  {
   "r": "PASS",
@@ -1046,17 +1126,17 @@
  {
   "r": "PASS",
   "n": "R30 · mobile · Criar também é só +",
-  "d": "{'texto': '', 'altura': 34, 'largura': 34, 'direita': 375, 'semOverflow': True}"
+  "d": "{'texto': '', 'altura': 34, 'largura': 34, 'direita': 377, 'semOverflow': True}"
  },
  {
   "r": "PASS",
   "n": "R30 · mobile · botão + com altura de toque",
-  "d": "{'texto': '', 'altura': 34, 'largura': 34, 'direita': 375, 'semOverflow': True}"
+  "d": "{'texto': '', 'altura': 34, 'largura': 34, 'direita': 377, 'semOverflow': True}"
  },
  {
   "r": "PASS",
   "n": "R30 · mobile · sem overflow com o novo botão",
-  "d": "{'texto': '', 'altura': 34, 'largura': 34, 'direita': 375, 'semOverflow': True}"
+  "d": "{'texto': '', 'altura': 34, 'largura': 34, 'direita': 377, 'semOverflow': True}"
  },
  {
   "r": "PASS",
@@ -1211,7 +1291,7 @@
  {
   "r": "PASS",
   "n": "R29 · página interior: voltar encostado à esquerda",
-  "d": "{'voltar': 10, 'semLogo': True}"
+  "d": "{'voltar': 8, 'semLogo': True}"
  },
  {
   "r": "PASS",
@@ -1246,12 +1326,12 @@
  {
   "r": "PASS",
   "n": "Mobile · botão 'Enviar novamente' com altura de toque",
-  "d": "{'n': 2, 'alturas': [50, 50], 'larguras': [327, 327], 'fs': '14.5px'}"
+  "d": "{'n': 2, 'alturas': [50, 50], 'larguras': [331, 331], 'fs': '14.5px'}"
  },
  {
   "r": "PASS",
   "n": "Mobile · botão ocupa a largura do cartão",
-  "d": "[327, 327]"
+  "d": "[331, 331]"
  },
  {
   "r": "PASS",
@@ -1331,7 +1411,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "-7,314.33 Kz"
+  "d": "13,521.87 Kz"
  },
  {
   "r": "PASS",
@@ -1341,12 +1421,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,587,807.98 Kz"
+  "d": "9,589,138.59 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.57 Kz"
+  "d": "9,749,999.07 Kz"
  },
  {
   "r": "PASS",
@@ -1434,7 +1514,7 @@
  {
   "r": "PASS",
   "n": "R63 · cabeça do Perfil cresce (escala >= 0.15)",
-  "d": 0.25
+  "d": 0.249
  },
  {
   "r": "PASS",
@@ -1444,7 +1524,7 @@
  {
   "r": "PASS",
   "n": "R63 · o anel do Perfil fica visível (opac. >= 0.5)",
-  "d": 0.843
+  "d": 0.85
  },
  {
   "r": "PASS",
@@ -1481,7 +1561,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34802
+   3.05465
   ]
  },
  {
@@ -1507,7 +1587,7 @@
  {
   "r": "PASS",
   "n": "R63 · as duas cabeças revezam-se (entra uma, cede a outra)",
-  "d": "{'opTras': 1, 'escFrente': 0.920635, 'trasEntra': True}"
+  "d": "{'opTras': 1, 'escFrente': 0.920636, 'trasEntra': True}"
  },
  {
   "r": "PASS",
@@ -2076,17 +2156,17 @@
  {
   "r": "PASS",
   "n": "R36 · mobile · sem 'Online' na appbar",
-  "d": "{'semPill': True, 'tituloInteiro': True, 'espacoTitulo': 48, 'whoDentro': True, 'sepVisivel': True, 'overflow': 0}"
+  "d": "{'semPill': True, 'tituloInteiro': True, 'espacoTitulo': 46, 'whoDentro': True, 'sepVisivel': True, 'overflow': 0}"
  },
  {
   "r": "PASS",
   "n": "R36 · mobile · título e ações com folga",
-  "d": "{'semPill': True, 'tituloInteiro': True, 'espacoTitulo': 48, 'whoDentro': True, 'sepVisivel': True, 'overflow': 0}"
+  "d": "{'semPill': True, 'tituloInteiro': True, 'espacoTitulo': 46, 'whoDentro': True, 'sepVisivel': True, 'overflow': 0}"
  },
  {
   "r": "PASS",
   "n": "R36 · mobile · perfil dentro da barra",
-  "d": "{'semPill': True, 'tituloInteiro': True, 'espacoTitulo': 48, 'whoDentro': True, 'sepVisivel': True, 'overflow': 0}"
+  "d": "{'semPill': True, 'tituloInteiro': True, 'espacoTitulo': 46, 'whoDentro': True, 'sepVisivel': True, 'overflow': 0}"
  },
  {
   "r": "PASS",
@@ -2346,7 +2426,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '22,718,279.88 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,668,019.23 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,822,258.10 Kz', 'temKz': True, 'contando': 9}]"
+  "d": "[{'fn': 1, 'vt': '22,280,996.47 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,737,366.92 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,879,804.56 Kz', 'temKz': True, 'contando': 9}]"
  },
  {
   "r": "PASS",
@@ -2356,7 +2436,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '22,743,396.92 Kz'}"
+  "d": "{'fn': '1', 'vt': '22,463,661.28 Kz'}"
  },
  {
   "r": "PASS",
@@ -2396,17 +2476,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 19:15 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 19:51 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 19:15 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 19:51 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 19:15 · enviado"
+  "d": "Hoje, 19:51 · enviado"
  },
  {
   "r": "PASS",

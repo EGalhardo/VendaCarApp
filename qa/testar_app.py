@@ -755,6 +755,73 @@ async def main():
         ok("R59 · sem erros de consola", len(r59e)==0, str(r59e[:2]))
         await r59.close()
 
+        # ============ R76 · RESPONSIVO EM TODA A GAMA ============
+        r76e = []
+        GAMA = [(320,568,"telemovel muito estreito"),(375,667,"telemovel pequeno"),
+                (390,844,"telemovel"),(430,932,"telemovel grande"),(768,1024,"tablet retrato"),
+                (1024,768,"tablet deitado"),(1440,900,"portatil"),(1920,1080,"monitor"),
+                (2560,1440,"ecra grande")]
+        PGS = ['modelos','listaorc','clientes','vendas','perfil']
+        for lw,lh,nome in GAMA:
+            ctx76 = await b.new_context(viewport={"width":lw,"height":lh}, is_mobile=(lw<700), has_touch=(lw<900))
+            p76 = await ctx76.new_page()
+            p76.on("pageerror", lambda e: r76e.append(lw+": "+str(e)))
+            await p76.goto(URL_ANIM); await p76.wait_for_selector("#pg-modelos:not(.hidden)")
+            await p76.wait_for_timeout(350)
+            ruim = []
+            for pgm in PGS:
+                if pgm != 'modelos':
+                    await p76.evaluate(f"()=>ir('{pgm}')"); await p76.wait_for_timeout(220)
+                m = await p76.evaluate("""()=>{const vw=document.documentElement.clientWidth;
+                  const fora=[...document.querySelectorAll('body *')].filter(el=>{
+                    const st=getComputedStyle(el);
+                    if(st.display==='none'||st.visibility==='hidden'||el.closest('.hidden')) return false;
+                    const r=el.getBoundingClientRect();
+                    if(!r.width||!r.height) return false;
+                    if(r.right<=vw+1 && r.left>=-1) return false;
+                    let p=el.parentElement;
+                    while(p){ if(getComputedStyle(p).overflowX!=='visible') return false; p=p.parentElement; }
+                    return true;}).map(el=>el.tagName+'.'+String(el.className).split(' ')[0]);
+                  const cortados=[...document.querySelectorAll('h1,button,td,th,.l,.chip')].filter(el=>{
+                    const st=getComputedStyle(el);
+                    if(st.display==='none'||el.closest('.hidden')) return false;
+                    return el.scrollWidth>el.clientWidth+1 && st.overflow!=='visible' && st.whiteSpace!=='normal';
+                  }).map(el=>el.textContent.trim().slice(0,18));
+                  return {scrl:document.documentElement.scrollWidth-vw, fora:fora.slice(0,3), cortados:cortados.slice(0,3)};}""")
+                if m["scrl"]>1 or m["fora"] or m["cortados"]:
+                    ruim.append(pgm + str(m))
+            ok(f"R76 · {lw} px ({nome}) · sem transbordo em 5 páginas", not ruim, str(ruim[:2]))
+            if lw in (320,768,1024,2560):
+                await p76.evaluate("()=>ir('modelos')"); await p76.wait_for_timeout(200)
+                L = await p76.evaluate("""()=>{const cs=[...document.querySelectorAll('#grid .car')];
+                  const sec=document.querySelector('#pg-modelos'), cont=document.querySelector('.content');
+                  const sr=sec.getBoundingClientRect(), cr=cont.getBoundingClientRect();
+                  return {cols:new Set(cs.map(c=>Math.round(c.getBoundingClientRect().x))).size,
+                          largura:Math.round(sr.width),
+                          centrado:Math.abs((sr.left+sr.right)/2-(cr.left+cr.right)/2)<2,
+                          side:getComputedStyle(document.querySelector('.side')).display,
+                          navbar:getComputedStyle(document.querySelector('.navbar')).display};}""")
+                ok(f"R76 · {lw} px · navegação e grelha corretas",
+                   L["centrado"] and ((lw>900 and L["side"]=="flex" and L["navbar"]=="none")
+                                      or (lw<=900 and L["side"]=="none" and L["navbar"]=="flex"))
+                   and ((lw<=400 and L["cols"]==1) or (401<=lw<=620 and L["cols"]==2)
+                        or (621<=lw<=900 and L["cols"]==3) or (lw>900 and L["cols"]>=3)), str(L))
+                if lw>=1700:
+                    ok(f"R76 · {lw} px · conteúdo com tecto de largura (sem esticar)",
+                       L["largura"]<=1360, str(L["largura"]))
+            await ctx76.close()
+        ctx76 = await b.new_context(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        p76 = await ctx76.new_page()
+        await p76.goto(URL_ANIM); await p76.wait_for_selector("#pg-modelos:not(.hidden)")
+        await p76.evaluate("()=>ir('vendas')"); await p76.wait_for_timeout(400)
+        T = await p76.evaluate("""()=>{const c=document.querySelector('.vneg .est button')||document.querySelector('.edit-mini');
+            const r=c.getBoundingClientRect(); const cs=getComputedStyle(c);
+            return {altura:Math.round(r.height), toque:matchMedia('(pointer:coarse)').matches};}""")
+        ok("R76 · telemóvel · botões com altura de toque (≥34 px)",
+           T["toque"] and T["altura"]>=34, str(T))
+        await ctx76.close()
+        ok("R76 · sem erros de consola em toda a gama", len(r76e)==0, str(r76e[:3]))
+
         # ============ R75 · FUNIL COERENTE E COMPACTO NO TELEMÓVEL ============
         r75 = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
         r75e=[]; r75.on("pageerror", lambda e: r75e.append(str(e)))
