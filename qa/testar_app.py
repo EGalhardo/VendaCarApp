@@ -918,38 +918,43 @@ async def main():
         ok("R81 \u00b7 sem erros de JavaScript com a marca animada", len(erros81)==0, str(erros81[:2]))
         await r81.close()
 
-        # ============ R82 · FUNDOS BRANCOS EM VENDAS E NO ESTADO DE VENDAS ============
-        r82 = await b.new_page(viewport={"width":1440,"height":900})
-        erros82=[]; r82.on("pageerror", lambda e: erros82.append(str(e)))
-        await r82.goto("file:///home/user/index.html#rapido"); await r82.wait_for_timeout(2200)
-        ET82 = await r82.evaluate("""()=>[...document.querySelectorAll('#pg-modelos .etapa')]
+        # ============ R83 · FUNDOS TRANSPARENTES EM VENDAS E NO ESTADO DE VENDAS ============
+        r83 = await b.new_page(viewport={"width":1440,"height":900})
+        erros83=[]; r83.on("pageerror", lambda e: erros83.append(str(e)))
+        await r83.goto("file:///home/user/index.html#rapido"); await r83.wait_for_timeout(2200)
+        ET83 = await r83.evaluate("""()=>[...document.querySelectorAll('#pg-modelos .etapa')]
             .map(e=>getComputedStyle(e).backgroundColor)""")
-        ok("R82 \u00b7 todos os containers do Estado de Vendas t\u00eam fundo branco",
-           len(ET82)==4 and all(c=="rgb(255, 255, 255)" for c in ET82), str(ET82))
-        FUN82 = await r82.evaluate("()=>getComputedStyle(document.querySelector('#pg-modelos .funil')).backgroundColor")
-        ok("R82 \u00b7 o cart\u00e3o do Estado de Vendas tamb\u00e9m \u00e9 branco", FUN82=="rgb(255, 255, 255)", FUN82)
+        ok("R83 \u00b7 todos os containers do Estado de Vendas t\u00eam fundo transparente",
+           len(ET83)==4 and all(c=="rgba(0, 0, 0, 0)" for c in ET83), str(ET83))
+        FUN83 = await r83.evaluate("()=>getComputedStyle(document.querySelector('#pg-modelos .funil')).backgroundColor")
+        ok("R83 \u00b7 o grupo Estado de Vendas mant\u00e9m o seu cart\u00e3o (s\u00f3 os containers internos s\u00e3o transparentes)",
+           FUN83=="rgb(255, 255, 255)", FUN83)
 
-        await r82.evaluate("()=>{ORCAMENTOS[0].estado='Venda conclu\\u00EDda'; guardarOrc(); ir('vendas');}")
-        await r82.wait_for_timeout(900)
-        VN82 = await r82.evaluate("""()=>{const l=[...document.querySelectorAll('#pg-vendas .vneg')];
+        await r83.evaluate("()=>{ORCAMENTOS[0].estado='Venda conclu\\u00EDda'; guardarOrc(); ir('vendas');}")
+        await r83.wait_for_timeout(900)
+        VN83 = await r83.evaluate("""()=>{const l=[...document.querySelectorAll('#pg-vendas .vneg')];
             return {todos:l.map(e=>getComputedStyle(e).backgroundColor), fechados:l.filter(e=>e.classList.contains('fechado')).length};}""")
-        ok("R82 \u00b7 todos os itens da p\u00e1gina Vendas t\u00eam fundo branco",
-           len(VN82["todos"])>=5 and all(c=="rgb(255, 255, 255)" for c in VN82["todos"]), str(VN82))
-        ok("R82 \u00b7 o cart\u00e3o de venda conclu\u00edda tamb\u00e9m ficou branco",
-           VN82["fechados"]>=1, str(VN82["fechados"]))
+        ok("R83 \u00b7 todos os itens da p\u00e1gina Vendas t\u00eam fundo transparente",
+           len(VN83["todos"])>=5 and all(c=="rgba(0, 0, 0, 0)" for c in VN83["todos"]), str(VN83))
+        ok("R83 \u00b7 o cart\u00e3o de venda conclu\u00edda tamb\u00e9m ficou transparente",
+           VN83["fechados"]>=1, str(VN83["fechados"]))
 
-        m82 = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
-        await m82.goto("file:///home/user/index.html#rapido"); await m82.wait_for_timeout(2200)
-        Mov82 = await m82.evaluate("""()=>{const e=[...document.querySelectorAll('#pg-modelos .etapa')].map(x=>getComputedStyle(x).backgroundColor);
-            return {etapas:e, iguaise:todos=>true};}""")
-        ok("R82 \u00b7 no telem\u00f3vel os containers do Estado de Vendas continuam brancos",
-           all(c=="rgb(255, 255, 255)" for c in Mov82["etapas"]), str(Mov82["etapas"]))
-        await m82.evaluate("()=>{ORCAMENTOS[0].estado='Venda conclu\\u00EDda'; guardarOrc(); ir('vendas');}")
-        await m82.wait_for_timeout(800)
-        ok("R82 \u00b7 no telem\u00f3vel os itens de Vendas continuam brancos",
-           await m82.evaluate("()=>[...document.querySelectorAll('#pg-vendas .vneg')].every(e=>getComputedStyle(e).backgroundColor==='rgb(255, 255, 255)')"), "")
-        ok("R82 \u00b7 sem erros de JavaScript", len(erros82)==0, str(erros82[:2]))
-        await m82.close(); await r82.close()
+        await r83.evaluate("()=>document.documentElement.setAttribute('data-tema','escuro')")
+        await r83.wait_for_timeout(400)
+        ok("R83 \u00b7 no modo escuro os fundos tamb\u00e9m s\u00e3o transparentes",
+           await r83.evaluate("()=>[...document.querySelectorAll('#pg-modelos .etapa, #pg-vendas .vneg')].every(e=>getComputedStyle(e).backgroundColor==='rgba(0, 0, 0, 0)')"), "")
+        ok("R83 \u00b7 sem erros de JavaScript", len(erros83)==0, str(erros83[:2]))
+        await r83.close()
+
+        m83 = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        await m83.goto("file:///home/user/index.html#rapido"); await m83.wait_for_timeout(2200)
+        ok("R83 \u00b7 no telem\u00f3vel os containers do Estado de Vendas continuam transparentes",
+           await m83.evaluate("()=>[...document.querySelectorAll('#pg-modelos .etapa')].every(e=>getComputedStyle(e).backgroundColor==='rgba(0, 0, 0, 0)')"), "")
+        await m83.evaluate("()=>{ORCAMENTOS[0].estado='Venda conclu\\u00EDda'; guardarOrc(); ir('vendas');}")
+        await m83.wait_for_timeout(800)
+        ok("R83 \u00b7 no telem\u00f3vel os itens de Vendas continuam transparentes",
+           await m83.evaluate("()=>[...document.querySelectorAll('#pg-vendas .vneg')].every(e=>getComputedStyle(e).backgroundColor==='rgba(0, 0, 0, 0)')"), "")
+        await m83.close()
 
         # ============ R76 · RESPONSIVO EM TODA A GAMA ============
         r76e = []
@@ -1110,8 +1115,8 @@ async def main():
         await r74.click("#btnTema"); await r74.wait_for_timeout(400)
         E74 = await r74.evaluate("""()=>{const f=document.querySelector('.funil'), e=document.querySelector('.etapa');
             return {fundo:getComputedStyle(f).backgroundColor, etapa:getComputedStyle(e).backgroundColor};}""")
-        ok("R74 · modo escuro aplica-se ao funil no Automóvel",
-           E74["fundo"]=="rgb(4, 13, 31)" and E74["etapa"]=="rgb(7, 21, 40)", str(E74))
+        ok("R74 · modo escuro aplica-se ao funil no Automóvel (etapas agora transparentes, R83)",
+           E74["fundo"]=="rgb(4, 13, 31)" and E74["etapa"]=="rgba(0, 0, 0, 0)", str(E74))
         ok("R74 · desktop sem erros de consola", len(r74e)==0, str(r74e[:2]))
         await r74.close()
 
@@ -2303,7 +2308,8 @@ async def main():
                   etapaFundo:getComputedStyle(e).backgroundColor, num:getComputedStyle(n).color,
                   ativoVerde:getComputedStyle(document.querySelector('.side .nav.on')).color};
         }""")
-        ok("R39 · modo escuro aplica-se ao funil", D1["fundo"]=="rgb(4, 13, 31)" and D1["etapaFundo"]=="rgb(7, 21, 40)", str(D1))
+        ok("R39 · modo escuro aplica-se ao funil (etapas transparentes desde a R83)",
+           D1["fundo"]=="rgb(4, 13, 31)" and D1["etapaFundo"]=="rgba(0, 0, 0, 0)", str(D1))
         ok("R39 · menu ativo a verde no escuro", D1["ativoVerde"]=="rgb(52, 217, 122)", str(D1["ativoVerde"]))
         await rvd.close()
 

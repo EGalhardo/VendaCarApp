@@ -256,8 +256,8 @@
   .funil-top .sub b{color:var(--green-ink)}
   .funil-top .chipP{margin-left:auto;font-size:11px;font-weight:800;color:var(--green-ink);background:var(--green-soft);border-radius:20px;padding:5px 11px;white-space:nowrap}
   .funil-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-  /* R82: todos os containers do Estado de Vendas com fundo branco */
-  .etapa{border:1px solid var(--line);border-radius:11px;padding:12px 13px 11px;background:#fff}
+  /* R83: todos os containers do Estado de Vendas com fundo transparente */
+  .etapa{border:1px solid var(--line);border-radius:11px;padding:12px 13px 11px;background:transparent}
   .etapa .n{font-size:26px;font-weight:800;color:#2b3532;letter-spacing:-1px;line-height:1}
   .etapa .l{font-size:12px;font-weight:700;color:#5c6b64;margin-top:6px}
   .etapa .pb{height:5px;border-radius:4px;background:#e9efec;margin-top:10px;overflow:hidden}
@@ -267,7 +267,7 @@
   .etapa .p i{width:6px;height:6px;border-radius:50%;background:#4caf50;display:block;flex:0 0 auto}
   .etapa.q .p{color:#b3730f}
   .etapa.q .p i{background:#e0a03a}
-  .etapa:last-child{background:#fff;border-color:#d3ecd6}
+  .etapa:last-child{background:transparent;border-color:#d3ecd6}
   .funil-base{display:flex;align-items:center;gap:8px;margin-top:13px;font-size:11.5px;color:var(--muted-2);flex-wrap:wrap}
   .funil-base b{color:var(--green-ink);font-weight:800}
   /* R74: o funil subiu para o Automovel \u2014 a lista de carros ganha um titulo proprio */
@@ -293,7 +293,7 @@
   select.inp.mini:focus{border-color:var(--green)}
   html[data-tema="escuro"] select.inp.mini{background-color:#071528;border-color:#17375e;color:#dce7f6}
   .vendas-contagem{font-size:11.5px;color:var(--muted-2);font-weight:600}
-  .vneg{border:1px solid var(--gray-line);border-radius:12px;padding:13px 14px;background:#fff}
+  .vneg{border:1px solid var(--gray-line);border-radius:12px;padding:13px 14px;background:transparent}
   .vneg .topo{display:flex;align-items:center;gap:11px}
   .vneg .topo>div{min-width:0}
   .vneg .topo img{width:52px;height:38px;border-radius:7px;object-fit:cover;flex:0 0 auto}
@@ -324,8 +324,8 @@
   .vneg .reabrir{border:1px solid #e2e8e5;background:#fff;color:#6d7b75;font-family:inherit;
                  font-size:11.5px;font-weight:800;border-radius:8px;padding:6px 10px;cursor:pointer}
   .vneg .reabrir:hover{background:#f4f7f5}
-  /* R82: os itens da pagina Vendas ficam todos com fundo branco */
-  .vneg.fechado{border-color:#d3ecd6;background:#fff}
+  /* R83: os itens da pagina Vendas ficam todos com fundo transparente */
+  .vneg.fechado{border-color:#d3ecd6;background:transparent}
   .vneg.fechado .vl{color:#2e7d32}
   .vneg .nota{margin-top:9px;font-size:11px;color:var(--muted-2);display:flex;align-items:center;gap:6px}
   .vneg .nota svg{flex:0 0 auto}
@@ -337,19 +337,19 @@
   html[data-tema="escuro"] .funil-top .sub b{color:#63dc92}
   html[data-tema="escuro"] .funil-top h3 .ico{background:#042b25;color:#63dc92}
   html[data-tema="escuro"] .funil-top .chipP{background:#042b25;color:#63dc92}
-  html[data-tema="escuro"] .etapa{background:#071528;border-color:#17375e}
+  html[data-tema="escuro"] .etapa{background:transparent;border-color:#17375e}
   html[data-tema="escuro"] .etapa .pb{background:#0e2440}
   html[data-tema="escuro"] .etapa .n{color:#fff}
   html[data-tema="escuro"] .etapa .l{color:#b3c6e0}
   html[data-tema="escuro"] .etapa .p{color:#63dc92}
   html[data-tema="escuro"] .etapa.q .p{color:#e7c276}
-  html[data-tema="escuro"] .etapa:last-child{background:#042b25;border-color:#0a3b30}
+  html[data-tema="escuro"] .etapa:last-child{background:transparent;border-color:#0a3b30}
   html[data-tema="escuro"] .funil-base{color:#93a7c4}
   html[data-tema="escuro"] .funil-base b{color:#63dc92}
   html[data-tema="escuro"] .vendas-head h3{color:#fff}
   html[data-tema="escuro"] .vendas-tot span{background:#071528;border-color:#17375e;color:#93a7c4}
   html[data-tema="escuro"] .vendas-tot b{color:#eaf1fb}
-  html[data-tema="escuro"] .vneg{background:#040d1f;border-color:#17375e}
+  html[data-tema="escuro"] .vneg{background:transparent;border-color:#17375e}
   html[data-tema="escuro"] .vneg .nm{color:#fff}
   html[data-tema="escuro"] .vneg .cr,html[data-tema="escuro"] .vneg .nota{color:#93a7c4}
   html[data-tema="escuro"] .vneg .vl{color:#63dc92}
@@ -364,7 +364,7 @@
   html[data-tema="escuro"] .vneg .perd:hover{background:#2e1a21}
   html[data-tema="escuro"] .vneg .reabrir{background:#071426;border-color:#17375e;color:#9fb2cb}
   html[data-tema="escuro"] .vneg .reabrir:hover{background:#0b1c33}
-  html[data-tema="escuro"] .vneg.fechado{background:#042b25;border-color:#0a3b30}
+  html[data-tema="escuro"] .vneg.fechado{background:transparent;border-color:#0a3b30}
   html[data-tema="escuro"] .vneg.fechado .vl{color:#63dc92}
 
   @media (max-width:1100px){ .vendas-lista{grid-template-columns:1fr} }

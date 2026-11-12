@@ -756,12 +756,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1.04, 'offsets': 10}"
+  "d": "{'dx': 1.03, 'offsets': 11}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1.04, 'offsets': 10}"
+  "d": "{'dx': 1.03, 'offsets': 11}"
  },
  {
   "r": "PASS",
@@ -955,38 +955,43 @@
  },
  {
   "r": "PASS",
-  "n": "R82 · todos os containers do Estado de Vendas têm fundo branco",
-  "d": "['rgb(255, 255, 255)', 'rgb(255, 255, 255)', 'rgb(255, 255, 255)', 'rgb(255, 255, 255)']"
+  "n": "R83 · todos os containers do Estado de Vendas têm fundo transparente",
+  "d": "['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)']"
  },
  {
   "r": "PASS",
-  "n": "R82 · o cartão do Estado de Vendas também é branco",
+  "n": "R83 · o grupo Estado de Vendas mantém o seu cartão (só os containers internos são transparentes)",
   "d": "rgb(255, 255, 255)"
  },
  {
   "r": "PASS",
-  "n": "R82 · todos os itens da página Vendas têm fundo branco",
-  "d": "{'todos': ['rgb(255, 255, 255)', 'rgb(255, 255, 255)', 'rgb(255, 255, 255)', 'rgb(255, 255, 255)', 'rgb(255, 255, 255)', 'rgb(255, 255, 255)'], 'fechados': 1}"
+  "n": "R83 · todos os itens da página Vendas têm fundo transparente",
+  "d": "{'todos': ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)'], 'fechados': 1}"
  },
  {
   "r": "PASS",
-  "n": "R82 · o cartão de venda concluída também ficou branco",
+  "n": "R83 · o cartão de venda concluída também ficou transparente",
   "d": "1"
  },
  {
   "r": "PASS",
-  "n": "R82 · no telemóvel os containers do Estado de Vendas continuam brancos",
-  "d": "['rgb(255, 255, 255)', 'rgb(255, 255, 255)', 'rgb(255, 255, 255)', 'rgb(255, 255, 255)']"
- },
- {
-  "r": "PASS",
-  "n": "R82 · no telemóvel os itens de Vendas continuam brancos",
+  "n": "R83 · no modo escuro os fundos também são transparentes",
   "d": ""
  },
  {
   "r": "PASS",
-  "n": "R82 · sem erros de JavaScript",
+  "n": "R83 · sem erros de JavaScript",
   "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R83 · no telemóvel os containers do Estado de Vendas continuam transparentes",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R83 · no telemóvel os itens de Vendas continuam transparentes",
+  "d": ""
  },
  {
   "r": "PASS",
@@ -1135,8 +1140,8 @@
  },
  {
   "r": "PASS",
-  "n": "R74 · modo escuro aplica-se ao funil no Automóvel",
-  "d": "{'fundo': 'rgb(4, 13, 31)', 'etapa': 'rgb(7, 21, 40)'}"
+  "n": "R74 · modo escuro aplica-se ao funil no Automóvel (etapas agora transparentes, R83)",
+  "d": "{'fundo': 'rgb(4, 13, 31)', 'etapa': 'rgba(0, 0, 0, 0)'}"
  },
  {
   "r": "PASS",
@@ -1236,7 +1241,7 @@
  {
   "r": "PASS",
   "n": "R71 · barra dura cerca de 6 segundos",
-  "d": "6062 ms"
+  "d": "6064 ms"
  },
  {
   "r": "PASS",
@@ -1581,7 +1586,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "11,329.98 Kz"
+  "d": "19,730.43 Kz"
  },
  {
   "r": "PASS",
@@ -1591,12 +1596,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,589,020.08 Kz"
+  "d": "9,589,399.10 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,999.02 Kz"
+  "d": "9,749,999.14 Kz"
  },
  {
   "r": "PASS",
@@ -1612,10 +1617,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   320473,
-   2892655,
-   4882168,
-   6363079
+   319510,
+   2891899,
+   4881402,
+   6362662
   ]
  },
  {
@@ -1636,14 +1641,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "415,874.16 Kz"
+  "d": "416,939.57 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "415,874.16 Kz",
-   "4,062,237.71 Kz"
+   "416,939.57 Kz",
+   "4,062,492.97 Kz"
   ]
  },
  {
@@ -1684,7 +1689,7 @@
  {
   "r": "PASS",
   "n": "R63 · cabeça do Perfil cresce (escala >= 0.15)",
-  "d": 0.249
+  "d": 0.25
  },
  {
   "r": "PASS",
@@ -1694,7 +1699,7 @@
  {
   "r": "PASS",
   "n": "R63 · o anel do Perfil fica visível (opac. >= 0.5)",
-  "d": 0.85
+  "d": 0.843
  },
  {
   "r": "PASS",
@@ -1731,7 +1736,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34779
+   3.34759
   ]
  },
  {
@@ -1757,7 +1762,7 @@
  {
   "r": "PASS",
   "n": "R63 · as duas cabeças revezam-se (entra uma, cede a outra)",
-  "d": "{'opTras': 1, 'escFrente': 0.920635, 'trasEntra': True}"
+  "d": "{'opTras': 1, 'escFrente': 0.920637, 'trasEntra': True}"
  },
  {
   "r": "PASS",
@@ -2515,8 +2520,8 @@
  },
  {
   "r": "PASS",
-  "n": "R39 · modo escuro aplica-se ao funil",
-  "d": "{'fundo': 'rgb(4, 13, 31)', 'borda': 'rgb(23, 55, 94)', 'etapaFundo': 'rgb(7, 21, 40)', 'num': 'rgb(255, 255, 255)', 'ativoVerde': 'rgb(52, 217, 122)'}"
+  "n": "R39 · modo escuro aplica-se ao funil (etapas transparentes desde a R83)",
+  "d": "{'fundo': 'rgb(4, 13, 31)', 'borda': 'rgb(23, 55, 94)', 'etapaFundo': 'rgba(0, 0, 0, 0)', 'num': 'rgb(255, 255, 255)', 'ativoVerde': 'rgb(52, 217, 122)'}"
  },
  {
   "r": "PASS",
@@ -2596,7 +2601,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '22,394,408.57 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,829,742.75 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,953,713.13 Kz', 'temKz': True, 'contando': 9}]"
+  "d": "[{'fn': 1, 'vt': '22,476,248.23 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,469,939.84 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,665,786.79 Kz', 'temKz': True, 'contando': 9}]"
  },
  {
   "r": "PASS",
@@ -2606,7 +2611,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '22,347,167.03 Kz'}"
+  "d": "{'fn': '1', 'vt': '22,680,594.05 Kz'}"
  },
  {
   "r": "PASS",
@@ -2646,17 +2651,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 16:52 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 17:13 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 16:52 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 17:13 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 16:52 · enviado"
+  "d": "Hoje, 17:13 · enviado"
  },
  {
   "r": "PASS",
