@@ -918,6 +918,39 @@ async def main():
         ok("R81 \u00b7 sem erros de JavaScript com a marca animada", len(erros81)==0, str(erros81[:2]))
         await r81.close()
 
+        # ============ R82 · FUNDOS BRANCOS EM VENDAS E NO ESTADO DE VENDAS ============
+        r82 = await b.new_page(viewport={"width":1440,"height":900})
+        erros82=[]; r82.on("pageerror", lambda e: erros82.append(str(e)))
+        await r82.goto("file:///home/user/index.html#rapido"); await r82.wait_for_timeout(2200)
+        ET82 = await r82.evaluate("""()=>[...document.querySelectorAll('#pg-modelos .etapa')]
+            .map(e=>getComputedStyle(e).backgroundColor)""")
+        ok("R82 \u00b7 todos os containers do Estado de Vendas t\u00eam fundo branco",
+           len(ET82)==4 and all(c=="rgb(255, 255, 255)" for c in ET82), str(ET82))
+        FUN82 = await r82.evaluate("()=>getComputedStyle(document.querySelector('#pg-modelos .funil')).backgroundColor")
+        ok("R82 \u00b7 o cart\u00e3o do Estado de Vendas tamb\u00e9m \u00e9 branco", FUN82=="rgb(255, 255, 255)", FUN82)
+
+        await r82.evaluate("()=>{ORCAMENTOS[0].estado='Venda conclu\\u00EDda'; guardarOrc(); ir('vendas');}")
+        await r82.wait_for_timeout(900)
+        VN82 = await r82.evaluate("""()=>{const l=[...document.querySelectorAll('#pg-vendas .vneg')];
+            return {todos:l.map(e=>getComputedStyle(e).backgroundColor), fechados:l.filter(e=>e.classList.contains('fechado')).length};}""")
+        ok("R82 \u00b7 todos os itens da p\u00e1gina Vendas t\u00eam fundo branco",
+           len(VN82["todos"])>=5 and all(c=="rgb(255, 255, 255)" for c in VN82["todos"]), str(VN82))
+        ok("R82 \u00b7 o cart\u00e3o de venda conclu\u00edda tamb\u00e9m ficou branco",
+           VN82["fechados"]>=1, str(VN82["fechados"]))
+
+        m82 = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        await m82.goto("file:///home/user/index.html#rapido"); await m82.wait_for_timeout(2200)
+        Mov82 = await m82.evaluate("""()=>{const e=[...document.querySelectorAll('#pg-modelos .etapa')].map(x=>getComputedStyle(x).backgroundColor);
+            return {etapas:e, iguaise:todos=>true};}""")
+        ok("R82 \u00b7 no telem\u00f3vel os containers do Estado de Vendas continuam brancos",
+           all(c=="rgb(255, 255, 255)" for c in Mov82["etapas"]), str(Mov82["etapas"]))
+        await m82.evaluate("()=>{ORCAMENTOS[0].estado='Venda conclu\\u00EDda'; guardarOrc(); ir('vendas');}")
+        await m82.wait_for_timeout(800)
+        ok("R82 \u00b7 no telem\u00f3vel os itens de Vendas continuam brancos",
+           await m82.evaluate("()=>[...document.querySelectorAll('#pg-vendas .vneg')].every(e=>getComputedStyle(e).backgroundColor==='rgb(255, 255, 255)')"), "")
+        ok("R82 \u00b7 sem erros de JavaScript", len(erros82)==0, str(erros82[:2]))
+        await m82.close(); await r82.close()
+
         # ============ R76 · RESPONSIVO EM TODA A GAMA ============
         r76e = []
         GAMA = [(320,568,"telemovel muito estreito"),(375,667,"telemovel pequeno"),

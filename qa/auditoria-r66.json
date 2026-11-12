@@ -1,21 +1,21 @@
 [
  {
   "nome": "Carga inicial (ate o ecra de Automoveis)",
-  "valor": "107 ms",
+  "valor": "99 ms",
   "alvo": "< 1500 ms",
   "ok": true,
   "nota": ""
  },
  {
   "nome": "First Contentful Paint",
-  "valor": "76 ms",
+  "valor": "84 ms",
   "alvo": "< 800 ms",
   "ok": true,
   "nota": ""
  },
  {
   "nome": "DOMContentLoaded",
-  "valor": "64 ms",
+  "valor": "63 ms",
   "alvo": "< 1200 ms",
   "ok": true,
   "nota": ""
@@ -64,10 +64,10 @@
  },
  {
   "nome": "Navegacao entre as 5 secoes",
-  "valor": "max 31 ms",
+  "valor": "max 32 ms",
   "alvo": "< 120 ms",
   "ok": true,
-  "nota": "{\"modelos\": 10.4, \"listaorc\": 27.6, \"vendas\": 30.4, \"clientes\": 29.4, \"perfil\": 30.8}"
+  "nota": "{\"modelos\": 27.1, \"listaorc\": 31.4, \"vendas\": 23.2, \"clientes\": 31.7, \"perfil\": 31.6}"
  },
  {
   "nome": "Recalculo por tecla no desconto",
