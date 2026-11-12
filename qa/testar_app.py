@@ -956,6 +956,35 @@ async def main():
            await m83.evaluate("()=>[...document.querySelectorAll('#pg-vendas .vneg')].every(e=>getComputedStyle(e).backgroundColor==='rgba(0, 0, 0, 0)')"), "")
         await m83.close()
 
+        # ============ R84 · TOTAIS DA PAGINA VENDAS COM FUNDO TRANSPARENTE ============
+        r84 = await b.new_page(viewport={"width":1440,"height":900})
+        erros84=[]; r84.on("pageerror", lambda e: erros84.append(str(e)))
+        await r84.goto("file:///home/user/index.html#rapido"); await r84.wait_for_timeout(2200)
+        await r84.evaluate("()=>ir('vendas')"); await r84.wait_for_timeout(600)
+        T84 = await r84.evaluate("""()=>{const s=[...document.querySelectorAll('#pg-vendas .vendas-tot span')];
+            return {n:s.length, fundos:s.map(e=>getComputedStyle(e).backgroundColor),
+                    txt:s.map(e=>e.innerText)};}""")
+        ok("R84 \u00b7 os dois totais de Vendas existem", T84["n"]==2, str(T84["n"]))
+        ok("R84 \u00b7 os dois totais t\u00eam fundo transparente",
+           all(c=="rgba(0, 0, 0, 0)" for c in T84["fundos"]), str(T84["fundos"]))
+        T84["txt"] = [" ".join(t.split()) for t in T84["txt"]]
+        ok("R84 \u00b7 r\u00f3tulos mantidos (em curso / fechadas)",
+           T84["txt"][0].startswith("Valor dos neg\u00f3cios em curso") and T84["txt"][1].startswith("Vendas fechadas")
+           and T84["txt"][0].endswith("Kz") and T84["txt"][1].endswith("Kz"), str(T84["txt"]))
+        await r84.evaluate("()=>document.documentElement.setAttribute('data-tema','escuro')")
+        await r84.wait_for_timeout(400)
+        ok("R84 \u00b7 no modo escuro continuam transparentes",
+           await r84.evaluate("()=>[...document.querySelectorAll('#pg-vendas .vendas-tot span')].every(e=>getComputedStyle(e).backgroundColor==='rgba(0, 0, 0, 0)')"), "")
+        ok("R84 \u00b7 sem erros de JavaScript", len(erros84)==0, str(erros84[:2]))
+        await r84.close()
+
+        m84 = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        await m84.goto("file:///home/user/index.html#rapido"); await m84.wait_for_timeout(2200)
+        await m84.evaluate("()=>ir('vendas')"); await m84.wait_for_timeout(600)
+        ok("R84 \u00b7 no telem\u00f3vel os totais tamb\u00e9m s\u00e3o transparentes",
+           await m84.evaluate("()=>[...document.querySelectorAll('#pg-vendas .vendas-tot span')].every(e=>getComputedStyle(e).backgroundColor==='rgba(0, 0, 0, 0)')"), "")
+        await m84.close()
+
         # ============ R76 · RESPONSIVO EM TODA A GAMA ============
         r76e = []
         GAMA = [(320,568,"telemovel muito estreito"),(375,667,"telemovel pequeno"),

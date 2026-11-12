@@ -756,12 +756,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1.03, 'offsets': 11}"
+  "d": "{'dx': 1.04, 'offsets': 11}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1.03, 'offsets': 11}"
+  "d": "{'dx': 1.04, 'offsets': 11}"
  },
  {
   "r": "PASS",
@@ -991,6 +991,36 @@
  {
   "r": "PASS",
   "n": "R83 · no telemóvel os itens de Vendas continuam transparentes",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R84 · os dois totais de Vendas existem",
+  "d": "2"
+ },
+ {
+  "r": "PASS",
+  "n": "R84 · os dois totais têm fundo transparente",
+  "d": "['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)']"
+ },
+ {
+  "r": "PASS",
+  "n": "R84 · rótulos mantidos (em curso / fechadas)",
+  "d": "['Valor dos negócios em curso 99,522,000 Kz', 'Vendas fechadas 0 Kz']"
+ },
+ {
+  "r": "PASS",
+  "n": "R84 · no modo escuro continuam transparentes",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R84 · sem erros de JavaScript",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R84 · no telemóvel os totais também são transparentes",
   "d": ""
  },
  {
@@ -1241,7 +1271,7 @@
  {
   "r": "PASS",
   "n": "R71 · barra dura cerca de 6 segundos",
-  "d": "6064 ms"
+  "d": "6061 ms"
  },
  {
   "r": "PASS",
@@ -1586,7 +1616,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "19,730.43 Kz"
+  "d": "-4,388.16 Kz"
  },
  {
   "r": "PASS",
@@ -1596,12 +1626,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,589,399.10 Kz"
+  "d": "9,587,974.71 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,999.14 Kz"
+  "d": "9,749,998.63 Kz"
  },
  {
   "r": "PASS",
@@ -1617,10 +1647,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   319510,
-   2891899,
-   4881402,
-   6362662
+   266107,
+   2850210,
+   4849538,
+   6339493
   ]
  },
  {
@@ -1641,13 +1671,13 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "416,939.57 Kz"
+  "d": "416,584.44 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "416,939.57 Kz",
+   "416,584.44 Kz",
    "4,062,492.97 Kz"
   ]
  },
@@ -1736,7 +1766,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34759
+   3.34659
   ]
  },
  {
@@ -1762,7 +1792,7 @@
  {
   "r": "PASS",
   "n": "R63 · as duas cabeças revezam-se (entra uma, cede a outra)",
-  "d": "{'opTras': 1, 'escFrente': 0.920637, 'trasEntra': True}"
+  "d": "{'opTras': 1, 'escFrente': 0.920636, 'trasEntra': True}"
  },
  {
   "r": "PASS",
@@ -2601,7 +2631,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '22,476,248.23 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,469,939.84 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,665,786.79 Kz', 'temKz': True, 'contando': 9}]"
+  "d": "[{'fn': 1, 'vt': '22,277,844.55 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,737,366.92 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,879,804.56 Kz', 'temKz': True, 'contando': 9}]"
  },
  {
   "r": "PASS",
@@ -2611,7 +2641,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '22,680,594.05 Kz'}"
+  "d": "{'fn': '1', 'vt': '22,280,996.47 Kz'}"
  },
  {
   "r": "PASS",
@@ -2651,17 +2681,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 17:13 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 17:41 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 17:13 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 17:41 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 17:13 · enviado"
+  "d": "Hoje, 17:41 · enviado"
  },
  {
   "r": "PASS",

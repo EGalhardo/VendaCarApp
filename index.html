@@ -280,7 +280,8 @@
   .vendas-head{display:flex;align-items:center;gap:12px;margin-bottom:11px}
   .vendas-head h3{font-size:14px;font-weight:800;color:#2b3532}
   .vendas-tot{margin-left:auto;display:flex;gap:9px;flex-wrap:wrap}
-  .vendas-tot span{font-size:11px;color:var(--muted-2);background:#f7faf8;border:1px solid var(--line);border-radius:20px;padding:4px 10px}
+  /* R84: os dois totais da pagina Vendas ficam com fundo transparente */
+  .vendas-tot span{font-size:11px;color:var(--muted-2);background:transparent;border:1px solid var(--line);border-radius:20px;padding:4px 10px}
   .vendas-tot b{color:var(--ink-2);font-weight:800}
   .vendas-lista{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   /* R68: seletor de estado do grupo "Neg\u00F3cios em curso" */
@@ -347,7 +348,7 @@
   html[data-tema="escuro"] .funil-base{color:#93a7c4}
   html[data-tema="escuro"] .funil-base b{color:#63dc92}
   html[data-tema="escuro"] .vendas-head h3{color:#fff}
-  html[data-tema="escuro"] .vendas-tot span{background:#071528;border-color:#17375e;color:#93a7c4}
+  html[data-tema="escuro"] .vendas-tot span{background:transparent;border-color:#17375e;color:#93a7c4}
   html[data-tema="escuro"] .vendas-tot b{color:#eaf1fb}
   html[data-tema="escuro"] .vneg{background:transparent;border-color:#17375e}
   html[data-tema="escuro"] .vneg .nm{color:#fff}
