@@ -778,6 +778,31 @@ async def main():
            await m78.evaluate("()=>{const r=document.querySelector('.logoC').getBoundingClientRect();return r.width<=250 && r.width>180;}"), "")
         await m78.close(); await r78.wait_for_timeout(6000); await r78.close()
 
+        # ============ R79 · "ESTADO DE VENDAS" NO AUTOMOVEL ============
+        r79 = await b.new_page(viewport={"width":1440,"height":900})
+        await r79.goto("file:///home/user/index.html#rapido"); await r79.wait_for_timeout(2200)
+        T79 = await r79.evaluate("""()=>{const h=document.querySelector('#pg-modelos .funil-top h3');
+            const svg=h.querySelector('svg'); const d=[...svg.querySelectorAll('path')].map(p=>p.getAttribute('d'));
+            return {txt:h.innerText.replace(/\\s+/g,' ').trim(), titulo:!!h,
+                    vazio:h.scrollWidth>h.clientWidth+1, barras:d.length,
+                    temFunil:d.some(x=>/l-7 8/.test(x)), largura:Math.round(h.getBoundingClientRect().width)};}""")
+        ok("R79 · o cartão do Automóvel chama-se \"Estado de Vendas\"",
+           T79["titulo"] and T79["txt"]=="Estado de Vendas", str(T79["txt"]))
+        ok("R79 · o ícone antigo do funil saiu de lá",
+           not T79["temFunil"], str(T79["temFunil"]))
+        ok("R79 · ícone novo: quatro traços verticais (gráfico a subir)",
+           T79["barras"]==4, str(T79["barras"]))
+        ok("R79 · o título novo cabe no cabeçalho sem transbordar",
+           not T79["vazio"] and 120<=T79["largura"]<=260, str(T79["largura"]))
+        m79 = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        await m79.goto("file:///home/user/index.html#rapido"); await m79.wait_for_timeout(2200)
+        M79 = await m79.evaluate("""()=>{const h=document.querySelector('#pg-modelos .funil-top h3');
+            const r=h.getBoundingClientRect(); return {txt:h.innerText.replace(/\\s+/g,' ').trim(),
+            vazio:h.scrollWidth>h.clientWidth+1, altura:Math.round(r.height)};}""")
+        ok("R79 · no telemóvel o título novo também cabe",
+           M79["txt"]=="Estado de Vendas" and not M79["vazio"] and M79["altura"]<=30, str(M79))
+        await m79.close(); await r79.close()
+
         # ============ R76 · RESPONSIVO EM TODA A GAMA ============
         r76e = []
         GAMA = [(320,568,"telemovel muito estreito"),(375,667,"telemovel pequeno"),

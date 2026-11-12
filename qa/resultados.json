@@ -756,12 +756,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1.04, 'offsets': 12}"
+  "d": "{'dx': 1.04, 'offsets': 11}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1.04, 'offsets': 12}"
+  "d": "{'dx': 1.04, 'offsets': 11}"
  },
  {
   "r": "PASS",
@@ -837,6 +837,31 @@
   "r": "PASS",
   "n": "R78 · no telemóvel a marca cabe com folga",
   "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R79 · o cartão do Automóvel chama-se \"Estado de Vendas\"",
+  "d": "Estado de Vendas"
+ },
+ {
+  "r": "PASS",
+  "n": "R79 · o ícone antigo do funil saiu de lá",
+  "d": "False"
+ },
+ {
+  "r": "PASS",
+  "n": "R79 · ícone novo: quatro traços verticais (gráfico a subir)",
+  "d": "4"
+ },
+ {
+  "r": "PASS",
+  "n": "R79 · o título novo cabe no cabeçalho sem transbordar",
+  "d": "163"
+ },
+ {
+  "r": "PASS",
+  "n": "R79 · no telemóvel o título novo também cabe",
+  "d": "{'txt': 'Estado de Vendas', 'vazio': False, 'altura': 21}"
  },
  {
   "r": "PASS",
@@ -1086,7 +1111,7 @@
  {
   "r": "PASS",
   "n": "R71 · barra dura cerca de 6 segundos",
-  "d": "6060 ms"
+  "d": "6056 ms"
  },
  {
   "r": "PASS",
@@ -1431,7 +1456,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "5,117.85 Kz"
+  "d": "-36,241.69 Kz"
  },
  {
   "r": "PASS",
@@ -1441,12 +1466,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,588,616.72 Kz"
+  "d": "9,589,895.66 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.89 Kz"
+  "d": "9,749,999.28 Kz"
  },
  {
   "r": "PASS",
@@ -1462,10 +1487,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   262561,
-   2889378,
-   4879296,
-   6361131
+   319189,
+   2891899,
+   4881402,
+   6362523
   ]
  },
  {
@@ -1486,14 +1511,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "416,939.57 Kz"
+  "d": "415,519 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "416,939.57 Kz",
-   "4,062,748.23 Kz"
+   "415,519 Kz",
+   "4,061,727.16 Kz"
   ]
  },
  {
@@ -1581,7 +1606,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.05572
+   3.34761
   ]
  },
  {
@@ -1607,7 +1632,7 @@
  {
   "r": "PASS",
   "n": "R63 · as duas cabeças revezam-se (entra uma, cede a outra)",
-  "d": "{'opTras': 1, 'escFrente': 0.920636, 'trasEntra': True}"
+  "d": "{'opTras': 1, 'escFrente': 0.920635, 'trasEntra': True}"
  },
  {
   "r": "PASS",
@@ -2446,7 +2471,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '22,425,892.22 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,426,146.12 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,974,227.38 Kz', 'temKz': True, 'contando': 9}]"
+  "d": "[{'fn': 1, 'vt': '22,740,257.59 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,683,434.70 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,836,649.81 Kz', 'temKz': True, 'contando': 9}]"
  },
  {
   "r": "PASS",
@@ -2456,7 +2481,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '22,485,687.54 Kz'}"
+  "d": "{'fn': '1', 'vt': '22,733,978.67 Kz'}"
  },
  {
   "r": "PASS",
@@ -2496,17 +2521,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 21:17 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 14:19 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 21:17 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 14:19 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 21:17 · enviado"
+  "d": "Hoje, 14:19 · enviado"
  },
  {
   "r": "PASS",
@@ -2586,12 +2611,12 @@
  {
   "r": "PASS",
   "n": "R44 · Exportar orçamentos em CSV descarrega",
-  "d": "['orcamentos-vendacar-2026-11-11.csv']"
+  "d": "['orcamentos-vendacar-2026-11-12.csv']"
  },
  {
   "r": "PASS",
   "n": "R66 · CSV exportado inclui desconto à vista e valor à vista",
-  "d": "{'cab': ['Carro', 'Cliente', 'Telefone', 'Data', 'Estado', 'Preco', 'Desconto a vista', 'A vista', 'IVA 14%', 'Total com IVA', 'Entrada', 'Saldo'], 'linha': ['Toyota Corolla 2018', 'Renato', '+244 923456789', '2026-11-11', 'Pendente', 9750000, 450000, 9300000, 1365000, 11115000, 2000000, 7750000], 'descontoCol': 6, 'vistaCol': 7}"
+  "d": "{'cab': ['Carro', 'Cliente', 'Telefone', 'Data', 'Estado', 'Preco', 'Desconto a vista', 'A vista', 'IVA 14%', 'Total com IVA', 'Entrada', 'Saldo'], 'linha': ['Toyota Corolla 2018', 'Renato', '+244 923456789', '2026-11-12', 'Pendente', 9750000, 450000, 9300000, 1365000, 11115000, 2000000, 7750000], 'descontoCol': 6, 'vistaCol': 7}"
  },
  {
   "r": "PASS",
@@ -2611,7 +2636,7 @@
  {
   "r": "PASS",
   "n": "R57 · o estoque já não gera ficheiro CSV",
-  "d": "['orcamentos-vendacar-2026-11-11.csv']"
+  "d": "['orcamentos-vendacar-2026-11-12.csv']"
  },
  {
   "r": "PASS",
