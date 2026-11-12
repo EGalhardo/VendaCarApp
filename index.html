@@ -629,6 +629,17 @@
   }
   .car .del-car:hover,.car .del-car:focus-visible{background:#fdecea;color:#c0392b;border-color:#f3cfc9;transform:scale(1.06)}
   .car .del-car:active{transform:scale(.96)}
+  /* R80: coluna de acao (eliminar) na lista de Clientes */
+  .tbl .col-acao{width:52px;text-align:right;padding-left:6px;padding-right:14px}
+  .btn-del-cli{
+    display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;
+    cursor:pointer;background:#fff;border:1px solid rgba(20,40,30,.10);color:#5c6b66;
+    transition:background .15s,color .15s,border-color .15s,transform .15s;
+  }
+  .btn-del-cli:hover,.btn-del-cli:focus-visible{background:#fdecea;color:#c0392b;border-color:#f3cfc9;transform:scale(1.06)}
+  .btn-del-cli:active{transform:scale(.96)}
+  html[data-tema="escuro"] .btn-del-cli{background:#040d1f;border-color:#17375e;color:#c6d6ec}
+  html[data-tema="escuro"] .btn-del-cli:hover,html[data-tema="escuro"] .btn-del-cli:focus-visible{background:#2e1418;color:#f1897c;border-color:#4a2027}
   .conf-txt{font-size:13.5px;color:var(--ink-3);line-height:1.55;margin:0 0 12px}
   .conf-txt b{color:#333d3a}
   .conf-box{
@@ -1329,7 +1340,9 @@
       display:table;width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0;
       margin-bottom:9px;border-radius:10px;overflow:hidden;
     }
-    .tbl-wrap.tbl-verde .tbl tr:first-child{display:table-row;background:transparent;border:0;padding:0;margin:0}
+    /* R80: so a linha de titulos (thead) escapa ao formato de cartao; a 1.a linha
+       de dados tem de ser cartao como as outras */
+    .tbl-wrap.tbl-verde .tbl thead tr:first-child{display:table-row;background:transparent;border:0;padding:0;margin:0}
     .tbl-wrap.tbl-verde .tbl thead th{
       display:table-cell;padding:9px 3px;font-size:0;letter-spacing:.2px;border-radius:0;
       white-space:nowrap;overflow:hidden;background:var(--green);color:#fff;
@@ -1340,6 +1353,10 @@
     }
     .tbl-wrap.tbl-verde .tbl thead th:first-child{border-radius:10px 0 0 10px}
     .tbl-wrap.tbl-verde .tbl thead th:last-child{border-radius:0 10px 10px 0}
+    /* R80: a coluna de eliminar nao precisa de titulo no cartao do telemovel */
+    .tbl-wrap.tbl-verde .tbl thead th.col-acao{display:none}
+    .tbl-wrap .tbl td.col-acao{width:auto;padding-left:0;padding-right:0;text-align:right!important}
+    .tbl .col-acao .btn-del-cli{width:34px;height:34px}
     .tbl,.tbl tbody,.tbl tr,.tbl td{display:block;width:100%}
     .tbl tr{
       background:#fff;border:1px solid var(--line-2);border-radius:12px;
@@ -1449,7 +1466,7 @@
     .tbl-wrap.tbl-verde .tbl thead th:nth-child(4),
     .tbl-wrap.tbl-verde .tbl thead th:nth-child(7){display:none}
     .tbl-wrap.tbl-verde .tbl thead{display:block;overflow:hidden}
-    .tbl-wrap.tbl-verde .tbl tr:first-child{display:block}
+    .tbl-wrap.tbl-verde .tbl thead tr:first-child{display:block}
     .tbl-wrap.tbl-verde .tbl thead th{display:inline-block;width:auto;padding:8px 8px}
   }
 
@@ -1929,7 +1946,8 @@ setTimeout(function(){
         <table class="tbl">
           <thead><tr><th data-ab="Cliente">Cliente</th><th data-ab="Telefone">Telefone</th>
             <th data-ab="Or&#231;.">Or&#231;amentos</th><th data-ab="Total">Total</th>
-            <th data-ab="&#218;ltimo">&#218;ltimo contacto</th></tr></thead>
+            <th data-ab="&#218;ltimo">&#218;ltimo contacto</th>
+            <th class="col-acao" data-ab="" aria-label="Eliminar"></th></tr></thead>
           <tbody id="tblClientes"></tbody>
         </table>
       </div>
@@ -2238,6 +2256,40 @@ setTimeout(function(){
     <div class="foot">
       <button class="btn ghost" data-close="mApagarModelo">Cancelar</button>
       <button class="btn danger-solid" id="btnApagarModelo">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>
+        </svg>
+        Eliminar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MODAL: ELIMINAR CLIENTE (R80) ================= -->
+<div class="ov" id="mApagarCliente">
+  <div class="modal narrow" role="dialog" aria-modal="true" aria-labelledby="ttApagarCli">
+    <div class="head">
+      <div class="ic ic-danger">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d1503f" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/><path d="M10 11v5M14 11v5"/>
+        </svg>
+      </div>
+      <div><h3 id="ttApagarCli">Eliminar cliente</h3><div class="sub">Esta a&#231;&#227;o n&#227;o pode ser desfeita</div></div>
+      <button class="x" data-close="mApagarCliente" aria-label="Fechar">&#215;</button>
+    </div>
+    <div class="body">
+      <p class="conf-txt">Tem a certeza de que quer eliminar <b id="apCliNome">&#8212;</b>?</p>
+      <div class="conf-box">
+        <span>O cliente sai dos <b>Clientes</b>.</span>
+        <span id="apCliOrcs">Os <b>or&#231;amentos</b> dele s&#227;o apagados.</span>
+        <span>Or&#231;amentos, Vendas, Perfil e a fila de envios ficam sem qualquer registo deste cliente.</span>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="btn ghost" data-close="mApagarCliente">Cancelar</button>
+      <button class="btn danger-solid" id="btnApagarClienteLista">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"
              stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>
@@ -3580,6 +3632,7 @@ document.getElementById('btnGuardarModelo').addEventListener('click', () => {
 
 /* volta a desenhar tudo o que depende dos dados, no ecra em que o utilizador esta */
 function atualizarTudo(){
+  try{ limparFantasma(); }catch(e){}   /* R80: nenhum ecra recebe dados orfaos */
   try{ renderGrid(); }catch(e){}
   try{ renderFiltrosOrc(); }catch(e){}
   try{ renderTabelaOrc(); }catch(e){}
@@ -3623,6 +3676,7 @@ function apagarOrcamento(id){
   if (enviarPendente === id) enviarPendente = null;
   if (orcAberto === id)      orcAberto = null;
 
+  limparFantasma();
   atualizarTudo();
   toast(ultimoDoCliente
     ? 'Or\u00E7amento apagado \u00B7 ' + orc.nome + ' saiu dos Clientes (n\u00E3o tem mais or\u00E7amentos)'
@@ -3657,12 +3711,29 @@ function apagarAutomovel(id){
   const clientesFora = [...telesAntes].filter(t => !telesAgora.has(t)).length;
 
   if (atual && atual.id === id) atual = CARROS[0] || null;
+  limparFantasma();
 
   atualizarTudo();
   toast('Autom\u00F3vel eliminado \u00B7 ' + orcsDoCarro.length +
     (orcsDoCarro.length === 1 ? ' or\u00E7amento apagado' : ' or\u00E7amentos apagados') +
     (clientesFora ? ' \u00B7 ' + clientesFora + (clientesFora === 1 ? ' cliente saiu' : ' clientes sa\u00EDram') + ' da lista' : ''));
   return true;
+}
+
+/* R80: limpeza de dados fantasma \u2014 remove tudo o que aponta para registos
+   que ja nao existem (fila de envios de orcamentos apagados, orcamentos de
+   automoveis apagados). Devolve quantos registos foram removidos. */
+function limparFantasma(){
+  let n = 0;
+  const idsOrc = new Set(ORCAMENTOS.map(o => o.id));
+  const antesFila = FILA_ENVIOS.length;
+  FILA_ENVIOS = FILA_ENVIOS.filter(f => idsOrc.has(f.orcId));
+  if (FILA_ENVIOS.length !== antesFila){ guardarFila(); n += antesFila - FILA_ENVIOS.length; }
+
+  if (enviarPendente && !idsOrc.has(enviarPendente)) enviarPendente = null;
+  if (orcAberto && !idsOrc.has(orcAberto)) orcAberto = null;
+  if (clienteAtual && !ORCAMENTOS.some(o => String(o.tel) === String(clienteAtual.tel))) clienteAtual = null;
+  return n;
 }
 
 /* APAGAR UM CLIENTE: todos os orcamentos desse telemovel desaparecem
@@ -3682,11 +3753,44 @@ function apagarCliente(tel){
   if (idsFora.has(orcAberto))      orcAberto = null;
   if (clienteAtual && String(clienteAtual.tel) === alvo) clienteAtual = null;
 
+  /* R80: nada do cliente fica escrito em nenhum sitio */
+  limparFantasma();
+  if (paginaAtual() === 'cliente') ir('clientes');
   atualizarTudo();
   toast('Cliente apagado \u00B7 ' + orcs.length +
-    (orcs.length === 1 ? ' or\u00E7amento apagado' : ' or\u00E7amentos apagados'));
+    (orcs.length === 1 ? ' or\u00E7amento apagado' : ' or\u00E7amentos apagados') +
+    ' \u00B7 sem dados pendentes');
   return true;
 }
+
+/* R80: ELIMINAR UM CLIENTE a partir da lista (com confirma\u00E7\u00E3o e cascata) */
+let apagarCliTel = null;
+
+function abrirApagarCliente(tel){
+  const alvo = String(tel);
+  const orcs = ORCAMENTOS.filter(o => String(o.tel) === alvo);
+  if (!orcs.length) return false;
+  apagarCliTel = alvo;
+
+  const nome = orcs.slice().sort((x,y) => y.data - x.data)[0].nome;
+  const qtd = orcs.length;
+  document.getElementById('apCliNome').textContent = nome + ' \u00B7 ' + fmtTel(alvo);
+  document.getElementById('apCliOrcs').innerHTML = qtd === 1
+    ? 'O <b>or\u00E7amento</b> dele \u00E9 apagado.'
+    : 'Os <b>' + qtd + ' or\u00E7amentos</b> dele s\u00E3o apagados.';
+  document.getElementById('mApagarCliente').classList.add('open');
+  reiniciarScroll(document.getElementById('mApagarCliente'));
+  return true;
+}
+
+document.getElementById('btnApagarClienteLista').addEventListener('click', () => {
+  const tel = apagarCliTel;
+  apagarCliTel = null;
+  document.getElementById('mApagarCliente').classList.remove('open');
+  if (!tel) return;
+  apagarCliente(tel);
+  if (paginaAtual() === 'cliente') ir('clientes');
+});
 
 /* ==========================================================
    ELIMINAR MODELO (com confirma\u00E7\u00E3o)
@@ -4568,6 +4672,12 @@ function renderClientes(filtroTexto){
       <td>${c.orcs.length} or\u00E7.</td>
       <td class="b" data-valor="${c.total}">${fmt(c.total)}</td>
       <td>${fmtData(c.ultimo)}</td>
+      <td class="col-acao"><button type="button" class="btn-del-cli" data-delcli="${c.tel}"
+        title="Eliminar cliente" aria-label="Eliminar ${esc(c.nome)}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/><path d="M10 11v5M14 11v5"/>
+        </svg></button></td>
     </tr>`;
   }).join('');
 
@@ -4649,6 +4759,9 @@ document.getElementById('btnApagarCliente').addEventListener('click', () => {
 
 /* clique nas tabelas de clientes / or\u00E7amentos */
 document.addEventListener('click', e => {
+  const del = e.target.closest('[data-delcli]');
+  if (del){ e.preventDefault(); e.stopPropagation(); abrirApagarCliente(del.dataset.delcli); return; }
+
   const row = e.target.closest('tr.cli[data-tel]');
   if (row) { abrirCliente(row.dataset.cliente, row.dataset.tel); return; }
 

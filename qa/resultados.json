@@ -756,12 +756,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1.04, 'offsets': 10}"
+  "d": "{'dx': 1.03, 'offsets': 11}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1.04, 'offsets': 10}"
+  "d": "{'dx': 1.03, 'offsets': 11}"
  },
  {
   "r": "PASS",
@@ -867,6 +867,61 @@
   "r": "PASS",
   "n": "R79 · no telemóvel o título novo também cabe",
   "d": "{'txt': 'Estado de Vendas', 'vazio': False, 'altura': 21}"
+ },
+ {
+  "r": "PASS",
+  "n": "R80 · cada cliente da lista tem botão de eliminar",
+  "d": "{'linhas': 5, 'botoes': 5, 'alvo': [30, 30]}"
+ },
+ {
+  "r": "PASS",
+  "n": "R80 · o botão de eliminar é um alvo confortável",
+  "d": "[30, 30]"
+ },
+ {
+  "r": "PASS",
+  "n": "R80 · eliminar abre a confirmação (e não a ficha do cliente)",
+  "d": "{'aberto': True, 'detalhe': False, 'txt': 'O orçamento dele é apagado.'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R80 · a confirmação diz quantos orçamentos vão com o cliente",
+  "d": "O orçamento dele é apagado."
+ },
+ {
+  "r": "PASS",
+  "n": "R80 · cancelar não apaga nada",
+  "d": "Renato mantém 1 orçamento(s)"
+ },
+ {
+  "r": "PASS",
+  "n": "R80 · confirmar elimina o cliente da lista e das contagens",
+  "d": "{'cli': 4, 'noHtml': False, 'orcs': 0, 'badge': '4', 'sub': '4 clientes receberam orçamentos'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R80 · o subtítulo dos Clientes acompanha a eliminação",
+  "d": "4 clientes receberam orçamentos"
+ },
+ {
+  "r": "PASS",
+  "n": "R80 · sem dados fantasma: fila, orçamentos e armazenamento limpos",
+  "d": "{'fila': 0, 'orcsSemCarro': 0, 'guardado': False, 'filaGuardada': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R80 · apagar um automóvel também não deixa orçamentos órfãos",
+  "d": "{'fila': 0, 'orcsSemCarro': 0, 'orcs': 4, 'carros': 3, 'cliFantasma': 0}"
+ },
+ {
+  "r": "PASS",
+  "n": "R80 · a cascata do automóvel chega aos orçamentos",
+  "d": "1 orçamento(s) do carro saíram; 4 ficam"
+ },
+ {
+  "r": "PASS",
+  "n": "R80 · no telemóvel o botão fica dentro do cartão do cliente",
+  "d": "{'linhas': 5, 'alvo': [34, 34], 'dentro': True, 'cartao': 'block'}"
  },
  {
   "r": "PASS",
@@ -1116,7 +1171,7 @@
  {
   "r": "PASS",
   "n": "R71 · barra dura cerca de 6 segundos",
-  "d": "6063 ms"
+  "d": "6053 ms"
  },
  {
   "r": "PASS",
@@ -1461,7 +1516,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "-14,998.31 Kz"
+  "d": "4,752.35 Kz"
  },
  {
   "r": "PASS",
@@ -1471,12 +1526,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,587,307.12 Kz"
+  "d": "9,588,592.98 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.33 Kz"
+  "d": "9,749,998.88 Kz"
  },
  {
   "r": "PASS",
@@ -1492,10 +1547,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   266430,
-   2892403,
-   4881785,
-   6362801
+   318868,
+   2891647,
+   4881019,
+   6362383
   ]
  },
  {
@@ -1516,14 +1571,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "415,163.83 Kz"
+  "d": "416,229.31 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "415,163.83 Kz",
-   "4,061,471.88 Kz"
+   "416,229.31 Kz",
+   "4,061,982.44 Kz"
   ]
  },
  {
@@ -1564,7 +1619,7 @@
  {
   "r": "PASS",
   "n": "R63 · cabeça do Perfil cresce (escala >= 0.15)",
-  "d": 0.25
+  "d": 0.249
  },
  {
   "r": "PASS",
@@ -1574,7 +1629,7 @@
  {
   "r": "PASS",
   "n": "R63 · o anel do Perfil fica visível (opac. >= 0.5)",
-  "d": 0.843
+  "d": 0.85
  },
  {
   "r": "PASS",
@@ -1611,7 +1666,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34556
+   3.05491
   ]
  },
  {
@@ -1637,7 +1692,7 @@
  {
   "r": "PASS",
   "n": "R63 · as duas cabeças revezam-se (entra uma, cede a outra)",
-  "d": "{'opTras': 1, 'escFrente': 0.920635, 'trasEntra': True}"
+  "d": "{'opTras': 1, 'escFrente': 0.920636, 'trasEntra': True}"
  },
  {
   "r": "PASS",
@@ -2476,7 +2531,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '22,649,179.78 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,611,471.98 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,779,062.62 Kz', 'temKz': True, 'contando': 9}]"
+  "d": "[{'fn': 1, 'vt': '22,429,040.11 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,860,512.42 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,976,278.42 Kz', 'temKz': True, 'contando': 9}]"
  },
  {
   "r": "PASS",
@@ -2486,7 +2541,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '22,205,326.67 Kz'}"
+  "d": "{'fn': '1', 'vt': '22,532,872.53 Kz'}"
  },
  {
   "r": "PASS",
@@ -2526,17 +2581,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 14:34 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 14:54 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 14:34 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 14:54 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 14:34 · enviado"
+  "d": "Hoje, 14:54 · enviado"
  },
  {
   "r": "PASS",

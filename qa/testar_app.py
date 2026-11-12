@@ -805,6 +805,81 @@ async def main():
            M79["txt"]=="Estado de Vendas" and not M79["vazio"] and M79["altura"]<=30, str(M79))
         await m79.close(); await r79.close()
 
+        # ============ R80 · ELIMINAR CLIENTE NA LISTA + SEM DADOS FANTASMA ============
+        r80 = await b.new_page(viewport={"width":1440,"height":900})
+        await r80.goto("file:///home/user/index.html#rapido"); await r80.wait_for_timeout(2400)
+        await r80.evaluate("ir('clientes')"); await r80.wait_for_timeout(700)
+        N80 = await r80.evaluate("""()=>{const l=document.querySelectorAll('#tblClientes tr.cli');
+            const b=[...document.querySelectorAll('#tblClientes .btn-del-cli')];
+            const r=b[0].getBoundingClientRect();
+            return {linhas:l.length, botoes:b.length, alvo:[Math.round(r.width),Math.round(r.height)]};}""")
+        ok("R80 \u00b7 cada cliente da lista tem bot\u00e3o de eliminar",
+           N80["linhas"]>=4 and N80["botoes"]==N80["linhas"], str(N80))
+        ok("R80 \u00b7 o bot\u00e3o de eliminar \u00e9 um alvo confort\u00e1vel",
+           N80["alvo"][0]>=30 and N80["alvo"][1]>=30, str(N80["alvo"]))
+
+        alvo80 = await r80.evaluate("""()=>{const t=document.querySelector('#tblClientes .btn-del-cli').dataset.delcli;
+            const lista=ORCAMENTOS.filter(o=>String(o.tel)===String(t));
+            return {tel:t, qtd:lista.length, nome:lista.length?lista[0].nome:''};}""")
+        await r80.click("#tblClientes .btn-del-cli"); await r80.wait_for_timeout(400)
+        M80 = await r80.evaluate("""()=>({aberto:document.getElementById('mApagarCliente').classList.contains('open'),
+            detalhe:!document.getElementById('pg-cliente').classList.contains('hidden'),
+            txt:document.getElementById('apCliOrcs').innerText})""")
+        ok("R80 \u00b7 eliminar abre a confirma\u00e7\u00e3o (e n\u00e3o a ficha do cliente)",
+           M80["aberto"] and not M80["detalhe"], str(M80))
+        ok("R80 \u00b7 a confirma\u00e7\u00e3o diz quantos or\u00e7amentos v\u00e3o com o cliente",
+           str(alvo80["qtd"]) in M80["txt"] or (alvo80["qtd"]==1 and "or\u00e7amento" in M80["txt"]), M80["txt"])
+
+        await r80.click("#mApagarCliente .btn.ghost"); await r80.wait_for_timeout(400)
+        ok("R80 \u00b7 cancelar n\u00e3o apaga nada",
+           await r80.evaluate("()=>ORCAMENTOS.filter(o=>String(o.tel)===String(arguments[0])).length".replace("arguments[0]", repr(alvo80["tel"])))==alvo80["qtd"],
+           f'{alvo80["nome"]} mant\u00e9m {alvo80["qtd"]} or\u00e7amento(s)')
+
+        await r80.evaluate("()=>abrirApagarCliente(%r)" % str(alvo80["tel"])); await r80.wait_for_timeout(300)
+        await r80.click("#btnApagarClienteLista"); await r80.wait_for_timeout(900)
+        D80 = await r80.evaluate("""()=>({cli:document.querySelectorAll('#tblClientes tr.cli').length,
+            noHtml:document.getElementById('pg-clientes').innerText.includes(argTel),
+            orcs:ORCAMENTOS.filter(o=>String(o.tel)===String(argTel)).length,
+            badge:document.querySelector('[data-cnt="clientes"]').textContent,
+            sub:document.getElementById('subClientes').textContent})""".replace("argTel", repr(alvo80["tel"])))
+        ok("R80 \u00b7 confirmar elimina o cliente da lista e das contagens",
+           D80["orcs"]==0 and not D80["noHtml"] and D80["badge"]==str(D80["cli"]), str(D80))
+        ok("R80 \u00b7 o subt\u00edtulo dos Clientes acompanha a elimina\u00e7\u00e3o",
+           str(D80["cli"]) in D80["sub"], D80["sub"])
+
+        F80 = await r80.evaluate("""()=>({fila:FILA_ENVIOS.filter(f=>!ORCAMENTOS.some(o=>o.id===f.orcId)).length,
+            orcsSemCarro:ORCAMENTOS.filter(o=>o.carro&&!CARROS.some(c=>c.id===o.carro)).length,
+            guardado:(localStorage.getItem('modelo_orcamentos_v1')||'').includes(argTel),
+            filaGuardada:(localStorage.getItem('modelo_fila_envios_v1')||'').includes(argTel)})""".replace("argTel", repr(alvo80["tel"])))
+        ok("R80 \u00b7 sem dados fantasma: fila, or\u00e7amentos e armazenamento limpos",
+           F80["fila"]==0 and F80["orcsSemCarro"]==0 and not F80["guardado"] and not F80["filaGuardada"], str(F80))
+
+        await r80.evaluate("ir('modelos')"); await r80.wait_for_timeout(600)
+        car80 = await r80.evaluate("()=>({id:CARROS[0].id, carros:CARROS.length, orcs:ORCAMENTOS.length, doCarro:ORCAMENTOS.filter(o=>o.carro===CARROS[0].id).length})")
+        await r80.evaluate("()=>apagarAutomovel(CARROS[0].id)"); await r80.wait_for_timeout(1000)
+        A80 = await r80.evaluate("""()=>({fila:FILA_ENVIOS.filter(f=>!ORCAMENTOS.some(o=>o.id===f.orcId)).length,
+            orcsSemCarro:ORCAMENTOS.filter(o=>o.carro&&!CARROS.some(c=>c.id===o.carro)).length,
+            orcs:ORCAMENTOS.length, carros:CARROS.length,
+            cliFantasma:[...document.querySelectorAll('#tblClientes tr.cli')].filter(r=>!ORCAMENTOS.some(o=>String(o.tel)===String(r.dataset.tel))).length})""")
+        ok("R80 \u00b7 apagar um autom\u00f3vel tamb\u00e9m n\u00e3o deixa or\u00e7amentos \u00f3rf\u00e3os",
+           A80["fila"]==0 and A80["orcsSemCarro"]==0 and A80["cliFantasma"]==0, str(A80))
+        ok("R80 \u00b7 a cascata do autom\u00f3vel chega aos or\u00e7amentos",
+           A80["carros"]==car80["carros"]-1 and A80["orcs"]==car80["orcs"]-car80["doCarro"] and car80["doCarro"]>=1,
+           f'{car80["doCarro"]} or\u00e7amento(s) do carro sa\u00edram; {A80["orcs"]} ficam')
+
+        m80 = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        await m80.goto("file:///home/user/index.html#rapido"); await m80.wait_for_timeout(2400)
+        await m80.evaluate("ir('clientes')"); await m80.wait_for_timeout(700)
+        Mov80 = await m80.evaluate("""()=>{const l=document.querySelectorAll('#tblClientes tr.cli');
+            const b=l[0].querySelector('.btn-del-cli'); const rr=l[0].getBoundingClientRect();
+            const rb=b.getBoundingClientRect();
+            return {linhas:l.length, alvo:[Math.round(rb.width),Math.round(rb.height)],
+                    dentro:rb.right<=rr.right+1 && rb.left>=rr.left-1,
+                    cartao:getComputedStyle(l[0]).display};}""")
+        ok("R80 \u00b7 no telem\u00f3vel o bot\u00e3o fica dentro do cart\u00e3o do cliente",
+           Mov80["dentro"] and Mov80["cartao"]=="block" and Mov80["alvo"][0]>=34, str(Mov80))
+        await m80.close(); await r80.close()
+
         # ============ R76 · RESPONSIVO EM TODA A GAMA ============
         r76e = []
         GAMA = [(320,568,"telemovel muito estreito"),(375,667,"telemovel pequeno"),
