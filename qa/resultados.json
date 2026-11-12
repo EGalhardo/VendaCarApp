@@ -921,7 +921,7 @@
  {
   "r": "PASS",
   "n": "R80 · no telemóvel o botão fica dentro do cartão do cliente",
-  "d": "{'linhas': 5, 'alvo': [34, 34], 'dentro': True, 'cartao': 'block'}"
+  "d": "{'linhas': 5, 'alvo': [36, 36], 'dentro': True, 'cartao': 'block'}"
  },
  {
   "r": "PASS",
@@ -1025,6 +1025,96 @@
  },
  {
   "r": "PASS",
+  "n": "R85 · viewport cobre o ecra todo (viewport-fit=cover)",
+  "d": "width=device-width, initial-scale=1.0, viewport-fit=cover"
+ },
+ {
+  "r": "PASS",
+  "n": "R85 · no telemovel o botao eliminar tem 40 px de alvo",
+  "d": "[40, 40]"
+ },
+ {
+  "r": "PASS",
+  "n": "R85 · telemovel pequeno sem rolagem horizontal",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R85 · deitado a appbar encolhe para 46 px",
+  "d": "46"
+ },
+ {
+  "r": "PASS",
+  "n": "R85 · deitado usa a barra de navegacao inferior",
+  "d": "{'barra': 46, 'funilBase': 'none', 'nav': True, 'side': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R85 · deitado o modal cabe no ecra e o botao Guardar fica visivel",
+  "d": "{'alt': 374, 'vh': 390, 'cabe': True, 'guardarVisivel': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R85 · deitado sem erros de JavaScript",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R85 · tablet em retrato mantem a barra inferior e 3 colunas",
+  "d": "{'barra': 58, 'colunas': 3, 'nav': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R85 · tablet sem rolagem horizontal",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R85 · 1920 px: conteudo limitado a 1360 px",
+  "d": "1360"
+ },
+ {
+  "r": "PASS",
+  "n": "R85 · 1920 px: conteudo centrado na area util",
+  "d": "[155, 156]"
+ },
+ {
+  "r": "PASS",
+  "n": "R85 · 2560 px: conteudo limitado a 1500 px",
+  "d": "1500"
+ },
+ {
+  "r": "PASS",
+  "n": "R85 · 2560 px: conteudo centrado na area util",
+  "d": "[405, 406]"
+ },
+ {
+  "r": "PASS",
+  "n": "R85 · 2560 px: fotos dos carros maiores (>=200 px)",
+  "d": "213"
+ },
+ {
+  "r": "PASS",
+  "n": "R85 · 3840 px: conteudo limitado a 1500 px",
+  "d": "1500"
+ },
+ {
+  "r": "PASS",
+  "n": "R85 · 3840 px: conteudo centrado na area util",
+  "d": "[1045, 1046]"
+ },
+ {
+  "r": "PASS",
+  "n": "R85 · 3840 px: fotos dos carros maiores (>=200 px)",
+  "d": "213"
+ },
+ {
+  "r": "PASS",
+  "n": "R85 · monitor vertical: fotos sobem para 190 px",
+  "d": "224"
+ },
+ {
+  "r": "PASS",
   "n": "R76 · 320 px (telemovel muito estreito) · sem transbordo em 5 páginas",
   "d": "[]"
  },
@@ -1086,12 +1176,12 @@
  {
   "r": "PASS",
   "n": "R76 · 2560 px · navegação e grelha corretas",
-  "d": "{'cols': 4, 'largura': 1360, 'centrado': True, 'side': 'flex', 'navbar': 'none'}"
+  "d": "{'cols': 4, 'largura': 1500, 'centrado': True, 'side': 'flex', 'navbar': 'none'}"
  },
  {
   "r": "PASS",
   "n": "R76 · 2560 px · conteúdo com tecto de largura (sem esticar)",
-  "d": "1360"
+  "d": "1500"
  },
  {
   "r": "PASS",
@@ -1271,7 +1361,7 @@
  {
   "r": "PASS",
   "n": "R71 · barra dura cerca de 6 segundos",
-  "d": "6061 ms"
+  "d": "6055 ms"
  },
  {
   "r": "PASS",
@@ -1616,7 +1706,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "-4,388.16 Kz"
+  "d": "-11,338.77 Kz"
  },
  {
   "r": "PASS",
@@ -1626,12 +1716,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,587,974.71 Kz"
+  "d": "9,587,545.76 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.63 Kz"
+  "d": "9,749,998.44 Kz"
  },
  {
   "r": "PASS",
@@ -1647,10 +1737,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   266107,
-   2850210,
-   4849538,
-   6339493
+   320473,
+   2892655,
+   4881976,
+   6363079
   ]
  },
  {
@@ -1678,7 +1768,7 @@
   "n": "Contador · e volta a subir",
   "d": [
    "416,584.44 Kz",
-   "4,062,492.97 Kz"
+   "4,062,237.71 Kz"
   ]
  },
  {
@@ -1766,7 +1856,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34659
+   3.34614
   ]
  },
  {
@@ -2631,7 +2721,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '22,277,844.55 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,737,366.92 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,879,804.56 Kz', 'temKz': True, 'contando': 9}]"
+  "d": "[{'fn': 1, 'vt': '22,444,778.29 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,444,181.54 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,986,532.60 Kz', 'temKz': True, 'contando': 9}]"
  },
  {
   "r": "PASS",
@@ -2641,7 +2731,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '22,280,996.47 Kz'}"
+  "d": "{'fn': '1', 'vt': '22,595,755.87 Kz'}"
  },
  {
   "r": "PASS",
@@ -2681,17 +2771,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 17:41 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 19:32 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 17:41 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 19:32 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 17:41 · enviado"
+  "d": "Hoje, 19:32 · enviado"
  },
  {
   "r": "PASS",

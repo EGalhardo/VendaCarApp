@@ -985,6 +985,86 @@ async def main():
            await m84.evaluate("()=>[...document.querySelectorAll('#pg-vendas .vendas-tot span')].every(e=>getComputedStyle(e).backgroundColor==='rgba(0, 0, 0, 0)')"), "")
         await m84.close()
 
+        # ============ R85 · ADAPTACAO A TODO O TIPO DE ECRAS ============
+        # telemovel pequeno e tablet: alvos tacteis e viewport com notch
+        vp85 = await b.new_page(viewport={"width":360,"height":640}, is_mobile=True, has_touch=True)
+        await vp85.goto(URL_ANIM); await vp85.wait_for_selector("#pg-modelos:not(.hidden)")
+        await vp85.wait_for_timeout(400)
+        META85 = await vp85.evaluate("()=>document.querySelector('meta[name=viewport]').content")
+        ok("R85 \u00b7 viewport cobre o ecra todo (viewport-fit=cover)", "viewport-fit=cover" in META85, META85)
+        DEL85 = await vp85.evaluate("""()=>{const d=document.querySelector('.car .del-car'); if(!d) return null;
+            const r=d.getBoundingClientRect(); return [Math.round(r.width),Math.round(r.height)];}""")
+        ok("R85 \u00b7 no telemovel o botao eliminar tem 40 px de alvo",
+           DEL85 is not None and DEL85[0]>=40 and DEL85[1]>=40, str(DEL85))
+        ok("R85 \u00b7 telemovel pequeno sem rolagem horizontal",
+           not await vp85.evaluate("()=>document.documentElement.scrollWidth>document.documentElement.clientWidth+1"), "")
+        await vp85.close()
+
+        # telemovel deitado / janela baixa: appbar fina e modal com o botao a vista
+        ld85 = await b.new_page(viewport={"width":844,"height":390}, is_mobile=True, has_touch=True)
+        erros85=[]; ld85.on("pageerror", lambda e: erros85.append(str(e)))
+        await ld85.goto(URL_ANIM); await ld85.wait_for_selector("#pg-modelos:not(.hidden)")
+        await ld85.wait_for_timeout(500)
+        L85 = await ld85.evaluate("""()=>{const b=document.querySelector('.bar').getBoundingClientRect();
+            const fb=document.querySelector('.funil-base');
+            return {barra:Math.round(b.height), funilBase:fb?getComputedStyle(fb).display:null,
+                    nav:getComputedStyle(document.querySelector('.navbar')).display!=='none',
+                    side:getComputedStyle(document.querySelector('.side')).display!=='none'};}""")
+        ok("R85 \u00b7 deitado a appbar encolhe para 46 px", L85["barra"]<=48, str(L85["barra"]))
+        ok("R85 \u00b7 deitado usa a barra de navegacao inferior", L85["nav"] and not L85["side"], str(L85))
+        await ld85.evaluate("()=>abrirNovoModelo()"); await ld85.wait_for_timeout(700)
+        MD85 = await ld85.evaluate("""()=>{const ov=document.querySelector('.ov.open'); if(!ov) return null;
+            const m=ov.querySelector('.modal'); const r=m.getBoundingClientRect();
+            const g=[...m.querySelectorAll('button')].find(x=>/Guardar/.test(x.textContent));
+            const gr=g?g.getBoundingClientRect():null;
+            return {alt:Math.round(r.height), vh:innerHeight, cabe:r.height<=innerHeight-6,
+                    guardarVisivel: gr? gr.bottom<=innerHeight+1 : false};}""")
+        ok("R85 \u00b7 deitado o modal cabe no ecra e o botao Guardar fica visivel",
+           MD85 is not None and MD85["cabe"] and MD85["guardarVisivel"], str(MD85))
+        ok("R85 \u00b7 deitado sem erros de JavaScript", len(erros85)==0, str(erros85[:2]))
+        await ld85.close()
+
+        # tablet em retrato: navegacao inferior, sem cortes, modal inteiro
+        tb85 = await b.new_page(viewport={"width":768,"height":1024}, is_mobile=True, has_touch=True)
+        await tb85.goto(URL_ANIM); await tb85.wait_for_selector("#pg-modelos:not(.hidden)")
+        await tb85.wait_for_timeout(500)
+        T85 = await tb85.evaluate("""()=>{const bar=document.querySelector('.bar').getBoundingClientRect();
+            const cars=getComputedStyle(document.querySelector('.cars')).gridTemplateColumns.split(' ').length;
+            return {barra:Math.round(bar.height), colunas:cars,
+                    nav:getComputedStyle(document.querySelector('.navbar')).display!=='none'};}""")
+        ok("R85 \u00b7 tablet em retrato mantem a barra inferior e 3 colunas",
+           T85["nav"] and T85["colunas"]==3, str(T85))
+        ok("R85 \u00b7 tablet sem rolagem horizontal",
+           not await tb85.evaluate("()=>document.documentElement.scrollWidth>document.documentElement.clientWidth+1"), "")
+        await tb85.close()
+
+        # monitores grandes: conteudo com tecto e centrado, cartoes maiores
+        for lw,lh,esperado in [(1920,1080,1360),(2560,1440,1500),(3840,2160,1500)]:
+            bg85 = await b.new_page(viewport={"width":lw,"height":lh})
+            await bg85.goto(URL_ANIM); await bg85.wait_for_selector("#pg-modelos:not(.hidden)")
+            await bg85.wait_for_timeout(500)
+            G85 = await bg85.evaluate("""()=>{const s=document.querySelector('#pg-modelos').getBoundingClientRect();
+                const ph=document.querySelector('.car .ph').getBoundingClientRect();
+                const c=document.querySelector('.content').getBoundingClientRect();
+                return {largura:Math.round(s.width), esq:Math.round(s.left),
+                        side:Math.round(document.querySelector('.side').getBoundingClientRect().width),
+                        gapEsq:Math.round(s.left-c.left), gapDir:Math.round(c.right-s.right),
+                        fotos:Math.round(ph.height)};}""")
+            ok(f"R85 \u00b7 {lw} px: conteudo limitado a {esperado} px",
+               G85["largura"]<=esperado+1 and G85["largura"]>=esperado-40, str(G85["largura"]))
+            ok(f"R85 \u00b7 {lw} px: conteudo centrado na area util", abs(G85["gapEsq"]-G85["gapDir"])<=2, str([G85["gapEsq"],G85["gapDir"]]))
+            if lw>=2560:
+                ok(f"R85 \u00b7 {lw} px: fotos dos carros maiores (>=200 px)", G85["fotos"]>=200, str(G85["fotos"]))
+            await bg85.close()
+
+        # monitor vertical alto: fotos maiores para nao deixar vazio
+        mr85 = await b.new_page(viewport={"width":1080,"height":1920})
+        await mr85.goto(URL_ANIM); await mr85.wait_for_selector("#pg-modelos:not(.hidden)")
+        await mr85.wait_for_timeout(500)
+        F85 = await mr85.evaluate("()=>Math.round(document.querySelector('.car .ph').getBoundingClientRect().height)")
+        ok("R85 \u00b7 monitor vertical: fotos sobem para 190 px", F85>=185, str(F85))
+        await mr85.close()
+
         # ============ R76 · RESPONSIVO EM TODA A GAMA ============
         r76e = []
         GAMA = [(320,568,"telemovel muito estreito"),(375,667,"telemovel pequeno"),
@@ -1038,7 +1118,7 @@ async def main():
                         or (621<=lw<=900 and L["cols"]==3) or (lw>900 and L["cols"]>=3)), str(L))
                 if lw>=1700:
                     ok(f"R76 · {lw} px · conteúdo com tecto de largura (sem esticar)",
-                       L["largura"]<=1360, str(L["largura"]))
+                       L["largura"]<=(1500 if lw>=2560 else 1360), str(L["largura"]))
             await ctx76.close()
         ctx76 = await b.new_context(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
         p76 = await ctx76.new_page()
