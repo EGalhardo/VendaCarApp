@@ -756,12 +756,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1.03, 'offsets': 11}"
+  "d": "{'dx': 1.08, 'offsets': 11}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1.03, 'offsets': 11}"
+  "d": "{'dx': 1.08, 'offsets': 11}"
  },
  {
   "r": "PASS",
@@ -820,8 +820,8 @@
  },
  {
   "r": "PASS",
-  "n": "R78 · marca do carregamento mais discreta (300 px, ~94% da barra)",
-  "d": "{'largura': 300, 'altura': 99, 'barra': 320, 'proporcao': 0.94, 'gap': 26}"
+  "n": "R78 · marca do carregamento em harmonia com a barra (320 px, 100% da barra)",
+  "d": "{'largura': 320, 'altura': 160, 'barra': 320, 'proporcao': 1, 'gap': 26}"
  },
  {
   "r": "PASS",
@@ -830,8 +830,8 @@
  },
  {
   "r": "PASS",
-  "n": "R78 · no modo escuro o cartão branco acompanha o novo tamanho",
-  "d": "{'largura': 300, 'fundo': 'rgb(255, 255, 255)', 'raio': '16px'}"
+  "n": "R78 · no modo escuro a marca acompanha o novo tamanho",
+  "d": "{'largura': 300, 'fundo': 'rgba(0, 0, 0, 0)', 'raio': '10px'}"
  },
  {
   "r": "PASS",
@@ -922,6 +922,36 @@
   "r": "PASS",
   "n": "R80 · no telemóvel o botão fica dentro do cartão do cliente",
   "d": "{'linhas': 5, 'alvo': [34, 34], 'dentro': True, 'cartao': 'block'}"
+ },
+ {
+  "r": "PASS",
+  "n": "R81 · a pagina de carregamento mostra a marca animada (GIF embutido)",
+  "d": "{'gif': True, 'fixa': True, 'animLida': True, 'fixaLida': True, 'largura': 320, 'altura': 160, 'barra': 320, 'gap': 26}"
+ },
+ {
+  "r": "PASS",
+  "n": "R81 · a imagem fixa fica por baixo (leitor com menos movimento)",
+  "d": "{'gif': True, 'fixa': True, 'animLida': True, 'fixaLida': True, 'largura': 320, 'altura': 160, 'barra': 320, 'gap': 26}"
+ },
+ {
+  "r": "PASS",
+  "n": "R81 · a marca animada fica em harmonia com a barra",
+  "d": "320x160, barra 320, gap 26"
+ },
+ {
+  "r": "PASS",
+  "n": "R81 · os tiques mexem-se sozinhos (varios quadros)",
+  "d": "4 quadros distintos em 4 capturas"
+ },
+ {
+  "r": "PASS",
+  "n": "R81 · a logomarca da appbar continua a antiga (inalterada)",
+  "d": "{'largura': 116, 'altura': 38, 'gifNaAppbar': False, 'png': True, 'carregada': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R81 · sem erros de JavaScript com a marca animada",
+  "d": "[]"
  },
  {
   "r": "PASS",
@@ -1171,7 +1201,7 @@
  {
   "r": "PASS",
   "n": "R71 · barra dura cerca de 6 segundos",
-  "d": "6053 ms"
+  "d": "6061 ms"
  },
  {
   "r": "PASS",
@@ -1186,12 +1216,12 @@
  {
   "r": "PASS",
   "n": "R58 · um só logótipo no código (sem a variante escura sem uso)",
-  "d": "{'imgs': 1, 'dataUris': 6, 'duplicadas': 6, 'fotosDeCarro': 2.5, 'logotiposDistintos': 2, 'logoEscuro': False}"
+  "d": "{'imgs': 1, 'dataUris': 7, 'duplicadas': 6, 'fotosDeCarro': 2.5, 'logotiposDistintos': 2, 'logoEscuro': False}"
  },
  {
   "r": "PASS",
-  "n": "R58/R71 · logotipos: appbar + ecra de carregamento, sem fotos repetidas",
-  "d": "{'imgs': 1, 'dataUris': 6, 'duplicadas': 6, 'fotosDeCarro': 2.5, 'logotiposDistintos': 2, 'logoEscuro': False}"
+  "n": "R58/R71 · logotipos: appbar + ecra de carregamento (fixo e animado), sem fotos repetidas",
+  "d": "{'imgs': 1, 'dataUris': 7, 'duplicadas': 6, 'fotosDeCarro': 2.5, 'logotiposDistintos': 2, 'logoEscuro': False}"
  },
  {
   "r": "PASS",
@@ -1516,7 +1546,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "4,752.35 Kz"
+  "d": "-31,111.16 Kz"
  },
  {
   "r": "PASS",
@@ -1526,12 +1556,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,588,592.98 Kz"
+  "d": "9,590,202.54 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.88 Kz"
+  "d": "9,749,999.36 Kz"
  },
  {
   "r": "PASS",
@@ -1547,10 +1577,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   318868,
-   2891647,
-   4881019,
-   6362383
+   320794,
+   2892907,
+   4881976,
+   6363079
   ]
  },
  {
@@ -1571,13 +1601,13 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "416,229.31 Kz"
+  "d": "415,874.16 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "416,229.31 Kz",
+   "415,874.16 Kz",
    "4,061,982.44 Kz"
   ]
  },
@@ -1619,7 +1649,7 @@
  {
   "r": "PASS",
   "n": "R63 · cabeça do Perfil cresce (escala >= 0.15)",
-  "d": 0.249
+  "d": 0.25
  },
  {
   "r": "PASS",
@@ -1629,7 +1659,7 @@
  {
   "r": "PASS",
   "n": "R63 · o anel do Perfil fica visível (opac. >= 0.5)",
-  "d": 0.85
+  "d": 0.843
  },
  {
   "r": "PASS",
@@ -1666,7 +1696,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.05491
+   3.34715
   ]
  },
  {
@@ -2531,7 +2561,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '22,429,040.11 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,860,512.42 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,976,278.42 Kz', 'temKz': True, 'contando': 9}]"
+  "d": "[{'fn': 1, 'vt': '22,435,335.64 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,436,452.54 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,980,380.30 Kz', 'temKz': True, 'contando': 9}]"
  },
  {
   "r": "PASS",
@@ -2541,7 +2571,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '22,532,872.53 Kz'}"
+  "d": "{'fn': '1', 'vt': '22,501,418.01 Kz'}"
  },
  {
   "r": "PASS",
@@ -2581,17 +2611,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 14:54 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 16:35 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 14:54 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 16:35 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 14:54 · enviado"
+  "d": "Hoje, 16:35 · enviado"
  },
  {
   "r": "PASS",

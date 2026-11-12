@@ -762,16 +762,16 @@ async def main():
             const ir=i.getBoundingClientRect(), br=bar.getBoundingClientRect();
             return {largura:Math.round(ir.width), altura:Math.round(ir.height), barra:Math.round(br.width),
                     proporcao:+(ir.width/br.width).toFixed(2), gap:Math.round(br.top-ir.bottom)};}""")
-        ok("R78 · marca do carregamento mais discreta (300 px, ~94% da barra)",
-           M78["largura"]==300 and 0.85<=M78["proporcao"]<=1.1 and M78["altura"]<=115, str(M78))
+        ok("R78 · marca do carregamento em harmonia com a barra (320 px, 100% da barra)",
+           M78["largura"]==320 and 0.95<=M78["proporcao"]<=1.1 and M78["altura"]<=170, str(M78))
         ok("R78 · marca e barra alinhadas como um só bloco", 20<=M78["gap"]<=32, str(M78["gap"]))
         await r78.evaluate("()=>document.documentElement.setAttribute('data-tema','escuro')")
         await r78.wait_for_timeout(300)
         E78 = await r78.evaluate("""()=>{const i=document.querySelector('.logoC');
             return {largura:Math.round(i.getBoundingClientRect().width), fundo:getComputedStyle(i).backgroundColor,
                     raio:getComputedStyle(i).borderRadius};}""")
-        ok("R78 · no modo escuro o cartão branco acompanha o novo tamanho",
-           E78["largura"]==300 and E78["fundo"]=="rgb(255, 255, 255)" and E78["raio"]=="16px", str(E78))
+        ok("R78 · no modo escuro a marca acompanha o novo tamanho",
+           E78["largura"]==300 and E78["raio"]=="10px", str(E78))
         m78 = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
         await m78.goto("file:///home/user/index.html"); await m78.wait_for_timeout(600)
         ok("R78 · no telemóvel a marca cabe com folga",
@@ -879,6 +879,44 @@ async def main():
         ok("R80 \u00b7 no telem\u00f3vel o bot\u00e3o fica dentro do cart\u00e3o do cliente",
            Mov80["dentro"] and Mov80["cartao"]=="block" and Mov80["alvo"][0]>=34, str(Mov80))
         await m80.close(); await r80.close()
+
+        # ============ R81 · MARCA ANIMADA SO NA PAGINA DE CARREGAMENTO ============
+        r81 = await b.new_page(viewport={"width":1440,"height":900})
+        erros81=[]; r81.on("pageerror", lambda e: erros81.append(str(e)))
+        await r81.goto("file:///home/user/index.html"); await r81.wait_for_timeout(900)
+        A81 = await r81.evaluate("""()=>{const c=document.querySelector('#ecraCarregando .logoC');
+            const a=c.querySelector('.animC'), f=c.querySelector('.fixoC');
+            const ra=a.getBoundingClientRect(), rb=document.querySelector('.barraC').getBoundingClientRect();
+            return {gif:a.src.startsWith('data:image/gif;base64,'), fixa:f.src.startsWith('data:image/png;base64,'),
+                    animLida:a.complete && a.naturalWidth>0, fixaLida:f.complete && f.naturalWidth>0,
+                    largura:Math.round(ra.width), altura:Math.round(ra.height),
+                    barra:Math.round(rb.width), gap:Math.round(rb.top-c.getBoundingClientRect().bottom)};}""")
+        ok("R81 \u00b7 a pagina de carregamento mostra a marca animada (GIF embutido)",
+           A81["gif"] and A81["animLida"], str(A81))
+        ok("R81 \u00b7 a imagem fixa fica por baixo (leitor com menos movimento)",
+           A81["fixa"] and A81["fixaLida"], str(A81))
+        ok("R81 \u00b7 a marca animada fica em harmonia com a barra",
+           A81["largura"]==A81["barra"]==320 and 20<=A81["gap"]<=32, f'{A81["largura"]}x{A81["altura"]}, barra {A81["barra"]}, gap {A81["gap"]}')
+        import hashlib as _h
+        h81 = []
+        for _ in range(4):
+            h81.append(_h.md5(await r81.locator("#ecraCarregando .logoC").screenshot()).hexdigest()[:8])
+            await r81.wait_for_timeout(700)
+        ok("R81 \u00b7 os tiques mexem-se sozinhos (varios quadros)",
+           len(set(h81))>=2, f"{len(set(h81))} quadros distintos em 4 capturas")
+
+        await r81.wait_for_function("()=>document.getElementById('ecraCarregando').classList.contains('fora')", timeout=9000)
+        await r81.wait_for_timeout(700)
+        A81b = await r81.evaluate("""()=>{const l=document.querySelector('.brand .logo');
+            const r=l.getBoundingClientRect(); const appSrc=l.getAttribute('src')||'';
+            return {largura:Math.round(r.width), altura:Math.round(r.height),
+                    gifNaAppbar:appSrc.startsWith('data:image/gif'), png:appSrc.startsWith('data:image/png;base64,'),
+                    carregada:l.complete && l.naturalWidth>0};}""")
+        ok("R81 \u00b7 a logomarca da appbar continua a antiga (inalterada)",
+           A81b["png"] and A81b["carregada"] and not A81b["gifNaAppbar"] and A81b["altura"]==38,
+           str(A81b))
+        ok("R81 \u00b7 sem erros de JavaScript com a marca animada", len(erros81)==0, str(erros81[:2]))
+        await r81.close()
 
         # ============ R76 · RESPONSIVO EM TODA A GAMA ============
         r76e = []
@@ -1137,7 +1175,7 @@ async def main():
         C71 = await r71.evaluate("""()=>({existe:!!document.getElementById('ecraCarregando'),
             visivel:getComputedStyle(document.getElementById('ecraCarregando')).display!=='none',
             logo:!!document.querySelector('#ecraCarregando .logoC'),
-            logoTemImagem:(()=>{const i=document.querySelector('#ecraCarregando .logoC');
+            logoTemImagem:(()=>{const i=document.querySelector('#ecraCarregando .logoC img');
                 return i ? i.naturalWidth>0 : false;})(),
             barra:!!document.getElementById('barraCarregando'),
             pct:document.getElementById('pctCarregando').textContent})""")
@@ -1176,8 +1214,8 @@ async def main():
         ok("R58 · um só logótipo no código (sem a variante escura sem uso)",
            IM["imgs"]==1 and not IM["logoEscuro"], str(IM))
         # R71: alem do logotipo da appbar existe o logotipo grande do ecra de carregamento
-        ok("R58/R71 · logotipos: appbar + ecra de carregamento, sem fotos repetidas",
-           IM["logotiposDistintos"]==2 and IM["dataUris"]==6, str(IM))
+        ok("R58/R71 · logotipos: appbar + ecra de carregamento (fixo e animado), sem fotos repetidas",
+           IM["logotiposDistintos"]>=2 and IM["dataUris"]==7 and IM["duplicadas"]==6, str(IM))
         ok("R58 · sem erros de consola", len(r58e)==0, str(r58e[:2]))
         await r58.close()
 
