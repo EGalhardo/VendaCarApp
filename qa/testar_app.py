@@ -794,6 +794,8 @@ async def main():
            T79["barras"]==4, str(T79["barras"]))
         ok("R79 · o título novo cabe no cabeçalho sem transbordar",
            not T79["vazio"] and 120<=T79["largura"]<=260, str(T79["largura"]))
+        ok("R79 · o primeiro passo diz \"entrada do Estado de Vendas\", n\u00e3o \"do funil\"",
+           "entrada do Estado de Vendas" in (await r79.evaluate("()=>document.querySelector('#fnPbContactos').closest('.etapa').innerText")))
         m79 = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
         await m79.goto("file:///home/user/index.html#rapido"); await m79.wait_for_timeout(2200)
         M79 = await m79.evaluate("""()=>{const h=document.querySelector('#pg-modelos .funil-top h3');
