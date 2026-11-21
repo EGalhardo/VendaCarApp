@@ -756,12 +756,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1.04, 'offsets': 11}"
+  "d": "{'dx': 1.04, 'offsets': 10}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1.04, 'offsets': 11}"
+  "d": "{'dx': 1.04, 'offsets': 10}"
  },
  {
   "r": "PASS",
@@ -1175,6 +1175,201 @@
  },
  {
   "r": "PASS",
+  "n": "R87 · 768x1024 (iPad em pe) · vendas rola até ao fim",
+  "d": "{'max': 391, 'rolou': 391, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 768x1024 (iPad em pe) · vendas o app cabe no ecra visivel",
+  "d": "{'max': 391, 'rolou': 391, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 768x1024 (iPad em pe) · perfil rola até ao fim",
+  "d": "{'max': 0, 'rolou': 0, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 768x1024 (iPad em pe) · perfil o app cabe no ecra visivel",
+  "d": "{'max': 0, 'rolou': 0, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 768x1024 (iPad em pe) · sem erros de JavaScript",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 820x1180 (iPad Air) · vendas rola até ao fim",
+  "d": "{'max': 235, 'rolou': 235, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 820x1180 (iPad Air) · vendas o app cabe no ecra visivel",
+  "d": "{'max': 235, 'rolou': 235, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 820x1180 (iPad Air) · perfil rola até ao fim",
+  "d": "{'max': 0, 'rolou': 0, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 820x1180 (iPad Air) · perfil o app cabe no ecra visivel",
+  "d": "{'max': 0, 'rolou': 0, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 820x1180 (iPad Air) · sem erros de JavaScript",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 834x1112 (iPad Air M2) · vendas rola até ao fim",
+  "d": "{'max': 303, 'rolou': 303, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 834x1112 (iPad Air M2) · vendas o app cabe no ecra visivel",
+  "d": "{'max': 303, 'rolou': 303, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 834x1112 (iPad Air M2) · perfil rola até ao fim",
+  "d": "{'max': 0, 'rolou': 0, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 834x1112 (iPad Air M2) · perfil o app cabe no ecra visivel",
+  "d": "{'max': 0, 'rolou': 0, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 834x1112 (iPad Air M2) · sem erros de JavaScript",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 900x1280 (tablet grande) · vendas rola até ao fim",
+  "d": "{'max': 171, 'rolou': 171, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 900x1280 (tablet grande) · vendas o app cabe no ecra visivel",
+  "d": "{'max': 171, 'rolou': 171, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 900x1280 (tablet grande) · perfil rola até ao fim",
+  "d": "{'max': 0, 'rolou': 0, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 900x1280 (tablet grande) · perfil o app cabe no ecra visivel",
+  "d": "{'max': 0, 'rolou': 0, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 900x1280 (tablet grande) · sem erros de JavaScript",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 600x1024 (tablet estreito) · vendas rola até ao fim",
+  "d": "{'max': 391, 'rolou': 391, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 600x1024 (tablet estreito) · vendas o app cabe no ecra visivel",
+  "d": "{'max': 391, 'rolou': 391, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 600x1024 (tablet estreito) · perfil rola até ao fim",
+  "d": "{'max': 103, 'rolou': 103, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 600x1024 (tablet estreito) · perfil o app cabe no ecra visivel",
+  "d": "{'max': 103, 'rolou': 103, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 600x1024 (tablet estreito) · sem erros de JavaScript",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 1024x768 (iPad deitado) · vendas rola até ao fim",
+  "d": "{'max': 329, 'rolou': 329, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 1024x768 (iPad deitado) · vendas o app cabe no ecra visivel",
+  "d": "{'max': 329, 'rolou': 329, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 1024x768 (iPad deitado) · perfil rola até ao fim",
+  "d": "{'max': 0, 'rolou': 0, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 1024x768 (iPad deitado) · perfil o app cabe no ecra visivel",
+  "d": "{'max': 0, 'rolou': 0, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 1024x768 (iPad deitado) · sem erros de JavaScript",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 1024x600 (iPad deitado baixo) · vendas rola até ao fim",
+  "d": "{'max': 497, 'rolou': 497, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 1024x600 (iPad deitado baixo) · vendas o app cabe no ecra visivel",
+  "d": "{'max': 497, 'rolou': 497, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 1024x600 (iPad deitado baixo) · perfil rola até ao fim",
+  "d": "{'max': 0, 'rolou': 0, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 1024x600 (iPad deitado baixo) · perfil o app cabe no ecra visivel",
+  "d": "{'max': 0, 'rolou': 0, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · 1024x600 (iPad deitado baixo) · sem erros de JavaScript",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · altura a mudar para 900 px continua a rolar até ao fim",
+  "d": "{'max': 515, 'rolou': 515, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · altura a mudar para 760 px continua a rolar até ao fim",
+  "d": "{'max': 655, 'rolou': 655, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · altura a mudar para 600 px continua a rolar até ao fim",
+  "d": "{'max': 815, 'rolou': 815, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R87 · altura a mudar para 1024 px continua a rolar até ao fim",
+  "d": "{'max': 391, 'rolou': 391, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
   "n": "R76 · 320 px (telemovel muito estreito) · sem transbordo em 5 páginas",
   "d": "[]"
  },
@@ -1421,7 +1616,7 @@
  {
   "r": "PASS",
   "n": "R71 · barra dura cerca de 6 segundos",
-  "d": "6068 ms"
+  "d": "6072 ms"
  },
  {
   "r": "PASS",
@@ -1766,7 +1961,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "12,425.97 Kz"
+  "d": "-10,241.08 Kz"
  },
  {
   "r": "PASS",
@@ -1776,12 +1971,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,588,854.07 Kz"
+  "d": "9,591,566.91 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.96 Kz"
+  "d": "9,749,999.65 Kz"
  },
  {
   "r": "PASS",
@@ -1797,10 +1992,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   262883,
-   2847423,
-   4847613,
-   6361270
+   317262,
+   2890386,
+   4880253,
+   6361688
   ]
  },
  {
@@ -1821,14 +2016,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "416,229.31 Kz"
+  "d": "413,032.65 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "416,229.31 Kz",
-   "4,062,237.71 Kz"
+   "413,032.65 Kz",
+   "4,059,940 Kz"
   ]
  },
  {
@@ -1916,7 +2111,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.05651
+   3.05605
   ]
  },
  {
@@ -1942,7 +2137,7 @@
  {
   "r": "PASS",
   "n": "R63 · as duas cabeças revezam-se (entra uma, cede a outra)",
-  "d": "{'opTras': 1, 'escFrente': 0.920636, 'trasEntra': True}"
+  "d": "{'opTras': 1, 'escFrente': 0.920635, 'trasEntra': True}"
  },
  {
   "r": "PASS",
@@ -2781,7 +2976,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '22,325,114.37 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,773,302.77 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,906,504.12 Kz', 'temKz': True, 'contando': 9}]"
+  "d": "[{'fn': 1, 'vt': '22,743,396.92 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,688,572.57 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,840,761.10 Kz', 'temKz': True, 'contando': 9}]"
  },
  {
   "r": "PASS",
@@ -2791,7 +2986,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '22,447,925.67 Kz'}"
+  "d": "{'fn': '1', 'vt': '22,724,559.66 Kz'}"
  },
  {
   "r": "PASS",
@@ -2831,17 +3026,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 16:30 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 16:44 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 16:30 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 16:44 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 16:30 · enviado"
+  "d": "Hoje, 16:44 · enviado"
  },
  {
   "r": "PASS",

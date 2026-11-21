@@ -1129,6 +1129,46 @@ async def main():
         await m86.context.set_offline(False)
         await m86.close()
 
+        # ============ R87 · ROLAGEM VERTICAL COMPLETA EM TABLET ============
+        R87JS = """(pgid)=>{const c=document.querySelector('.content');
+                const sec=document.getElementById('pg-'+pgid); const k=[...sec.children]; const last=k[k.length-1];
+                c.scrollTop=0; c.scrollTop=c.scrollHeight;
+                const lr=last.getBoundingClientRect(), cr=c.getBoundingClientRect();
+                const nav=document.querySelector('.navbar');
+                const nr=nav&&getComputedStyle(nav).display!=='none'?nav.getBoundingClientRect():null;
+                return {max:c.scrollHeight-c.clientHeight, rolou:Math.round(c.scrollTop),
+                        fim:lr.bottom<=(nr?nr.top:cr.bottom)+1,
+                        cabe:Math.round(document.querySelector('.app').getBoundingClientRect().height)<=innerHeight+1};}"""
+        TAB87 = [(768,1024,"iPad em pe"),(820,1180,"iPad Air"),(834,1112,"iPad Air M2"),
+                 (900,1280,"tablet grande"),(600,1024,"tablet estreito"),(1024,768,"iPad deitado"),
+                 (1024,600,"iPad deitado baixo")]
+        for lw,lh,nome87 in TAB87:
+            ctx87 = await b.new_context(viewport={"width":lw,"height":lh}, is_mobile=True, has_touch=True)
+            p87 = await ctx87.new_page(); erros87=[]
+            p87.on("pageerror", lambda e: erros87.append(str(e)))
+            await p87.goto(URL_ANIM); await p87.wait_for_selector("#pg-modelos:not(.hidden)")
+            await p87.wait_for_timeout(400)
+            for g87 in ["vendas","perfil"]:
+                await p87.evaluate(f"()=>ir('{g87}')"); await p87.wait_for_timeout(350)
+                D87 = await p87.evaluate(R87JS, g87)
+                ok(f"R87 \u00b7 {lw}x{lh} ({nome87}) \u00b7 {g87} rola at\u00e9 ao fim",
+                   D87["fim"] and abs(D87["rolou"]-D87["max"])<=1, str(D87))
+                ok(f"R87 \u00b7 {lw}x{lh} ({nome87}) \u00b7 {g87} o app cabe no ecra visivel", D87["cabe"], str(D87))
+            ok(f"R87 \u00b7 {lw}x{lh} ({nome87}) \u00b7 sem erros de JavaScript", len(erros87)==0, str(erros87[:1]))
+            await ctx87.close()
+
+        # barras do browser a aparecer/desaparecer (altura a mudar) nao quebra a rolagem
+        rz87 = await b.new_context(viewport={"width":768,"height":1024}, is_mobile=True, has_touch=True)
+        pz87 = await rz87.new_page()
+        await pz87.goto(URL_ANIM); await pz87.wait_for_selector("#pg-modelos:not(.hidden)")
+        await pz87.evaluate("()=>ir('vendas')"); await pz87.wait_for_timeout(400)
+        for h87 in [900, 760, 600, 1024]:
+            await pz87.set_viewport_size({"width":768,"height":h87}); await pz87.wait_for_timeout(300)
+            Z87 = await pz87.evaluate(R87JS, "vendas")
+            ok(f"R87 \u00b7 altura a mudar para {h87} px continua a rolar at\u00e9 ao fim",
+               Z87["fim"] and Z87["cabe"] and abs(Z87["rolou"]-Z87["max"])<=1, str(Z87))
+        await rz87.close()
+
         # ============ R76 · RESPONSIVO EM TODA A GAMA ============
         r76e = []
         GAMA = [(320,568,"telemovel muito estreito"),(375,667,"telemovel pequeno"),

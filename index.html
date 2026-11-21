@@ -97,6 +97,7 @@
      ========================================================== */
   .app{
     height:100vh;
+    height:100dvh;      /* R87: em tablet/iPad as barras do browser tambem contam */
     display:grid;
     grid-template-columns:250px 1fr;
     grid-template-rows:64px 1fr;
@@ -1313,6 +1314,9 @@
     .content{
       padding:14px 14px 26px;
       position:relative;
+      min-height:0;              /* R87: deixa o conteudo rolar dentro da grelha */
+      -webkit-overflow-scrolling:touch;
+      overscroll-behavior:contain;
     }
     .page-head{margin-bottom:14px}
     .page-head h2{display:none}          /* titulo ja esta na appbar  evita repeticao */
