@@ -756,12 +756,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1, 'offsets': 11}"
+  "d": "{'dx': 1.03, 'offsets': 12}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1, 'offsets': 11}"
+  "d": "{'dx': 1.03, 'offsets': 12}"
  },
  {
   "r": "PASS",
@@ -1535,6 +1535,196 @@
  },
  {
   "r": "PASS",
+  "n": "R89 · 360x640 (telemovel pequeno): navbar visivel e dentro do ecra",
+  "d": "{'display': 'flex', 'altura': 66, 'fim': 640, 'vh': 640, 'visivel': True, 'itens': 5, 'itensComLargura': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 360x640 (telemovel pequeno): 5 itens de navegacao com area",
+  "d": "{'display': 'flex', 'altura': 66, 'fim': 640, 'vh': 640, 'visivel': True, 'itens': 5, 'itensComLargura': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 360x640 (telemovel pequeno): conteudo nunca fica escondido pela navbar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 360x640 (telemovel pequeno): sem erros de JavaScript",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 360x780 (Android comum): navbar visivel e dentro do ecra",
+  "d": "{'display': 'flex', 'altura': 66, 'fim': 780, 'vh': 780, 'visivel': True, 'itens': 5, 'itensComLargura': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 360x780 (Android comum): 5 itens de navegacao com area",
+  "d": "{'display': 'flex', 'altura': 66, 'fim': 780, 'vh': 780, 'visivel': True, 'itens': 5, 'itensComLargura': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 360x780 (Android comum): conteudo nunca fica escondido pela navbar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 360x780 (Android comum): sem erros de JavaScript",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 390x844 (iPhone 14): navbar visivel e dentro do ecra",
+  "d": "{'display': 'flex', 'altura': 66, 'fim': 844, 'vh': 844, 'visivel': True, 'itens': 5, 'itensComLargura': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 390x844 (iPhone 14): 5 itens de navegacao com area",
+  "d": "{'display': 'flex', 'altura': 66, 'fim': 844, 'vh': 844, 'visivel': True, 'itens': 5, 'itensComLargura': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 390x844 (iPhone 14): conteudo nunca fica escondido pela navbar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 390x844 (iPhone 14): sem erros de JavaScript",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 393x852 (Pixel): navbar visivel e dentro do ecra",
+  "d": "{'display': 'flex', 'altura': 66, 'fim': 852, 'vh': 852, 'visivel': True, 'itens': 5, 'itensComLargura': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 393x852 (Pixel): 5 itens de navegacao com area",
+  "d": "{'display': 'flex', 'altura': 66, 'fim': 852, 'vh': 852, 'visivel': True, 'itens': 5, 'itensComLargura': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 393x852 (Pixel): conteudo nunca fica escondido pela navbar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 393x852 (Pixel): sem erros de JavaScript",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 412x915 (Pixel grande): navbar visivel e dentro do ecra",
+  "d": "{'display': 'flex', 'altura': 66, 'fim': 915, 'vh': 915, 'visivel': True, 'itens': 5, 'itensComLargura': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 412x915 (Pixel grande): 5 itens de navegacao com area",
+  "d": "{'display': 'flex', 'altura': 66, 'fim': 915, 'vh': 915, 'visivel': True, 'itens': 5, 'itensComLargura': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 412x915 (Pixel grande): conteudo nunca fica escondido pela navbar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 412x915 (Pixel grande): sem erros de JavaScript",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 428x926 (iPhone Max): navbar visivel e dentro do ecra",
+  "d": "{'display': 'flex', 'altura': 66, 'fim': 926, 'vh': 926, 'visivel': True, 'itens': 5, 'itensComLargura': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 428x926 (iPhone Max): 5 itens de navegacao com area",
+  "d": "{'display': 'flex', 'altura': 66, 'fim': 926, 'vh': 926, 'visivel': True, 'itens': 5, 'itensComLargura': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 428x926 (iPhone Max): conteudo nunca fica escondido pela navbar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 428x926 (iPhone Max): sem erros de JavaScript",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 600x962 (dobravel aberto): navbar visivel e dentro do ecra",
+  "d": "{'display': 'flex', 'altura': 66, 'fim': 962, 'vh': 962, 'visivel': True, 'itens': 5, 'itensComLargura': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 600x962 (dobravel aberto): 5 itens de navegacao com area",
+  "d": "{'display': 'flex', 'altura': 66, 'fim': 962, 'vh': 962, 'visivel': True, 'itens': 5, 'itensComLargura': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 600x962 (dobravel aberto): conteudo nunca fica escondido pela navbar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 600x962 (dobravel aberto): sem erros de JavaScript",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 768x1024 (iPad em pe): navbar visivel e dentro do ecra",
+  "d": "{'display': 'flex', 'altura': 66, 'fim': 1024, 'vh': 1024, 'visivel': True, 'itens': 5, 'itensComLargura': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 768x1024 (iPad em pe): 5 itens de navegacao com area",
+  "d": "{'display': 'flex', 'altura': 66, 'fim': 1024, 'vh': 1024, 'visivel': True, 'itens': 5, 'itensComLargura': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 768x1024 (iPad em pe): conteudo nunca fica escondido pela navbar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 768x1024 (iPad em pe): sem erros de JavaScript",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 820x1180 (iPad Air em pe): navbar visivel e dentro do ecra",
+  "d": "{'display': 'flex', 'altura': 66, 'fim': 1180, 'vh': 1180, 'visivel': True, 'itens': 5, 'itensComLargura': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 820x1180 (iPad Air em pe): 5 itens de navegacao com area",
+  "d": "{'display': 'flex', 'altura': 66, 'fim': 1180, 'vh': 1180, 'visivel': True, 'itens': 5, 'itensComLargura': 5}"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 820x1180 (iPad Air em pe): conteudo nunca fica escondido pela navbar",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · 820x1180 (iPad Air em pe): sem erros de JavaScript",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · se o layout vertical falhar, o app repoe a navbar sozinho",
+  "d": "['none', {'display': 'flex', 'altura': 66, 'fim': 844, 'vh': 844, 'visivel': True, 'itens': 5, 'itensComLargura': 5}]"
+ },
+ {
+  "r": "PASS",
+  "n": "R89 · --vh e' medido a partir da area visivel real",
+  "d": "{'vh': '8.44px', 'esperado': '8.44px'}"
+ },
+ {
+  "r": "PASS",
   "n": "R76 · 320 px (telemovel muito estreito) · sem transbordo em 5 páginas",
   "d": "[]"
  },
@@ -1766,22 +1956,22 @@
  {
   "r": "PASS",
   "n": "R71 · o ecrã de carregamento aparece ao iniciar",
-  "d": "{'existe': True, 'visivel': True, 'logo': True, 'logoTemImagem': True, 'barra': True, 'pct': '5%'}"
+  "d": "{'existe': True, 'visivel': True, 'logo': True, 'logoTemImagem': True, 'barra': True, 'pct': '6%'}"
  },
  {
   "r": "PASS",
   "n": "R71 · mostra o logotipo ao centro",
-  "d": "{'existe': True, 'visivel': True, 'logo': True, 'logoTemImagem': True, 'barra': True, 'pct': '5%'}"
+  "d": "{'existe': True, 'visivel': True, 'logo': True, 'logoTemImagem': True, 'barra': True, 'pct': '6%'}"
  },
  {
   "r": "PASS",
   "n": "R71 · tem barra de carregamento a encher",
-  "d": "5%"
+  "d": "6%"
  },
  {
   "r": "PASS",
   "n": "R71 · barra dura cerca de 6 segundos",
-  "d": "6081 ms"
+  "d": "6108 ms"
  },
  {
   "r": "PASS",
@@ -2126,7 +2316,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "24,841.37 Kz"
+  "d": "-0 Kz"
  },
  {
   "r": "PASS",
@@ -2136,12 +2326,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,589,895.66 Kz"
+  "d": "9,588,284.04 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,999.28 Kz"
+  "d": "9,749,998.75 Kz"
  },
  {
   "r": "PASS",
@@ -2157,10 +2347,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   261916,
-   2889126,
-   4879104,
-   6360992
+   317583,
+   2890639,
+   4880445,
+   6361966
   ]
  },
  {
@@ -2181,14 +2371,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "415,519 Kz"
+  "d": "412,677.42 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "415,519 Kz",
-   "4,061,727.16 Kz"
+   "412,677.42 Kz",
+   "4,059,684.66 Kz"
   ]
  },
  {
@@ -2239,7 +2429,7 @@
  {
   "r": "PASS",
   "n": "R63 · o anel do Perfil fica visível (opac. >= 0.5)",
-  "d": 0.85
+  "d": 0.843
  },
  {
   "r": "PASS",
@@ -2276,7 +2466,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.05506
+   3.05462
   ]
  },
  {
@@ -2302,7 +2492,7 @@
  {
   "r": "PASS",
   "n": "R63 · as duas cabeças revezam-se (entra uma, cede a outra)",
-  "d": "{'opTras': 1, 'escFrente': 0.920637, 'trasEntra': True}"
+  "d": "{'opTras': 1, 'escFrente': 0.921114, 'trasEntra': True}"
  },
  {
   "r": "PASS",
@@ -3141,7 +3331,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '22,536,017.51 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,516,285.25 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,702,881.96 Kz', 'temKz': True, 'contando': 9}]"
+  "d": "[{'fn': 1, 'vt': '22,655,463.32 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,616,614.19 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,783,177.80 Kz', 'temKz': True, 'contando': 9}]"
  },
  {
   "r": "PASS",
@@ -3151,7 +3341,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '22,479,394.75 Kz'}"
+  "d": "{'fn': '1', 'vt': '22,608,328.43 Kz'}"
  },
  {
   "r": "PASS",
@@ -3191,17 +3381,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 17:22 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 17:51 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 17:22 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 17:51 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 17:22 · enviado"
+  "d": "Hoje, 17:51 · enviado"
  },
  {
   "r": "PASS",

@@ -1219,6 +1219,61 @@ async def main():
            DEIT["side"] and not DEIT["navbar"] and PE["navbar"] and not PE["side"], str([DEIT,PE]))
         await c88.close()
 
+        # ============ R89 · NAVBAR SEMPRE VISIVEL EM TELEMOVEL ============
+        NAV89 = """()=>{const n=document.querySelector('.navbar');
+            if(!n) return null;
+            const st=getComputedStyle(n), r=n.getBoundingClientRect();
+            const c=document.querySelector('.content').getBoundingClientRect();
+            const itens=[...document.querySelectorAll('.navbar .nav-item')].map(x=>Math.round(x.getBoundingClientRect().width));
+            return {display:st.display, altura:Math.round(r.height), fim:Math.round(r.bottom), vh:innerHeight,
+                    visivel:st.display!=='none' && r.height>=40 && r.bottom<=innerHeight+1,
+                    itens:itens.length, itensComLargura:itens.filter(w=>w>20).length};}"""
+        MOVEIS89 = [(360,640,"telemovel pequeno"),(360,780,"Android comum"),(390,844,"iPhone 14"),
+                    (393,852,"Pixel"),(412,915,"Pixel grande"),(428,926,"iPhone Max"),(600,962,"dobravel aberto"),
+                    (768,1024,"iPad em pe"),(820,1180,"iPad Air em pe")]
+        for lw,lh,nome89 in MOVEIS89:
+            c89 = await b.new_context(viewport={"width":lw,"height":lh}, is_mobile=True, has_touch=True)
+            p89 = await c89.new_page(); e89=[]
+            p89.on("pageerror", lambda e: e89.append(str(e)))
+            await p89.goto(URL_ANIM); await p89.wait_for_selector("#pg-modelos:not(.hidden)")
+            await p89.wait_for_timeout(400)
+            D89 = await p89.evaluate(NAV89)
+            ok(f"R89 \u00b7 {lw}x{lh} ({nome89}): navbar visivel e dentro do ecra",
+               D89 is not None and D89["visivel"], str(D89))
+            ok(f"R89 \u00b7 {lw}x{lh} ({nome89}): 5 itens de navegacao com area",
+               D89["itens"]==5 and D89["itensComLargura"]==5, str(D89))
+            # o conteudo tem de continuar a rolar
+            ok(f"R89 \u00b7 {lw}x{lh} ({nome89}): conteudo nunca fica escondido pela navbar",
+               await p89.evaluate("""()=>{const c=document.querySelector('.content');
+                 const nav=document.querySelector('.navbar').getBoundingClientRect();
+                 const sec=document.getElementById('pg-modelos'); const k=[...sec.children];
+                 c.scrollTop=c.scrollHeight;
+                 return k[k.length-1].getBoundingClientRect().bottom<=nav.top+1;}"""), "")
+            ok(f"R89 \u00b7 {lw}x{lh} ({nome89}): sem erros de JavaScript", len(e89)==0, str(e89[:1]))
+            await c89.close()
+
+        # plano B: mesmo com CSS de desktop aplicado por engano, a navbar aparece
+        pb89 = await b.new_context(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        pp89 = await pb89.new_page()
+        await pp89.goto(URL_ANIM); await pp89.wait_for_selector("#pg-modelos:not(.hidden)")
+        await pp89.add_style_tag(content="@media (max-width:1180px){ .navbar{display:none} .app{grid-template-areas:\"brand bar\" \"side content\";grid-template-rows:64px 1fr;grid-template-columns:250px 1fr} }")
+        await pp89.wait_for_timeout(250)
+        antes89 = await pp89.evaluate("()=>getComputedStyle(document.querySelector('.navbar')).display")
+        await pp89.evaluate("()=>garantirBarraVisivel()"); await pp89.wait_for_timeout(400)
+        D896 = await pp89.evaluate(NAV89)
+        ok("R89 \u00b7 se o layout vertical falhar, o app repoe a navbar sozinho",
+           antes89=="none" and D896["visivel"], str([antes89, D896]))
+        await pb89.close()
+
+        # altura medida: --vh acompanha a janela
+        vh89 = await b.new_context(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        pv89 = await vh89.new_page()
+        await pv89.goto(URL_ANIM); await pv89.wait_for_selector("#pg-modelos:not(.hidden)")
+        await pv89.wait_for_timeout(400)
+        V89 = await pv89.evaluate("()=>{const v=getComputedStyle(document.documentElement).getPropertyValue('--vh').trim();return {vh:v, esperado:(innerHeight/100)+'px'};}")
+        ok("R89 \u00b7 --vh e' medido a partir da area visivel real", V89["vh"]==V89["esperado"], str(V89))
+        await vh89.close()
+
         # ============ R76 · RESPONSIVO EM TODA A GAMA ============
         r76e = []
         GAMA = [(320,568,"telemovel muito estreito"),(375,667,"telemovel pequeno"),
