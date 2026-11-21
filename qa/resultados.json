@@ -756,12 +756,12 @@
  {
   "r": "PASS",
   "n": "R60 · o carro desloca-se de facto (≈1 px, ida e volta)",
-  "d": "{'dx': 1.04, 'offsets': 10}"
+  "d": "{'dx': 1, 'offsets': 11}"
  },
  {
   "r": "PASS",
   "n": "R60 · a estrada tracejada está em movimento",
-  "d": "{'dx': 1.04, 'offsets': 10}"
+  "d": "{'dx': 1, 'offsets': 11}"
  },
  {
   "r": "PASS",
@@ -1045,8 +1045,8 @@
  },
  {
   "r": "PASS",
-  "n": "R85 · deitado usa a barra de navegacao inferior",
-  "d": "{'barra': 46, 'funilBase': 'none', 'nav': True, 'side': False}"
+  "n": "R85 · deitado usa uma navegacao persistente (barra lateral desde a R88)",
+  "d": "{'barra': 46, 'funilBase': 'none', 'nav': False, 'side': True}"
  },
  {
   "r": "PASS",
@@ -1111,7 +1111,7 @@
  {
   "r": "PASS",
   "n": "R85 · monitor vertical: fotos sobem para 190 px",
-  "d": "224"
+  "d": "246"
  },
  {
   "r": "PASS",
@@ -1356,17 +1356,182 @@
  {
   "r": "PASS",
   "n": "R87 · altura a mudar para 760 px continua a rolar até ao fim",
-  "d": "{'max': 655, 'rolou': 655, 'fim': True, 'cabe': True}"
+  "d": "{'max': 645, 'rolou': 645, 'fim': True, 'cabe': True}"
  },
  {
   "r": "PASS",
   "n": "R87 · altura a mudar para 600 px continua a rolar até ao fim",
-  "d": "{'max': 815, 'rolou': 815, 'fim': True, 'cabe': True}"
+  "d": "{'max': 805, 'rolou': 805, 'fim': True, 'cabe': True}"
  },
  {
   "r": "PASS",
   "n": "R87 · altura a mudar para 1024 px continua a rolar até ao fim",
   "d": "{'max': 391, 'rolou': 391, 'fim': True, 'cabe': True}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 360x640 (telemovel pequeno): appbar + conteudo + navbar",
+  "d": "{'appbar': True, 'side': False, 'navbar': True, 'rotulos': 0, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 360x640 (telemovel pequeno): sem barra lateral e sem rolagem horizontal",
+  "d": "{'appbar': True, 'side': False, 'navbar': True, 'rotulos': 0, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 390x844 (telemovel em pe): appbar + conteudo + navbar",
+  "d": "{'appbar': True, 'side': False, 'navbar': True, 'rotulos': 0, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 390x844 (telemovel em pe): sem barra lateral e sem rolagem horizontal",
+  "d": "{'appbar': True, 'side': False, 'navbar': True, 'rotulos': 0, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 430x932 (telemovel grande): appbar + conteudo + navbar",
+  "d": "{'appbar': True, 'side': False, 'navbar': True, 'rotulos': 0, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 430x932 (telemovel grande): sem barra lateral e sem rolagem horizontal",
+  "d": "{'appbar': True, 'side': False, 'navbar': True, 'rotulos': 0, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 768x1024 (iPad em pe): appbar + conteudo + navbar",
+  "d": "{'appbar': True, 'side': False, 'navbar': True, 'rotulos': 0, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 768x1024 (iPad em pe): sem barra lateral e sem rolagem horizontal",
+  "d": "{'appbar': True, 'side': False, 'navbar': True, 'rotulos': 0, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 820x1180 (iPad Air em pe): appbar + conteudo + navbar",
+  "d": "{'appbar': True, 'side': False, 'navbar': True, 'rotulos': 0, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 820x1180 (iPad Air em pe): sem barra lateral e sem rolagem horizontal",
+  "d": "{'appbar': True, 'side': False, 'navbar': True, 'rotulos': 0, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 834x1112 (iPad Air M2 em pe): appbar + conteudo + navbar",
+  "d": "{'appbar': True, 'side': False, 'navbar': True, 'rotulos': 0, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 834x1112 (iPad Air M2 em pe): sem barra lateral e sem rolagem horizontal",
+  "d": "{'appbar': True, 'side': False, 'navbar': True, 'rotulos': 0, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 900x1280 (tablet em pe): appbar + conteudo + navbar",
+  "d": "{'appbar': True, 'side': False, 'navbar': True, 'rotulos': 0, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 900x1280 (tablet em pe): sem barra lateral e sem rolagem horizontal",
+  "d": "{'appbar': True, 'side': False, 'navbar': True, 'rotulos': 0, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 1024x1366 (iPad Pro em pe): appbar + conteudo + navbar",
+  "d": "{'appbar': True, 'side': False, 'navbar': True, 'rotulos': 0, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 1024x1366 (iPad Pro em pe): sem barra lateral e sem rolagem horizontal",
+  "d": "{'appbar': True, 'side': False, 'navbar': True, 'rotulos': 0, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 740x360 (telemovel deitado): appbar + barra lateral (sem navbar)",
+  "d": "{'appbar': True, 'side': True, 'navbar': False, 'rotulos': 6, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 740x360 (telemovel deitado): barra lateral com rotulos das seccoes",
+  "d": "6"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 844x390 (iPhone deitado): appbar + barra lateral (sem navbar)",
+  "d": "{'appbar': True, 'side': True, 'navbar': False, 'rotulos': 6, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 844x390 (iPhone deitado): barra lateral com rotulos das seccoes",
+  "d": "6"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 1024x768 (iPad deitado): appbar + barra lateral (sem navbar)",
+  "d": "{'appbar': True, 'side': True, 'navbar': False, 'rotulos': 6, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 1024x768 (iPad deitado): barra lateral com rotulos das seccoes",
+  "d": "6"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 1180x820 (iPad Air deitado): appbar + barra lateral (sem navbar)",
+  "d": "{'appbar': True, 'side': True, 'navbar': False, 'rotulos': 6, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 1180x820 (iPad Air deitado): barra lateral com rotulos das seccoes",
+  "d": "6"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 1280x800 (portatil): appbar + barra lateral (sem navbar)",
+  "d": "{'appbar': True, 'side': True, 'navbar': False, 'rotulos': 6, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 1280x800 (portatil): barra lateral com rotulos das seccoes",
+  "d": "6"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 1440x900 (desktop): appbar + barra lateral (sem navbar)",
+  "d": "{'appbar': True, 'side': True, 'navbar': False, 'rotulos': 6, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 1440x900 (desktop): barra lateral com rotulos das seccoes",
+  "d": "6"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 1920x1080 (Full HD): appbar + barra lateral (sem navbar)",
+  "d": "{'appbar': True, 'side': True, 'navbar': False, 'rotulos': 6, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 1920x1080 (Full HD): barra lateral com rotulos das seccoes",
+  "d": "6"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 2560x1440 (2K): appbar + barra lateral (sem navbar)",
+  "d": "{'appbar': True, 'side': True, 'navbar': False, 'rotulos': 6, 'rolagemH': False}"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · 2560x1440 (2K): barra lateral com rotulos das seccoes",
+  "d": "6"
+ },
+ {
+  "r": "PASS",
+  "n": "R88 · rodar o ecra troca de barra lateral para navbar",
+  "d": "[{'appbar': True, 'side': True, 'navbar': False, 'rotulos': 6, 'rolagemH': False}, {'appbar': True, 'side': False, 'navbar': True, 'rotulos': 0, 'rolagemH': False}]"
  },
  {
   "r": "PASS",
@@ -1411,7 +1576,7 @@
  {
   "r": "PASS",
   "n": "R76 · 1024 px · navegação e grelha corretas",
-  "d": "{'cols': 3, 'largura': 889, 'centrado': True, 'side': 'flex', 'navbar': 'none'}"
+  "d": "{'cols': 3, 'largura': 759, 'centrado': True, 'side': 'flex', 'navbar': 'none'}"
  },
  {
   "r": "PASS",
@@ -1616,7 +1781,7 @@
  {
   "r": "PASS",
   "n": "R71 · barra dura cerca de 6 segundos",
-  "d": "6072 ms"
+  "d": "6081 ms"
  },
  {
   "r": "PASS",
@@ -1961,7 +2126,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "-10,241.08 Kz"
+  "d": "24,841.37 Kz"
  },
  {
   "r": "PASS",
@@ -1971,12 +2136,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,591,566.91 Kz"
+  "d": "9,589,895.66 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,999.65 Kz"
+  "d": "9,749,999.28 Kz"
  },
  {
   "r": "PASS",
@@ -1992,10 +2157,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   317262,
-   2890386,
-   4880253,
-   6361688
+   261916,
+   2889126,
+   4879104,
+   6360992
   ]
  },
  {
@@ -2016,14 +2181,14 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "413,032.65 Kz"
+  "d": "415,519 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "413,032.65 Kz",
-   "4,059,940 Kz"
+   "415,519 Kz",
+   "4,061,727.16 Kz"
   ]
  },
  {
@@ -2074,7 +2239,7 @@
  {
   "r": "PASS",
   "n": "R63 · o anel do Perfil fica visível (opac. >= 0.5)",
-  "d": 0.843
+  "d": 0.85
  },
  {
   "r": "PASS",
@@ -2111,7 +2276,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.05605
+   3.05506
   ]
  },
  {
@@ -2137,7 +2302,7 @@
  {
   "r": "PASS",
   "n": "R63 · as duas cabeças revezam-se (entra uma, cede a outra)",
-  "d": "{'opTras': 1, 'escFrente': 0.920635, 'trasEntra': True}"
+  "d": "{'opTras': 1, 'escFrente': 0.920637, 'trasEntra': True}"
  },
  {
   "r": "PASS",
@@ -2976,7 +3141,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '22,743,396.92 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,688,572.57 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,840,761.10 Kz', 'temKz': True, 'contando': 9}]"
+  "d": "[{'fn': 1, 'vt': '22,536,017.51 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,516,285.25 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,702,881.96 Kz', 'temKz': True, 'contando': 9}]"
  },
  {
   "r": "PASS",
@@ -2986,7 +3151,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '22,724,559.66 Kz'}"
+  "d": "{'fn': '1', 'vt': '22,479,394.75 Kz'}"
  },
  {
   "r": "PASS",
@@ -3026,17 +3191,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 16:44 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 17:22 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 16:44 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 17:22 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 16:44 · enviado"
+  "d": "Hoje, 17:22 · enviado"
  },
  {
   "r": "PASS",

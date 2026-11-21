@@ -1011,7 +1011,8 @@ async def main():
                     nav:getComputedStyle(document.querySelector('.navbar')).display!=='none',
                     side:getComputedStyle(document.querySelector('.side')).display!=='none'};}""")
         ok("R85 \u00b7 deitado a appbar encolhe para 46 px", L85["barra"]<=48, str(L85["barra"]))
-        ok("R85 \u00b7 deitado usa a barra de navegacao inferior", L85["nav"] and not L85["side"], str(L85))
+        ok("R85 \u00b7 deitado usa uma navegacao persistente (barra lateral desde a R88)",
+           L85["nav"] or L85["side"], str(L85))
         await ld85.evaluate("()=>abrirNovoModelo()"); await ld85.wait_for_timeout(700)
         MD85 = await ld85.evaluate("""()=>{const ov=document.querySelector('.ov.open'); if(!ov) return null;
             const m=ov.querySelector('.modal'); const r=m.getBoundingClientRect();
@@ -1168,6 +1169,55 @@ async def main():
             ok(f"R87 \u00b7 altura a mudar para {h87} px continua a rolar at\u00e9 ao fim",
                Z87["fim"] and Z87["cabe"] and abs(Z87["rolou"]-Z87["max"])<=1, str(Z87))
         await rz87.close()
+
+        # ============ R88 · LAYOUT POR ORIENTACAO (navbar vs barra lateral) ============
+        L88JS = """()=>{const vis=e=>{const x=document.querySelector(e);
+            return !!(x&&getComputedStyle(x).display!=='none'&&x.getBoundingClientRect().width>0);};
+          return {appbar:vis('.bar'), side:vis('.side'), navbar:vis('.navbar'),
+                  rotulos:[...document.querySelectorAll('.side .nav')].filter(x=>x.getBoundingClientRect().width>0
+                    &&getComputedStyle(x.querySelector('.tx')).display!=='none').length,
+                  rolagemH:document.documentElement.scrollWidth>document.documentElement.clientWidth+1};}"""
+        VERT88 = [(360,640,"telemovel pequeno"),(390,844,"telemovel em pe"),(430,932,"telemovel grande"),(768,1024,"iPad em pe"),
+                  (820,1180,"iPad Air em pe"),(834,1112,"iPad Air M2 em pe"),(900,1280,"tablet em pe"),
+                  (1024,1366,"iPad Pro em pe")]
+        HORIZ88 = [(740,360,"telemovel deitado"),(844,390,"iPhone deitado"),(1024,768,"iPad deitado"),
+                   (1180,820,"iPad Air deitado"),(1280,800,"portatil"),(1440,900,"desktop"),
+                   (1920,1080,"Full HD"),(2560,1440,"2K")]
+        for lw,lh,nome88 in VERT88:
+            c88 = await b.new_context(viewport={"width":lw,"height":lh}, is_mobile=True, has_touch=True)
+            p88 = await c88.new_page(); e88=[]
+            p88.on("pageerror", lambda e: e88.append(str(e)))
+            await p88.goto(URL_ANIM); await p88.wait_for_selector("#pg-modelos:not(.hidden)")
+            await p88.wait_for_timeout(400)
+            D88 = await p88.evaluate(L88JS)
+            ok(f"R88 \u00b7 {lw}x{lh} ({nome88}): appbar + conteudo + navbar",
+               D88["appbar"] and D88["navbar"] and not D88["side"], str(D88))
+            ok(f"R88 \u00b7 {lw}x{lh} ({nome88}): sem barra lateral e sem rolagem horizontal",
+               D88["side"]==False and D88["rolagemH"]==False, str(D88))
+            await c88.close()
+        for lw,lh,nome88 in HORIZ88:
+            c88 = await b.new_context(viewport={"width":lw,"height":lh}, is_mobile=(lw<1300), has_touch=(lw<1300))
+            p88 = await c88.new_page(); e88=[]
+            p88.on("pageerror", lambda e: e88.append(str(e)))
+            await p88.goto(URL_ANIM); await p88.wait_for_selector("#pg-modelos:not(.hidden)")
+            await p88.wait_for_timeout(400)
+            D88 = await p88.evaluate(L88JS)
+            ok(f"R88 \u00b7 {lw}x{lh} ({nome88}): appbar + barra lateral (sem navbar)",
+               D88["appbar"] and D88["side"] and not D88["navbar"], str(D88))
+            ok(f"R88 \u00b7 {lw}x{lh} ({nome88}): barra lateral com rotulos das seccoes",
+               D88["rotulos"]>=5, str(D88["rotulos"]))
+            await c88.close()
+
+        # a orientacao manda: mesmo tamanho, resultados opostos
+        c88 = await b.new_context(viewport={"width":1024,"height":768}, has_touch=True)
+        p88 = await c88.new_page(); await p88.goto(URL_ANIM); await p88.wait_for_selector("#pg-modelos:not(.hidden)")
+        await p88.wait_for_timeout(300)
+        DEIT = await p88.evaluate(L88JS)
+        await p88.set_viewport_size({"width":768,"height":1024}); await p88.wait_for_timeout(400)
+        PE = await p88.evaluate(L88JS)
+        ok("R88 \u00b7 rodar o ecra troca de barra lateral para navbar",
+           DEIT["side"] and not DEIT["navbar"] and PE["navbar"] and not PE["side"], str([DEIT,PE]))
+        await c88.close()
 
         # ============ R76 · RESPONSIVO EM TODA A GAMA ============
         r76e = []
