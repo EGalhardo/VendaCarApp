@@ -1065,6 +1065,70 @@ async def main():
         ok("R85 \u00b7 monitor vertical: fotos sobem para 190 px", F85>=185, str(F85))
         await mr85.close()
 
+        # ============ R86 · FUNCIONAR SEM INTERNET ============
+        r86 = await b.new_page(viewport={"width":1440,"height":900})
+        pedidos86=[]; erros86=[]
+        r86.on("request", lambda r: pedidos86.append(r.url))
+        r86.on("pageerror", lambda e: erros86.append(str(e)))
+        await r86.goto("file:///home/user/index.html#rapido"); await r86.wait_for_timeout(2200)
+        EXTERNOS = [u for u in pedidos86 if not u.startswith("file:")]
+        ok("R86 \u00b7 o app n\u00e3o pede nada \u00e0 internet ao arrancar", not EXTERNOS, str(EXTERNOS[:3]))
+        DADOS86 = await r86.evaluate("""()=>{const r=localStorage; let n=0;
+            for (let i=0;i<r.length;i++) n += (r.getItem(r.key(i))||'').length;
+            return {chaves:r.length, chars:n};}""")
+        ok("R86 \u00b7 os dados ficam no pr\u00f3prio dispositivo (localStorage)", DADOS86["chaves"]>=1, str(DADOS86))
+
+        # corte de rede a meio da utiliza\u00e7\u00e3o
+        await r86.context.set_offline(True)
+        await r86.evaluate("()=>renderEstadoRede()"); await r86.wait_for_timeout(400)
+        A86 = await r86.evaluate("()=>{const t=document.getElementById('toast');return t&&t.classList.contains('on')?t.textContent:'';}")
+        ok("R86 \u00b7 avisa uma vez quando fica sem internet", "offline" in A86, A86)
+        ok("R86 \u00b7 o \u00edcone de rede passa a desligado",
+           await r86.evaluate("()=>document.getElementById('btnRede').dataset.rede")=="off", "")
+        # or\u00e7amento calculado e guardado sem rede
+        await r86.evaluate("()=>{ir('modelos');atual=CARROS[0];abrirOrcamento();}"); await r86.wait_for_timeout(500)
+        await r86.evaluate("()=>{document.getElementById('oEntrada').value='2,000,000';calc();}"); await r86.wait_for_timeout(300)
+        CAL86 = await r86.evaluate("""()=>[document.getElementById('oIva').textContent,
+            document.getElementById('oTotalIva').textContent, document.getElementById('oSaldo').textContent]""")
+        ok("R86 \u00b7 calcula IVA, total e saldo sem rede",
+           all(x.endswith("Kz") for x in CAL86) and len(set(CAL86))==3, str(CAL86))
+        await r86.evaluate("()=>{enviarPendente=null;document.getElementById('mNome').value='Cliente Offline';"+
+                           "document.getElementById('mTel').value='923456789';document.getElementById('btnZap').click();}")
+        await r86.wait_for_timeout(800)
+        FIL86 = await r86.evaluate("()=>FILA_ENVIOS.length")
+        ok("R86 \u00b7 or\u00e7amento enviado sem rede fica na fila", FIL86>=1, str(FIL86))
+
+        # exporta\u00e7\u00f5es continuam vivas (Blob local)
+        await r86.evaluate("()=>ir('listaorc')"); await r86.wait_for_timeout(400)
+        ok("R86 \u00b7 exportar CSV/PDF dispon\u00edvel sem rede",
+           await r86.evaluate("()=>[...document.querySelectorAll('button')].filter(x=>/CSV|PDF/.test(x.textContent)).length")>=2, "")
+
+        # Perfil: estado honesto
+        await r86.evaluate("()=>ir('perfil')"); await r86.wait_for_timeout(400)
+        PERF86 = await r86.evaluate("()=>document.getElementById('linhaOffline').textContent")
+        ok("R86 \u00b7 no Perfil explica o modo offline", "Sem liga" in PERF86 and "fila" in PERF86, PERF86)
+
+        # recarregar o ficheiro com a rede cortada
+        await r86.reload(); await r86.wait_for_timeout(2200)
+        REC86 = await r86.evaluate("()=>({carros:document.querySelectorAll('.car').length, fila:FILA_ENVIOS.length})")
+        ok("R86 \u00b7 recarregar o app sem rede mant\u00e9m tudo",
+           REC86["carros"]==4 and REC86["fila"]>=1, str(REC86))
+        ok("R86 \u00b7 sem erros de JavaScript offline", len(erros86)==0, str(erros86[:2]))
+        await r86.context.set_offline(False)
+        await r86.close()
+
+        # no telem\u00f3vel: mesmo comportamento
+        m86 = await b.new_page(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        await m86.goto("file:///home/user/index.html#rapido"); await m86.wait_for_timeout(2200)
+        await m86.context.set_offline(True)
+        await m86.evaluate("()=>renderEstadoRede()"); await m86.wait_for_timeout(400)
+        ok("R86 \u00b7 telem\u00f3vel: offline com os carros todos",
+           await m86.evaluate("()=>document.querySelectorAll('.car').length")==4, "")
+        ok("R86 \u00b7 telem\u00f3vel: \u00edcone de rede desligado",
+           await m86.evaluate("()=>document.getElementById('btnRede').dataset.rede")=="off", "")
+        await m86.context.set_offline(False)
+        await m86.close()
+
         # ============ R76 · RESPONSIVO EM TODA A GAMA ============
         r76e = []
         GAMA = [(320,568,"telemovel muito estreito"),(375,667,"telemovel pequeno"),

@@ -236,7 +236,7 @@
  {
   "r": "PASS",
   "n": "Arranque online",
-  "d": "Ativo — dados guardados no dispositivo"
+  "d": "Ativo — abra o ficheiro index.html sem internet"
  },
  {
   "r": "PASS",
@@ -1115,6 +1115,66 @@
  },
  {
   "r": "PASS",
+  "n": "R86 · o app não pede nada à internet ao arrancar",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R86 · os dados ficam no próprio dispositivo (localStorage)",
+  "d": "{'chaves': 3, 'chars': 93697}"
+ },
+ {
+  "r": "PASS",
+  "n": "R86 · avisa uma vez quando fica sem internet",
+  "d": "Sem internet — o app continua a funcionar offline"
+ },
+ {
+  "r": "PASS",
+  "n": "R86 · o ícone de rede passa a desligado",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R86 · calcula IVA, total e saldo sem rede",
+  "d": "['1,365,000 Kz', '11,115,000 Kz', '7,750,000 Kz']"
+ },
+ {
+  "r": "PASS",
+  "n": "R86 · orçamento enviado sem rede fica na fila",
+  "d": "1"
+ },
+ {
+  "r": "PASS",
+  "n": "R86 · exportar CSV/PDF disponível sem rede",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R86 · no Perfil explica o modo offline",
+  "d": "Sem ligação · 1 mensagem(ns) na fila"
+ },
+ {
+  "r": "PASS",
+  "n": "R86 · recarregar o app sem rede mantém tudo",
+  "d": "{'carros': 4, 'fila': 1}"
+ },
+ {
+  "r": "PASS",
+  "n": "R86 · sem erros de JavaScript offline",
+  "d": "[]"
+ },
+ {
+  "r": "PASS",
+  "n": "R86 · telemóvel: offline com os carros todos",
+  "d": ""
+ },
+ {
+  "r": "PASS",
+  "n": "R86 · telemóvel: ícone de rede desligado",
+  "d": ""
+ },
+ {
+  "r": "PASS",
   "n": "R76 · 320 px (telemovel muito estreito) · sem transbordo em 5 páginas",
   "d": "[]"
  },
@@ -1361,7 +1421,7 @@
  {
   "r": "PASS",
   "n": "R71 · barra dura cerca de 6 segundos",
-  "d": "6055 ms"
+  "d": "6068 ms"
  },
  {
   "r": "PASS",
@@ -1706,7 +1766,7 @@
  {
   "r": "PASS",
   "n": "Contador · valores dos Modelos começam perto de 0",
-  "d": "-11,338.77 Kz"
+  "d": "12,425.97 Kz"
  },
  {
   "r": "PASS",
@@ -1716,12 +1776,12 @@
  {
   "r": "PASS",
   "n": "Contador · duração de 8 s (aos 6 s ainda não acabou)",
-  "d": "9,587,545.76 Kz"
+  "d": "9,588,854.07 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · termina no valor certo em ~8 s",
-  "d": "9,749,998.44 Kz"
+  "d": "9,749,998.96 Kz"
  },
  {
   "r": "PASS",
@@ -1737,10 +1797,10 @@
   "r": "PASS",
   "n": "Contador · valores do Orçamento a subir",
   "d": [
-   320473,
-   2892655,
-   4881976,
-   6363079
+   262883,
+   2847423,
+   4847613,
+   6361270
   ]
  },
  {
@@ -1761,13 +1821,13 @@
  {
   "r": "PASS",
   "n": "Contador · ao voltar recomeça do 0",
-  "d": "416,584.44 Kz"
+  "d": "416,229.31 Kz"
  },
  {
   "r": "PASS",
   "n": "Contador · e volta a subir",
   "d": [
-   "416,584.44 Kz",
+   "416,229.31 Kz",
    "4,062,237.71 Kz"
   ]
  },
@@ -1856,7 +1916,7 @@
   "n": "Animação · o traço da linha cresce (dashoffset diminui)",
   "d": [
    0,
-   3.34614
+   3.05651
   ]
  },
  {
@@ -2721,7 +2781,7 @@
  {
   "r": "PASS",
   "n": "R43 · valores a meio da contagem ainda não chegaram ao fim",
-  "d": "[{'fn': 1, 'vt': '22,444,778.29 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,444,181.54 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,986,532.60 Kz', 'temKz': True, 'contando': 9}]"
+  "d": "[{'fn': 1, 'vt': '22,325,114.37 Kz', 'temKz': True, 'contando': 9}, {'fn': 3, 'vt': '42,773,302.77 Kz', 'temKz': True, 'contando': 9}, {'fn': 4, 'vt': '58,906,504.12 Kz', 'temKz': True, 'contando': 9}]"
  },
  {
   "r": "PASS",
@@ -2731,7 +2791,7 @@
  {
   "r": "PASS",
   "n": "R43 · ao voltar à página a contagem recomeça do 0",
-  "d": "{'fn': '1', 'vt': '22,595,755.87 Kz'}"
+  "d": "{'fn': '1', 'vt': '22,447,925.67 Kz'}"
  },
  {
   "r": "PASS",
@@ -2771,17 +2831,17 @@
  {
   "r": "PASS",
   "n": "R56 · orçamento criado nasce Pendente",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 19:32 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 16:30 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · aparece logo em Negócios em Curso, no topo",
-  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 19:32 · enviado'}"
+  "d": "{'naLista': True, 'etiqueta': 'Pendente', 'primeiro': 'Cliente R56', 'selo': 'Hoje, 16:30 · enviado'}"
  },
  {
   "r": "PASS",
   "n": "R56 · o envio aparece como selo, não como estado",
-  "d": "Hoje, 19:32 · enviado"
+  "d": "Hoje, 16:30 · enviado"
  },
  {
   "r": "PASS",
@@ -2861,12 +2921,12 @@
  {
   "r": "PASS",
   "n": "R44 · Exportar orçamentos em CSV descarrega",
-  "d": "['orcamentos-vendacar-2026-11-12.csv']"
+  "d": "['orcamentos-vendacar-2026-11-21.csv']"
  },
  {
   "r": "PASS",
   "n": "R66 · CSV exportado inclui desconto à vista e valor à vista",
-  "d": "{'cab': ['Carro', 'Cliente', 'Telefone', 'Data', 'Estado', 'Preco', 'Desconto a vista', 'A vista', 'IVA 14%', 'Total com IVA', 'Entrada', 'Saldo'], 'linha': ['Toyota Corolla 2018', 'Renato', '+244 923456789', '2026-11-12', 'Pendente', 9750000, 450000, 9300000, 1365000, 11115000, 2000000, 7750000], 'descontoCol': 6, 'vistaCol': 7}"
+  "d": "{'cab': ['Carro', 'Cliente', 'Telefone', 'Data', 'Estado', 'Preco', 'Desconto a vista', 'A vista', 'IVA 14%', 'Total com IVA', 'Entrada', 'Saldo'], 'linha': ['Toyota Corolla 2018', 'Renato', '+244 923456789', '2026-11-21', 'Pendente', 9750000, 450000, 9300000, 1365000, 11115000, 2000000, 7750000], 'descontoCol': 6, 'vistaCol': 7}"
  },
  {
   "r": "PASS",
@@ -2886,7 +2946,7 @@
  {
   "r": "PASS",
   "n": "R57 · o estoque já não gera ficheiro CSV",
-  "d": "['orcamentos-vendacar-2026-11-12.csv']"
+  "d": "['orcamentos-vendacar-2026-11-21.csv']"
  },
  {
   "r": "PASS",
