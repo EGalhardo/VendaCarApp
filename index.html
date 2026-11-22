@@ -2287,10 +2287,10 @@ setTimeout(function(){
         </svg>
       </span>
       <span class="t">Carregar v&#237;deos</span>
-      <span class="s s-desk">Clique ou arraste &#183; MP4 ou WebM &#183; at&#233; 2 v&#237;deos</span>
-      <span class="s s-mob">Toque para escolher &#183; MP4 ou WebM &#183; at&#233; 2 v&#237;deos</span>
+      <span class="s s-desk">Clique ou arraste &#183; MP4 &#183; at&#233; 2 v&#237;deos</span>
+      <span class="s s-mob">Toque para escolher &#183; MP4 &#183; at&#233; 2 v&#237;deos</span>
     </label>
-    <input type="file" id="fVideos" accept="video/*" multiple hidden>
+    <input type="file" id="fVideos" accept="video/mp4,.mp4" multiple hidden>
     <div class="ups" id="videosPreview"></div>
     <div class="up-count" id="videosContador"></div>
 
@@ -2573,9 +2573,13 @@ let FILA_ENVIOS  = [];       // mensagens criadas sem liga\u00E7\u00E3o, \u00E0 
 let DEMO_OFFLINE = false;    // simula\u00E7\u00E3o de falta de rede (\u00FAtil em demonstra\u00E7\u00E3o)
 let AVISO_OFFLINE = false;   // R86: aviso de offline mostrado uma vez
 let fotos = [];
-let videos = [];              // v\u00EDdeos do modelo (data URI), no m\u00E1ximo 2
+let videos = [];              // v\u00EDdeos do modelo (MP4), no m\u00E1ximo 2
 const MAX_FOTOS  = 6;
 const MAX_VIDEOS = 2;
+/* R90: o v\u00EDdeo ja n\u00E3o vai para o localStorage (estourava a quota e o modelo
+   desaparecia). Fica no IndexedDB e no catalogo guarda-se so a chave. */
+const VIDEO_MAX_BYTES = 60 * 1024 * 1024;      /* 60 MB por v\u00EDdeo */
+const VIDEO_FORMATO   = 'video/mp4';
 
 /* ==========================================================
    UTILIT\u00C1RIOS
@@ -2774,6 +2778,33 @@ const totalComIva = preco => (Number(preco) || 0) + ivaDe(preco);
 const VERSAO_KEY = 'modelo_versao_dados';
 const VERSAO_DADOS = 5;      // 4 = or\u00E7amento de demonstra\u00E7\u00E3o em negocia\u00E7\u00E3o (p\u00E1gina Vendas)
 
+/* R90: videos guardados como data URI (formato antigo) passam para o IndexedDB,
+   senao continuam a estourar a quota do localStorage */
+function migrarVideosAntigos(){
+  let mudou = false;
+  CARROS.forEach(c => {
+    if (!Array.isArray(c.videos)) return;
+    c.videos = c.videos.map(v => v);
+    c.videos.forEach((v, i) => {
+      if (typeof v === 'string' && v.startsWith('data:video')){
+        const chave = 'mig' + c.id + '-' + i;
+        try{
+          const partes = v.split(',');
+          const meta   = partes[0];
+          const tipo   = (meta.match(/data:([^;]+)/) || [])[1] || VIDEO_FORMATO;
+          const bin    = atob(partes[1] || '');
+          const arr    = new Uint8Array(bin.length);
+          for (let k = 0; k < bin.length; k++) arr[k] = bin.charCodeAt(k);
+          videoGuardar(chave, new Blob([arr], { type: VIDEO_FORMATO }));
+          c.videos[i] = 'idb:' + chave;
+          mudou = true;
+        }catch(e){}
+      }
+    });
+  });
+  if (mudou) guardar();
+}
+
 function carregar(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -2782,6 +2813,7 @@ function carregar(){
   }catch(e){ CARROS = PADRAO.slice(); }
   const versaoAnterior = migrarVersao();
   atual = CARROS[0];
+  migrarVideosAntigos();
 
   try{
     const rawO = localStorage.getItem(ORC_KEY);
@@ -2981,13 +3013,93 @@ function marcarAlteracao(){
   try{ localStorage.setItem(SELO_KEY, seloVisto); }catch(e){}
 }
 
+/* ==========================================================
+   R90 \u00B7 V\u00CDDEOS MP4 (IndexedDB)
+   ----------------------------------------------------------
+   O localStorage s\u00F3 guarda ~5 MB e um v\u00EDdeo em base64 ocupa 33% a mais.
+   Ao carregar um v\u00EDdeo de 4 MB o setItem falhava em sil\u00EAncio e o modelo
+   N\u00C3O era guardado. Agora o ficheiro fica no IndexedDB (Blob, sem base64)
+   e no cat\u00E1logo guarda-se apenas a chave "idb:<chave>".
+   ========================================================== */
+const VIDEO_DB   = 'vendacar-videos';
+const VIDEO_STORE = 'videos';
+let videoDB = null;
+const VIDEO_CACHE = new Map();          /* chave -> object URL (para nao repetir) */
+
+function abrirDB(){
+  if (videoDB) return Promise.resolve(videoDB);
+  return new Promise((ok, falha) => {
+    let pedido;
+    try{ pedido = indexedDB.open(VIDEO_DB, 1); }catch(e){ falha(e); return; }
+    pedido.onupgradeneeded = () => {
+      const db = pedido.result;
+      if (!db.objectStoreNames.contains(VIDEO_STORE)) db.createObjectStore(VIDEO_STORE);
+    };
+    pedido.onsuccess = () => { videoDB = pedido.result; ok(videoDB); };
+    pedido.onerror   = () => falha(pedido.error);
+  });
+}
+
+function videoGuardar(chave, blob){
+  return abrirDB().then(db => new Promise((ok, falha) => {
+    const tx = db.transaction(VIDEO_STORE, 'readwrite');
+    tx.objectStore(VIDEO_STORE).put(blob, chave);
+    tx.oncomplete = () => ok(chave);
+    tx.onerror    = () => falha(tx.error);
+    tx.onabort    = () => falha(tx.error);
+  }));
+}
+
+function videoLer(chave){
+  return abrirDB().then(db => new Promise((ok, falha) => {
+    const tx = db.transaction(VIDEO_STORE, 'readonly');
+    const r  = tx.objectStore(VIDEO_STORE).get(chave);
+    r.onsuccess = () => ok(r.result || null);
+    r.onerror   = () => falha(r.error);
+  }));
+}
+
+function videoApagar(chave){
+  const url = VIDEO_CACHE.get(chave);
+  if (url){ URL.revokeObjectURL(url); VIDEO_CACHE.delete(chave); }
+  return abrirDB().then(db => new Promise(ok => {
+    const tx = db.transaction(VIDEO_STORE, 'readwrite');
+    tx.objectStore(VIDEO_STORE).delete(chave);
+    tx.oncomplete = ok;
+    tx.onerror = ok;
+  })).catch(() => {});
+}
+
+/* devolve um object URL utilizavel em <video src>: aceita chave idb:, data: (antigo) ou http */
+function videoURL(valor){
+  if (!valor) return Promise.resolve('');
+  if (valor.startsWith('data:') || /^blob:|^https?:/.test(valor)) return Promise.resolve(valor);
+  const chave = valor.replace(/^idb:/, '');
+  if (VIDEO_CACHE.has(chave)) return Promise.resolve(VIDEO_CACHE.get(chave));
+  return videoLer(chave).then(blob => {
+    if (!blob) return '';
+    const url = URL.createObjectURL(blob);
+    VIDEO_CACHE.set(chave, url);
+    return url;
+  }).catch(() => '');
+}
+
+/* ==========================================================
+   FIM R90 \u00B7 V\u00CDDEOS MP4
+   ========================================================== */
+
 function guardar(){
   try{
     const txt = JSON.stringify(CARROS);
     if (localStorage.getItem(STORAGE_KEY) !== txt){
       localStorage.setItem(STORAGE_KEY, txt); marcarAlteracao();
     }
-  }catch(e){/* quota */}
+  }catch(e){
+    /* R90: nunca mais falhar em silencio --- se o catalogo nao couber, avisa */
+    try{ toast('N\u00E3o foi poss\u00EDvel guardar o cat\u00E1logo no dispositivo (sem espa\u00E7o)'); }catch(x){}
+    return false;
+  }
+  return true;
 }
 function guardarOrc(){
   try{
@@ -3477,7 +3589,15 @@ function mostrarMidia(indiceFoto, indiceVideo){
   const vids = videosDe(atual);
 
   if (indiceVideo !== undefined && vids[indiceVideo] !== undefined){
-    hero.innerHTML = `<video src="${vids[indiceVideo]}" controls playsinline preload="metadata"></video>`;
+    /* R90: o video vem do IndexedDB como Blob (object URL), nao do localStorage */
+    const valor = vids[indiceVideo];
+    hero.innerHTML = '<video controls playsinline preload="metadata"></video>';
+    videoURL(valor).then(url => {
+      const el = hero.querySelector('video');
+      if (!el) return;
+      if (url) el.src = url;
+      else el.outerHTML = '<div class="empty">V\u00EDdeo indispon\u00EDvel</div>';
+    });
     document.querySelectorAll('#thumbs .t').forEach(x =>
       x.classList.toggle('on', x.dataset.video === String(indiceVideo)));
   } else {
@@ -3550,7 +3670,7 @@ function renderVideos(){
   previewVid.className = 'ups videos';
   previewVid.innerHTML = videos.map((v, i) => `
     <div class="up video">
-      <video src="${v.src}#t=0.3" muted preload="metadata" playsinline></video>
+      <video src="${v.mostra || ''}" muted preload="metadata" playsinline></video>
       <div class="play">${ICONE_PLAY}</div>
       <span class="nm">${esc(v.nome || 'v\u00EDdeo')}</span>
       <button type="button" class="del" data-delvid="${i}" aria-label="Remover v\u00EDdeo">\u00D7</button>
@@ -3559,14 +3679,31 @@ function renderVideos(){
     ? videos.length + ' de ' + MAX_VIDEOS + ' v\u00EDdeos' : '';
 }
 
+/* R90: s\u00F3 MP4 (por extenso ou tipo MIME) e o ficheiro vai para o IndexedDB */
+function ehMP4(f){
+  const nome = (f.name || '').toLowerCase();
+  return /^video\/mp4$/.test(f.type) || (f.type === '' && nome.endsWith('.mp4'));
+}
+
 function addVideos(lista){
   const vagas = MAX_VIDEOS - videos.length;
+  if (vagas <= 0){ toast('M\u00E1ximo de ' + MAX_VIDEOS + ' v\u00EDdeos por modelo'); return; }
   Array.from(lista).slice(0, Math.max(vagas, 0)).forEach(f => {
-    if (!f.type.startsWith('video/')){ toast('Escolha um ficheiro de v\u00EDdeo (MP4 ou WebM)'); return; }
-    if (f.size > 8 * 1024 * 1024){ toast('V\u00EDdeo demasiado grande \u2014 m\u00E1ximo 8 MB'); return; }
-    const fr = new FileReader();
-    fr.onload = ev => { videos.push({ nome: f.name, src: ev.target.result }); renderVideos(); };
-    fr.readAsDataURL(f);
+    if (!ehMP4(f)){ toast('Formato inv\u00E1lido \u2014 o v\u00EDdeo tem de ser MP4'); return; }
+    if (f.size > VIDEO_MAX_BYTES){
+      toast('V\u00EDdeo demasiado grande \u2014 m\u00E1ximo ' + (VIDEO_MAX_BYTES / 1024 / 1024) + ' MB');
+      return;
+    }
+    const chave = 'v' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+    const blob  = f.slice(0, f.size, VIDEO_FORMATO);   /* MP4 garantido no tipo */
+    videoGuardar(chave, blob).then(() => {
+      videos.push({ nome: f.name, src: 'idb:' + chave, bytes: f.size, mostra: URL.createObjectURL(blob) });
+      VIDEO_CACHE.set(chave, videos[videos.length - 1].mostra);
+      renderVideos();
+      toast('V\u00EDdeo guardado \u2014 MP4 \u00B7 ' + (f.size / 1024 / 1024).toFixed(1) + ' MB');
+    }).catch(e => {
+      toast('N\u00E3o foi poss\u00EDvel guardar o v\u00EDdeo neste dispositivo');
+    });
   });
 }
 
@@ -3585,7 +3722,8 @@ previewVid.addEventListener('click', e => {
   const b = e.target.closest('[data-delvid]');
   if (!b) return;
   e.preventDefault();
-  videos.splice(Number(b.dataset.delvid), 1);
+  const fora = videos.splice(Number(b.dataset.delvid), 1)[0];
+  if (fora && fora.src && fora.src.startsWith('idb:')) videoApagar(fora.src.replace(/^idb:/, ''));
   renderVideos();
 });
 
@@ -3688,7 +3826,16 @@ document.getElementById('btnGuardarModelo').addEventListener('click', () => {
   renderPerfilLoja();
 
   CARROS.push(carro);
-  guardar();
+  /* R90: nunca "guardar" um modelo que desaparece ao recarregar */
+  if (guardar() === false){
+    CARROS.pop();
+    try{
+      const av = document.getElementById('avisoModelo');
+      av.textContent = 'Sem espa\u00E7o no dispositivo para guardar este modelo.';
+      av.classList.add('on');
+    }catch(e){}
+    return;
+  }
 
   document.getElementById('avisoModelo').classList.remove('on');
   mNovoModelo.classList.remove('open');
@@ -3765,6 +3912,11 @@ function apagarOrcamento(id){
 function apagarAutomovel(id){
   const c = CARROS.find(x => x.id === id);
   if (!c) return false;
+
+  /* R90: os videos MP4 guardados no IndexedDB vao com o carro (sem orfaos) */
+  (c.videos || []).forEach(v => {
+    if (typeof v === 'string' && v.startsWith('idb:')) videoApagar(v.replace(/^idb:/, ''));
+  });
 
   const orcsDoCarro = ORCAMENTOS.filter(o => o.carro === id);
   const telesAntes = new Set(ORCAMENTOS.map(o => String(o.tel)));
