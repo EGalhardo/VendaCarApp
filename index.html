@@ -2755,6 +2755,12 @@ const videosDe  = c => (c && c.videos) ? c.videos : [];
 
 /* valor \u00E0 vista = pre\u00E7o \u2212 desconto, nunca abaixo de 0 */
 const valorAVista = (preco, desconto) => Math.max(Number(preco) - Number(desconto), 0);
+/* R92: valor combinado de um or\u00E7amento = pre\u00E7o com o desconto acordado.
+   Tudo o que mostra dinheiro de um or\u00E7amento passa por aqui, para a tabela,
+   as vendas, o hist\u00F3rico e o detalhe nunca mostrarem o pre\u00E7o de cat\u00E1logo. */
+const valorOrc   = o => valorAVista(o && o.preco, o && o.desc);
+const ivaOrc     = o => ivaDe(valorOrc(o));
+const totalOrc   = o => totalComIva(valorOrc(o));
 /* R64: o desconto a vista pertence ao ORCAMENTO (negociado com o cliente), nao ao catalogo */
 let DESCONTO_ORC = 0;
 
@@ -2775,7 +2781,9 @@ function textoPrestacao(saldo, meses){
 
 /* IVA 14% \u2014 imposto mostrado sempre \u00E0 parte (nunca somado ao pre\u00E7o do carro) */
 const IVA_TAXA = 0.14;
-const ivaDe   = preco => Math.round((Number(preco) || 0) * IVA_TAXA * 100) / 100;
+/* R92: o Kwanza nao tem centimos --- o IVA arredonda ao Kz inteiro, senao
+   apareciam valores como "1,889,999.58 Kz" no ecra e no texto do WhatsApp */
+const ivaDe   = preco => Math.round((Number(preco) || 0) * IVA_TAXA);
 const totalComIva = preco => (Number(preco) || 0) + ivaDe(preco);
 
 /* ==========================================================
@@ -3282,7 +3290,7 @@ function renderFunil(){
   if (!caixa) return;
   const f = dadosFunil();
   const emCurso = ORCAMENTOS.filter(o => ORC_CURSO.includes(o.estado));
-  const negTotal = emCurso.reduce((t,o) => t + totalComIva(o.preco), 0);
+  const negTotal = emCurso.reduce((t,o) => t + totalOrc(o), 0);   /* R92: valor com desconto */
 
   /* cart\u00F5es do funil \u2014 os n\u00FAmeros contam de 0 at\u00E9 ao valor (8 s) */
   contarPara(document.getElementById('fnContactos'),  f.contactos, 0);
@@ -3302,7 +3310,7 @@ function renderVendas(){
   const lista = document.getElementById('vendasLista');
   if (!lista) return;
   const f = dadosFunil();
-  const soma = arr => arr.reduce((t,o) => t + totalComIva(o.preco), 0);
+  const soma = arr => arr.reduce((t,o) => t + totalOrc(o), 0);
   const emCurso = ORCAMENTOS.filter(o => ORC_CURSO.includes(o.estado));
   const fechadas = ORCAMENTOS.filter(o => ORC_FECHADOS.includes(o.estado));
   renderFunil();                      /* R74: o funil pertence a pagina Automovel */
@@ -3332,7 +3340,7 @@ function renderVendas(){
   /* lista de neg\u00F3cios */
   const cartao = (o, fechado) => {
     const c = CARROS.find(x => x.id === o.carro) || CARROS[0];
-    const valor = totalComIva(o.preco);
+    const valor = totalOrc(o);
     return `<article class="vneg${fechado ? ' fechado' : ''}" data-orc="${o.id}">
       <div class="topo">${o.carro ? '<img src="' + c.img + '" alt="">' : ''}
         <div><div class="nm">${o.nome}</div><div class="cr">${nomeDoCarro(o)} \u00B7 ${fmtTel(o.tel)}</div></div>
@@ -4206,8 +4214,12 @@ document.getElementById('oEntrada').addEventListener('input', e => {
 
 /* R64: desconto a vista --- escreve-se, e TODO o orcamento se atualiza no mesmo instante */
 document.getElementById('oDesc').addEventListener('input', e => {
-  const d = e.target.value.replace(/\D/g, '').slice(0, 12);
-  e.target.value = d ? Number(d).toLocaleString('en-US') + ' Kz' : '';
+  let d = Number(String(e.target.value).replace(/\D/g, '').slice(0, 12)) || 0;
+  if (atual && d > atual.preco){
+    d = atual.preco;
+    toast('O desconto n\u00E3o pode passar o pre\u00E7o da viatura');
+  }
+  e.target.value = d ? d.toLocaleString('en-US') + ' Kz' : '';
   calc();
 });
 
@@ -4440,10 +4452,10 @@ function linhasCSV(){
   const cab = ['Carro','Cliente','Telefone','Data','Estado','Preco','Desconto a vista','A vista','IVA 14%','Total com IVA','Entrada','Saldo'];
   const corpo = ORCAMENTOS.map(o => {
     const c = CARROS.find(x => x.id === o.carro);
-    const saldo = Math.max(o.preco - (o.entrada || 0), 0);
-    const desc = o.desc || 0;
+    const desc = Math.min(o.desc || 0, o.preco || 0);
+    const saldo = Math.max(valorOrc(o) - (o.entrada || 0), 0);
     return [nomeDoCarro(o), o.nome, '+244 ' + o.tel, dataCurta(o.data), o.estado,
-            o.preco, desc, valorAVista(o.preco, desc), ivaDe(o.preco), totalComIva(o.preco), o.entrada || 0, saldo];
+            valorOrc(o), desc, valorAVista(o.preco, desc), ivaOrc(o), totalOrc(o), o.entrada || 0, saldo];
   });
   return [cab].concat(corpo);
 }
@@ -4594,7 +4606,14 @@ document.getElementById('pg-cliente').addEventListener('click', e => {
   document.getElementById('mTel').value  = orc.tel.replace(/^(\d{3})(\d{3})(\d{3})$/, '$1 $2 $3');
 
   enviarPendente = orc.id;   // permite saber que se trata de um reenvio
-  if (typeof preencherResumoEnvio === 'function') preencherResumoEnvio(orc.preco);
+  /* R92: a simulacao e o resumo passam a refletir o orcamento reenviado (preco com
+     desconto, entrada e desconto), senao o popup mostrava outra coisa */
+  DESCONTO_ORC = Math.min(orc.desc || 0, orc.preco || 0);
+  ENTRADA_ORC  = Math.min(orc.entrada || 0, valorAVista(orc.preco, DESCONTO_ORC));
+  const eEnt = document.getElementById('oEntrada'), eDesc = document.getElementById('oDesc');
+  if (eEnt)  eEnt.value  = ENTRADA_ORC ? fmt(ENTRADA_ORC) : '';
+  if (eDesc) eDesc.value = DESCONTO_ORC ? fmt(DESCONTO_ORC) : '';
+  if (typeof preencherResumoEnvio === 'function') preencherResumoEnvio(valorOrc(orc));
   document.getElementById('mEnviar').classList.add('open');
   reiniciarScroll(document.getElementById('mEnviar')); reiniciarScroll(document.getElementById('mEnviar'));
 });
@@ -4659,9 +4678,9 @@ function renderTabelaOrc(){
       <td data-c="Ve&#237;culo"><div class="cell-car">${o.carro ? '<img src="' + c.img + '" alt="">' : ''}<span class="b">${nomeDoCarro(o)}</span></div></td>
       <td data-c="Cliente">${o.nome}</td><td data-c="Telefone">${fmtTel(o.tel)}</td><td data-c="Data">${fmtData(o.data)}</td>
       <td data-c="Estado"><span class="pill${classeEstado(o.estado)}">${o.estado}</span></td>
-      <td data-c="Valor" style="text-align:right" class="b" data-valor="${o.preco}">${fmt(o.preco)}</td>
-      <td data-c="IVA 14%" style="text-align:right" class="iva-col" data-valor="${ivaDe(o.preco)}">${fmt(ivaDe(o.preco))}</td>
-      <td data-c="Total c/ IVA" style="text-align:right" class="b" data-valor="${totalComIva(o.preco)}">${fmt(totalComIva(o.preco))}</td>
+      <td data-c="Valor" style="text-align:right" class="b" data-valor="${valorOrc(o)}">${fmt(valorOrc(o))}</td>
+      <td data-c="IVA 14%" style="text-align:right" class="iva-col" data-valor="${ivaOrc(o)}">${fmt(ivaOrc(o))}</td>
+      <td data-c="Total c/ IVA" style="text-align:right" class="b" data-valor="${totalOrc(o)}">${fmt(totalOrc(o))}</td>
     </tr>`;
   }).join('');
 
@@ -4732,22 +4751,26 @@ function orcLinhaData(orc){
 
 /* l\u00EA os campos em edi\u00E7\u00E3o */
 function valoresOrcForm(){
-  const preco   = num(document.getElementById('odPrecoInp').value);
-  const entrada = Math.min(num(document.getElementById('odEntradaInp').value), preco);
-  const desc    = num(document.getElementById('odDescInp').value);
+  /* R92: o desconto nao pode passar o preco (antes ficava gravado um desconto
+     maior do que a viatura) e a entrada e limitada ao preco com desconto */
+  const preco = num(document.getElementById('odPrecoInp').value);
+  const desc  = Math.min(num(document.getElementById('odDescInp').value), preco);
+  const entrada = Math.min(num(document.getElementById('odEntradaInp').value), Math.max(preco - desc, 0));
   return { preco, entrada, desc };
 }
 
 /* resumo recalculado em tempo real */
 function orcResumo(){
   const { preco, entrada, desc } = valoresOrcForm();
-  const saldo = Math.max(preco - entrada, 0);
+  /* R92: o resumo acompanha o desconto escrito no campo (antes ficava no preco cheio) */
+  const precoFinal = valorAVista(preco, desc);
+  const saldo = Math.max(precoFinal - entrada, 0);
   definirValores({
-    odRPreco: preco,
-    odRIva: ivaDe(preco),
-    odRTotalIva: totalComIva(preco),
-    odIvaMini: ivaDe(preco),
-    odTotalMini: totalComIva(preco),
+    odRPreco: precoFinal,
+    odRIva: ivaDe(precoFinal),
+    odRTotalIva: totalComIva(precoFinal),
+    odIvaMini: ivaDe(precoFinal),
+    odTotalMini: totalComIva(precoFinal),
     odREnt: entrada,
     odRSaldo: saldo,
     odR12: prestacao(saldo, 12).base,
@@ -4939,6 +4962,7 @@ function renderClientes(filtroTexto){
 
   tbody.innerHTML = lista.map(c => {
     const ini = c.nome.trim().split(/\s+/).slice(0,2).map(w => w[0]).join('').toUpperCase();
+    /* R92: o cartao mostra o valor combinado (preco com desconto), nao o de catalogo */
     return `<tr class="cli" data-cliente="${esc(c.nome)}" data-tel="${c.tel}">
       <td><div class="cell-car"><div class="avx">${ini}</div><span class="b">${c.nome}</span></div></td>
       <td>${fmtTel(c.tel)}</td>
@@ -4978,7 +5002,7 @@ function abrirCliente(nome, tel, semNavegar){
 
   document.getElementById('cOrcs').innerHTML = orcs.map(o => {
     const c = CARROS.find(x => x.id === o.carro) || CARROS[0];
-    const saldo = o.preco - o.entrada;
+    const saldo = Math.max(valorOrc(o) - (o.entrada || 0), 0);   /* R92 */
     return `<article class="orc-card">
       <div class="orc-top">
         ${o.carro ? '<img src="' + c.img + '" alt="">' : ''}
@@ -4992,7 +5016,7 @@ function abrirCliente(nome, tel, semNavegar){
             <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
             ${o.estado}
           </span>
-          <div class="orc-val">${fmt(o.preco)}</div>
+          <div class="orc-val">${fmt(valorOrc(o))}</div>
         </div>
       </div>
 
