@@ -3167,6 +3167,11 @@ function ir(page){
   document.querySelector('.brand').classList.toggle('com-voltar', voltar);
 
   if (page === 'vendas') renderVendas();
+  /* R93: o numero de Vendas na navegacao acompanha em TODAS as paginas */
+  try{
+    const fNav = dadosFunil();
+    document.querySelectorAll('[data-cnt="vendas"]').forEach(el => el.textContent = fNav.vendas);
+  }catch(e){}
   const raiz = (page === 'detalhe' || page === 'orcamento') ? 'modelos'
              : (page === 'cliente') ? 'clientes'
              : (page === 'orcdetalhe') ? 'listaorc' : page;
@@ -3333,7 +3338,10 @@ function renderVendas(){
   /* totais \u2014 tamb\u00E9m contam de 0 at\u00E9 ao valor (8 s) */
   contarPara(document.getElementById('vtNeg'),  negTotal, 0);
   contarPara(document.getElementById('vtFech'), soma(fechadas), 0);
-  document.querySelectorAll('[data-cnt="vendas"]').forEach(el => el.textContent = f.negoc);
+  /* R93: o numero na barra lateral / navbar da seccao Vendas mostra as vendas
+     CONCLUIDAS (antes mostrava os negocios "em negociacao", o que nao batia com
+     o cartao "Vendas concluidas" nem com o Perfil) */
+  document.querySelectorAll('[data-cnt="vendas"]').forEach(el => el.textContent = f.vendas);
   const stv = document.getElementById('stVendas');
   if (stv) stv.textContent = f.vendas;
 
@@ -5152,6 +5160,12 @@ function adotarDadosDeOutroSeparador(){
 function sincronizarContadores(){
   document.querySelectorAll('[data-cnt="carros"]').forEach(el => el.textContent = CARROS.length);
   document.querySelectorAll('[data-cnt="orcs"]').forEach(el => el.textContent = ORCAMENTOS.length);
+  /* R93: o numero de Vendas acompanha sempre (a barra lateral e a navbar vivem
+     fora da pagina Vendas, por isso nao eram atualizadas ao mudar um estado) */
+  try{
+    const f = dadosFunil();
+    document.querySelectorAll('[data-cnt="vendas"]').forEach(el => el.textContent = f.vendas);
+  }catch(e){}
   try{ renderClientes(); }catch(e){}
   const pg = paginaAtual();
   if (pg === 'vendas') renderVendas();
@@ -5188,6 +5202,9 @@ renderFiltros();
 renderGrid();
 renderTabelaOrc();
 renderClientes();
+/* R93: os contadores da barra lateral/navbar tambem sao preenchidos no arranque
+   (antes o numero de Vendas so aparecia depois de abrir a pagina Vendas) */
+sincronizarContadores();
 marcarCabecalhosVazios();
 ir('modelos');
 renderEstadoRede();
