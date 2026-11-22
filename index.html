@@ -2516,6 +2516,12 @@ setTimeout(function(){
       <div class="re"><span>Valor</span><b id="rePreco">&#8212;</b></div>
       <div class="re"><span>IVA 14% <i class="imposto">imposto</i></span><b id="reIva">&#8212;</b></div>
       <div class="re total"><span>Total com IVA</span><b id="reTotal">&#8212;</b></div>
+      <div class="re"><span>Valor da Entrada</span><b id="reEnt">&#8212;</b></div>
+      <div class="re"><span>Saldo a Pagar</span><b id="reSaldo">&#8212;</b></div>
+      <div class="re"><span>Saldo em 12x de</span><b id="re12">&#8212;</b></div>
+      <div class="re"><span>Saldo em 24x de</span><b id="re24">&#8212;</b></div>
+      <div class="re"><span>Saldo em 36x de</span><b id="re36">&#8212;</b></div>
+      <div class="re"><span>Desconto &#224; vista</span><b id="reDesc">&#8212;</b></div>
     </div>
     <div class="fg"><p class="lbl">Nome do Cliente</p><input class="inp" id="mNome" placeholder="Ex: Renato" autocomplete="off"></div>
     <div class="fg"><p class="lbl">Telefone</p><input class="inp" id="mTel" placeholder="923 456 789" inputmode="numeric"></div>
@@ -4145,17 +4151,21 @@ function abrirOrcamento(){
 }
 
 function calc(){
-  const preco = atual.preco;
-  /* R64: escrever o desconto e mexer no preco em destaque --- a contagem de 0
-     nunca deve atrasar a resposta, por isso este rec\u00E1lculo escreve o valor final */
+  const precoBase = atual.preco;
+  /* R91: o pre\u00E7o em destaque acompanha o desconto, por isso os valores do
+     cart\u00E3o (pre\u00E7o, IVA, total c/ IVA e presta\u00E7\u00F5es) tamb\u00E9m passam a
+     ser calculados sobre o pre\u00E7o com desconto --- antes ficavam no pre\u00E7o de
+     cat\u00E1logo e o utilizador via dois totais diferentes na mesma p\u00E1gina. */
   PARAR_CONTAGEM += 1;
+  const desc  = Math.min(num(document.getElementById('oDesc').value), precoBase);
+  const preco = valorAVista(precoBase, desc);
+  /* a entrada nunca passa o pre\u00E7o j\u00E1 com desconto */
   const entrada = Math.min(num(document.getElementById('oEntrada').value), preco);
-  const saldo = preco - entrada;
-  /* R64: desconto a vista lido do campo, limitado ao preco */
-  const desc = Math.min(num(document.getElementById('oDesc').value), preco);
-  const vista = valorAVista(preco, desc);
+  const saldo = Math.max(preco - entrada, 0);
+  const vista = valorAVista(precoBase, desc);
+  const p12 = prestacao(saldo, 12), p24 = prestacao(saldo, 24), p36 = prestacao(saldo, 36);
   definirValores({
-    oPrecoN: preco,
+    oPrecoN: precoBase,
     oIva: ivaDe(preco),
     oTotalIva: totalComIva(preco),
     oIvaMini: ivaDe(preco),
@@ -4163,23 +4173,28 @@ function calc(){
     oEnt: entrada,
     oSaldo: saldo,
     tSaldo: saldo,
-    o12: prestacao(saldo, 12).base,
-    o24: prestacao(saldo, 24).base,
-    o36: prestacao(saldo, 36).base,
+    o12: p12.base,
+    o24: p24.base,
+    o36: p36.base,
     oVista: vista,
     oDescTxt: desc,
     oDescMini: desc,
     oVistaCalc: vista
   });
   DESCONTO_ORC = desc;
-  /* R64: o preco em destaque no cartao acompanha o desconto (preco - desconto) */
+  ENTRADA_ORC  = entrada;                       /* R91: o resumo do envio le daqui */
+
+  /* pre\u00E7o em destaque = pre\u00E7o com desconto */
   const elPreco = document.getElementById('oPreco');
-  const rafPreco = _raf.get(elPreco);          /* R64: mata a contagem antiga */
+  const rafPreco = _raf.get(elPreco);
   if (rafPreco){ cancelAnimationFrame(rafPreco); _raf.delete(elPreco); }
   elPreco.classList.remove('contando');
   elPreco.textContent = fmt(vista);
   _alvo.set(elPreco, vista);
   _cont.set(elPreco, vista);
+
+  /* R91: o resumo do popup de envio acompanha (estava sempre no pre\u00E7o cheio) */
+  preencherResumoEnvio(vista);
   PARAR_CONTAGEM -= 1;
 }
 
@@ -4199,12 +4214,24 @@ document.getElementById('oDesc').addEventListener('input', e => {
 function preencherResumoEnvio(preco){
   const g = id => document.getElementById(id);
   if (!g('rePreco')) return;
+  /* R91: o preco recebido ja vem com desconto; o resumo mostra tambem a entrada,
+     o saldo e as prestacoes para nao contradizer a simulacao */
+  const entrada = Math.min(Math.max(ENTRADA_ORC, 0), Math.max(preco, 0));
+  const saldo = Math.max(preco - entrada, 0);
   g('reCarro').textContent = atual ? atual.nome : '\u2014';
   definirValores({ rePreco: preco, reIva: ivaDe(preco), reTotal: totalComIva(preco) }, true);
+  ['reEnt','reSaldo','re12','re24','re36','reDesc'].forEach(id => {
+    const el = g(id);
+    if (!el) return;
+    const valor = { reEnt:entrada, reSaldo:saldo, re12:prestacao(saldo,12).base,
+                    re24:prestacao(saldo,24).base, re36:prestacao(saldo,36).base,
+                    reDesc:DESCONTO_ORC }[id];
+    el.textContent = fmt(valor);
+  });
 }
 
 document.getElementById('btnEnviar').addEventListener('click', () => {
-  preencherResumoEnvio(atual.preco);
+  preencherResumoEnvio(valorAVista(atual.preco, DESCONTO_ORC));
   const avE = document.getElementById('avisoEnvio');
   if (avE) avE.classList.remove('on');
   document.getElementById('mEnviar').classList.add('open'); reiniciarScroll(document.getElementById('mEnviar'));
@@ -4222,26 +4249,36 @@ document.getElementById('mTel').addEventListener('input', e => {
 
 function mensagem(){
   const nome = document.getElementById('mNome').value.trim() || 'cliente';
-  const entrada = Math.min(num(document.getElementById('oEntrada').value), atual.preco);
-  /* uma unica fonte de verdade para o texto enviado (evita divergencias) */
+  /* R91: entra sempre com o preco de catalogo + o desconto (o texto aplica-o uma
+     unica vez); a entrada e a que esta na simulacao, limitada ao preco com desconto */
+  const precoSim = valorAVista(atual.preco, DESCONTO_ORC);
+  const entrada  = Math.min(ENTRADA_ORC, precoSim);
   return textoOrcamento(nome, atual, atual.preco, entrada, DESCONTO_ORC);
 }
 
 /* ---- helpers de or\u00E7amento ---- *//* ---- helpers de or\u00E7amento ---- */
 function textoOrcamento(nome, carro, preco, entrada, desc){
-  const saldo = preco - entrada;
+  /* R91: o desconto aparece escrito no texto e TODOS os valores (IVA, total,
+     saldo, prestacoes e valor a vista) sao calculados sobre o preco com desconto,
+     para a mensagem nunca contradizer a simulacao do ecra. */
+  const desconto = Math.min(Math.max(Number(desc) || 0, 0), Number(preco) || 0);
+  const precoFinal = valorAVista(preco, desconto);
+  const entradaFinal = Math.min(Math.max(Number(entrada) || 0, 0), precoFinal);
+  const saldo = Math.max(precoFinal - entradaFinal, 0);
   return 'Ol\u00E1 ' + nome + ', tudo bem?\n\n' +
     'Conforme falamos' + (LOJA.dados.trim() ? ' aqui na loja ' + LOJA.dados.trim() : '') + ', segue o or\u00E7amento:\n' +
     carro.nome + '\n\n' +
     'Valor: ' + fmt(preco) + '\n' +
-    'IVA 14%: ' + fmt(ivaDe(preco)) + '\n' +
-    'Total com IVA: ' + fmt(totalComIva(preco)) + '\n\n' +
-    'Podemos trabalhar com uma entrada de ' + fmt(entrada) + ' e o saldo em:\n' +
+    (desconto > 0 ? 'Desconto \u00E0 vista: ' + fmt(desconto) + '\n' +
+                    'Valor com desconto: ' + fmt(precoFinal) + '\n' : '') +
+    'IVA 14%: ' + fmt(ivaDe(precoFinal)) + '\n' +
+    'Total com IVA: ' + fmt(totalComIva(precoFinal)) + '\n\n' +
+    'Podemos trabalhar com uma entrada de ' + fmt(entradaFinal) + ' e o saldo em:\n' +
     '- 12x de ' + textoPrestacao(saldo, 12) + ', ou\n' +
     '- 24x de ' + textoPrestacao(saldo, 24) + ', ou\n' +
     '- 36x de ' + textoPrestacao(saldo, 36) + ',\n' +
     'Ou, ainda, se quiser pagar \u00E0 vista, conseguimos chegar no incr\u00EDvel valor de ' +
-    fmt(valorAVista(preco, desc)) + '\n\n' +
+    fmt(precoFinal) + '\n\n' +
     'Simula\u00E7\u00E3o sem juros, sujeita a aprova\u00E7\u00E3o de financiamento.\n\n' +
     'O que acha?' + (linhaLoja() ? '\n\n' + linhaLoja() : '');
 }
