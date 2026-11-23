@@ -1989,6 +1989,8 @@ setTimeout(function(){
         <div class="panel">
           <div class="grp" style="margin-top:0">Resumo</div>
           <div class="od-row"><span>Pre&#231;o Normal</span><b id="odRPreco">&#8212;</b></div>
+          <div class="od-row" id="odRLinhaDesc"><span>Desconto &#224; vista</span><b id="odRDesc">&#8212;</b></div>
+          <div class="od-row"><span>Valor &#224; vista</span><b id="odRVista">&#8212;</b></div>
           <div class="od-row"><span>IVA 14% <i class="imposto">imposto</i></span><b id="odRIva">&#8212;</b></div>
           <div class="od-row total-iva"><span>Total com IVA</span><b id="odRTotalIva">&#8212;</b></div>
           <div class="od-row"><span>Valor da Entrada</span><b id="odREnt">&#8212;</b></div>
@@ -1996,11 +1998,11 @@ setTimeout(function(){
 
           <div class="grp">Op&#231;&#245;es de Financiamento</div>
           <div class="od-row"><span>Saldo em 12x de</span><b id="odR12">&#8212;</b></div>
+          <div class="od-row"><span>&#218;ltima presta&#231;&#227;o (12x)</span><b id="odR12u">&#8212;</b></div>
           <div class="od-row"><span>Saldo em 24x de</span><b id="odR24">&#8212;</b></div>
+          <div class="od-row"><span>&#218;ltima presta&#231;&#227;o (24x)</span><b id="odR24u">&#8212;</b></div>
           <div class="od-row"><span>Saldo em 36x de</span><b id="odR36">&#8212;</b></div>
-
-          <div class="grp">Valor &#224; Vista</div>
-          <div class="od-row"><span>&#192; Vista por</span><b id="odRVista">&#8212;</b></div>
+          <div class="od-row"><span>&#218;ltima presta&#231;&#227;o (36x)</span><b id="odR36u">&#8212;</b></div>
 
           <div class="note" style="margin-top:14px">Alterar o pre&#231;o aqui <b>n&#227;o muda</b> o cat&#225;logo &#8212; afeta apenas este or&#231;amento.</div>
         </div>
@@ -2513,7 +2515,9 @@ setTimeout(function(){
     <div class="body">
     <div class="resumo-envio">
       <div class="re"><span>Carro</span><b id="reCarro">&#8212;</b></div>
-      <div class="re"><span>Valor</span><b id="rePreco">&#8212;</b></div>
+      <div class="re"><span>Valor</span><b id="rePrecoOrig">&#8212;</b></div>
+      <div class="re" id="reLinhaDesc"><span>Desconto &#224; vista</span><b id="reDesc">&#8212;</b></div>
+      <div class="re"><span>Valor com desconto</span><b id="rePreco">&#8212;</b></div>
       <div class="re"><span>IVA 14% <i class="imposto">imposto</i></span><b id="reIva">&#8212;</b></div>
       <div class="re total"><span>Total com IVA</span><b id="reTotal">&#8212;</b></div>
       <div class="re"><span>Valor da Entrada</span><b id="reEnt">&#8212;</b></div>
@@ -2521,7 +2525,6 @@ setTimeout(function(){
       <div class="re"><span>Saldo em 12x de</span><b id="re12">&#8212;</b></div>
       <div class="re"><span>Saldo em 24x de</span><b id="re24">&#8212;</b></div>
       <div class="re"><span>Saldo em 36x de</span><b id="re36">&#8212;</b></div>
-      <div class="re"><span>Desconto &#224; vista</span><b id="reDesc">&#8212;</b></div>
     </div>
     <div class="fg"><p class="lbl">Nome do Cliente</p><input class="inp" id="mNome" placeholder="Ex: Renato" autocomplete="off"></div>
     <div class="fg"><p class="lbl">Telefone</p><input class="inp" id="mTel" placeholder="923 456 789" inputmode="numeric"></div>
@@ -2677,7 +2680,7 @@ const SEL_VALORES = '[data-valor], .pr, .d-price, #oPreco, #tSaldo, #oVista, ' +
   '#oDescTxt, #oDescMini, #oVistaCalc, ' +
   '#oTotalIvaMini, #rePreco, #reIva, #reTotal, #sPreco, #sIva, #sEnt, ' +
   '#odRPreco, #odREnt, #odRSaldo, #odR12, #odR24, #odR36, #odRVista, #odRIva, ' +
-  '#odRTotalIva, #odIvaMini, #odTotalMini';
+  '#odRTotalIva, #odIvaMini, #odTotalMini, #odRDesc, #odR12u, #odR24u, #odR36u';
 
 let obsValores = null;
 const obsRegistados = new WeakSet();
@@ -4575,7 +4578,7 @@ function calc(){
   _cont.set(elPreco, vista);
 
   /* R91: o resumo do popup de envio acompanha (estava sempre no pre\u00E7o cheio) */
-  preencherResumoEnvio(vista);
+  preencherResumoEnvio(vista, atual ? atual.preco : vista, DESCONTO_ORC);
   PARAR_CONTAGEM -= 1;
 }
 
@@ -4596,10 +4599,16 @@ document.getElementById('oDesc').addEventListener('input', e => {
   calc();
 });
 
-function preencherResumoEnvio(preco){
+function preencherResumoEnvio(preco, catalogo, desconto){
   const g = id => document.getElementById(id);
   if (!g('rePreco')) return;
-  /* R91: o preco recebido ja vem com desconto; o resumo mostra tambem a entrada,
+  /* R96: o valor de catalogo, o desconto e o valor com desconto aparecem cada um
+     no seu sitio --- antes o desconto repetia-se duas vezes no mesmo resumo */
+  const desc = Math.min(Math.max(Number(desconto) || 0, 0), Number(catalogo) || Number(preco) || 0);
+  const linhaDesc = g('reLinhaDesc');
+  if (linhaDesc) linhaDesc.style.display = desc > 0 ? '' : 'none';
+  if (g('rePrecoOrig')) g('rePrecoOrig').textContent = fmt(Number(catalogo) || Number(preco) || 0);
+  /* o preco recebido ja vem com desconto; o resumo mostra tambem a entrada,
      o saldo e as prestacoes para nao contradizer a simulacao */
   const entrada = Math.min(Math.max(ENTRADA_ORC, 0), Math.max(preco, 0));
   const saldo = Math.max(preco - entrada, 0);
@@ -4608,15 +4617,18 @@ function preencherResumoEnvio(preco){
   ['reEnt','reSaldo','re12','re24','re36','reDesc'].forEach(id => {
     const el = g(id);
     if (!el) return;
-    const valor = { reEnt:entrada, reSaldo:saldo, re12:prestacao(saldo,12).base,
-                    re24:prestacao(saldo,24).base, re36:prestacao(saldo,36).base,
-                    reDesc:DESCONTO_ORC }[id];
+    /* R96: aqui nao ha animacao de contagem, por isso o texto pode levar a ultima parcela */
+    const valor = { reEnt:entrada, reSaldo:saldo, reDesc:DESCONTO_ORC }[id];
+    if (id === 're12' || id === 're24' || id === 're36'){
+      el.textContent = textoPrestacao(saldo, Number(id.slice(2)));
+      return;
+    }
     el.textContent = fmt(valor);
   });
 }
 
 document.getElementById('btnEnviar').addEventListener('click', () => {
-  preencherResumoEnvio(valorAVista(atual.preco, DESCONTO_ORC));
+  preencherResumoEnvio(valorAVista(atual.preco, DESCONTO_ORC), atual.preco, DESCONTO_ORC);
   const avE = document.getElementById('avisoEnvio');
   if (avE) avE.classList.remove('on');
   document.getElementById('mEnviar').classList.add('open'); reiniciarScroll(document.getElementById('mEnviar'));
@@ -4986,7 +4998,7 @@ document.getElementById('pg-cliente').addEventListener('click', e => {
   const eEnt = document.getElementById('oEntrada'), eDesc = document.getElementById('oDesc');
   if (eEnt)  eEnt.value  = ENTRADA_ORC ? fmt(ENTRADA_ORC) : '';
   if (eDesc) eDesc.value = DESCONTO_ORC ? fmt(DESCONTO_ORC) : '';
-  if (typeof preencherResumoEnvio === 'function') preencherResumoEnvio(valorOrc(orc));
+  if (typeof preencherResumoEnvio === 'function') preencherResumoEnvio(valorOrc(orc), orc.preco, DESCONTO_ORC);
   document.getElementById('mEnviar').classList.add('open');
   reiniciarScroll(document.getElementById('mEnviar')); reiniciarScroll(document.getElementById('mEnviar'));
 });
@@ -5138,18 +5150,28 @@ function orcResumo(){
   /* R92: o resumo acompanha o desconto escrito no campo (antes ficava no preco cheio) */
   const precoFinal = valorAVista(preco, desc);
   const saldo = Math.max(precoFinal - entrada, 0);
+  const p12 = prestacao(saldo, 12), p24 = prestacao(saldo, 24), p36 = prestacao(saldo, 36);
+  /* R96: o desconto aparece com o seu nome --- antes o resumo chamava "Preco Normal"
+     ao valor ja com desconto e mostrava 9,300,000 em dois sitios diferentes */
+  const linhaDesc = document.getElementById('odRLinhaDesc');
+  if (linhaDesc) linhaDesc.style.display = desc > 0 ? '' : 'none';
   definirValores({
-    odRPreco: precoFinal,
+    odRPreco: preco,
+    odRDesc: desc,
     odRIva: ivaDe(precoFinal),
     odRTotalIva: totalComIva(precoFinal),
     odIvaMini: ivaDe(precoFinal),
     odTotalMini: totalComIva(precoFinal),
     odREnt: entrada,
     odRSaldo: saldo,
-    odR12: prestacao(saldo, 12).base,
-    odR24: prestacao(saldo, 24).base,
-    odR36: prestacao(saldo, 36).base,
-    odRVista: valorAVista(preco, desc)
+    odR12: p12.base,
+    odR24: p24.base,
+    odR36: p36.base,
+    /* R96: a ultima prestacao e diferente (o resto vai para ela) --- mostra-se */
+    odR12u: p12.ultima,
+    odR24u: p24.ultima,
+    odR36u: p36.ultima,
+    odRVista: precoFinal
   });
 }
 
@@ -5236,6 +5258,13 @@ document.getElementById('odReenviar').addEventListener('click', () => {
   document.getElementById('mNome').value = orc.nome;
   document.getElementById('mTel').value  = String(orc.tel).replace(/^(\d{3})(\d{3})(\d{3})$/, '$1 $2 $3');
   enviarPendente = orc.id;
+  /* R96: o resumo do popup tem de mostrar os valores deste orcamento
+     (preco de catalogo, desconto, valor com desconto, entrada, saldo e prestacoes) */
+  const desc = Math.min(orc.desc || 0, orc.preco || 0);
+  const vista = valorAVista(orc.preco, desc);
+  DESCONTO_ORC = desc;
+  ENTRADA_ORC  = Math.min(orc.entrada || 0, vista);
+  if (typeof preencherResumoEnvio === 'function') preencherResumoEnvio(vista, orc.preco, desc);
   document.getElementById('mEnviar').classList.add('open');
   reiniciarScroll(document.getElementById('mEnviar'));
 });
