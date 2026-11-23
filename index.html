@@ -2828,6 +2828,7 @@ function carregar(){
   const versaoAnterior = migrarVersao();
   atual = CARROS[0];
   migrarVideosAntigos();
+  migrarFotosAntigas();     /* R94: fotos em base64 saem do localStorage */
 
   try{
     const rawO = localStorage.getItem(ORC_KEY);
@@ -3102,6 +3103,229 @@ function videoURL(valor){
    FIM R90 \u00B7 V\u00CDDEOS MP4
    ========================================================== */
 
+/* ==========================================================
+   R94 \u00B7 FOTOS (compress\u00E3o + IndexedDB)
+   ----------------------------------------------------------
+   O localStorage s\u00F3 guarda ~5 MB por site --- \u00E9 um limite do navegador,
+   n\u00E3o \u00E9 a mem\u00F3ria do telem\u00F3vel. Uma foto de telem\u00F3vel (4032x3024) ocupa
+   ~4,4 MB em base64 e, sozinha, estourava a quota: aparecia "Sem espa\u00E7o
+   no dispositivo" mesmo com o telem\u00F3vel vazio.
+   Agora cada foto \u00E9 reduzida a 1600 px (JPEG 0,82) e guardada como Blob
+   no IndexedDB --- o mesmo s\u00EDtio dos v\u00EDdeos, sem o limite de 5 MB.
+   No cat\u00E1logo fica s\u00F3 a chave "foto:<chave>", tal como nos v\u00EDdeos.
+   ========================================================== */
+const FOTO_DB    = 'vendacar-fotos';
+const FOTO_STORE = 'fotos';
+const FOTO_LADO  = 1600;                 /* maior lado, em pix\u00E9is */
+const FOTO_QUAL  = 0.82;                 /* qualidade JPEG */
+const FOTO_FALLBACK_MAX = 1.2 * 1024 * 1024;  /* s\u00F3 se o IndexedDB n\u00E3o existir */
+const FOTO_VAZIA = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+let fotoDB = null;
+const FOTO_CACHE = new Map();            /* chave -> object URL (para n\u00E3o repetir) */
+
+function abrirFotoDB(){
+  if (fotoDB) return Promise.resolve(fotoDB);
+  return new Promise((ok, falha) => {
+    let pedido;
+    try{ pedido = indexedDB.open(FOTO_DB, 1); }catch(e){ falha(e); return; }
+    pedido.onupgradeneeded = () => {
+      const db = pedido.result;
+      if (!db.objectStoreNames.contains(FOTO_STORE)) db.createObjectStore(FOTO_STORE);
+    };
+    pedido.onsuccess = () => { fotoDB = pedido.result; ok(fotoDB); };
+    pedido.onerror   = () => falha(pedido.error);
+  });
+}
+
+function fotoGuardar(chave, blob){
+  return abrirFotoDB().then(db => new Promise((ok, falha) => {
+    const tx = db.transaction(FOTO_STORE, 'readwrite');
+    tx.objectStore(FOTO_STORE).put(blob, chave);
+    tx.oncomplete = () => ok(chave);
+    tx.onerror    = () => falha(tx.error);
+    tx.onabort    = () => falha(tx.error);
+  }));
+}
+
+function fotoLer(chave){
+  return abrirFotoDB().then(db => new Promise((ok, falha) => {
+    const tx = db.transaction(FOTO_STORE, 'readonly');
+    const r  = tx.objectStore(FOTO_STORE).get(chave);
+    r.onsuccess = () => ok(r.result || null);
+    r.onerror   = () => falha(r.error);
+  }));
+}
+
+function fotoApagar(chave){
+  const url = FOTO_CACHE.get(chave);
+  if (url){ URL.revokeObjectURL(url); FOTO_CACHE.delete(chave); }
+  return abrirFotoDB().then(db => new Promise(ok => {
+    const tx = db.transaction(FOTO_STORE, 'readwrite');
+    tx.objectStore(FOTO_STORE).delete(chave);
+    tx.oncomplete = ok;
+    tx.onerror = ok;
+  })).catch(() => {});
+}
+
+/* devolve um object URL utiliz\u00E1vel em <img src>: aceita foto:<chave>, data: ou http */
+function fotoURL(valor){
+  if (!valor) return Promise.resolve('');
+  if (valor.indexOf('foto:') !== 0) return Promise.resolve(valor);
+  const chave = valor.slice(5);
+  if (FOTO_CACHE.has(chave)) return Promise.resolve(FOTO_CACHE.get(chave));
+  return fotoLer(chave).then(blob => {
+    if (!blob) return '';
+    const url = URL.createObjectURL(blob);
+    FOTO_CACHE.set(chave, url);
+    return url;
+  }).catch(() => '');
+}
+
+function attrFoto(valor, extra){
+  const mais = extra ? ' ' + extra : '';
+  if (typeof valor === 'string' && valor.indexOf('foto:') === 0)
+    return ' src="' + FOTO_VAZIA + '" data-foto-idb="' + valor + '"' + mais;
+  return ' src="' + (valor || FOTO_VAZIA) + '"' + mais;
+}
+
+/* p\u00F5e a foto certa num <img>, venha ela do IndexedDB ou n\u00E3o */
+function definirFotoImg(img, valor){
+  if (!img) return;
+  if (typeof valor === 'string' && valor.indexOf('foto:') === 0){
+    img.removeAttribute('src');
+    img.dataset.fotoIdb = valor;
+    delete img.dataset.fotoLida;
+    aplicarFotosIDB(img);
+  } else {
+    delete img.dataset.fotoIdb;
+    img.src = valor || FOTO_VAZIA;
+  }
+}
+
+/* todas as <img data-foto-idb> que entrarem no ecr\u00E3 recebem o object URL */
+function aplicarFotosIDB(raiz){
+  const alvo = raiz || document;
+  const lista = [];
+  if (alvo.nodeType === 1 && alvo.tagName === 'IMG') lista.push(alvo);
+  if (alvo.querySelectorAll) alvo.querySelectorAll('img[data-foto-idb]').forEach(i => lista.push(i));
+  lista.forEach(img => {
+    const valor = img.dataset.fotoIdb;
+    if (!valor || img.dataset.fotoLida === '1') return;
+    img.dataset.fotoLida = '1';
+    fotoURL(valor).then(url => {
+      if (url) img.src = url;
+      else delete img.dataset.fotoLida;
+    });
+  });
+}
+const __fotoObserver = new MutationObserver(lista => {
+  lista.forEach(m => {
+    if (!m.addedNodes) return;
+    m.addedNodes.forEach(n => { if (n.nodeType === 1) aplicarFotosIDB(n); });
+  });
+});
+try{ __fotoObserver.observe(document.body, { childList: true, subtree: true }); }catch(e){}
+
+/* reduz a foto antes de a guardar: 1600 px no maior lado, JPEG */
+function comprimirFoto(ficheiro){
+  return new Promise((ok, falha) => {
+    const url = URL.createObjectURL(ficheiro);
+    const img = new Image();
+    img.onload = () => {
+      try{
+        let l = img.naturalWidth || img.width;
+        let a = img.naturalHeight || img.height;
+        if (!l || !a){ URL.revokeObjectURL(url); falha(new Error('imagem sem tamanho')); return; }
+        const escala = Math.min(1, FOTO_LADO / Math.max(l, a));
+        l = Math.max(1, Math.round(l * escala));
+        a = Math.max(1, Math.round(a * escala));
+        const c = document.createElement('canvas');
+        c.width = l; c.height = a;
+        const g = c.getContext('2d');
+        g.fillStyle = '#ffffff'; g.fillRect(0, 0, l, a);
+        g.drawImage(img, 0, 0, l, a);
+        c.toBlob(b => {
+          URL.revokeObjectURL(url);
+          if (b) ok(b); else falha(new Error('sem blob'));
+        }, 'image/jpeg', FOTO_QUAL);
+      }catch(e){ URL.revokeObjectURL(url); falha(e); }
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); falha(new Error('imagem invalida')); };
+    img.src = url;
+  });
+}
+
+/* R94: fotos antigas guardadas no localStorage (data:image) passam para o IndexedDB,
+   sen\u00E3o continuam a encher os 5 MB e o pr\u00F3ximo modelo volta a falhar */
+function migrarFotosAntigas(){
+  const LIMITE = 150000;               /* ~110 KB em bin\u00E1rio: as imagens de origem ficam */
+  let mudou = false;
+
+  function passar(c, campo, indice, valor){
+    const chave = 'mig' + c.id + '-' + campo + (indice === null ? '' : indice);
+    try{
+      const partes = valor.split(',');
+      const tipo   = (partes[0].match(/data:([^;]+)/) || [])[1] || 'image/jpeg';
+      const bin    = atob(partes[1] || '');
+      const arr    = new Uint8Array(bin.length);
+      for (let k = 0; k < bin.length; k++) arr[k] = bin.charCodeAt(k);
+      const blob = new Blob([arr], { type: tipo });
+      fotoGuardar(chave, blob).then(() => {
+        FOTO_CACHE.set(chave, URL.createObjectURL(blob));
+        const novo = 'foto:' + chave;
+        if (indice === null){ if (c[campo] === valor) c[campo] = novo; }
+        else { if (c[campo][indice] === valor) c[campo][indice] = novo; }
+        guardar();
+        try{ renderGrid(); }catch(e){}
+        try{ aplicarFotosIDB(document); }catch(e){}
+      }).catch(() => {});
+      mudou = true;
+    }catch(e){}
+  }
+
+  CARROS.forEach(c => {
+    if (!c) return;
+    if (typeof c.img === 'string' && c.img.indexOf('data:image') === 0 && c.img.length > LIMITE)
+      passar(c, 'img', null, c.img);
+    if (Array.isArray(c.fotos))
+      c.fotos.forEach((f, i) => {
+        if (typeof f === 'string' && f.indexOf('data:image') === 0 && f.length > LIMITE)
+          passar(c, 'fotos', i, f);
+      });
+  });
+  return mudou;
+}
+
+/* fotos que ficaram no IndexedDB sem nenhum dono (modelo n\u00E3o chegou a ser guardado) */
+function limparFotosOrfas(){
+  const usadas = new Set();
+  CARROS.forEach(c => {
+    if (!c) return;
+    const lista = (c.fotos || []).slice();
+    if (c.img) lista.push(c.img);
+    lista.forEach(f => {
+      if (typeof f === 'string' && f.indexOf('foto:') === 0) usadas.add(f.slice(5));
+    });
+  });
+  (fotos || []).forEach(f => {
+    if (typeof f === 'string' && f.indexOf('foto:') === 0) usadas.add(f.slice(5));
+  });
+  return abrirFotoDB().then(db => new Promise(ok => {
+    const tx = db.transaction(FOTO_STORE, 'readonly');
+    const rq = tx.objectStore(FOTO_STORE).getAllKeys();
+    rq.onsuccess = () => {
+      const fora = (rq.result || []).filter(k => !usadas.has(k));
+      if (!fora.length) return ok(0);
+      const tx2 = db.transaction(FOTO_STORE, 'readwrite');
+      const loja = tx2.objectStore(FOTO_STORE);
+      fora.forEach(k => { loja.delete(k); });
+      tx2.oncomplete = () => ok(fora.length);
+      tx2.onerror    = () => ok(0);
+    };
+    rq.onerror = () => ok(0);
+  })).catch(() => 0);
+}
+
 function guardar(){
   try{
     const txt = JSON.stringify(CARROS);
@@ -3110,7 +3334,8 @@ function guardar(){
     }
   }catch(e){
     /* R90: nunca mais falhar em silencio --- se o catalogo nao couber, avisa */
-    try{ toast('N\u00E3o foi poss\u00EDvel guardar o cat\u00E1logo no dispositivo (sem espa\u00E7o)'); }catch(x){}
+    /* R94: a mensagem diz a verdade --- o limite \u00E9 do navegador (~5 MB), n\u00E3o do telem\u00F3vel */
+    try{ toast('Sem espa\u00E7o do navegador para guardar o cat\u00E1logo (limite ~5 MB). Use fotos mais pequenas.'); }catch(x){}
     return false;
   }
   return true;
@@ -3121,7 +3346,12 @@ function guardarOrc(){
     if (localStorage.getItem(ORC_KEY) !== txt){
       localStorage.setItem(ORC_KEY, txt); marcarAlteracao();
     }
-  }catch(e){/* quota */}
+  }catch(e){
+    /* R94: os or\u00E7amentos tamb\u00E9m podem n\u00E3o caber --- antes falhava em sil\u00EAncio */
+    try{ toast('Sem espa\u00E7o do navegador para guardar este or\u00E7amento (limite ~5 MB).'); }catch(x){}
+    return false;
+  }
+  return true;
 }
 
 /* ==========================================================
@@ -3350,7 +3580,7 @@ function renderVendas(){
     const c = CARROS.find(x => x.id === o.carro) || CARROS[0];
     const valor = totalOrc(o);
     return `<article class="vneg${fechado ? ' fechado' : ''}" data-orc="${o.id}">
-      <div class="topo">${o.carro ? '<img src="' + c.img + '" alt="">' : ''}
+      <div class="topo">${o.carro ? '<img' + attrFoto(c.img) + ' alt="">' : ''}
         <div><div class="nm">${o.nome}</div><div class="cr">${nomeDoCarro(o)} \u00B7 ${fmtTel(o.tel)}</div></div>
         <div class="vl" data-valor="${valor}">${fmt(valor)}</div>
       </div>
@@ -3412,7 +3642,15 @@ document.addEventListener('click', e => {
   const g = e.target.closest('[data-go]');
   if (g) { ir(g.dataset.go); return; }
   const c = e.target.closest('[data-close]');
-  if (c) document.getElementById(c.dataset.close).classList.remove('open');
+  if (c){
+    const ov = document.getElementById(c.dataset.close);
+    if (ov) ov.classList.remove('open');
+    /* R94: fotos ja escritas no IndexedDB de um modelo que nao chegou a ser criado */
+    if (c.dataset.close === 'mNovoModelo'){
+      fotos = []; renderFotos();
+      setTimeout(() => { limparFotosOrfas(); }, 400);
+    }
+  }
   const criar = e.target.closest('[data-criar]');
   if (criar) abrirNovoModelo();
 });
@@ -3491,7 +3729,7 @@ function renderGrid(){
   grid.innerHTML = lista.map(c => `
     <article class="car" data-car="${c.id}">
       <div class="ph">
-        <img src="${c.img}" alt="${c.nome}" loading="lazy">
+        <img${attrFoto(c.img, 'alt="' + c.nome + '" loading="lazy"')}>
         <span class="tag${tagClass(c.cat)}">${c.cat}</span>
         <button type="button" class="del-car" data-delcar="${c.id}"
                 title="Eliminar modelo" aria-label="Eliminar ${c.nome}">
@@ -3593,10 +3831,10 @@ function abrirDetalhe(){
   /* miniatura 0..n = fotos \u00B7 miniatura "v0..vn" = v\u00EDdeos (na mesma lista) */
   const vids = videosDe(atual);
   const miniFotos = gal.map((src, i) =>
-    `<div class="t ${i === 0 ? 'on' : ''}" data-foto="${i}"><img src="${src}" alt=""></div>`).join('');
+    `<div class="t ${i === 0 ? 'on' : ''}" data-foto="${i}"><img${attrFoto(src)} alt=""></div>`).join('');
   const miniVideos = vids.map((v, i) => `
     <div class="t play-t" data-video="${i}" title="V\u00EDdeo ${i + 1}">
-      <img src="${gal[0]}" alt="">
+      <img${attrFoto(gal[0])} alt="">
       <span class="ico">${ICONE_PLAY}</span>
     </div>`).join('');
   document.getElementById('thumbs').innerHTML = miniFotos + miniVideos;
@@ -3623,8 +3861,9 @@ function mostrarMidia(indiceFoto, indiceVideo){
     document.querySelectorAll('#thumbs .t').forEach(x =>
       x.classList.toggle('on', x.dataset.video === String(indiceVideo)));
   } else {
-    hero.innerHTML = `<img id="heroImg" alt="">`;
-    document.getElementById('heroImg').src = gal[indiceFoto] || gal[0];
+    const valorFoto = gal[indiceFoto] || gal[0];
+    hero.innerHTML = `<img id="heroImg" alt=""${attrFoto(valorFoto)}>`;
+    aplicarFotosIDB(hero);     /* R94: a foto pode vir do IndexedDB */
     document.querySelectorAll('#thumbs .t').forEach(x =>
       x.classList.toggle('on', x.dataset.foto === String(indiceFoto)));
   }
@@ -3660,7 +3899,7 @@ document.getElementById('fAno').innerHTML = '<option value="">Ano...</option>' +
 function renderFotos(){
   preview.innerHTML = fotos.map((src, i) => `
     <div class="up">
-      <img src="${src}" alt="">
+      <img${attrFoto(src)} alt="">
       <button type="button" class="del" data-del="${i}" aria-label="Remover">\u00D7</button>
       ${i === 0 ? '<span class="cover">CAPA</span>' : ''}
     </div>`).join('');
@@ -3668,13 +3907,34 @@ function renderFotos(){
     ? fotos.length + ' de ' + MAX_FOTOS + ' imagens \u00B7 a primeira \u00E9 a capa' : '';
 }
 
+/* R94: cada foto e reduzida e guardada no IndexedDB --- nunca mais "memoria cheia"
+   por causa de uma foto de telemovel. Se o IndexedDB nao existir, aceita-se
+   a foto comprimida em base64 desde que caiba no localStorage. */
 function addFotos(lista){
   const vagas = MAX_FOTOS - fotos.length;
-  Array.from(lista).slice(0, vagas).forEach(f => {
-    if (!f.type.startsWith('image/')) return;
-    const fr = new FileReader();
-    fr.onload = ev => { fotos.push(ev.target.result); renderFotos(); };
-    fr.readAsDataURL(f);
+  const aceites = Array.from(lista)
+    .filter(f => f && f.type && f.type.indexOf('image/') === 0)
+    .slice(0, Math.max(0, vagas));
+  aceites.forEach(f => {
+    comprimirFoto(f).then(blob =>
+      fotoGuardar('f' + Date.now() + '-' + Math.random().toString(36).slice(2, 7), blob)
+        .then(chave => ({ idb: true, chave, blob }))
+        .catch(() => ({ idb: false, blob }))
+    ).then(r => {
+      if (r.idb){
+        FOTO_CACHE.set(r.chave, URL.createObjectURL(r.blob));
+        fotos.push('foto:' + r.chave);
+        renderFotos();
+        return;
+      }
+      if (r.blob.size > FOTO_FALLBACK_MAX){
+        toast('Esta foto ficou grande demais para este dispositivo');
+        return;
+      }
+      const fr = new FileReader();
+      fr.onload = ev => { fotos.push(ev.target.result); renderFotos(); };
+      fr.readAsDataURL(r.blob);
+    }).catch(() => { toast('N\u00E3o foi poss\u00EDvel preparar esta foto'); });
   });
 }
 
@@ -3853,7 +4113,8 @@ document.getElementById('btnGuardarModelo').addEventListener('click', () => {
     CARROS.pop();
     try{
       const av = document.getElementById('avisoModelo');
-      av.textContent = 'Sem espa\u00E7o no dispositivo para guardar este modelo.';
+      av.textContent = 'Sem espa\u00E7o do navegador para guardar este modelo (limite ~5 MB). '
+                     + 'Remova fotos ou modelos antigos e tente de novo.';
       av.classList.add('on');
     }catch(e){}
     return;
@@ -3938,6 +4199,13 @@ function apagarAutomovel(id){
   /* R90: os videos MP4 guardados no IndexedDB vao com o carro (sem orfaos) */
   (c.videos || []).forEach(v => {
     if (typeof v === 'string' && v.startsWith('idb:')) videoApagar(v.replace(/^idb:/, ''));
+  });
+
+  /* R94: as fotos tambem vao com o carro (IndexedDB, sem orfaos) */
+  const fotosDoCarro = (c.fotos || []).slice();
+  if (c.img) fotosDoCarro.push(c.img);
+  fotosDoCarro.forEach(f => {
+    if (typeof f === 'string' && f.indexOf('foto:') === 0) fotoApagar(f.slice(5));
   });
 
   const orcsDoCarro = ORCAMENTOS.filter(o => o.carro === id);
@@ -4683,7 +4951,7 @@ function renderTabelaOrc(){
   tbody.innerHTML = lista.map(o => {
     const c = CARROS.find(x => x.id === o.carro) || CARROS[0];
     return `<tr class="cli" data-abrirorc="${o.id}">
-      <td data-c="Ve&#237;culo"><div class="cell-car">${o.carro ? '<img src="' + c.img + '" alt="">' : ''}<span class="b">${nomeDoCarro(o)}</span></div></td>
+      <td data-c="Ve&#237;culo"><div class="cell-car">${o.carro ? '<img' + attrFoto(c.img) + ' alt="">' : ''}<span class="b">${nomeDoCarro(o)}</span></div></td>
       <td data-c="Cliente">${o.nome}</td><td data-c="Telefone">${fmtTel(o.tel)}</td><td data-c="Data">${fmtData(o.data)}</td>
       <td data-c="Estado"><span class="pill${classeEstado(o.estado)}">${o.estado}</span></td>
       <td data-c="Valor" style="text-align:right" class="b" data-valor="${valorOrc(o)}">${fmt(valorOrc(o))}</td>
@@ -4726,7 +4994,7 @@ function abrirOrcDetalhe(id){
 
   const c = CARROS.find(x => x.id === orc.carro) || null;
   const imgEl = document.getElementById('odImg');
-  if (c){ imgEl.src = c.img; imgEl.style.display = ''; }
+  if (c){ definirFotoImg(imgEl, c.img); imgEl.style.display = ''; }   /* R94: aceita foto: */
   else { imgEl.removeAttribute('src'); imgEl.style.display = 'none'; }
   document.getElementById('odCarro').textContent = nomeDoCarro(orc);
   document.getElementById('odTipo').textContent = c ? c.tipo : 'Modelo j\u00E1 n\u00E3o est\u00E1 no estoque';
@@ -5013,7 +5281,7 @@ function abrirCliente(nome, tel, semNavegar){
     const saldo = Math.max(valorOrc(o) - (o.entrada || 0), 0);   /* R92 */
     return `<article class="orc-card">
       <div class="orc-top">
-        ${o.carro ? '<img src="' + c.img + '" alt="">' : ''}
+        ${o.carro ? '<img' + attrFoto(c.img) + ' alt="">' : ''}
         <div class="orc-info">
           <div class="n">${nomeDoCarro(o)}</div>
           <div class="m">${o.carro ? c.tipo : 'Modelo j\u00E1 n\u00E3o est\u00E1 no estoque'}</div>
@@ -5206,6 +5474,7 @@ renderClientes();
    (antes o numero de Vendas so aparecia depois de abrir a pagina Vendas) */
 sincronizarContadores();
 marcarCabecalhosVazios();
+setTimeout(() => { limparFotosOrfas(); }, 8000);   /* R94: sem fotos sem dono */
 ir('modelos');
 renderEstadoRede();
 /* ==========================================================
