@@ -2825,6 +2825,32 @@ function carregar(){
     const arr = raw ? JSON.parse(raw) : null;
     CARROS = Array.isArray(arr) && arr.length ? arr : PADRAO.slice();
   }catch(e){ CARROS = PADRAO.slice(); }
+  /* R94: o cofre pode estar mais recente do que o localStorage (quando este encheu) */
+  if (window.indexedDB){
+    let seloLocal = 0;
+    try{ seloLocal = Number(localStorage.getItem(SELO_CARROS_KEY)) || 0; }catch(e){}
+    cofreLer(COFRE_CHAVE_CARROS).then(c => {
+      if (!c || !c.lista || !c.lista.length) return;
+      if (c.quando <= seloLocal) return;          /* o localStorage esta tao ou mais atualizado */
+      const antes = JSON.stringify(CARROS);
+      if (JSON.stringify(c.lista) === antes) return;
+      CARROS = c.lista;
+      atual = CARROS.find(x => atual && x.id === atual.id) || CARROS[0];
+      try{ renderGrid(); renderFiltros(); }catch(e){}
+      try{ if (paginaAtual() === 'vendas') renderVendas(); }catch(e){}
+      try{ aplicarFotosIDB(document); }catch(e){}
+    });
+    /* o mesmo para os orcamentos */
+    let seloOrc = 0;
+    try{ seloOrc = Number(localStorage.getItem(SELO_ORCS_KEY)) || 0; }catch(e){}
+    cofreLer(COFRE_CHAVE_ORCS).then(c => {
+      if (!c || !c.lista) return;
+      if (c.quando <= seloOrc) return;
+      ORCAMENTOS = c.lista;
+      try{ renderTabelaOrc(); renderClientes(); }catch(e){}
+      try{ if (paginaAtual() === 'vendas') renderVendas(); }catch(e){}
+    });
+  }
   const versaoAnterior = migrarVersao();
   atual = CARROS[0];
   migrarVideosAntigos();
@@ -3041,18 +3067,25 @@ const VIDEO_STORE = 'videos';
 let videoDB = null;
 const VIDEO_CACHE = new Map();          /* chave -> object URL (para nao repetir) */
 
-function abrirDB(){
-  if (videoDB) return Promise.resolve(videoDB);
+/* R94: uma base para os videos e outra para as fotos; o mesmo motor serve as duas */
+function abrirDBGenerico(nome, armazem, guardarLigacao){
   return new Promise((ok, falha) => {
     let pedido;
-    try{ pedido = indexedDB.open(VIDEO_DB, 1); }catch(e){ falha(e); return; }
+    try{ pedido = indexedDB.open(nome, 1); }catch(e){ falha(e); return; }
     pedido.onupgradeneeded = () => {
       const db = pedido.result;
-      if (!db.objectStoreNames.contains(VIDEO_STORE)) db.createObjectStore(VIDEO_STORE);
+      /* a base dos videos ja existe com o armazem "videos" --- as fotos entram em "fotos" */
+      if (!db.objectStoreNames.contains(armazem)) db.createObjectStore(armazem);
+      if (nome === VIDEO_DB && !db.objectStoreNames.contains('fotos')) db.createObjectStore('fotos');
     };
-    pedido.onsuccess = () => { videoDB = pedido.result; ok(videoDB); };
+    pedido.onsuccess = () => { if (guardarLigacao) guardarLigacao(pedido.result); ok(pedido.result); };
     pedido.onerror   = () => falha(pedido.error);
   });
+}
+
+function abrirDB(){
+  if (videoDB) return Promise.resolve(videoDB);
+  return abrirDBGenerico(VIDEO_DB, VIDEO_STORE, db => { videoDB = db; });
 }
 
 function videoGuardar(chave, blob){
@@ -3114,8 +3147,11 @@ function videoURL(valor){
    no IndexedDB --- o mesmo s\u00EDtio dos v\u00EDdeos, sem o limite de 5 MB.
    No cat\u00E1logo fica s\u00F3 a chave "foto:<chave>", tal como nos v\u00EDdeos.
    ========================================================== */
+/* R94: o "cofre" (bak) guarda o catalogo/orcamentos quando o localStorage enche.
+   Fica na mesma base das fotos, que assim tem de ser criada com versao 2. */
 const FOTO_DB    = 'vendacar-fotos';
 const FOTO_STORE = 'fotos';
+const COFRE_STORE = 'bak';
 const FOTO_LADO  = 1600;                 /* maior lado, em pix\u00E9is */
 const FOTO_QUAL  = 0.82;                 /* qualidade JPEG */
 const FOTO_FALLBACK_MAX = 1.2 * 1024 * 1024;  /* s\u00F3 se o IndexedDB n\u00E3o existir */
@@ -3127,10 +3163,11 @@ function abrirFotoDB(){
   if (fotoDB) return Promise.resolve(fotoDB);
   return new Promise((ok, falha) => {
     let pedido;
-    try{ pedido = indexedDB.open(FOTO_DB, 1); }catch(e){ falha(e); return; }
+    try{ pedido = indexedDB.open(FOTO_DB, 2); }catch(e){ falha(e); return; }
     pedido.onupgradeneeded = () => {
       const db = pedido.result;
       if (!db.objectStoreNames.contains(FOTO_STORE)) db.createObjectStore(FOTO_STORE);
+      if (!db.objectStoreNames.contains(COFRE_STORE)) db.createObjectStore(COFRE_STORE);
     };
     pedido.onsuccess = () => { fotoDB = pedido.result; ok(fotoDB); };
     pedido.onerror   = () => falha(pedido.error);
@@ -3326,30 +3363,98 @@ function limparFotosOrfas(){
   })).catch(() => 0);
 }
 
+/* ==========================================================
+   R94 \u00B7 O COFRE (IndexedDB) --- nenhum registo se perde
+   ----------------------------------------------------------
+   O localStorage do navegador tem um teto (~5 MB) que n\u00E3o tem nada a ver
+   com a mem\u00F3ria do telem\u00F3vel. Se estourar, o registo ia embora com um
+   aviso. Agora o cat\u00E1logo e os or\u00E7amentos s\u00E3o gravados TAMB\u00C9M no
+   IndexedDB (centenas de MB). Ao abrir, leem-se os dois e fica o mais
+   recente --- mesmo que o localStorage n\u00E3o tenha conseguido guardar nada.
+   ========================================================== */
+const COFRE_CHAVE_CARROS = 'carros';
+const COFRE_CHAVE_ORCS   = 'orcamentos';
+const COFRE_SELO         = 'selo';
+/* dois bilhetes minusculos (13 digitos) dizem qual das copias e a mais recente;
+   como substituem o proprio valor, cabem mesmo com o localStorage no limite */
+const SELO_CARROS_KEY = 'modelo_carros_quando';
+const SELO_ORCS_KEY   = 'modelo_orcamentos_quando';
+
+/* grava o cofre com um pequeno atraso: editar valores no orcamento escreve
+   muitas vezes seguidas e so interessa o ultimo estado */
+const COFRE_FILA = {};
+function cofreGravar(chave, lista, quando){
+  if (!window.indexedDB || !lista) return Promise.resolve(false);
+  const copia = JSON.stringify(lista);
+  const marca = Number(quando) || Date.now();
+  clearTimeout(COFRE_FILA[chave]);
+  return new Promise(ok => {
+    COFRE_FILA[chave] = setTimeout(() => {
+      cofreGravarAgora(chave, copia, marca).then(ok).catch(() => ok(false));
+    }, 250);
+  });
+}
+function cofreGravarAgora(chave, copia, marca){
+  return abrirFotoDB().then(db => new Promise(ok => {
+    const tx = db.transaction(COFRE_STORE, 'readwrite');
+    const loja = tx.objectStore(COFRE_STORE);
+    loja.put(copia, chave);
+    loja.put(marca, COFRE_SELO + ':' + chave);
+    tx.oncomplete = () => ok(true);
+    tx.onerror = () => ok(false);
+    tx.onabort = () => ok(false);
+  })).catch(() => false);
+}
+function cofreLer(chave){
+  if (!window.indexedDB) return Promise.resolve(null);
+  return abrirFotoDB().then(db => new Promise(ok => {
+    const tx = db.transaction(COFRE_STORE, 'readonly');
+    const loja = tx.objectStore(COFRE_STORE);
+    const r = loja.get(chave);
+    const s = loja.get(COFRE_SELO + ':' + chave);
+    tx.oncomplete = () => {
+      let lista = null;
+      try{ lista = r.result ? JSON.parse(r.result) : null; }catch(e){ lista = null; }
+      ok({ lista: Array.isArray(lista) ? lista : null, quando: Number(s.result) || 0 });
+    };
+    tx.onerror = () => ok(null);
+    tx.onabort = () => ok(null);
+  })).catch(() => null);
+}
+
 function guardar(){
+  const txt = JSON.stringify(CARROS);
+  const agora = Date.now();
+  let caberam = true;
   try{
-    const txt = JSON.stringify(CARROS);
     if (localStorage.getItem(STORAGE_KEY) !== txt){
       localStorage.setItem(STORAGE_KEY, txt); marcarAlteracao();
     }
+    try{ localStorage.setItem(SELO_CARROS_KEY, String(agora)); }catch(e){}
   }catch(e){
-    /* R90: nunca mais falhar em silencio --- se o catalogo nao couber, avisa */
-    /* R94: a mensagem diz a verdade --- o limite \u00E9 do navegador (~5 MB), n\u00E3o do telem\u00F3vel */
-    try{ toast('Sem espa\u00E7o do navegador para guardar o cat\u00E1logo (limite ~5 MB). Use fotos mais pequenas.'); }catch(x){}
-    return false;
+    caberam = false;      /* o localStorage encheu --- o cofre segura o registo */
+  }
+  cofreGravar(COFRE_CHAVE_CARROS, CARROS, agora);
+  if (!caberam){
+    try{ toast('Guardado no armazenamento do dispositivo (o cache do navegador esta cheio).'); }catch(x){}
   }
   return true;
 }
 function guardarOrc(){
+  const txt = JSON.stringify(ORCAMENTOS);
+  const agora = Date.now();
+  let caberam = true;
   try{
-    const txt = JSON.stringify(ORCAMENTOS);
     if (localStorage.getItem(ORC_KEY) !== txt){
       localStorage.setItem(ORC_KEY, txt); marcarAlteracao();
     }
+    try{ localStorage.setItem(SELO_ORCS_KEY, String(agora)); }catch(e){}
   }catch(e){
-    /* R94: os or\u00E7amentos tamb\u00E9m podem n\u00E3o caber --- antes falhava em sil\u00EAncio */
-    try{ toast('Sem espa\u00E7o do navegador para guardar este or\u00E7amento (limite ~5 MB).'); }catch(x){}
-    return false;
+    caberam = false;
+  }
+  cofreGravar(COFRE_CHAVE_ORCS, ORCAMENTOS, agora);
+  if (!caberam){
+    try{ toast('Or\u00E7amento guardado no armazenamento do dispositivo (o cache do navegador esta cheio).'); }catch(x){}
   }
   return true;
 }
@@ -4108,17 +4213,9 @@ document.getElementById('btnGuardarModelo').addEventListener('click', () => {
   renderPerfilLoja();
 
   CARROS.push(carro);
-  /* R90: nunca "guardar" um modelo que desaparece ao recarregar */
-  if (guardar() === false){
-    CARROS.pop();
-    try{
-      const av = document.getElementById('avisoModelo');
-      av.textContent = 'Sem espa\u00E7o do navegador para guardar este modelo (limite ~5 MB). '
-                     + 'Remova fotos ou modelos antigos e tente de novo.';
-      av.classList.add('on');
-    }catch(e){}
-    return;
-  }
+  /* R94: o registo novo fica sempre guardado --- se o localStorage encher,
+     o catalogo vai para o IndexedDB e volta a ser lido ao abrir a app */
+  guardar();
 
   document.getElementById('avisoModelo').classList.remove('on');
   mNovoModelo.classList.remove('open');
@@ -4425,7 +4522,7 @@ document.getElementById('btnSalvar').addEventListener('click', () => {
    OR\u00C7AMENTO
    ========================================================== */
 function abrirOrcamento(){
-  document.getElementById('oImg').src = atual.img;
+  definirFotoImg(document.getElementById('oImg'), atual.img);   /* R94: aceita foto: */
   document.getElementById('oNome').textContent = atual.nome;
   document.getElementById('oPreco').textContent = fmt(atual.preco);   /* atualizado em calc() */
   document.getElementById('oEntrada').value = fmt(atual.preco / 10);
