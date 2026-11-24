@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0e9c94">
-<!-- R86: instalar no ecra principal e abrir sem rede (iOS) -->
+<!-- instalar no ecra principal (iOS) &#8212; R97: a app precisa de internet -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="VendaCar">
@@ -24,6 +24,30 @@
     padding:24px;transition:opacity .45s ease, visibility .45s ease;
   }
   #ecraCarregando.fora{opacity:0;visibility:hidden;pointer-events:none}
+  /* R97: sem ligacao a internet nao se entra --- o app so funciona online */
+  #ecraSemRede{
+    position:fixed;inset:0;z-index:99998;background:#ffffff;color:#0f1a17;
+    display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+    padding:28px 22px;text-align:center;
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+  }
+  #ecraSemRede.on{display:flex}
+  #ecraSemRede .icone{
+    width:64px;height:64px;border-radius:50%;background:#fdecec;color:#d64545;
+    display:flex;align-items:center;justify-content:center;
+  }
+  #ecraSemRede h2{margin:2px 0 0;font-size:20px;letter-spacing:-.2px}
+  #ecraSemRede p{margin:0;font-size:13.5px;line-height:1.6;color:#54625c;max-width:340px}
+  #ecraSemRede .btnTentar{
+    margin-top:6px;background:#3dbb5a;color:#fff;border:0;border-radius:10px;
+    padding:12px 22px;font-size:14px;font-weight:650;cursor:pointer;
+    font-family:inherit;box-shadow:0 2px 8px rgba(61,187,90,.28);
+  }
+  #ecraSemRede .btnTentar:active{transform:translateY(1px)}
+  #ecraSemRede .nota{font-size:11px;color:#8b968f;margin-top:2px}
+  html[data-tema="escuro"] #ecraSemRede{background:#040d1f;color:#eaf1fb}
+  html[data-tema="escuro"] #ecraSemRede p{color:#9fb0c6}
+  html[data-tema="escuro"] #ecraSemRede .icone{background:#31191b;color:#f2726b}
   /* R81: a pagina de carregamento usa a marca animada (3 tiques verdes).
      A appbar mantem o logotipo antigo, que nao e tocado por esta regra. */
   #ecraCarregando .logoC{
@@ -1596,6 +1620,21 @@
 </div>
 <noscript><style>#ecraCarregando{display:none}</style></noscript>
 
+<!-- R97: o app so funciona com internet --- sem ligacao nao se entra -->
+<div id="ecraSemRede" role="alertdialog" aria-modal="true" aria-labelledby="srTitulo" aria-describedby="srTexto">
+  <div class="icone">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 8.5a16 16 0 0120 0"/><path d="M5 12a11 11 0 0114 0"/>
+      <path d="M8.5 15.5a6 6 0 017 0"/><path d="M12 19h.01"/><path d="M3 3l18 18"/>
+    </svg>
+  </div>
+  <h2 id="srTitulo">Sem liga&#231;&#227;o &#224; internet</h2>
+  <p id="srTexto">O VendaCar precisa de internet para funcionar. Ligue-se a uma rede Wi-Fi ou a dados m&#243;veis e tente de novo.</p>
+  <button type="button" class="btnTentar" id="btnTentarRede">Tentar novamente</button>
+  <span class="nota">A liga&#231;&#227;o &#233; verificada automaticamente</span>
+</div>
+
 <div id="falhaArranque" style="display:none;position:fixed;inset:0;z-index:9999;background:#0f1a17;color:#eaf1fb;
      font-family:Arial,Helvetica,sans-serif;padding:26px 22px;overflow:auto">
   <h1 style="font-size:18px;margin:0 0 6px">A aplica&#231;&#227;o n&#227;o arrancou</h1>
@@ -2136,7 +2175,7 @@ setTimeout(function(){
               <td id="perfilLojaZap">&#8212;</td>
               <td style="text-align:right"><button class="edit-mini" data-abrir-loja="whatsapp" aria-label="Editar n&#250;mero do WhatsApp">Editar</button></td>
             </tr>
-            <tr><td class="b">Modo offline</td><td id="linhaOffline">Ativo &#8212; dados guardados no dispositivo</td><td style="text-align:right;color:#c3ccc8">&#10003;</td></tr>
+            <tr><td class="b">Liga&#231;&#227;o</td><td id="linhaOffline">Online</td><td style="text-align:right;color:#2f9e44" id="linhaOfflineIco">&#10003;</td></tr>
             <tr class="editavel">
               <td class="b">Modelo de Mensagem</td>
               <td>Texto padr&#227;o do or&#231;amento</td>
@@ -2547,7 +2586,6 @@ setTimeout(function(){
    ========================================================== */
 const STORAGE_KEY = 'modelo_orcamento_carros_v1';
 const ORC_KEY     = 'modelo_orcamentos_v1';
-const FILA_KEY    = 'modelo_fila_envios_v1';
 
 const PADRAO = [
   { id:'corolla', nome:'Toyota Corolla 2018', tipo:'Sedan \u00B7 2018 \u00B7 Branco',  cat:'Usado',      preco:9750000, desc:0, img:'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAcFBQYFBAcGBgYIBwcICxILCwoKCxYPEA0SGhYbGhkWGRgcICgiHB4mHhgZIzAkJiorLS4tGyIyNTEsNSgsLSz/2wBDAQcICAsJCxULCxUsHRkdLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCz/wgARCAExAjADASIAAhEBAxEB/8QAGwAAAgMBAQEAAAAAAAAAAAAAAAECAwQFBgf/xAAXAQEBAQEAAAAAAAAAAAAAAAAAAQID/9oADAMBAAIQAxAAAAHslhZWWBUWorVoVK4KVcikuRSr0Uq9FCvDOtCM60IzrQjMtMTOtCKC6JUrUVxtiVxsRWrEQVgQc2RcmJykQc5FZbIqdsip2sqdzKXcyl2sqdrKnYyssZW7AtJhAmECYVlgVlgVq1FRYFatCpXIqVyKS0KVcilXooVyKY3ooVyKFciiN8ShXopLgodwUu0K3YyEpyK5WMrlORXKcit2MrdjK3YyssZW5src2VuYQJsmMESCJIIkgiSCKmECYQViIEwrJhWTCtWBWrAqVqKVaiqN0SqNqKo2opLArLArLQrLArc2Rc2RcpEXNkXNkHNkHNkHIIuQRJhByCJIIuQMYIbIkgi2CGCGEWwSkESQQJBFTRFTRFTRGNiK1ZEhGxFcbEVxtiVqwIEwgTCDkyBME3ITchOTE2xNsi2yLYIkEWwQwRIItgDBMAGCGCbBKSEMEMEMEpIQwiMIjCKkiKmiCkiMZogpxIEgRIIkgiSCJJibYNsUhgxiYwGCYxDBDAGgBiGCYADEwAGIYIYIYIaAAQwSkhDQhoSYRU8he+Lzk9bPwnWX1E+f0CyUAtlTohS5nDPU5OBdZ1jkc9fU2+Ziemp8/hPVPk98zuURsAYAMAYIYIYIYIYJgAAwAAAAAAAAAEwQ0CaBNAniTXj5PNTocXZ0meD0/VbVxaZ0tWToZbCjpB56ma166i5tdUU0cXq4Fy+l8J2Y3eT6sHPzevblb+h7PkP0NvpG/IQaYMABiGCGCGCGCAAAYA0AMAEAAAAAAgBHMOnmwc9NPMx9FmGmjezo7eO5rSUxV1kiyu/aq8fv8JNe7359SZ+P6LBZxl89jc/Qsfj90T28ytfW8fKM8/rYr2ujzt3oDb6ai6bz074WZC6kYmAAAAAAIAAaYAAAAAAAIGSuM09bM07nHJw+lDy1/omvmn6OSecyevkvkt3fRzr9ECN2eBfVAPmnK9/Gzx1nru/HzS76ez5rt98V4vX6lHn7unOMM9UVVtSL1nrNUuZamxVi2cXq+ZnT0L5+/XNgIAAAAAgAaBgAAAIaKi/RJw5RayHITAYsxqWSB0Fy+Uelfg9OdewjVZrLkMGBEKC7LGg0qgNLys0qhlmS8KI6GSIsZEJEQdkJFsaUl1bgtV0J2MTATAAAQCYAAxAAAgj4/wBzxDh9Xx0I9hHy286uWew5XT6GquTh9NwzkUGs5567t51530DZK2mNmvNj4J6OPzDGfXrvnHtToUTgTSBiRJwCZAJkETdTJkAm4MnU/AkeRzoJ9T7Xxr6+s782mwAAAaAABNAwAABAHJ6vhi08jkjr6fORPpl/ypn13rfDfQn1GeGS7Y5GXwrCyzLalqqS20HAOV46Ukdc5GPt8/Gfa5+S9StxBEyASIBMgElEHJTIykxDiZPlHtPKppq6nTrwf1j5d9Mjq349lDQMQMQMQAmDQMTEmg8H7v5cT5OrIOMoGZMiQg9T7v45789I4BNV1q9PG6JoUYo/l/vfmRLtczqHXhVM5nF9R542fSvkX1pb1FE1GQNyIuUSZVA1vFA3QxxTVXna+Hnw+gnoKNfMrH7nx3vYu055VcVMsIhIiEiIBhRvMDN0cjNEagl8v+h+MOBHsc4zwdURGA0D05tB9TeTQsObyPNlvvfEe5Oukjy3i/T+YTvdfhwPQVdLmmjz9+c5H1v5T9WWUs2eOkcWk7ceBQelXn4noauHM69POvLcuxJx8PS8lWft8Paemuoz1L3Hk/SRpKJFsYyAGJgAFSJApRYxImQCvldlR5Xme9VfL8P1ymPkq+i+IMV+QOv7vwvpV9ZfwIJ3jzkzt1cGpfRR8ZrOVwdORO/2vK9k6PNumS856TzSnraIRppp5RkwisGhfQ9rx/WjtwwWGyWWwtJXmfH2oHz+j2LPK9L0O+rL9dhllpkZ5XhS7UVq4K5SBKtJYVC2qpFsa4k4Qzl9OfMbIc+KX+ar5hBSCGvMHqOj4/uHUOJOXqY8qJ7eZE51HR59kupx5Hr15ZE+jXvlzZuzqPMx9fYeLu9jM8lo9RYef29OUYrtbqi2yQiciGXdEwPSEJ2hLZj1VJtiGACQTFSkGZyZAbIkwrr0My17chmrvgc/L1EnmM3rRfGVe3UeFj70PCavYs8U/aM8Zb66R5S30zPNv0bPM3+hsOHp60o5k+hAyT02VmNTMs9LMr1hmncyl3MqlYyp2BWWIysVk1JKrqdCSnGSg0AIZFjEiBAJuDJEQmRQ8OvFEEIBIYMi2CkWEJWSKS5lMrGVSsZQrIU7I2ATgFN9ZG+rXFMrGVO1VEk4iphXKapDBEgEwzQvpsE0O6nRKTjIBMHFEkhGIM5S5bVFjYwYBj2ZTOrFVbsIg5lRcpIXV2LOSkRGgakBIM9V1JOyqRZEQ4uCS1ZtKtgAANAxMBA3FgIBMK6tNdlKsAtjKUlFkkgZERkQZEMwEpYAwKkgCgCEQsAIaCiYEphFgCpAFgEgCmkCxASiAIEnoC1gQADQDABADAAAAEAIAEAMAAsSCBANAf/EADIQAAEEAQMDAwMEAQMFAAAAAAABAgMRBAUSExAgIRQwQAYVMSIyQVAWIyRCJTM0Q4D/2gAIAQEAAQUCrrRRRRRRRRRRRRRRRRRRRRRRRRRXx6KKKKKKKKKKKKKKK6UV7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFe3XSulFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFfCrtorpRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRX9TRXtUUUUUUUV0orrRX/0htVTjccDj0ynpkPTMPTxnDGcMZwsOJg/08YuVgoerwT1GCpvwnHBG4XGcLE9P7GiTIijHaorSTWMgbqOfkOjxM+QhxUiEah4KQpo2NEMjUGRDpcnJG4p6dp6WMrjcxjZhcISLKjG67PG6LXcWVUbHKxWq3+sXwj8lrSbLsc58ipjPcRaKr3xYzIWdKPB+Va1I0yc5Z1jgRvXweNuX4lx5EZN4MqVux2CxSXFkiMLNlw34WoQ50boj8f1L8hGkuTYrnyiY6EMDpCHHZF0VSxFtXKIiuVrWxNyspct0UKMW6XcWWMdRlJux1f59U+SIe9sTfXRDoY8kZvjl07VW5aK1HDmq3+mfM1pLPY57nq2HpBjbxG0nRy+bGJ4VHPkYxI26ln8y4WK7hbivRJcWSnOWNedD1DRchg/UGXv/THkpERyNlTUltEQwX7MhYEdO+NyP0nUH5LBzK/o5s+CAXKbMySRpzIs3NA1PUwEL8a0y8cTIhccjTlaWh4GxPcNajG6tmcUSybTEykTE9WgmSaixmXgKUo1qit/0pP0vuyJdhLchxqMatpFNJLj6Q96xQshZ0VqKLH83a5TjNjSbCSZV0XHVrNCxoz7NjH2PDPseGLomG5v+O4Q3QMZo3SmNG4LGnpohsLEW2tFlQWRVNTyVkzknY1G6nOjfWag8RmoyiaXlOG6FMo36fcN0BBNEir7NjW3ScRq/b8ZBMTHQSKNvZuTovRVpIs1uQ75CNVRI0Px0rvoorpZuQ3KLalFFKS6LjPk+zYSJBgQwOjRE7+TyrjchvQ3m83qPc/akkitje9ydcvFdA7DkWXG+KjVURiJ20V2V0uhJWKKpu9hRPx4Q3ohynKcim9TcpJy3+tWRtk9hOldY42xJ8S90nsXQuREhzOUvIUXcT5OLC+TNa4w86XmvuUVylqf8/g2chyKbrF+Kq0mZnPbNF9Rqi/fsVE/yTBP8mxBfqZg76nef5JlvWPVnuRc2hdYm3S6vlW/Lnck8qxyxRT5M2PpdDGNjaIpuRB05yOU3KJK4R27p/7PaT8dz3o1M3XZHOj1fMjdgZ7c2L4qeDN0rGzBIUjSGVroItCzZEb9N5Cjfpdo36Zw0GaFgxiaZhNF0/EVMjQ9wuk5jHM0HKlINHxccRUa3pYq+FcqmZq8GIs2t5cipqmai4uvORYpmSsRbF/d7SfjtU1vMV8iRDo1amHkuxMlq234edl+lj+9uQXXVVj5o3R6bmY+I5PqCETXoBut47hMjkTeciHMcynK83KonSyyxXWarqu0bE55wIgsRVGm564czXoqO/PtJ+O3JnTHx1cqqzBc5mRiS4Y9tOw/GJ8PU/8Ac5r8V7DjcbHIeTyfqP1Gnai7Ge1yOb27qdZZYqmqZnpcZrBXqo1jnq5j4xVR6L4XQ8nkx1/Hsr+KKK6qa5NWNiM3PkmWfTciZj8iRitdjLWNH5d8L90uR/2ujlVG/wAddJ1Djd2WSLXbn5Hqs5VMPFjcSyOxYcWZ0mDnYHAknlukS8eor+3vooVPHTchyNOUV9msS787Aa1I4IlxBsmNFLls/wCoM8RxM2p8J0zo55Z9zOj/ANqfg89dKzuaPpYrjJyWQRRu3RdM+bgwUIY0kl1Brkyc6ZZdP5fQabgOmy2uj45sZ2zKX9vWiulob0OQWRa3L1tEN7ek8nLkx4/qMaGNYo9uPJkT/wCpqzHRtOVpyNN7Tchfs2WbkORpytOVLlReQ3Ucg59t7YZHQyxSpJCrxXmRmRwJk5UmVJpcvJgdNdfWOhgLCxkmKyfDRkkEUkWLPMzIilNQTZns/wDJ62bhZUORFNxuNwrjkodkwoeqhF1GBo/WmoS6w57DFexkePkTMwGQuyH4lZGtHg8FIbUNqG0pT9Rbjc8tx5KNptKK6ZL+PGR21JGRvHQ0KxSu6CJ80sTOOLjWp8x8jeOWRWafkvNOxXYuL01115CfmHHfkYOLDkszGRPie+PGyhNNljn1HxmY6bs0cu0WVqC5cKC5sAuqRsPuqPX1Eym/IUqRTjap6eARkbDmVDlskwYJpMmHgnIJFZJceU3KzGsbo8eyLcX0ssv3pYmzRu0qFR+kyoPwMppJFI0Xr4I9hHC7KmxcGPGjbGidNkbTcgr0L660v++QwkdKkucmIyLjfp+YiTYWC98uPky8uVjtkZNFk5UiOZvc+ONrZp1VVXpZhyWWhZalqWp5LUtTKx0yWSQSQlnL4xcJ+S9sW1EjNhtKKKPJ5LUsvraFll9LLL6X0cxjjL0+HIjnwcnHWyzB1D0hBqj5l9SLknqlEySfUEgWTU0bH99cfcplxcvKXLmIJeKVcCGsydrNOxWI3Ez1hwocVm6fm8c4syGRNuTp/BCtP5UtJRHOU2vUSOQSF4kDhMYkhaxrsVJFbhRCYkaDEWMZTkpDaUUUUUUUUV3WWWbkFkQWZBZznccriXJ2JPnSPF6x5EkZBlo83ociHIOVsiLiY6jsGIiY2OGeLhlEWiDJ428mHOsuWxjJJFkfEqRR8osiluUVjlEx5FEw5FEwHCYCDMJiCYzBIWiRohtNpXSx6K5dojBGmwi8da6V0rtssvtoVBWKLGou5BZBZPGRK5y9sS050lRpMLKcx6hD1KHqEHyte3avSxJXtN7nrFiuUTDUbhoJitEgagkKHGcaHGhsQ2lCIUbDYbTabTaKiiFeP5T93n26KKK6UV0oUWyrJI/PCitdhIouCLgvPSSoemkOCQSCQWOVW8Ep6eU9JKJhSCYLj0B6BD0DRNNiE06EbhRIJCjSjaIhtNpsNhsNptKKNpXevZ/KCHk8ll+x57KKFFcbixfJtNhxnGbDjQ40OJDjOM4zYbDYbDabBGGw2m02m0o2m0rpRtNptNpXsL+U7E7rL7LLL7l/DvZorpRRRRRtNpRRXSuqiG02m0ort8+w5OxPiKO/Ps0UUUUUUUUL0Tp/x/gUQT4K9ie1fSzcWX3O9lE6UV3u6J2qJ8JU7E6X8NxXdXVPZd0TtUb8NWm0r4Cdv8L7KCdydX9n8dW/0X//xAAfEQACAQQCAwAAAAAAAAAAAAABEQACECBAITFQcID/2gAIAQMBAT8B9iOPaceLwMcB1XdXVlFgvAKLOgCrgwhFaRpI70TogqEvv5R//8QAHBEBAAEEAwAAAAAAAAAAAAAAAQIRMVCAACFA/9oACAECAQE/AdCa4x8ZIbYKRXrgBbVH/8QAQRAAAQIEAgYGCAUDAgcAAAAAAQACAxEhMRIiECAyQVFxBBNAYYGRIzAzQlBSkqFicoKx0RRD4aKyJDRggJDB8f/aAAgBAQAGPwL/AMbdlbRdXOncrBWC2VnMNvMr2kPwW0PpK22/dUjM+pZIk1QhW+JXxHuWWGwfdUc0fpWGG97j3Bem6Y9vc0rbiOP4nT1LTKrdFsPO4XO4KpMvpH8rbA/KxViRD+pXifWU+GTPCZifBHO8clSJ5sC9HG+5Ck7PLiP4UorcHfdY4T5gqvwyZosvmVUzWUTVTJYnvIbwUmgAashUqZPMrq4M8HHe7/CBNT9hqTChxOOUoTsrIwxc3WRzmqZGNvEKcN8272neshzb2lZfhMysvmrzVFnOJZRILieOthbdfuV1ULY/3f4UrneVLUqn92YaBu0YnGQW9F8CjhuWOE7C8Lq4mWN+/wAIpUqpUhVTdXRidZSGthb/APFIIwYR9GLn5ljHvbzvW02ZUwJ8lJwwnvW0PNbTfNVePNNaM2KiCkRNZVDAOgcDRRYZp7zSvliN3rq4zTjb73HRT4HIuxO4BZXtDeE1tDzQbOQ3lSERg8V7Vqm6M3kvahZYjT46bqlV8oUmrqYZzPueAX8KGCPdVitlRA9tWibTw1GneCnDv0WcUJQiJaLIEQ3ndQIOjZB91hY2Q1KdtsqlcV7WIBw3LC7EQqPi+a9/zVneas5SLCrxfqWWJHHJ6pGj+LgqueeZVpqeEakStjJVYXHmg2GxoCoZeCrFieC/uk94Kq132VZfV/hVe37lSL/9KriPkth31L2U+ZK9hD+lUhtHhqX1Jo4WEN49qqqDsj4rsczWU1SGTzcUcMJviJqjQOQ19l2vlupykVnEtQx+j0HvBAm/wSj2nx9XLhTUtpupsd4FbVVnM/VUOmTbTn2UMHqtqfKqyQnHmvdas8b/AFSWEye/gpYBLuCELq3PZ/t9TdO+Gf8ADxcMVu75lh6R0ch34VmbGb+hf3fpWWFGPgFl6JEPMqnRAOb1JkGDPxKlFjAv+WE3/wBqsAu73rDD6ti9rRN9K6p4oEOf9U05+FznuU45r8rf5WFjQ0d2plV1dcdPh2Ilxk0XRb0XK35jcqfXF/c5YhlcLjs83DA75gj6QvkaVRhOe8PcfdU5tYPxLN0po5TWfpLj4Kr4hWy4/qVIAXsG+CnBcPyuWSE4HzC9K9rApvJiHvWFjQ1vdq1WAekicBuWVwhj8IX/ADDlLpLZj5moPhuxNO/Q3sX9JDNG7aqVO4TYgtvHEKluyA7yrg/qThhuJXRB2kXuZN/ukia/wVdv3W03zU2q+jZVgrq+uej9HNfecP20VcFQz0SPsnXCBFim8+wvin3BNEnadUlYnu6tvfdTOZpVLFQh+GXZHQwZBjVtNI71Yea2Vv0b1vQY/wBn+yxDWGrJp9I+g7liKpQLI0u5BZmubzCrfQYTjWHbkhz7CyH87v2T3yxYBOXFBzdskBHo+DEXDMnQzdjkzsnSH8XyTtNDqiBEOU21p8NV7vdFGqSY6PZ2y3iukG2GjE+JFzz3LrWbO8cEHJg3Py+rOm+i2jDuY2SBMTC7FQcUZZgXT5LretxxIm+VkKzxgJo7lM7+xvAcJYjQogsI9T1Tznb99XFENE06Yr98pDRm2RV3JQ4sPZLaKE9oniNVDbIdYU/rasNCSnwjuooZ4OCPq76bq89ESJ8xQwuAc0mh3poc7MRs3WdnVRm1MlCaLUXerq6uPW3V1db094xYS496pL9Jkv5GiWsHtuE143jTmNeCm7ZFgmd1NMNnzOnoiOj7LsiEODEoDNpumwoYxV38F6WIT1Yq3chCgRQyW6S5gJv5tbaCvNbLvJW+691bX2W2VWIPqXHwmqftJUa53iiGw5TpOehznMxluZq6TEi0L9mah9JEgWszArGNltfUXK2ltK6urlXOs93cpKrQqE6ttIYxs3FNht90SUyj1JDW7iTUqeFziqdHd5INftGvLTCbwbocGSmHzryTYbWxGnesL4ge95nJPh1Y5rqnvTS0h7UBwaFDH4xo2/squd5qrh9S936Zqk/2UmifNyoGDxXtGDkFm6Q7wCq+I79S9nPmsrGDw0Vb9kXuaQTwKczdu0Ai4RBiyxXB3BOZCdMuoTwTopu+3JX7GWPsVlc9qyRGu50Xsp8qrNDePDVzOl+maEKA9zhvJoAsLLm7uOmjGjwV9Vv5ND4bYphGYdNdXjMSIv66LPrWzATekMNWXlvTDjqLz3p79002M2GXSrZTiSh9wCm973eKn1YPNUyju1JE+ouuDxYrO2XforIoFwww1ICQHaczWnmFJobDfuICzMJHEVGl3o8WLvVIDgOJKvo2PutlMmyjjKc7IvZ1b5bsS9gPqRjiGyQ3LrHNApKmhr+F+SxvijqtqYufFNbDbha6jQmwX/3ASuqgbTggdza6L6JA619SwW5XV1aqm8TXs2rYb5KnadyurqTSWjUo4qt9STmh3NbEuRVHOC6u4Ut27TgewRIZ907k10Qvm2zZLJDzCznKZqSpbzfRfRZbOi6qrKytp3K3qJaLdltpvrimjfqb1IjUo4hbyVOR02Vlb4YVvVDostlbK2ULqysrau9b1sfdeyaqMAVlb4vZW/61t/2Nf//EACsQAAMAAAUCBQQDAQEAAAAAAAABERAhMUFRYXEggZGhsUDB0fAw4fFQYP/aAAgBAQABPyEQn1YAA/5CeJ4QhCEJ4oT6EG4JiQhCEIT/AMAAAB8AAAAAAIQhCEIQhMEwT6IAAD/mABEF9IAAAQhCEIQhCEIQhCEwQhCYk/mAAP8AmAAF/AAQhCEIQhCEIQmEIQhCEIQhCEIQhCEIQhCExIQhCEIQn8IBBYEJiQhCEIQhCEIQhCEJ44QmMIQhCEIQhCEIQhCEIQhCEIQhCEIQgkJEIJEIQhCEIQhCEIQmE+jnhhCYQhCEIQhCEIQhCEIQhCEIQhCEIQhCE8MIT+OfxT+GEIQhCEGiEIQhCEIQhCEITCEJ/wBCEIQhCEIQhCEJ4J/2J44Qn/YWgZifvE3hCZr7RbwLevqJGy9RceAV/THTeh8AJG5Pq+D9E+xxq9gtAn2iQqexpiGoNRfyz/6Oi6LliXVxZD32qx8OEOxWJJEto+U36maPmnhHYnE6Js5jRIz1E/gPEFuCd9/ZGqN+vtrN5kc230l7ulvsT4OR37ciZuNZattmvwVVvDKTs0XdT5z4ho75e3dQ3ZZpa3z/AAFp9n2PyLCGiadQ/wAnn/zIopOpoihmqsNdOwfemWbEb19kn1wJYJJmNruOozTYZ0LMwpZG2Zfg6jICvRfAiYVeRpiK1Giv5l9zmaj7Ma4hNCmiMtjVh71GTbzhDZvDRfrkpoIuchWuToNNo1H/AMhxKiS5Zl2fqKG3QZZaudhR2jjYydCd9kJKl1QoiaHhh9giovwHHPq0W8zj8mGGsjvsdzaozYWUM02TJta+0Fy09UJSTWSNrVkw6jiTDDcJ7WOk5nlHqLkVbaIqc/Uacrn/AI2W/ZDX1HwQS2E6t8bG0RkqrauRSkJJbY0DGq5N4O72GsBvV8moqxe7jt8k2Fz/ALNB+rGVj8Z1yLVcGQe6kf4wS0Ill73RCzekEt6N60vn8hSEebbSeBCMUNnT8wZOewR6kOKNmQyajNdo/wCHlR5fMrtxJ8hLJGb7RrzHsKYTsGvXy3RpHq2TM/0I9jXhB8x1kJ+0VZV2ZmpefqTRl7sciDQtfyMVkjnCDzTiHCTHp7hYS3eshLoLjL9UQ5oFjaV+Rw6kVTr11EQnMoxJ1UIrVdjLnlVHwPjbr/gR1vn7iWGzDFqv1q3gT7CErkNVcbGvZBuYxnt+B48u9p/BfV/v2G7VpStPWX4KTuqcfqhvdj++g7/eexJqnI+UZw1YJO/zGSGtlqSSpdjYJs0JJGqDI+RSeQSF5BopTZHaqOTHJ/YT11b/AHBpw7tfub2vf8Qn9j9xC2drhfkxZh2dvwMgeoXwLVJ3L7mj+kZ7RSiSWiSKUz5NKM9ml3K1q0/IW9nklRsJmVsWav1GnrzENVElsDN4J4qJ5I4KegfcHtKDbhZfGE/i1ylX0GQgvTv6KJ/QxC7+G9G30HMe0JWsXmPmO4dhXGBnjqc49xiZeFltTxTbFyL1k7dewo+U0/ptJ0NYzfjIiYRg0TNwR+kKJW9G+2RaQhCEwSoy23hWbbRsmJeHgdJHXG3ce82gy7ROyMw18IbeKCCG+4vcembo9BpXGyOPpeoGvYWSiwuCWFwaJW4uo0kvx+I96GQeyT2vyIn43wFy7z1MYavshL1M/S4zfn4ErELwMcgfMFvcJjXguFx2E8lhSlLhkG2x1RJ3jFz+ksvgSktyp1kvGepPcat57Mzzu39ho0r9dSH6p5nxmEfr79BIb3RULMjo15hmbqRflj3nvgYTOtzhUI5jCLKxyq7G7A6WbS6sTPej5/A6NRQm61L5PJjQrcQzRPNj1Dkt/qJZNx1EJ14GPJOv6+fFSlKUbIUpSiKJqq1nojKa9q/gF10N8xMmQe3VS/SKlEoVQyRYmcNLYc6hG1f+HRlG0b8j26DHxUPyHpfYsyrW6j5vtk1DrSZmGS4fuiF6UaYQuj1n7IndQ0XoIiS2SYXAtZhjm7DJkW/l3MZulvuMsK94xNV4iNeQhpoEIj5yxuFKUpSjZexSlxbI5cplu+Ci0CYdxD7XD+YFqbVlUzf6Nax52SFqOy/oWydtAyhWSS6bDJqMsgL8jGrXmX+eD5L9/cXVyOsJa3ZO3uHtoGzh2HqGfmai+A2D2m6Nt0DnL1Hocxu12DZsxUa2ztdRydRUxsz9ZFKUpSlKUbyNDtisdAVscvYZxXsTmqpJ5Lm0yGCnrml8oSnqUO2zrS12N19HW8JdRI8m4Qe0/sOUH0oXk8BdHoH8Oss/3kJTamUpSlMg58A2z7etbsyhyYE0z7x7noiCTpYjgxl8d6g/oClKUpSlw1OwsiEEJg0RH3nZ9v7QflM/rFov3gqO2+a20YDN3Zh6KF6DS+j/AEZkLr8C0wa6K5MWg3wa41GbIDvboWqrQpS4IlyUpSjzGIXn+Ui8TQeNR8+a+goSSyhKLP8A0yieRMrf1kNOfr3+BEs10Y+xkNhvcvkpSlLhBBD0ISwadUGrlj4+sZqJavJeZ5i4msNszXuaNsreiDejaN9B9BGRJpvn9h1ZA5mQ9n0VKiKmXc9mNd+1Ks0LHzCPBmLWnm6uHOFHOCySaMtWKQOpouE8c9aeRlQsJpnXRqPWyL4qfqMhrolzhlBmmnonqMPX/sA3e5hif/UOFwgggkQ3RHcabIu6LIbw23q8HrEXdlNE7My7vIdzy12GvxmdMyQ48+hFFnmb0CDZCLZxDMM3yawXSn+0LkWClKUpSlwTyjp/UaNo/wDAVieg6R3KJd0NJ2W/RkxtrTQdq9TICnnhOhOh6nqZZzb3NN5TxCr6ZNWKCpuehn3Va8sseuY3kv7NRAbKz6cmtUQeToKFwib27izeZQ4nmJkm+jUuglseo/fQTIXD5HmmuSiJWxXAhqvzNg3Ymz9EfJXT3Ubcr5t/YY1Gvl/caavZX2PlYa6TtYrc08gZzyAZN/dNAhflGHD0f2FzSp8CV9tDOEMxqigtKiThKIUwQdg6KOgStKvM4PWKmjYbofQ6sz/mK/swRwSQRELyahd3kZSySKOY5Rst5i+6fkN1sidCPgjE6CTeibPgfDqzU8kVyJzMiSrZtr72C2M3Pt9T3MNiHdmyXLYbKdQh+r/rC2X3bg8SNi/UP7toPRcIeuyQhS/cIa3dZP0OKwHVz5BOstzZXaD5wIvsfIN39zUquwa0TskFTDdBD9y7s3fdrF8AqF77GE53M7mfEpFlk0Nly33odAmvKQzbTrcrB+OZVdOxJ6y0rVsQVCDRDT9k9gliORNdRJ1IO4vXwRk6k6iWPkeWF2uk4Ks170zjpyDXnXrQ9310axonJ5xl1e1RBhL5kE0XUtf6GxCi2F7B1Q07EbLMdjZSyuE+WNGRHkputH9iXSt38zQt2ZUcSXYigdmyQI8iupWBFbNk7Ida3hVGZVPbMe42kOpfMu5DOuwyDXq6UUMSsV6i2oNzgaF/mdQvLM6wgKWa/wAoOs1PR6igTQshyMxaj69hKZhEhHB5xdRl3E/JRA+ojwxcyMKsKScFJW5GCkDfU9iJZCNbN64QjlLUvoQq8wnVDEbmeVXsRz9TIyz8zoP32EN/kbqSAZJBdFvACtmI7dhThiAtTj3IvO4Qy1bRGU+R6c7HW/vJqGOl0KF0zm3UoiucOByEbiLMmwDzeHAhP4EgHpZfBot8jlDAM8BrUs3Z4APWon9ENOV5B0qy4pmJ0sHfiQPRJiQRhSlZeh2YWpIS3EhmyHwJ5j4nkU22fmPn0IZmdebIQdLJcNkRZRHU4mvUnmkizhDPX5oM/nDOV59u9Gs1626YpXmRjsIrETQijwGSi6IZHvfE4b1Mg82o4+J1j8jf7wR0Ac1G+MY7hTCG1CVcCbZBOjndDsKlovjAitCODWHlcHYTBMEPXCPl49FZmZjTZWC9uK9R2FqeaRR3UoOK0jzIJYxsqPbrPodBnV8xK1fuNB3Bs/uWXa2z0GjTNFFB7bDHmza8xQmt2GNacFi2w2ZgUrYTNhKEcpiXA7RVsZBdQnKG4gJ0Euwk0FrIJhMzwzwngy8OTAw4txtwJ3OgPeFaUNIg6HOiGjo+YGncdaIPUIKZCm8tvEwMcDerE+7FvjnKnY3F+Ypy7saN5ip7bCgjjmV2h0rGQiCC6BdOHsEy2I+MIjIhDVoJZaC0JmdBU1K5O4vRgjgqL4JhOS9CCRMEciJKih9gwtZkkMjgjgngodPBRsOxHkJO3DWGBAk4FJEH0nkEhAgoIJfE2HkZcGR5GXA5wOugZTUTWG+hoFhni+gkqKUgkjgpfCxRxFWNXJejN9WZ3B3CSFwGIOw7MC6RlBBIaQSyGqtRM8xMyn0NRGMkQjI8FfBfBBozDIyHOBs9BXgTZbhmXFpmYy4aMyMmGRSlQ2AylRlx4KLMQWBBPB2YqCx4kZPAUgmYmeLIiMiE8dwqKjOZGRBcxCKUuFKXBcaiytmZMHoZWU7nYjIQnUSMwSQkwNEITFc8GEy5TGLqQJ5fQMQPJlPM164LNPG8axM88JjRsWvDEtjLg8idCdBBIWBFKUosIL4GcxiiZ6CwqKXw0pfHTAilMEvBcLjWLwlixr8C+hBbi8BmrFi/kWC8G5t4NsN34f/aAAwDAQACAAMAAAAQ+umeSem2CKWuO26mySKEeyWeKaaGCy+yKem+uOyqCuaWWqWy+aqqeyCiuOKiqqe66aqqm+OCGGeeiWquqaKC+WaKu+yCKWeWS6yuuSieiC6yuOuqSC+SW2S2aaGSG+qGeeSCCquSu+SiSuC+iW+6iWiKq+yueG+CCW62SiC6CqS+GKCm6uayyyGOyWmma63O8Fjnh8064+mmWCyyyymeCO+++OSmW+X1jdua5g8RsGfu86OiKyyyyG2WeiO+yCSWIAFNh7RaWZxCHqCz+ZUKCSGGWoW++6OE9/X6r48GIC9v30kL2i6r+WsCCyCWuCwGWnqQcQccQq2uqOS2Oeq6uGy7e9KKAEK+m6qtzDnF9L5OGCGiae2+uOuiG+TOpy+equWiaYzDnLiK+Pey/wCxSpgvouIkmk3D2bjjjmpitlKsloi81nJwaYUTNHLFGKBfF3DwBDnjvOlMGNX8YdWCJCIW4zaDrpknqk4c+R+2669MjlVb9b7l4ARWCKR89BgsfHllupkmNHANNOt6PNPBCQYcceqkuXT9kYqORxfaZnrjPOBynisNkJKGeHsssqgMbSw3TYUYQQywh4ExJovhhIPBDjNIbaRQXwlAPOGv9Wx5FMCLcSiOrsxhQZXHpPpAxLRhsXqjr7ImrimqrjoVStmiq/gYXAIIY3AH/oonvnvo/InngovvgvonvoPvnv/EACERAAMAAgICAgMAAAAAAAAAAAABERBAIDAxUSFQQWFw/9oACAEDAQE/EP59Vilw3CBUUq1/Ax+gr5ZSiQ4LcJxjz5KbGLyJ0mm/QbZGxQQgvbED9MMfyhQ6NUSeJ3QmYTlMQggnJ83Rvx6Hub8dc5L5cQkqaLNuvQVL6vI163fcP6N9s039VcwhCEITShOiacJswhCE71sXjeDKLsuKJ6TJwvYtdZ//xAAdEQADAAMBAQEBAAAAAAAAAAAAAREQIDAhQDFw/9oACAECAQE/EPjn8umEiEIel+e4uWJEJtfnmLBIohS7XvSlKXa5vBmvUL1X4X56xlG+FcromioqI6/BLE+FcX9S4sQ/hpcUXWM90bJwpS7LF1maXFKUvPzP4UpSlLvS63Rnp6R7Uu06wmaUpSlLrCaUpcvlS7QhCYhCEwkQmZiD2uIQhCEIQmWhdr1XBfL/AP/EACkQAQACAQMEAgIDAQEBAQAAAAEAESExQVEQYXGBkaGxwSDR8DDhQPH/2gAIAQEAAT8Qjxj0n+AMMPQY8J4zxjLL2R7I9kYYYYYYe2Li4oiJMxiRIIkYeoIICBAgQGCg4OEnbCSTshB2wgg7IdIgggkg/k/4/wAJ4R7I9R4Rhh7Ohllll7Yy9keyPZGHsj2x7Yywwwwww9WQQQQQQdkJJJO2HbCSSSSTpnZDs6ToEGUP4nf+H8/wrw/kBhh7Iww9ke2MvbHtnYjD2R7Iy9k8I9sev8IdvT2Z2YSSdsO2HbCCSCSDshB2dB2dTw6PH/vwvv8ADX+HMMsPQYYYYYeyMMMPQMPQ8Ojw6TthJSEEHQEEEEEEEEnbDt650zpn8bV/2AG+P8G9e9Nlllhhllllllll/wCMAOkIO2EkEEkkknbCSSTr/D+YFSpUqVK/gKldGj+YD0HqGWGWGWWWWWWWWfH/AJf0JJ7MJJJJOmSdA/mAroqVKlSpUqBKlSpUqVKgSpXRUqVE/gKjDhGGGGGGWWGkf+KvJJIIIIIIIIOgdRUCVK/gKlSpUqVKlSpXRUqVKlSpUqV0VKlRJUSVKjDDDDDDD0DDl/IGrqEEEEEEBCCCKgSpUqVKlSpUqVKlSpUqVKlSoEqVKeJUqVKlSpUqVKlSokqV0SJEiRIkYYYYYIP5gCCAgQIQECBAlSpUqVKlSpUqVKlSpXSpXSugSpXSpUqVKlSpXWpUqVKlRJUSJEiRIkSJ0BAlSpRK6hAQJUCBAgQIEqVCBKlSpUrrUqVK6BK6VKlfwqV1qVEldGVKldKjEiRiRIFZXYiNHsxNSfdc/WMb9eKIDc8zqntkX98pLweCKLKPCd/hH/pHdjlLu7+6W6L4gKPZLLfkjNccCfhZUhbIP1Pulsmt45/olI0iPDCHQISpUCVKgdKlSpUqV0CaSulf8qlTTpvE6JKidGMZZvrlKIwsDep8sYSp0X+hDqCm+J83OQ6nkBoAii5y+KNAehmnT0t30tHxAMp8sC2y7ZDAXhQV/FWpF9jRLrjdfJ3qWe3QqvtgPKorsbWy+0yp/mewg7CV+iYNQC6727Q6jaRHFyJqjbK3yFMwOtAz5PqhEDiEKNWVfcYw9Ux/AD4huOu+/czzDYZGEOtQ6VK6V1qVKldKlfyr/jWf4seq7otVfjmEIbPB8Rn7KogJ9UPcFBJ0y0K2qQgP3t+YazwoZXld3uwSWGkyGqbBHzBZeeDQOXtKjzZVAGvgI0tKW0d6f7j2Na96TFdn9jnxPE+YGaa9RFkfwRM6I0jPveDP/FLUFqjp/wCD+JSx8MRUZmqupZv+Ieuw6+g5+4ZRG1Xk3PuNmU1GjZOauhmUjZxHn7neKvO56eogUGz0If8ALbpX/wAb/B6JYHqlEEQEbOPR/cZA51xKO3KwPcCM9If3FDFZrX90PcjDPriLQIFLvMF1VylLxqxwLRVssZGVdDyzGjS1q61V2IFK7jRj8Q2N9eCY++ybmgcBxHwBINZYmtYLBrB09mNnBnmd/i5psVfs/cG8V1wMOdoNy5ik4NXy8ENsvBFH1rK8PDHWboH/AJe28bgWlaDc4e3xKqc7DUmVHCIdalSv4V/8ly+j0voCtGWW7nbcP7jRYtBof1FvGBoeWATsno/uBQGg4xUaj1Og/wDmFRagFB0uPR6jLRKk9YUkNRXQ5f6h27IfV8sLJAV09na68jgzQYZq0jag0i59CC/1OOEhtPcUHmzb7hF9wD9ykx/q7wRRuU/3D5z2N3Grl14iuRQWcVhPqZ7XApUa5Jq9SFRy8FNAX9xkMQXFCpdO33UVIAfY1HctPiZkKGow0z+GMdyZoMWuz+YiqEdmLY13HEOh/wAk6sP+d4630Zl0Lj6XYDNu7ofntFWlAN3wsXBWk7DMZSDCAC3MNAux/dKvXf5VDCDKlPmj6gwKQ5AfiduCJfibM/MclXeYnezWsCUrwVPxKcPeyr2NvcH3bW25OV3Yqk+ZS2qOEs7FvEw+hgsV2qUyZiVpWiRRyvLFSyBz9gnXh4apO8HLM2siGgHiGKgd8yh0p4aXcTRRjwv9pX77IzjOkNK4ohdZXuPmfk8hCsGZrL8RK+oV422hdpmoTgMntb2gh9lrK+VqvmU422lRS0DyYhC0OHWUmEyf8nrj/i/wuXxmaYRy4mq7IZmsHkcRwbFuB2tSJxywmvts9SkI13YIS5/qQp8sH9TQR7PzBWg5CG+AY8HZmJFuX8H4hxbcxPysadQiL9AEwqri7FSK2PkrvHEHx/4gdZ+JgLn2zRIPwMP0vuBLu0f0IUaaa8Jcq1/xJEck2N+jKU68sHzJV/4N3v1EB7Vf8eZQ0vEQYbbeGfZEpvq2m8V+MCKHUdR8Jm/8E5hbFeX8gg2h8f8ABMD4AqX3WIC1qX5HgNx4RoHMIuGiTtT9ymc5OtBEKPQ2eLDSIAIjkT+RHqf9LlzI1HLBM+74MEKofAlajDlKyiVKlSraMvaD648w3kwHZ7lTB8EUaoO8Nz+M0RQPS48U7iFlhUSteGFZa1a95brcsVfhI82gbJnjKAT/AEDglkyvmUSiYllxI0cALY/JqtpBxaGaoxXL1ENlE7P5jtAinB6gXeNAxyO0DLDCW360jNugKzEWE3jpmOE3B9g+xtr4M6QRph1/4v8Awvpc2jEfslGjzQt104gBAlQT2gDWdiUNiNrQV3huNwoKIwSHK0QkjuBQP3NWS4IjFB2illvzC0JDxExEoliVcNmsmXBp9JKAy4q5Y1PBA6JLunyYvoEX4eCap8kqJ7qnew4ZZCGwQofesA0sIB93+oNhly5cuXKrdQiaIRW12SkCDI5qoxQ0jhGXHMG22x26bf8AwMuXBuELLNaa/wBe4QgAMUQZ5Qb0m6vqFGnRcaiDVVBHAI2FfkT4bUH6uXKc9k+VX1CFYNyh8TTktLLXLea76Rob2rC8rMVo/i6XKqvsc8TQW/4QxYgTY08R+vyRKCu/yj9TJKgQahF9C2SjiXkHE+KJc1dDBAwAVaCGwQ7sLLQnCQ3gakoYVHV/6X0vpcxOtLaLo5gxdg7IXfDwxpLWwqxf74ZWYpe38kaS8JPzCHI+CKL2r9IMCp/iuE0G9tn0/cDcX52clvivMSWupafZB7XXbCgdys9oAi7QMvO0fL/Mei6DHf8AMB01ShALS93/AGJgaYsF6CYHy4olLdOQ/wCP/UPB3EPLy92Wuyvy8wfgHPiMxhuyxRD/ABiMfTagqwXynoyRbDHJKx+V/SQsuXLl/wAQZ+EOl65dKHJN0BlVglj0q9wDgffiXUjhH7B6jcjqsuu52gidWOZ5/jfW4sP+FzKgZWUkpXViqomKD5NGUM9SlqBbLM4dCZOAn2lC70cl1jaU8m5EnNBT3GSi3PyNRNL+4Z+VhBd7zDycaD4cNBGjLN1v5iHP8A9jC3isJ9F+T3EdkVhrurVeYtXzawj6PslAf/8AyGX2s0GgEHwQYVICLnPgmWif58y8zGSCfX4LfEtpuhVPkfxKdYOlT4SOvuHzk6H1UMSNt/1MybrvHTc/gv8AUWXGL/kBj4118oMGUxf9ico1x9jV7vaFYEX4POV5gBwS7CaPjSV1KNuJYzUeely/+J0uX0vppUoTSxUtdwMfMXUgGzYl2F7xJLnBZQsnNnPMaW91GuoDhO/FVEsTwokqq+T9EatjjFX6EOkX8kuuT1M2v8RHUfML/cM/UwJ91yiE3/CtC7iWuhoRKA57K3Xnl9Evgw6pmA4ZdypfZVKoUe8GOgR+KEXMBojvPCPyUYZf5cPfKU9osXZMwG8QMCLiVTIBeAe1CWgZbVVtmf5NWFSpoO15lAFBSVe21HXEi3bt6lo+rkiv1BEt16jLly4S49T+DGMLtzxLpYMRCpGWwH+7xnyxf3GzY+Mw76napm/bPD4sQdTs3iEzWLX3H5HsgaTiI30EEEMIW3J9RzjD3Sgy1j4depr+huju9oF1Uy51e8yH2DFxoGaiV+CKlsuP3JK3AaO/mKNYxF7mNnLpfDZ7JWvH5q/cYer19fVrLYM3dG9ESAQhMQEWbU0+c35fCOEBL0BfyF+0ZcuhaNQ+WotZagulYB4y9sMF9aA8i194Zcg2a/bLENhl/jcvpfUl/wAGLDDMt5VD2P8AbPaM0K6Ju2x1OIfggZQqWt4wuu+218+3HxAglrIwgll7pQ7kYLgmRjLKVEKvMi6r9tvuJpA22mX+5af7DQ38avW6uihSBx+EBm8V49KruiOkFYDlcO+zswwg2EwEdwLLPsJidn+kYZ8+sWwcV6Ie5+IAYigZxNHXuaY+Am18yakDgJmU8KyPyfEeYboKAWDqSSNqU5d8hRC+2jVbQ1hgy6y1d7FaXF6NoFVvUPPZcCHS7ly4dL/4MY8oPtSFDv2R7MfloIP7I6AvNXAgz8ywUmMZjetkrlCuqM8R5uBU0as+Dy2fTvFmEDdBN41F0ILR2CVBBpNzZ+IyvePaRdNdE+rX1BQZzKrkeBm+WD3KpTANX9DjWClaOlZY+You934bPrBLICYUZ2B+CNKra81o+8fMxPL/AKz0lPwxhYJivREI6kPceY8EFqvlqYCZHeb0PGJqA+Xp9VwQZTnGb6iSk8HU8xSNmWcsfVQD9A1KcPJUomJVks20ZwcQYHMdXrNt4StyNQWtmaFXbtCwPJuPHEGdvkSC/vYNp8SLbG8MC7kDevXrESsrzAykT1D3EtR9Jq3rgeXhMA9a1eBFGJWzG1LdRvWJ5NranzJ6v85qM83wj9Qd5uDK7X7nk+Ydz5hg0Hu5d7RZKZk6Nx7JiWeUm+5cMvMuNY0Co3fiP2zOxphB5Xd7xrG2ZuX6BFi5jBNUjk/ujHAqU62Kqqxd1poZht3ACDrczVO/aGHSZjcOdfE1kSRddGmul0wNFgr8pdNecscESxqraqKuwfwg7MSEI1WptExI0B3mJ8ySf5HPYY8U8r9U7bwv4Wf52fD8xoGPP+X9ZeNT1flMOZ4r+hInuvV3+WGXoPH8yo4Deh+2CEVo1sVYBrMa8VB3PZsNhtou9qlIcyKQaDUS05zBUO0RWn3Qv1DXsYKCxe1GUkLcSwxXxFdvhFG5A6U8MEZ7mFKtD7w/KeZRu+CBaJ5i/X1gR3n+EG1Ty4B1t8twv0X4gWx8TsTtEupar6H2wwwiCq12qfqGmt4yIu35ka1C3D56XvJYcs9z6JMxyCMZwN02CWkcedQZfbLPnI0AysYwqhXugunkuWKQzZTFDHf8OCU7k+swVbfB8vQMpnPFH6I2GMdep6rQodnO8QSSBwqtV1HeB95hxAUOtBmtJdh0tWwreBjeobJKuqzuv0sDTKcvnL+4h+a316QFoVkKJ7dvUywvD/X7Rmv8OwQAU76fZGYwY/2KRZ5nz8wURHdn6COgH/BbHMgdv1MfvsRD4KgtDUz/ACsPBU4/qmATGgVKx4OjftsS7FURbjlLd0fj7INeYaw5CbK7JZLIh6igOO9t53uVJjVxCqHlA8QDYov1Nz2/iAqRbwyqrDNkekA8J3IDhArjI2JaEzw+pV6PyzJh6Gn+kUq36gSuj2nqFlcFzMNmZ5eCp+ElyJ5S+rJdo7f6wb+oyip/oqUEWnZi7Ro5NdpkVYe8p6DlL5WLVVEoXlBofay+8BXz/rgflhJqZVQwSk5meqv9QQ3BuBhsXf1EdrAjqiSm7Ce4CIWStCFGu7MDaqABe+kO2sYq2GsCkPJxFvUirLu1uNfcXauENi+/fzK0lI9nAfRNZWnBtkiC8Yt/NbV4qWGLUUK8ARJJF3Z+ZQ+TR/SiOXybmBpKlMTCoaWcy9SxiMDjsETc7zH628RTuHhiRaYzUkDi45xbzBEtF2icu34i0ONALfgYlzGJXDZVGoGRNlUngfuVOABoBoSoXnzCmfyj4yg1j5wJpfU7cCeCDYB8TcfFLC6D2gmMSwMj8Q4qlDlz4nAzwLC2pXuUvT7nATvSjzK8xDFstNcC1XuHzFtoUMLwDU+yMuNHZ7NPdRVWo2SV7fCAe6I1V40bMwKSuil+XgjVhTygWyfCz9Qtzq5zYrFL/wB4lS6xNTRlKzr9QYFiF4RUE2zyf1FLkoQBpb98QIZlZShXfzMNUx2thNUx8NfUGi0gsgDY7FCy6LBBnOyHNuHOYCNeK9gr4fqFKI0eAmabYaPfEDeshYpofMsVY4YMHqNFopDJABy1HNBeSNS2UxFHCGeIz1pOcXMEd8JAOSuIubGuMA4Vd3/2U9+zMJC6OCN0h4xHVXbiy2AVpcvB4CaPUtfktK9Y5IWE/E+IhMzviBaQB3hXSKf4gWJbnxE1dWb4lZTSooZLmbJUa5+Yk3+pq3+JQ6fUtvKzZ8xBj8QRnHuOjQgWUQLCvuVs698TQiIaWjD0vcUmnzmW33Euyjarax6ApW7hICobc3jUbabusw4UIFks4hsAh3zGKDf8i5gn3wPxBZe0dU1YmQaPd/2INlRl2jlTWtScv9RY+VoC/TnBpxLGUKNxtNR+CPDDK1f9xKwOkDXiIJv5T+oypPCpsW2dDV4qaGjzGCwj9VkuZUKtkb5idjuYWZw1NE+RGsB8ysKIRkL2YUzrBC06jGA0sPUQaaPUHLbMUuqsCtA7wtMiAUn0e4CsyvL8w24fce6J5iJpGV1SOqpLGn5luSBYF9xu5i8n5i+kyX6i+uI6a/EuKHxNHuKlZOWVsT4zELrc5iAbfQY1asVc1b4ldoDFeakzhF3RHUs61EEoPIJt7XaLaqt3FuNVU/c1xXa830QnJckZx8Wsx1w8RlhhyCMPYUFTjyyoD5mbY9wTSnlhefdAymZqT6Q0w+JjKwLTD2qEMKe4bg/cW6ONqg6V/wCQTsYy1MtkCREpfzOQp5lDioy8k4R9wVyYhaGYGDjmaArtcqEfcuKpUQmEuJcrKlvJL5qXyIWdcyhnWUIA2Jr0jhdYgA3Hgp6mSiDmMGS0LHJ8MyAoyuocTXBTUj5wXvKfyIk1+kvKMbveJU/ohRBZjz7LhuH3P25Y7kHmasH1EMXxK0K2v5j33JU5b/3ia6v928TPa/agNFdmHumAOxvcLfHdgkr2MCHfxKOpBvM2CkpaAmTRKXRAbzLS0UgJxSA1lZmlLmU2uOOjNchmwD3A2EPmW1FxKyVAxSYDWRMD+soNVC42aYnIpdoJC/FeYouT7lEoN4JLgIbRVcRwQd8Bs1nt5iUywLURQm4RaIbvDrYkp6KyjFBfacS5vT5sS1NQ1ATzJ2HxAio24vMy1ID2GFzAJa6gWtEqGc+IJNBTNQD3EGQqUaIScO8auSkc0Be8xVco0r4gq7p7SrrmI2PiA4IHmpY0YPj7gjZgzUgEVyQ7PmWVvl7JQHKXGWEYJgDlit6fcHfDaYjpLuXe77lCU1mLQqacEABtDiSXGlSuz6uWdGJbQTOWXaap4DLaUQ8/UDXWe/uMUEyC5ayxDFN+JdaAe5Y6v3Edz4menwSls+DaBtYrWVvKQJu9E7p8ygKE5YL/AOwI62XTRKuhAC20MboluRD1MuVZUaMUVq4HbEsKTKtHrVa7QAZgZZVhyMDeF9yw4zOQqdmYoYnmgDRWG+vUMNH4l261D5g21VS/E7MItYeoPYw8CIO6DohVKpCpZKqkr3KNl+ZY3WWvLFKuyWbRGgRRqPUu2omW5UwakEuuOJQb9FOfuVvXEU3IFP5lB5lN6YhzUSMwWXb3BFxLraXe0KOC6mbaJWRqY9PmArX4hf8A3ANPhDhF3CJBbRU1Kj6j8wKMH3LqW1KGr9RLKZlhSLCFQL4hV1ICtZXMrh0K5xDo1KBPMsNujp0utpTiWBd1O8R5iEF4+Y0UoZWwYjZYrrmBUTc0YnZGLxrEcS94I2miPcSo4GNjGsX/APJk1lzWWnNwwpWHY9wNr0lVinQjl0ErlDcuB3GHwgD/AMTLuwqLH7TjSptMukOcwcQp7zKxXO82rMNvmWGo1CqBvnxNpdTFVBOYFfCWJm2+YVNemsEnoYNy+JeJcOmPEuXFiXsQG5HGBlKqzNUBWAmpBrf5gZ0urnbpeIpekslnNRG2ZmW75lG1+Ymq0cQrb7Qp0IX1fuBW8Go8Jg1lq6R8mGsmq5mzakBuojsGeAhXmEuWvaJxmWCOXTm6TM0lDN1RruFjSTIcV6gI4Ug7k7sENpZlmAjRBpiWU3KDSA26Bom0elpqhbSpbvL7S56ldoglQFRrFkpd+mTE4JXeaS3WAiktWYpWst2YhpU1M2ZxNENJqjHVn4prTaOkNCaujrOYaHiapqhpDTow16Hbz01k3OhoYaoaQ0mpmn5hCaZom83hrNoR0jqR26unQzVGM5j0CbR0Y6uh936jOfM2m8//2Q==' },
@@ -2578,9 +2616,7 @@ function SEED_ORCAMENTOS(){
 let atual = null;
 let filtro = 'Todos';
 let enviarPendente = null;   // id do or\u00E7amento em reenvio
-let FILA_ENVIOS  = [];       // mensagens criadas sem liga\u00E7\u00E3o, \u00E0 espera de abrir o WhatsApp
-let DEMO_OFFLINE = false;    // simula\u00E7\u00E3o de falta de rede (\u00FAtil em demonstra\u00E7\u00E3o)
-let AVISO_OFFLINE = false;   // R86: aviso de offline mostrado uma vez
+let AVISO_OFFLINE = false;   // R97: aviso de falta de rede mostrado uma vez
 let fotos = [];
 let videos = [];              // v\u00EDdeos do modelo (MP4), no m\u00E1ximo 2
 const MAX_FOTOS  = 6;
@@ -4135,6 +4171,7 @@ preview.addEventListener('click', e => {
 });
 
 function abrirNovoModelo(){
+  if (!exigeRede()) return;   /* R97: criar registos exige internet */
   document.getElementById('fMarca').value = '';
   document.getElementById('fModelo').value = '';
   document.getElementById('fAno').value = '';
@@ -4176,6 +4213,7 @@ function mascaraZap(valor){
 });
 
 document.getElementById('btnGuardarModelo').addEventListener('click', () => {
+  if (!exigeRede()) return;   /* R97: sem internet nao se guarda nada */
   // marca agora \u00E9 texto livre; normaliza espa\u00E7os e aplica capitaliza\u00E7\u00E3o
   const marcaEl = document.getElementById('fMarca');
   const marcaRaw = marcaEl.value.trim().replace(/\s+/g, ' ');
@@ -4274,11 +4312,6 @@ function apagarOrcamento(id){
   ORCAMENTOS = ORCAMENTOS.filter(o => o.id !== id);
   guardarOrc();
 
-  /* mensagens ainda por enviar para este orcamento deixam de fazer sentido */
-  const antes = FILA_ENVIOS.length;
-  FILA_ENVIOS = FILA_ENVIOS.filter(f => f.orcId !== id);
-  if (FILA_ENVIOS.length !== antes) guardarFila();
-
   if (enviarPendente === id) enviarPendente = null;
   if (orcAberto === id)      orcAberto = null;
 
@@ -4317,10 +4350,7 @@ function apagarAutomovel(id){
   ORCAMENTOS = ORCAMENTOS.filter(o => o.carro !== id);
   guardarOrc();
 
-  /* fila de envios desses orcamentos */
   const idsFora = new Set(orcsDoCarro.map(o => o.id));
-  FILA_ENVIOS = FILA_ENVIOS.filter(f => !idsFora.has(f.orcId));
-  guardarFila();
   if (idsFora.has(enviarPendente)) enviarPendente = null;
   if (idsFora.has(orcAberto))      orcAberto = null;
 
@@ -4344,9 +4374,6 @@ function apagarAutomovel(id){
 function limparFantasma(){
   let n = 0;
   const idsOrc = new Set(ORCAMENTOS.map(o => o.id));
-  const antesFila = FILA_ENVIOS.length;
-  FILA_ENVIOS = FILA_ENVIOS.filter(f => idsOrc.has(f.orcId));
-  if (FILA_ENVIOS.length !== antesFila){ guardarFila(); n += antesFila - FILA_ENVIOS.length; }
 
   if (enviarPendente && !idsOrc.has(enviarPendente)) enviarPendente = null;
   if (orcAberto && !idsOrc.has(orcAberto)) orcAberto = null;
@@ -4365,8 +4392,6 @@ function apagarCliente(tel){
   guardarOrc();
 
   const idsFora = new Set(orcs.map(o => o.id));
-  FILA_ENVIOS = FILA_ENVIOS.filter(f => !idsFora.has(f.orcId));
-  guardarFila();
   if (idsFora.has(enviarPendente)) enviarPendente = null;
   if (idsFora.has(orcAberto))      orcAberto = null;
   if (clienteAtual && String(clienteAtual.tel) === alvo) clienteAtual = null;
@@ -4425,6 +4450,7 @@ function abrirApagarModelo(id){
 }
 
 document.getElementById('btnApagarModelo').addEventListener('click', () => {
+  if (!exigeRede()) return;
   const id = apagarId;
   apagarId = null;
   document.getElementById('mApagarModelo').classList.remove('open');
@@ -4696,19 +4722,51 @@ function mostrarAviso(idAviso, texto, campo){
 }
 
 /* ==========================================================
-   MODO OFFLINE
+   LIGACAO A INTERNET (R97)
+   ----------------------------------------------------------
+   O app so funciona online. Sem rede, o ecra de bloqueio tapa tudo
+   e nao se cria, edita nem envia nada; quando a ligacao volta, o
+   ecra sai sozinho e a app fica utilizavel outra vez.
    ========================================================== */
-function temRede(){ return navigator.onLine !== false && !DEMO_OFFLINE; }
+function temRede(){ return navigator.onLine !== false; }
 
-function guardarFila(){
-  try{ localStorage.setItem(FILA_KEY, JSON.stringify(FILA_ENVIOS)); }catch(e){/* quota */}
+function ecraSemRedeAberto(){
+  const e = document.getElementById('ecraSemRede');
+  return !!(e && e.classList.contains('on'));
 }
-function carregarFila(){
-  try{
-    const raw = localStorage.getItem(FILA_KEY);
-    FILA_ENVIOS = raw ? JSON.parse(raw) : [];
-    if (!Array.isArray(FILA_ENVIOS)) FILA_ENVIOS = [];
-  }catch(e){ FILA_ENVIOS = []; }
+
+function atualizarEcraSemRede(){
+  const e = document.getElementById('ecraSemRede');
+  if (!e) return;
+  const on = !temRede();
+  e.classList.toggle('on', on);
+  if (on){
+    /* nada atras deve responder a cliques ou ao teclado */
+    try{ e.focus(); }catch(x){}
+  }
+}
+
+/* botao do ecra de bloqueio: verifica outra vez (navigator.onLine pode demorar a acompanhar) */
+document.addEventListener('click', e => {
+  const b = e.target.closest('#btnTentarRede');
+  if (!b) return;
+  const btn = b;
+  const original = btn.textContent;
+  btn.textContent = 'A verificar\u2026';
+  setTimeout(() => {
+    btn.textContent = original;
+    atualizarEcraSemRede();
+    if (temRede()) toast('Liga\u00E7\u00E3o reposta');
+    else toast('Continua sem liga\u00E7\u00E3o \u00E0 internet');
+  }, 420);
+});
+
+/* tudo o que altera dados fica bloqueado sem ligacao */
+function exigeRede(){
+  if (temRede()) return true;
+  atualizarEcraSemRede();
+  toast('Sem internet \u2014 ligue-se para poder trabalhar');
+  return false;
 }
 
 /* estado da liga\u00E7\u00E3o (j\u00E1 n\u00E3o h\u00E1 c\u00E1psula na appbar) */
@@ -4723,34 +4781,29 @@ function renderEstadoRede(){
     icone.setAttribute('aria-label', titulo);
   }
 
-  /* R86: no Perfil o estado e' honesto --- com rede diz como ficar offline,
-     sem rede confirma que o app continua a funcionar (o ficheiro e' local) */
+  /* R97: no Perfil o estado diz so se ha ligacao */
   const linha = document.getElementById('linhaOffline');
-  if (linha){
-    linha.textContent = temRede()
-      ? 'Ativo \u2014 abra o ficheiro index.html sem internet'
-      : 'Sem liga\u00E7\u00E3o \u00B7 ' + (FILA_ENVIOS.length ? FILA_ENVIOS.length + ' mensagem(ns) na fila' : 'tudo funcional');
+  if (linha) linha.textContent = temRede() ? 'Online' : 'Sem liga\u00E7\u00E3o';
+  const ico = document.getElementById('linhaOfflineIco');
+  if (ico){
+    ico.textContent = temRede() ? '\u2713' : '\u2014';
+    ico.style.color = temRede() ? '#2f9e44' : '#d64545';
   }
-  /* R86: aviso unico quando a ligacao cai (o app nao perde nada) */
+  /* R97: o ecra de bloqueio acompanha sempre o estado da ligacao */
+  atualizarEcraSemRede();
   if (!temRede() && !AVISO_OFFLINE){
     AVISO_OFFLINE = true;
-    toast('Sem internet \u2014 o app continua a funcionar offline');
+    toast('Sem internet \u2014 o VendaCar precisa de liga\u00E7\u00E3o');
   }
   if (temRede()) AVISO_OFFLINE = false;
 }
 
-/* envia de facto: WhatsApp se houver rede, sen\u00E3o p\u00F5e na fila */
+/* envia de facto: o app so funciona online --- ou ha rede, ou nao se envia */
 function despachar(nome, telDigits, texto, orcId){
-  if (temRede()){
-    abrirWhatsApp(nome, telDigits, texto);
-    renderEstadoRede();
-    return true;
-  }
-  FILA_ENVIOS.push({ id: 'f' + Date.now() + Math.random().toString(36).slice(2,6),
-                     nome, tel: telDigits, texto, orcId: orcId || null, data: Date.now() });
-  guardarFila();
+  if (!exigeRede()) return false;
+  abrirWhatsApp(nome, telDigits, texto);
   renderEstadoRede();
-  return false;
+  return true;
 }
 
 /* aviso r\u00E1pido */
@@ -4768,64 +4821,8 @@ function toast(msg){
   toastTimer = setTimeout(() => el.classList.remove('on'), 2600);
 }
 
-/* di\u00E1logo pr\u00F3prio para a fila (sem confirm() do navegador) */
-function perguntarFila(n){
-  return new Promise(resolve => {
-    let ov = document.getElementById('mFila');
-    if (!ov){
-      ov = document.createElement('div');
-      ov.id = 'mFila'; ov.className = 'ov';
-      ov.innerHTML = `
-        <div class="modal narrow" role="dialog" aria-modal="true">
-          <div class="head">
-            <div class="ic" style="background:#e8f0fb">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b72c4" stroke-width="2">
-                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 9l5-5 5 5"/><path d="M12 4v12"/></svg>
-            </div>
-            <div><h3>Mensagens por enviar</h3><div class="sub" id="filaSub"></div></div>
-            <button class="x" data-fila="nao" aria-label="Fechar">\u00D7</button>
-          </div>
-          <div class="body">
-            <p style="margin:0;font-size:13.5px;line-height:1.55;color:#54625c" id="filaTxt"></p>
-          </div>
-          <div class="foot">
-            <button class="btn ghost" data-fila="nao">Agora n\u00E3o</button>
-            <button class="btn" data-fila="sim">Abrir WhatsApp</button>
-          </div>
-        </div>`;
-      document.body.appendChild(ov);
-      ov.addEventListener('click', e => {
-        const b = e.target.closest('[data-fila]');
-        if (b || e.target === ov){ ov.classList.remove('open'); resolve(!!(b && b.dataset.fila === 'sim')); }
-      });
-    }
-    document.getElementById('filaSub').textContent = n + (n === 1 ? ' or\u00E7amento criado sem liga\u00E7\u00E3o' : ' or\u00E7amentos criados sem liga\u00E7\u00E3o');
-    document.getElementById('filaTxt').textContent =
-      'A liga\u00E7\u00E3o voltou. Os or\u00E7amentos ficaram guardados no dispositivo \u2014 abra o WhatsApp para enviar '
-      + (n === 1 ? 'a mensagem.' : 'as mensagens, uma de cada vez.');
-    ov.classList.add('open');
-    reiniciarScroll(ov);
-  });
-}
-
-/* ao voltar a rede, pergunta se quer enviar o que ficou na fila */
-async function descarregarFila(){
-  if (!temRede() || !FILA_ENVIOS.length) return;
-  const n = FILA_ENVIOS.length;
-  if (!await perguntarFila(n)) return;
-
-  const fila = FILA_ENVIOS.slice();
-  FILA_ENVIOS = [];
-  guardarFila();
-  fila.forEach((m, i) => setTimeout(() => {
-    abrirWhatsApp(m.nome, m.tel, m.texto);
-    if (i === fila.length - 1) renderEstadoRede();
-  }, i * 350));
-  renderEstadoRede();
-}
-
 /* ==========================================================
-   EXPORTAR \u2014 CSV e PDF (funciona offline, sem bibliotecas)
+   EXPORTAR \u2014 CSV e PDF (sem bibliotecas externas)
    ========================================================== */
 const dataCurta = t => {
   const d = new Date(t), p = n => String(n).padStart(2, '0');
@@ -4903,6 +4900,7 @@ function abrirWhatsApp(nome, telDigits, texto){
 
 /* ---- enviar or\u00E7amento (novo ou reenvio) ---- */
 document.getElementById('btnZap').addEventListener('click', () => {
+  if (!exigeRede()) return;   /* R97: o envio exige internet */
   const nome = document.getElementById('mNome').value.trim();
   const digitos = document.getElementById('mTel').value.replace(/\D/g, '');
 
@@ -5490,9 +5488,11 @@ document.getElementById('pg-listaorc').addEventListener('click', e => {
 /* ==========================================================
    LIGA\u00C7\u00C3O \u00C0 REDE
    ========================================================== */
-carregarFila();
-window.addEventListener('online',  () => { DEMO_OFFLINE = false; renderEstadoRede(); descarregarFila(); });
+/* R97: a ligacao volta -> o ecra de bloqueio sai sozinho e a app fica utilizavel */
+window.addEventListener('online',  () => { renderEstadoRede(); toast('Liga\u00E7\u00E3o reposta'); });
 window.addEventListener('offline', () => { renderEstadoRede(); });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') renderEstadoRede(); });
+window.addEventListener('focus', renderEstadoRede);
 
 
 /* ==========================================================
@@ -5568,7 +5568,7 @@ function sincronizarContadores(){
 /* ---- 1) o proprio browser avisa quando OUTRO separador grava ---- */
 window.addEventListener('storage', e => {
   if (e.key === null || e.key === STORAGE_KEY || e.key === ORC_KEY ||
-      e.key === LOJA_KEY  || e.key === TEMA_KEY || e.key === FILA_KEY){
+      e.key === LOJA_KEY  || e.key === TEMA_KEY){
     if (e.key === TEMA_KEY){ iniciarTemaDoDisco(); return; }
     adotarDadosDeOutroSeparador();
   }
