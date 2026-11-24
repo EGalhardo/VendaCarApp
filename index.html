@@ -1635,7 +1635,7 @@
   <span class="nota">A liga&#231;&#227;o &#233; verificada automaticamente</span>
 </div>
 
-<div id="falhaArranque" style="display:none;position:fixed;inset:0;z-index:9999;background:#0f1a17;color:#eaf1fb;
+<div id="falhaArranque" style="display:none;position:fixed;inset:0;z-index:100000;background:#0f1a17;color:#eaf1fb;
      font-family:Arial,Helvetica,sans-serif;padding:26px 22px;overflow:auto">
   <h1 style="font-size:18px;margin:0 0 6px">A aplica&#231;&#227;o n&#227;o arrancou</h1>
   <p style="font-size:13px;color:#b3c6e0;margin:0 0 16px;max-width:560px">
@@ -1643,10 +1643,13 @@
     Copia a mensagem abaixo (ou envia uma captura) para conseguirmos corrigir.</p>
   <pre id="falhaDetalhe" style="white-space:pre-wrap;font-size:12px;line-height:1.5;background:#071528;
        border:1px solid #17375e;border-radius:10px;padding:14px;color:#e7c276"></pre>
-  <p style="font-size:12px;color:#93a7c4;margin:14px 0 0">Vers&#227;o do ficheiro: R49 &#183; <span id="falhaHora"></span></p>
+  <p style="font-size:12px;color:#93a7c4;margin:14px 0 0">Vers&#227;o do ficheiro: <b id="falhaVersao">R49</b> &#183; <span id="falhaHora"></span></p>
+  <p style="font-size:12px;color:#93a7c4;margin:6px 0 0">Navegador: <span id="falhaNavegador"></span></p>
 </div>
 <script>
 window.__arranqueOK = false;
+/* R101: identificacao real do ficheiro (antes dizia sempre R49, de uma versao antiga) */
+window.__VERSAO_APP = 'R101';
 window.__falhaArranque = function(msg){
   if (window.__arranqueOK) return;
   var cx = document.getElementById('falhaArranque');
@@ -1654,6 +1657,13 @@ window.__falhaArranque = function(msg){
   if (!cx || !det) return;
   det.textContent += (det.textContent ? '\n' : '') + msg;
   document.getElementById('falhaHora').textContent = new Date().toLocaleString('pt-PT');
+  var v = document.getElementById('falhaVersao');
+  if (v) v.textContent = window.__VERSAO_APP || '?';
+  var nv = document.getElementById('falhaNavegador');
+  if (nv) nv.textContent = navigator.userAgent;
+  /* R101: a mensagem tem de ficar visivel --- o ecra de carregamento sai da frente */
+  var ld = document.getElementById('ecraCarregando');
+  if (ld){ ld.classList.add('fora'); ld.style.display = 'none'; }
   cx.style.display = 'block';
 };
 window.addEventListener('error', function(e){
@@ -1674,11 +1684,15 @@ window.addEventListener('error', function(e){
 window.addEventListener('unhandledrejection', function(e){
   window.__falhaArranque('Promessa rejeitada: ' + ((e.reason && e.reason.message) || e.reason));
 });
+/* R101: so avisa se o script principal mesmo nao correu (erro de sintaxe ou
+   download cortado). Num telemovel antigo 2,5 s era cedo demais: o aviso
+   tapava a app enquanto ela ainda estava a arrancar normalmente. */
 setTimeout(function(){
-  if (!window.__arranqueOK) window.__falhaArranque(
-    'O script principal nao terminou o arranque.\n' +
-    'Se abriste este ficheiro por dentro de outra pagina (pre-visualizacao), guarda-o e abre-o directamente no navegador.');
-}, 2500);
+  if (window.__arranqueOK || window.__arranqueEmCurso) return;
+  window.__falhaArranque(
+    'O script principal nao chegou a correr (ficheiro incompleto ou erro de sintaxe).\n' +
+    'Descarregue o index.html outra vez, sem cortar o download, e abra-o directamente no navegador.');
+}, 12000);
 </script>
 <div class="app">
 
@@ -2176,6 +2190,7 @@ setTimeout(function(){
               <td style="text-align:right"><button class="edit-mini" data-abrir-loja="whatsapp" aria-label="Editar n&#250;mero do WhatsApp">Editar</button></td>
             </tr>
             <tr><td class="b">Liga&#231;&#227;o</td><td id="linhaOffline">Online</td><td style="text-align:right;color:#2f9e44" id="linhaOfflineIco">&#10003;</td></tr>
+            <tr><td class="b">Vers&#227;o</td><td id="linhaVersao">R101</td><td style="text-align:right;color:#c3ccc8">&#8212;</td></tr>
             <tr class="editavel">
               <td class="b">Modelo de Mensagem</td>
               <td>Texto padr&#227;o do or&#231;amento</td>
@@ -2932,6 +2947,10 @@ function migrarVideosAntigos(){
   });
   if (mudou) guardar();
 }
+
+/* R101: assim que o script principal comeca a correr, o aviso de arranque
+   falhado fica desarmado (a app pode ser lenta, mas nao esta quebrada) */
+window.__arranqueEmCurso = true;
 
 /* ==================================================================
    R99 \u00B7 MEM\u00D3RIA DO DISPOSITIVO \u00C0 PROVA DE BLOQUEIO
