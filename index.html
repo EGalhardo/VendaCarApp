@@ -2630,7 +2630,7 @@ const ehCurado = c => !!c && CURADOS.some(k => k.id === c.id);
 /* junta os registos do ficheiro ao cat\u00E1logo do dispositivo */
 function curarCatalogo(){
   try{
-    const r = JSON.parse(localStorage.getItem(CURADOS_KEY) || '[]');
+    const r = JSON.parse(lsGet(CURADOS_KEY) || '[]');
     CURADOS_REM = Array.isArray(r) ? r.map(String) : [];
   }catch(e){ CURADOS_REM = []; }
   CURADOS.forEach(k => {
@@ -2665,7 +2665,7 @@ function vigiarCurados(){
   });
   if (mudou){
     CURADOS_REM = rem;
-    try{ localStorage.setItem(CURADOS_KEY, JSON.stringify(rem)); }catch(e){}
+    lsSet(CURADOS_KEY, JSON.stringify(rem));
   }
 }
 
@@ -2933,16 +2933,34 @@ function migrarVideosAntigos(){
   if (mudou) guardar();
 }
 
+/* ==================================================================
+   R99 \u00B7 MEM\u00D3RIA DO DISPOSITIVO \u00C0 PROVA DE BLOQUEIO
+   ------------------------------------------------------------------
+   Quando a app \u00E9 aberta dentro de uma p\u00E1gina que a isola (pr\u00E9-visualiza\u00E7\u00E3o,
+   iframe com sandbox) ou num navegador que pro\u00EDbe o armazenamento, tocar em
+   localStorage/indexedDB deita a app abaixo e ela fica presa no ecr\u00E3 de
+   carregamento. Estas duas fun\u00E7\u00F5es nunca falham: se o armazenamento estiver
+   bloqueado, a app funciona na mesma (s\u00F3 n\u00E3o guarda).
+   ================================================================== */
+function lsGet(chave){
+  try{ return localStorage.getItem(chave); }catch(e){ return null; }
+}
+function lsSet(chave, valor){
+  try{ localStorage.setItem(chave, valor); return true; }catch(e){ return false; }
+}
+/* mais tarde no c\u00F3digo (guardarTema) usa-se este nome */
+function lerLS(chave){ return lsGet(chave); }
+
 function carregar(){
   try{
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = lsGet(STORAGE_KEY);
     const arr = raw ? JSON.parse(raw) : null;
     CARROS = Array.isArray(arr) && arr.length ? arr : PADRAO.slice();
   }catch(e){ CARROS = PADRAO.slice(); }
   /* R94: o cofre pode estar mais recente do que o localStorage (quando este encheu) */
-  if (window.indexedDB){
+  if (idbDisponivel()){
     let seloLocal = 0;
-    try{ seloLocal = Number(localStorage.getItem(SELO_CARROS_KEY)) || 0; }catch(e){}
+    seloLocal = Number(lsGet(SELO_CARROS_KEY)) || 0;
     cofreLer(COFRE_CHAVE_CARROS).then(c => {
       if (!c || !c.lista || !c.lista.length) return;
       if (c.quando <= seloLocal) return;          /* o localStorage esta tao ou mais atualizado */
@@ -2957,7 +2975,7 @@ function carregar(){
     });
     /* o mesmo para os orcamentos */
     let seloOrc = 0;
-    try{ seloOrc = Number(localStorage.getItem(SELO_ORCS_KEY)) || 0; }catch(e){}
+    seloOrc = Number(lsGet(SELO_ORCS_KEY)) || 0;
     cofreLer(COFRE_CHAVE_ORCS).then(c => {
       if (!c || !c.lista) return;
       if (c.quando <= seloOrc) return;
@@ -2971,11 +2989,11 @@ function carregar(){
   const versaoAnterior = migrarVersao();
   guardar();                       /* o registo do ficheiro fica na memoria do dispositivo */
   atual = CARROS[0];
-  migrarVideosAntigos();
-  migrarFotosAntigas();     /* R94: fotos em base64 saem do localStorage */
+  try{ migrarVideosAntigos(); }catch(e){ /* R99: nunca travam o arranque */ }
+  try{ migrarFotosAntigas(); }catch(e){ /* R94: fotos em base64 saem do localStorage */ }
 
   try{
-    const rawO = localStorage.getItem(ORC_KEY);
+    const rawO = lsGet(ORC_KEY);
     ORCAMENTOS = rawO ? JSON.parse(rawO) : null;
     if (!Array.isArray(ORCAMENTOS)) ORCAMENTOS = SEED_ORCAMENTOS();
   }catch(e){ ORCAMENTOS = SEED_ORCAMENTOS(); }
@@ -2994,7 +3012,7 @@ function carregar(){
    ------------------------------------------------------------------ */
 function migrarVersao(){
   let v = 0;
-  try{ v = Number(localStorage.getItem(VERSAO_KEY)) || 0; }catch(e){}
+  v = Number(lsGet(VERSAO_KEY)) || 0;
   if (v >= VERSAO_DADOS) return v;
 
   /* 1) cat\u00E1logo de demonstra\u00E7\u00E3o: os 4 modelos de origem recebem os valores novos;
@@ -3007,7 +3025,7 @@ function migrarVersao(){
 
   /* 2) or\u00E7amentos de demonstra\u00E7\u00E3o seguem o carro */
   try{
-    const rawO = localStorage.getItem(ORC_KEY);
+    const rawO = lsGet(ORC_KEY);
     const lista = rawO ? JSON.parse(rawO) : null;
     if (Array.isArray(lista)){
       lista.forEach(o => {
@@ -3015,11 +3033,11 @@ function migrarVersao(){
         const c = CARROS.find(x => x.id === o.carro);
         if (c){ o.preco = c.preco; o.entrada = Math.round(c.preco * 0.2); }
       });
-      localStorage.setItem(ORC_KEY, JSON.stringify(lista));
+      lsSet(ORC_KEY, JSON.stringify(lista));
     }
   }catch(e){/* quota */}
 
-  try{ localStorage.setItem(VERSAO_KEY, String(VERSAO_DADOS)); }catch(e){}
+  lsSet(VERSAO_KEY, String(VERSAO_DADOS));
   return v;
 }
 
@@ -3038,7 +3056,7 @@ function garantirExemploVendas(versaoAnterior){
   if (c){ exemplo.preco = c.preco; exemplo.desc = 0; }
   ORCAMENTOS.push(exemplo);
   guardarOrc();
-  try{ localStorage.setItem(VERSAO_KEY, String(VERSAO_DADOS)); }catch(e){}
+  lsSet(VERSAO_KEY, String(VERSAO_DADOS));
 }
 
 /* R56: o estado \u00ABEnviado\u00BB deixou de existir \u2014 o envio passou a ser um selo.
@@ -3082,7 +3100,7 @@ let AVATAR_TMP = null;                     /* foto escolhida mas ainda n\u00E3o 
 
 function carregarLoja(){
   try{
-    const raw = localStorage.getItem(LOJA_KEY);
+    const raw = lsGet(LOJA_KEY);
     const o = raw ? JSON.parse(raw) : null;
     LOJA = { dados:  (o && o.dados)  ? String(o.dados) : '',
              zap:    (o && o.zap)    ? String(o.zap).replace(/\D/g,'').slice(0,9) : '',
@@ -3132,8 +3150,8 @@ function renderAvatarLoja(){
 function guardarLoja(){
   try{
     const txt = JSON.stringify(LOJA);
-    if (localStorage.getItem(LOJA_KEY) !== txt){
-      localStorage.setItem(LOJA_KEY, txt); marcarAlteracao();
+    if (lsGet(LOJA_KEY) !== txt){
+      lsSet(LOJA_KEY, txt); marcarAlteracao();
     }
   }catch(e){/* quota */}
 }
@@ -3169,7 +3187,7 @@ let seloVisto = null;
 
 function marcarAlteracao(){
   seloVisto = Date.now() + '_' + Math.random().toString(36).slice(2, 7);
-  try{ localStorage.setItem(SELO_KEY, seloVisto); }catch(e){}
+  lsSet(SELO_KEY, seloVisto);
 }
 
 /* ==========================================================
@@ -3187,6 +3205,7 @@ const VIDEO_CACHE = new Map();          /* chave -> object URL (para nao repetir
 
 /* R94: uma base para os videos e outra para as fotos; o mesmo motor serve as duas */
 function abrirDBGenerico(nome, armazem, guardarLigacao){
+  if (!idbDisponivel()) return Promise.reject(new Error('armazenamento indisponivel'));
   return new Promise((ok, falha) => {
     let pedido;
     try{ pedido = indexedDB.open(nome, 1); }catch(e){ falha(e); return; }
@@ -3279,6 +3298,7 @@ const FOTO_CACHE = new Map();            /* chave -> object URL (para n\u00E3o r
 
 function abrirFotoDB(){
   if (fotoDB) return Promise.resolve(fotoDB);
+  if (!idbDisponivel()) return Promise.reject(new Error('armazenamento indisponivel'));
   return new Promise((ok, falha) => {
     let pedido;
     try{ pedido = indexedDB.open(FOTO_DB, 2); }catch(e){ falha(e); return; }
@@ -3501,8 +3521,24 @@ const SELO_ORCS_KEY   = 'modelo_orcamentos_quando';
 /* grava o cofre com um pequeno atraso: editar valores no orcamento escreve
    muitas vezes seguidas e so interessa o ultimo estado */
 const COFRE_FILA = {};
+/* R99: o indexedDB pode existir e mesmo assim estar proibido (iframe isolado).
+   Testa-se uma vez, sem rebentar, e o resultado decide se se usa o cofre. */
+let __idbOK = null;
+function idbDisponivel(){
+  if (__idbOK !== null) return __idbOK;
+  __idbOK = false;
+  try{
+    if (!window.indexedDB) return __idbOK;
+    const pedido = indexedDB.open('vendacar-teste', 1);
+    if (pedido && typeof pedido.addEventListener === 'function'){
+      __idbOK = true;
+    }
+  }catch(e){ __idbOK = false; }
+  return __idbOK;
+}
+
 function cofreGravar(chave, lista, quando){
-  if (!window.indexedDB || !lista) return Promise.resolve(false);
+  if (!idbDisponivel() || !lista) return Promise.resolve(false);
   const copia = JSON.stringify(lista);
   const marca = Number(quando) || Date.now();
   clearTimeout(COFRE_FILA[chave]);
@@ -3524,7 +3560,7 @@ function cofreGravarAgora(chave, copia, marca){
   })).catch(() => false);
 }
 function cofreLer(chave){
-  if (!window.indexedDB) return Promise.resolve(null);
+  if (!idbDisponivel()) return Promise.resolve(null);
   return abrirFotoDB().then(db => new Promise(ok => {
     const tx = db.transaction(COFRE_STORE, 'readonly');
     const loja = tx.objectStore(COFRE_STORE);
@@ -3546,10 +3582,10 @@ function guardar(){
   const agora = Date.now();
   let caberam = true;
   try{
-    if (localStorage.getItem(STORAGE_KEY) !== txt){
-      localStorage.setItem(STORAGE_KEY, txt); marcarAlteracao();
+    if (lsGet(STORAGE_KEY) !== txt){
+      lsSet(STORAGE_KEY, txt); marcarAlteracao();
     }
-    try{ localStorage.setItem(SELO_CARROS_KEY, String(agora)); }catch(e){}
+    lsSet(SELO_CARROS_KEY, String(agora));
   }catch(e){
     caberam = false;      /* o localStorage encheu --- o cofre segura o registo */
   }
@@ -3566,10 +3602,10 @@ function guardarOrc(){
   const agora = Date.now();
   let caberam = true;
   try{
-    if (localStorage.getItem(ORC_KEY) !== txt){
-      localStorage.setItem(ORC_KEY, txt); marcarAlteracao();
+    if (lsGet(ORC_KEY) !== txt){
+      lsSet(ORC_KEY, txt); marcarAlteracao();
     }
-    try{ localStorage.setItem(SELO_ORCS_KEY, String(agora)); }catch(e){}
+    lsSet(SELO_ORCS_KEY, String(agora));
   }catch(e){
     caberam = false;
   }
@@ -5586,18 +5622,18 @@ window.addEventListener('focus', renderEstadoRede);
 let sincronizacoes = 0;         /* quantas vezes este separador ja se atualizou */
 
 function adotarDadosDeOutroSeparador(){
-  const selo = localStorage.getItem(SELO_KEY);
+  const selo = lsGet(SELO_KEY);
   const carrosAntes = JSON.stringify(CARROS);
   const orcsAntes   = JSON.stringify(ORCAMENTOS);
   const lojaAntes   = JSON.stringify(LOJA);
 
   try{
-    const rawC = localStorage.getItem(STORAGE_KEY);
+    const rawC = lsGet(STORAGE_KEY);
     const arr = rawC ? JSON.parse(rawC) : null;
     if (Array.isArray(arr) && arr.length) CARROS = arr;
   }catch(e){}
   try{
-    const rawO = localStorage.getItem(ORC_KEY);
+    const rawO = lsGet(ORC_KEY);
     const arrO = rawO ? JSON.parse(rawO) : null;
     if (Array.isArray(arrO)) ORCAMENTOS = arrO;
   }catch(e){}
@@ -5658,7 +5694,7 @@ window.addEventListener('storage', e => {
 
 /* ---- 2) rede de seguranca: ao voltar a esta aba, confirma se ficou para tras ---- */
 function recarregarSeEstiverDesatualizado(){
-  const selo = localStorage.getItem(SELO_KEY);
+  const selo = lsGet(SELO_KEY);
   if (selo && selo !== seloVisto) adotarDadosDeOutroSeparador();
 }
 document.addEventListener('visibilitychange', () => {
@@ -5671,7 +5707,7 @@ setInterval(recarregarSeEstiverDesatualizado, 4000);
    ARRANQUE
    ========================================================== */
 carregar();
-seloVisto = localStorage.getItem(SELO_KEY);   /* R67: marca o que ja esta neste separador */
+seloVisto = lsGet(SELO_KEY);   /* R67: marca o que ja esta neste separador */
 observarValores('#pg-' + paginaAtual());
 guardar();          // garante o cat\u00E1logo em cache local desde o primeiro arranque
 renderFiltros();
@@ -5703,7 +5739,7 @@ function aplicarTema(tema, guardar){
   }
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.setAttribute('content', escuro ? '#040d1f' : '#ffffff');
-  if (guardar){ try{ localStorage.setItem(TEMA_KEY, escuro ? 'escuro' : 'claro'); }catch(e){} }
+  if (guardar){ lsSet(TEMA_KEY, escuro ? 'escuro' : 'claro'); }
 }
 
 function alternarTema(){
@@ -5714,7 +5750,7 @@ function alternarTema(){
 
 (function iniciarTema(){
   let guardado = null;
-  try{ guardado = localStorage.getItem(TEMA_KEY); }catch(e){}
+  guardado = lsGet(TEMA_KEY);
   aplicarTema(guardado === 'escuro' ? 'escuro' : 'claro', false);
   const b = document.getElementById('btnTema');
   if (b) b.addEventListener('click', alternarTema);
@@ -5723,17 +5759,18 @@ function alternarTema(){
 /* R67: se outro separador trocar o tema, este acompanha */
 function iniciarTemaDoDisco(){
   let guardado = null;
-  try{ guardado = localStorage.getItem(TEMA_KEY); }catch(e){}
+  guardado = lsGet(TEMA_KEY);
   aplicarTema(guardado === 'escuro' ? 'escuro' : 'claro', false);
 }
 
 /* ==========================================================
    R71 \u2014 ECR\u00C3 DE CARREGAMENTO
-   6 segundos de barra a encher; no fim entra na p\u00E1gina Autom\u00F3vel.
+   Barra a encher (no m\u00E1ximo 2 s, ou o tempo real do arranque se for maior);
+   no fim entra na p\u00E1gina Autom\u00F3vel. R100: deixou de esperar 6 s \u00E0 for\u00E7a.
    O tempo da contagem de valores come\u00E7a a contar quando o ecr\u00E3 sai,
    para o utilizador ver os valores a subir e n\u00E3o j\u00E1 no fim.
    ========================================================== */
-const CARREGAMENTO_MS = 6000;
+const CARREGAMENTO_MS = 2000;
 let __valoresProntos = false;
 
 function arranqueVisivel(){
@@ -5766,6 +5803,12 @@ function arranqueVisivel(){
     setTimeout(() => { ecra.style.display = 'none'; }, 520);
   }
 
+  /* R100: se o arranque terminar antes do tempo, o ecra sai logo */
+  function tentarFechar(){
+    if (!fechado && __valoresProntos) fim();
+  }
+  setTimeout(tentarFechar, 120);
+
   function passo(agora){
     const t = Math.min((agora - t0) / CARREGAMENTO_MS, 1);
     const p = Math.round(t * 100);
@@ -5773,7 +5816,7 @@ function arranqueVisivel(){
     if (pct) pct.textContent = p + '%';
     if (txt) txt.textContent = leves[Math.min(Math.floor(t * 3), 2)];
     if (t < 1) requestAnimationFrame(passo);
-    else fim();
+    else tentarFechar();
   }
   requestAnimationFrame(passo);
   /* rede de seguranca: se a aba for posta em segundo plano, o fim nao pode perder-se */
